@@ -19,10 +19,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        /*
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-        ],
+        ],*/
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -43,6 +44,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],        
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -53,6 +57,12 @@ $config = [
         */
     ],
     'params' => $params,
+    'modules' => [
+        'user' => [
+            'class' => Da\User\Module::class,
+            'administrators' => ['user']
+        ]
+    ]
 ];
 
 if (YII_ENV_DEV) {

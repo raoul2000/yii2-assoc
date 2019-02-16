@@ -26,7 +26,14 @@ $config = [
             ],
         ],
         'db' => $db,
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],        
+
     ],
+    'modules' => [
+        'user' =>  Da\User\Module::class,
+    ],    
     'params' => $params,
     /*
     'controllerMap' => [
