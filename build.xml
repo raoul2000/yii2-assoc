@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="yii2-assoc" default="help" basedir=".">
+    <property file="./ftp.dev.properties" />
+
+    <property name="package"     value="${phing.project.name}" override="true" />
+    <property name="buildSite"   value="./build/site"          override="true" />
+    <property name="buildVendor" value="./build/vendor"          override="true" />
+    <property name="srcdir"      value="${project.basedir}/src"    override="true" />
+
+
+    <fileset dir="${srcdir}" id="PHPFiles">
+      <exclude name="**/web/assets/**/*" />
+      <exclude name="vendor**" />
+      <exclude name="**/web/assets/**/*" />
+      <exclude name="**/runtime/**/*" />
+
+      <include name="**/*.php" />
+    </fileset>
+
+    <!-- Fileset for all files -->
+    <fileset dir="${srcdir}" id="srcFiles">
+
+        <exclude name="**/.gitignore" />
+        <exclude name="**/.bowerrc"/>
+        <exclude name="build.xml"/>
+        <exclude name="LICENSE" />
+        <exclude name="LICENSE.md" />
+        <exclude name="README" />
+        <exclude name="README.md" />
+        <exclude name="yii" />
+        <exclude name="yii.bat" />
+        <exclude name="requirements.php" />
+        <exclude name="codeception.yml" />
+        <exclude name="*.properties" />
+
+    		<exclude name="**/*.bak" />
+    		<exclude name="**/*.log" />
+    		<exclude name="**/web/assets/**/*" />
+    		<exclude name="**/web/index-test.php" />
+    		<exclude name="**/runtime/**/*" />
+        <exclude name="tests/**" />
+    		<exclude name="vendor/**/*" />
+    		<exclude name="vendor**" />
+    		<exclude name="build**" />
+    		<exclude name="**/*~" />
+        <exclude name="composer**" />
+
+        <include name="**" />
+    </fileset>
+
+    <fileset dir="${buildSite}" id="srcBuild">
+      <include name="**" />
+    </fileset>
+
+    <fileset dir="${buildVendor}" id="vendorBuild">
+      <include name="**" />
+    </fileset>
+
+    <!-- /////////////////////////////////////////////////////////////////////
+  		Create API documentation (phpdoc)
+  	-->
+    <target name="build-src" description="main target">
+        <echo>building to ${buildSite} ...</echo>
+        <delete dir="${buildSite}" />
+        <copy todir="${buildSite}">
+            <fileset refid="srcFiles" />
+        </copy>
+
+    </target>
+
+    <!--
+      Install composer dependencies (no-dev) in build/vendor folder
+    -->
+    <target name="build-vendor" description="vendor dir no-dev">
+        <echo>building vendor to ${buildVendor} ...</echo>
+        <delete dir="${buildVendor}" />
+        <copy file="${srcdir}/composer.lock" todir="${buildVendor}" />
+        <copy file="${srcdir}/composer.json" todir="${buildVendor}" />
+        <exec command="composer install  --no-dev --prefer-dist" dir="${buildVendor}" passthru="true" />
+    </target>
+
+    <!--
+		Check for PHP syntax errors
+	 -->
+	<target name="phplint" description="find syntax errors in php files">
+	  <phplint haltonfailure="true">
+	    <fileset refid="PHPFiles" />
+	  </phplint>
+	</target>
+    <!--
+		Deploy
+	 -->
+    <target name="deploy">
+      <echo message="Copying '${deploy.fileset.refid}' to ${ftp.host} in ${ftp.mode} mode" />
+      <ftpdeploy
+        host="${ftp.host}"
+        port="${ftp.port}"
+        username="${ftp.username}"
+        password="${ftp.password}"
+        dir="${ftp.dir}"
+        passive="true"
+        mode="${ftp.mode}">
+
+        <fileset refid="${deploy.fileset.refid}" />
+
+      </ftpdeploy>
+    </target>
+    <!--
+  		Deploy built Source
+  	-->
+    <target name="deploy-src">
+      <echo msg="Deploying Source" />
+      <phingcall target="deploy">
+        <property name="deploy.fileset.refid" value="srcBuild" />
+      </phingcall>
+    </target>
+    <!--
+      Deploy build vendor
+  	-->
+    <target name="deploy-vendor">
+      <echo msg="Deploying Vendor" />
+      <phingcall target="deploy">
+        <property name="deploy.fileset.refid" value="vendorBuild" />
+        <!-- override a property -->
+        <!-- property name="ftp.dir" value="20" override="true" / -->
+      </phingcall>
+    </target>
+    <!--
+  		Deploy All
+  	-->
+    <target name="deploy-all">
+        <phingcall target="deploy-src" />
+        <phingcall target="deploy-vendor" />
+    </target>
+	<!--
+	-->
+	<target name="help">
+		<echo>
+	${phing.project.name} build script
+	----------------------------------
+	You may use the following command format to build a target:
+
+		phing &lt;target name&gt;
+
+	where &lt;target name&gt; can be one of the	following:
+
+	${phing_targets}
+
+		</echo>
+	</target>
+</project>
