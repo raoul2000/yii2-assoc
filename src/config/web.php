@@ -14,7 +14,7 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'APUtCHmBBdYlOZSamqTuboHn219lt_J8',
+            'cookieValidationKey' => 'APUtllkiioCHmBBdYlOZSamqTuboHn219lt_J8',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -47,20 +47,14 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],        
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
     ],
     'params' => $params,
     'modules' => [
         'user' => [
             'class' => Da\User\Module::class,
-            'administrators' => ['user']
+            'enableRegistration' => false,
+            'enableEmailConfirmation' => false,
+            'administratorPermissionName' => 'manageUser'
         ]
     ]
 ];
