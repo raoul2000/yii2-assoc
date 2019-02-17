@@ -39,8 +39,10 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => 'Admin', 'url' => ['admin/home']],
+            
             Yii::$app->user->can('manageUser') ? (
-                ['label' => 'Admin', 'url' => ['/user/admin']]
+                ['label' => 'AdminUsers', 'url' => ['/user/admin']]
             ) : (''),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/user/security/login']]
