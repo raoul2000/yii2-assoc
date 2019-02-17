@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b59f9e79ce6155a3bf87e401230e83c3",
+    "content-hash": "f7d31b9633e3647f3d5cf69848ad8b7d",
     "packages": [
         {
             "name": "2amigos/2fa-library",
@@ -484,6 +484,57 @@
             "license": [
                 "MIT"
             ]
+        },
+        {
+            "name": "bupy7/yii2-activerecord-history",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bupy7/yii2-activerecord-history.git",
+                "reference": "608b6b225c7539e4d73266e40b6d72dbce705f62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bupy7/yii2-activerecord-history/zipball/608b6b225c7539e4d73266e40b6d72dbce705f62",
+                "reference": "608b6b225c7539e4d73266e40b6d72dbce705f62",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "^2.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.2.17",
+                "phpunit/phpunit": ">=4.8 <6.0.0",
+                "satooshi/php-coveralls": "^1.0.1 || ^2.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "bupy7\\activerecord\\history\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Vasilij Belosludcev",
+                    "email": "bupy765@gmail.com"
+                }
+            ],
+            "description": "This extension adds storage history of changes to the ActiveRecord model.",
+            "keywords": [
+                "Behavior",
+                "activerecord",
+                "changes",
+                "extension",
+                "history",
+                "model",
+                "module",
+                "yii2"
+            ],
+            "time": "2018-10-24T08:08:28+00:00"
         },
         {
             "name": "cebe/markdown",

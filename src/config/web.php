@@ -55,9 +55,14 @@ $config = [
             'enableRegistration' => false,
             'enableEmailConfirmation' => false,
             'administratorPermissionName' => 'manageUser'
-        ]
+        ],
+        'arhistory' => [
+            'class' => 'bupy7\activerecord\history\Module',
+        ],        
     ]
 ];
+
+$config['bootstrap'][] = 'arhistory';
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment

@@ -8,6 +8,7 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic basic
 
 ## Yii2-usuario
 
+- https://yii2-usuario.readthedocs.io/en/latest
 - to install, `composer` required PHP > 7.0.0 in command line
 - command run in a Windows PC
 
@@ -57,3 +58,12 @@ composer require 2amigos/yii2-usuario:~1.0
 ```
 
 - go to : http://localhost/[PATH]/index.php?r=user/admin
+
+## Active Rcord History
+
+- refers to doc https://github.com/bupy7/yii2-activerecord-history
+
+```bash
+composer require --prefer-dist bupy7/yii2-activerecord-history "*"
+./yii migrate/up --migrationPath=@bupy7/activerecord/history/migrations
+```

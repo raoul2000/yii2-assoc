@@ -4,12 +4,15 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "contact".
  *
  * @property string $id
  * @property string $name name
+ * @property int $created_at timestamp of record creation (see TimestampBehavior)
+ * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  */
 class Contact extends \yii\db\ActiveRecord
 {
@@ -27,6 +30,13 @@ class Contact extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::className(),
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ]
         ];
     }
     /**

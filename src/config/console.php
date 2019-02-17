@@ -28,11 +28,22 @@ $config = [
         'db' => $db,
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
-        ],        
+        ],     
+        'user' => [
+            //'class' => 'Da\User\Model\User',
+            'class' => 'yii\web\User',
+            //'identityClass' => 'app\models\User',
+            'identityClass' => 'Da\User\Model\User',
+            //'enableAutoLogin' => true,
+        ],
+
 
     ],
     'modules' => [
         'user' =>  Da\User\Module::class,
+        'arhistory' => [
+            'class' => 'bupy7\activerecord\history\Module',
+        ],        
     ],    
     'params' => $params,
     /*
@@ -43,7 +54,7 @@ $config = [
     ],
     */
 ];
-
+$config['bootstrap'][] = 'arhistory';
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'gii';
