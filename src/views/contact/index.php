@@ -27,7 +27,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:d/m/Y H:i']
+            ],
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d/m/Y H:i']
+            ],
+            
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
