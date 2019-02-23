@@ -39,7 +39,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Admin', 'url' => ['admin/home']],
+            ['label' => 'Admin', 'url' => ['/admin/home']],
             
             Yii::$app->user->can('manageUser') ? (
                 ['label' => 'AdminUsers', 'url' => ['/user/admin']]

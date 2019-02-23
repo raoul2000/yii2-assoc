@@ -17,7 +17,7 @@ class ContactSearch extends Contact
     public function rules()
     {
         return [
-            [['id', 'name'], 'safe'],
+            [['id', 'name','is_deleted'], 'safe'],
         ];
     }
 
@@ -40,8 +40,8 @@ class ContactSearch extends Contact
     public function search($params)
     {
         $query = Contact::find();
-
         // add conditions that should always apply here
+        
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

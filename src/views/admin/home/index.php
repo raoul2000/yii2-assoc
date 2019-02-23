@@ -9,4 +9,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <hr/>
 <p>
     <?= Html::a('Manage Users', ['user/admin'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Manage Contacts', ['contact/index'], ['class' => 'btn btn-primary']) ?>
+</p>
+<hr/>
+<p>
+    <?= Html::a('Record History', ['/record-history'], ['class' => 'btn btn-primary']) ?>
 </p>
