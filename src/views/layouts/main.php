@@ -41,9 +41,6 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Admin', 'url' => ['/admin/home']],
             
-            Yii::$app->user->can('manageUser') ? (
-                ['label' => 'AdminUsers', 'url' => ['/user/admin']]
-            ) : (''),
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/user/security/login']]
             ) : (
