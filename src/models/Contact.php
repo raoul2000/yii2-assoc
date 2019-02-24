@@ -7,11 +7,13 @@ use yii\behaviors\TimestampBehavior;
 use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 use yii2tech\ar\softdelete\SoftDeleteBehavior;
 use yii2tech\ar\softdelete\SoftDeleteQueryBehavior;
+use thamtech\uuid\helpers\UuidHelper;
 
 /**
  * This is the model class for table "contact".
  *
  * @property int $id
+ * @property binary $uuid
  * @property string $name name
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -65,6 +67,7 @@ class Contact extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['uuid'], 'default', 'value' => UuidHelper::uuid()],
             [['created_at', 'updated_at','is_deleted'], 'integer'],
             [['name'], 'string', 'max' => 128],
         ];
@@ -77,6 +80,7 @@ class Contact extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'uuid' => 'UUID',
             'name' => 'name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',     
