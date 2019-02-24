@@ -11,7 +11,7 @@ use yii2tech\ar\softdelete\SoftDeleteQueryBehavior;
 /**
  * This is the model class for table "contact".
  *
- * @property string $id
+ * @property int $id
  * @property string $name name
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -65,10 +65,7 @@ class Contact extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id','name'], 'required'],
-            [['id'], 'unique'],
             [['created_at', 'updated_at','is_deleted'], 'integer'],
-            [['id'], 'string', 'max' => 40],
             [['name'], 'string', 'max' => 128],
         ];
     }
