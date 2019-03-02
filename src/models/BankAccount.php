@@ -67,4 +67,20 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Contact::className(), ['id' => 'contact_id']);
     }
+    /**
+     * Returns all transaction having this account as source (from)
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromTransactions()
+    {
+        return $this->hasMany(Transaction::className(), ['from_contact_id' => 'id']);
+    }       
+    /**
+     * Returns all transaction having this account as target (to)
+     * @return \yii\db\ActiveQuery
+     */
+    public function getToTransactions()
+    {
+        return $this->hasMany(Transaction::className(), ['to_contact_id' => 'id']);
+    }       
 }
