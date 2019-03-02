@@ -14,6 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     ?>
     <?= Html::a('Manage Contacts', ['contact/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Manage Bank Accounts', ['bank-account/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Manage Transactions', ['transaction/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Manage Products', ['product/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Manage Orders', ['order/index'], ['class' => 'btn btn-primary']) ?>
 </p>
 <hr/>
 <p>
