@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "transaction".
  *
@@ -12,8 +12,8 @@ use Yii;
  * @property int $to_account_id
  * @property string $value
  * @property string $description
- * @property int $created_at
- * @property int $updated_at
+ * @property int $created_at timestamp of record creation (see TimestampBehavior)
+ * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  *
  * @property BankAccount $fromAccount
  * @property BankAccount $toAccount
@@ -27,7 +27,15 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return 'transaction';
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),         
+        ];
+    }
     /**
      * {@inheritdoc}
      */

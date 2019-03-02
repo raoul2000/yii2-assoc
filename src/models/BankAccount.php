@@ -3,14 +3,15 @@
 namespace app\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "bank_account".
  *
  * @property int $id
  * @property int $contact_id
  * @property string $name
- *
+ * @property int $created_at timestamp of record creation (see TimestampBehavior)
+ * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property Contact $contact
  */
 class BankAccount extends \yii\db\ActiveRecord
@@ -22,7 +23,15 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         return 'bank_account';
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),         
+        ];
+    }
     /**
      * {@inheritdoc}
      */
@@ -31,6 +40,7 @@ class BankAccount extends \yii\db\ActiveRecord
         return [
             [['contact_id'], 'required'],
             [['contact_id'], 'integer'],
+            [['created_at', 'updated_at'], 'integer'],            
             [['name'], 'string', 'max' => 45],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
         ];
@@ -45,6 +55,8 @@ class BankAccount extends \yii\db\ActiveRecord
             'id' => 'ID',
             'contact_id' => 'Contact ID',
             'name' => 'Name',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',     
         ];
     }
 

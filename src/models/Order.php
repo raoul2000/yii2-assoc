@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "order".
  *
@@ -12,8 +12,8 @@ use Yii;
  * @property int $product_id
  * @property int $transaction_id
  * @property int $contact_id
- * @property int $created_at
- * @property int $updated_at
+ * @property int $created_at timestamp of record creation (see TimestampBehavior)
+ * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  *
  * @property Contact $contact
  * @property Product $product
@@ -28,7 +28,15 @@ class Order extends \yii\db\ActiveRecord
     {
         return 'order';
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),         
+        ];
+    }
     /**
      * {@inheritdoc}
      */

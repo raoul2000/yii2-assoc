@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "product".
  *
  * @property int $id
  * @property string $name
  * @property string $value
- * @property int $created_at
- * @property int $updated_at
+ * @property int $created_at timestamp of record creation (see TimestampBehavior)
+ * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -22,7 +22,15 @@ class Product extends \yii\db\ActiveRecord
     {
         return 'product';
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),         
+        ];
+    }
     /**
      * {@inheritdoc}
      */
