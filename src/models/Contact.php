@@ -87,4 +87,11 @@ class Contact extends \yii\db\ActiveRecord
             'is_deleted' => 'Is Deleted'       
         ];
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBankAccounts()
+    {
+        return $this->hasMany(BankAccount::className(), ['contact_id' => 'id']);
+    }    
 }
