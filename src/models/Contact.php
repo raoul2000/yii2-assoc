@@ -94,4 +94,11 @@ class Contact extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BankAccount::className(), ['contact_id' => 'id']);
     }    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['contact_id' => 'id']);
+    }     
 }
