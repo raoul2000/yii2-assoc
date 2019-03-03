@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\Contact;
 use app\models\BankAccount;
 use app\models\BankAccountSearch;
 use yii\web\Controller;
@@ -37,10 +38,13 @@ class BankAccountController extends Controller
     {
         $searchModel = new BankAccountSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query
+            ->with('contact');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 
@@ -72,6 +76,7 @@ class BankAccountController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 
@@ -92,6 +97,7 @@ class BankAccountController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 

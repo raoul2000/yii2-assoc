@@ -30,7 +30,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'uuid',
+            [
+                'label' => "Bank Account",
+                'format' => 'raw',
+                'value' => function($model) {
+                    if( $model->bankAccounts ) {
+                        return count($model->bankAccounts) 
+                            . ' '
+                            . Html::a('(view)',['bank-account/index','BankAccountSearch[contact_id]' => $model->id]);
+                    } else {
+                        return 'No account' ;
+                    }
+                }
+            ],
             'name',
             [
                 'attribute' => 'updated_at',

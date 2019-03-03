@@ -62,6 +62,15 @@ class Contact extends \yii\db\ActiveRecord
     }    
 
     /**
+     * @return array list of [id, name] items
+     */
+    public static function getNameIndex() {
+        return parent::find()
+            ->select(['id','name'])
+            ->asArray()
+            ->all();
+    }
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -87,6 +96,16 @@ class Contact extends \yii\db\ActiveRecord
             'is_deleted' => 'Is Deleted'       
         ];
     }
+    /**
+     * (non-PHPdoc)
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete()
+    {
+        foreach ($this->bankAccounts as $account) {
+            $account->delete();
+        }        
+    }    
     /**
      * @return \yii\db\ActiveQuery
      */

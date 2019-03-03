@@ -38,7 +38,7 @@ class BankAccount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contact_id'], 'required'],
+            [['contact_id', 'name'], 'required'],
             [['contact_id'], 'integer'],
             [['created_at', 'updated_at'], 'integer'],            
             [['name'], 'string', 'max' => 45],
@@ -59,6 +59,19 @@ class BankAccount extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',     
         ];
     }
+    /**
+     * (non-PHPdoc)
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete()
+    {
+        foreach ($this->fromTransactions as $transaction) {
+            $transaction->delete();
+        }        
+        foreach ($this->toTransactions as $transaction) {
+            $transaction->delete();
+        }        
+    }    
 
     /**
      * @return \yii\db\ActiveQuery
@@ -73,7 +86,7 @@ class BankAccount extends \yii\db\ActiveRecord
      */
     public function getFromTransactions()
     {
-        return $this->hasMany(Transaction::className(), ['from_contact_id' => 'id']);
+        return $this->hasMany(Transaction::className(), ['from_account_id' => 'id']);
     }       
     /**
      * Returns all transaction having this account as target (to)
@@ -81,6 +94,6 @@ class BankAccount extends \yii\db\ActiveRecord
      */
     public function getToTransactions()
     {
-        return $this->hasMany(Transaction::className(), ['to_contact_id' => 'id']);
+        return $this->hasMany(Transaction::className(), ['to_account_id' => 'id']);
     }       
 }
