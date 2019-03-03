@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 
 use yii\filters\AccessControl;
+use app\models\BankAccount;
 use app\models\Contact;
 use app\models\ContactSearch;
 use yii\web\Controller;
@@ -72,6 +73,12 @@ class ContactController extends Controller
         $model = new Contact();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            // be default, create account for new contact
+            $bankAccount = new BankAccount();
+            $bankAccount->contact_id = $model->id;
+            $bankAccount->name = 'principal';
+            $bankAccount->save(false);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
