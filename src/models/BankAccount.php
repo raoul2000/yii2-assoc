@@ -95,5 +95,15 @@ class BankAccount extends \yii\db\ActiveRecord
     public function getToTransactions()
     {
         return $this->hasMany(Transaction::className(), ['to_account_id' => 'id']);
-    }       
+    }     
+
+    /**
+     * @return array list of [id, name] items
+     */
+    public static function getNameIndex() {
+        return parent::find()
+            ->select(['id','name'])
+            ->asArray()
+            ->all();
+    }      
 }

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
@@ -24,6 +25,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            [
+                'attribute' => 'from_account_id',
+                'filter' 	=>  ArrayHelper::map($bankAccounts,'id','name'),
+                'format' 	=> 'html',
+                'value' 	=> function($model, $key, $index, $column) {
+                    return Html::a(Html::encode($model->contact->name), ['bank-account/view','id'=>$model->from_account_id]);
+                }
+            ],	
+
             'from_account_id',
             'to_account_id',
             'value',

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\BankAccount;
 use app\models\Transaction;
 use app\models\TransactionSearch;
 use yii\web\Controller;
@@ -41,6 +42,7 @@ class TransactionController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
 

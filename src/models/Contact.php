@@ -42,12 +42,15 @@ class Contact extends \yii\db\ActiveRecord
                     'updated_at',
                 ],
             ],
+            // disable soft delete
+            /*
             'softDeleteBehavior' => [
                 'class' => SoftDeleteBehavior::className(),
                 'softDeleteAttributeValues' => [
                     'is_deleted' => true
                 ],
-            ],            
+            ],*/
+                        
         ];
     }
 
@@ -57,19 +60,12 @@ class Contact extends \yii\db\ActiveRecord
         // Hard code soft delete condition because I could not use 
         // the SoftDeleteQueryBehavior behavior described in https://github.com/yii2tech/ar-softdelete
         //    $query->attachBehavior('softDelete', SoftDeleteQueryBehavior::className());
-        $query->andWhere([ 'is_deleted' => 0]);
+
+        // disable soft delete
+        //$query->andWhere([ 'is_deleted' => 0]);
         return $query;
     }    
 
-    /**
-     * @return array list of [id, name] items
-     */
-    public static function getNameIndex() {
-        return parent::find()
-            ->select(['id','name'])
-            ->asArray()
-            ->all();
-    }
     /**
      * {@inheritdoc}
      */
@@ -120,4 +116,14 @@ class Contact extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Order::className(), ['contact_id' => 'id']);
     }     
+
+    /**
+     * @return array list of [id, name] items
+     */
+    public static function getNameIndex() {
+        return parent::find()
+            ->select(['id','name'])
+            ->asArray()
+            ->all();
+    }    
 }
