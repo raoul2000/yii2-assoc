@@ -30,12 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' 	=>  ArrayHelper::map($bankAccounts,'id','name'),
                 'format' 	=> 'html',
                 'value' 	=> function($model, $key, $index, $column) {
-                    return Html::a(Html::encode($model->contact->name), ['bank-account/view','id'=>$model->from_account_id]);
+                    return Html::a(Html::encode($model->fromAccount->name), ['bank-account/view','id'=>$model->from_account_id]);
                 }
             ],	
-
-            'from_account_id',
-            'to_account_id',
+            [
+                'attribute' => 'to_account_id',
+                'filter' 	=>  ArrayHelper::map($bankAccounts,'id','name'),
+                'format' 	=> 'html',
+                'value' 	=> function($model, $key, $index, $column) {
+                    return Html::a(Html::encode($model->toAccount->name), ['bank-account/view','id'=>$model->to_account_id]);
+                }
+            ],	
             'value',
             'description',
             [

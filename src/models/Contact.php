@@ -49,8 +49,7 @@ class Contact extends \yii\db\ActiveRecord
                 'softDeleteAttributeValues' => [
                     'is_deleted' => true
                 ],
-            ],*/
-                        
+            ],*/            
         ];
     }
 
@@ -65,7 +64,6 @@ class Contact extends \yii\db\ActiveRecord
         //$query->andWhere([ 'is_deleted' => 0]);
         return $query;
     }    
-
     /**
      * {@inheritdoc}
      */
@@ -101,6 +99,7 @@ class Contact extends \yii\db\ActiveRecord
         foreach ($this->bankAccounts as $account) {
             $account->delete();
         }        
+        return true;
     }    
     /**
      * @return \yii\db\ActiveQuery

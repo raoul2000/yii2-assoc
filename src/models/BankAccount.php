@@ -70,7 +70,8 @@ class BankAccount extends \yii\db\ActiveRecord
         }        
         foreach ($this->toTransactions as $transaction) {
             $transaction->delete();
-        }        
+        }   
+        return true;     
     }    
 
     /**

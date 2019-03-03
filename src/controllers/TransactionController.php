@@ -38,6 +38,8 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query
+            ->with(['fromAccount', 'toAccount']);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

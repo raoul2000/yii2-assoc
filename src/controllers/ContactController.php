@@ -76,7 +76,7 @@ class ContactController extends Controller
             // be default, create account for new contact
             $bankAccount = new BankAccount();
             $bankAccount->contact_id = $model->id;
-            $bankAccount->name = 'principal';
+            $bankAccount->name = $model->name;
             $bankAccount->save(false);
 
             return $this->redirect(['view', 'id' => $model->id]);

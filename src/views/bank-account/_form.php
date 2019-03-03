@@ -15,7 +15,7 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'contact_id')->listBox(ArrayHelper::map($contacts,'id','name'),['size'=>1])?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>"off"]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
