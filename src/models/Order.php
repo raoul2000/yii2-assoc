@@ -44,7 +44,9 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['quantity', 'product_id', 'transaction_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
-            [['product_id', 'transaction_id', 'contact_id'], 'required'],
+            [['product_id', 'transaction_id', 'contact_id','quantity'], 'required'],
+            ['quantity', 'number', 'min' => 1],
+            ['quantity', 'default', 'value' => 1],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
             [['transaction_id'], 'exist', 'skipOnError' => true, 'targetClass' => Transaction::className(), 'targetAttribute' => ['transaction_id' => 'id']],

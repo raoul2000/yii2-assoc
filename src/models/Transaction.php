@@ -42,10 +42,11 @@ class Transaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['from_account_id', 'to_account_id'], 'required'],
+            [['from_account_id', 'to_account_id','value'], 'required'],
             [['from_account_id', 'to_account_id', 'created_at', 'updated_at'], 'integer'],
-            [['value'], 'number'],
+            [['value'], 'number', 'min' => 0],
             [['description'], 'string', 'max' => 128],
+            ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number'],
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
         ];
