@@ -54,7 +54,8 @@ $config = [
             'class' => Da\User\Module::class,
             'enableRegistration' => false,
             'enableEmailConfirmation' => false,
-            'administratorPermissionName' => 'manageUser'
+            'administratorPermissionName' => 'manageUser',
+            'administrators' => ['admin']
         ],
         'arhistory' => [
             'class' => 'bupy7\activerecord\history\Module',

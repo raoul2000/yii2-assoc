@@ -73,7 +73,15 @@ class TransactionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+/*
+        $accounts = BankAccount::find()
+            ->select(['id', 'name', 'contact_id', 'contact.*'])
+            ->asArray()
+            ->with(['contact'])            
+            ->all();
+        Yii::trace($accounts);
 
+*/        
         return $this->render('create', [
             'model' => $model,
         ]);
