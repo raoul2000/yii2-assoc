@@ -38,8 +38,6 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query
-            ->with(['fromAccount', 'toAccount']);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -73,17 +71,10 @@ class TransactionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-/*
-        $accounts = BankAccount::find()
-            ->select(['id', 'name', 'contact_id', 'contact.*'])
-            ->asArray()
-            ->with(['contact'])            
-            ->all();
-        Yii::trace($accounts);
-
-*/        
+     
         return $this->render('create', [
             'model' => $model,
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
 

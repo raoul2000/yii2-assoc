@@ -38,8 +38,6 @@ class BankAccountController extends Controller
     {
         $searchModel = new BankAccountSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query
-            ->with('contact');
 
         return $this->render('index', [
             'searchModel' => $searchModel,

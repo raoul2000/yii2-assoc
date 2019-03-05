@@ -12,9 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'from_account_id')->textInput() ?>
+    <?= $form->field($model, 'from_account_id')->listBox($bankAccounts,['size'=>1])?>
 
-    <?= $form->field($model, 'to_account_id')->textInput() ?>
+    <?= $form->field($model, 'to_account_id')->listBox($bankAccounts,['size'=>1])?>    
 
     <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>"off"]) ?>
 

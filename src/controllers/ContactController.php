@@ -73,7 +73,7 @@ class ContactController extends Controller
         $model = new Contact();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // be default, create account for new contact
+            // by default, create an account for new contact
             $bankAccount = new BankAccount();
             $bankAccount->contact_id = $model->id;
             $bankAccount->name = ''; //$model->name;

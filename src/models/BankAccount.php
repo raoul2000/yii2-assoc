@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 /**
  * This is the model class for table "bank_account".
  *
@@ -98,13 +99,21 @@ class BankAccount extends \yii\db\ActiveRecord
         return $this->hasMany(Transaction::className(), ['to_account_id' => 'id']);
     }     
 
+
     /**
-     * @return array list of [id, name] items
+     * Returns an array containing all bank account names indexed by account id. 
+     * Account names are prefixed with the contact name.
      */
     public static function getNameIndex() {
-        return parent::find()
-            ->select(['id','name'])
-            ->asArray()
-            ->all();
-    }      
+        $accounts = parent::find()
+        ->asArray()
+        ->with(['contact'])          
+        ->all();
+        
+        return ArrayHelper::map($accounts, 'id', function($item) {
+            return $item['contact']['name'] . ( empty($item['name'] ) 
+                ? ''
+                : ' (' . $item['name'] . ')');
+        });
+    }
 }

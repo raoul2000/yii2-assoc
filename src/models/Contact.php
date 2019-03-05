@@ -117,7 +117,9 @@ class Contact extends \yii\db\ActiveRecord
     }     
 
     /**
-     * @return array list of [id, name] items
+     * Returns an array containing all contact names indexed by contact Id.
+     * 
+     * @returns array list of [id, name] items
      */
     public static function getNameIndex() {
         return parent::find()
