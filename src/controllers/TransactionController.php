@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\BankAccount;
 use app\models\Transaction;
+use app\models\Order;
+use app\models\OrderSearch;
 use app\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -48,14 +50,22 @@ class TransactionController extends Controller
 
     /**
      * Displays a single Transaction model.
+     * The view also displays a grid of all related orders
+     * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $orderSearchModel = new OrderSearch();
+        $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams);
+        $orderDataProvider->query->andWhere(['transaction_id' => $id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'orderSearchModel' => $orderSearchModel,
+            'orderDataProvider' => $orderDataProvider
         ]);
     }
 

@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
+use yii\grid\GridView;
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
 
@@ -44,5 +45,38 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+
+    <h2>Orders</h2>
+    <?php Pjax::begin(); ?>
+        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+        <p>
+            <?= Html::a('Create Order', [
+                'order/create', 
+                'transaction_id' => $model->id,
+                ], ['class' => 'btn btn-success']) ?>
+        </p>
+
+        <?= GridView::widget([
+            'dataProvider' => $orderDataProvider,
+            'filterModel' => $orderSearchModel,
+            'columns' => [
+                'quantity',
+                'product_id',
+                'transaction_id',
+                'contact_id',
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+
+                ['class' => 'yii\grid\ActionColumn'],
+            ],
+        ]); ?>
+    <?php Pjax::end(); ?>    
 
 </div>
