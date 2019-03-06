@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\Transaction;
 use app\models\Order;
 use app\models\OrderSearch;
 use yii\web\Controller;
@@ -62,16 +63,33 @@ class OrderController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($transaction_id = null, $contact_id = null)
     {
         $model = new Order();
 
+        // user submitted the form
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        if( Yii::$app->request->isGet ) {
+            $model->transaction_id = $transaction_id;
+            $model->contact_id = $contact_id;
+        }
+/*
+        if( $transaction_id ) {
+            $transaction = Transaction::find()
+                ->where( ['id' => $transaction_id])
+                ->with(['fromAccount','toAccount'])
+                ->one();
+
+        } else {
+            $transaction = null;
+        }
+*/
         return $this->render('create', [
             'model' => $model,
+            'transaction' => $transaction
         ]);
     }
 
