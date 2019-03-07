@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
 
@@ -31,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'from_account_id',
-            'to_account_id',
+            'fromAccount.longName',
+            'toAccount.longName',
             'value',
             'description',
             [
@@ -52,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <p>
             <?= Html::a('Create Order For This Transaction', [
-                'order/create', 
+                'order/create',
                 'transaction_id' => $model->id,
                 'contact_id' => $model->fromAccount->contact->id
                 ], ['class' => 'btn btn-success']) ?>
@@ -62,9 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $orderDataProvider,
             'filterModel' => $orderSearchModel,
             'columns' => [
-                'quantity',
                 'product_id',
-                'transaction_id',
+                'quantity',
                 'contact_id',
                 [
                     'attribute' => 'updated_at',

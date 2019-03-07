@@ -78,14 +78,14 @@ class BankAccount extends \yii\db\ActiveRecord
     }
 
     /**
-     * Initialize and save the 'contact_name' attribute with the name of the related contact.
+     * Maintain synchro between the related contact record, and the 'contact_name' column.
      *
      * @see \app\models\Contact::afterSave()
      * @see \yii\db\BaseActiveRecord::afterSave($insert, $changedAttributes)
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if ($insert && empty($this->contact_name)) {
+        if ($insert || (!$insert && isset($changedAttributes['contact_id']))) {
             $this->contact_name = $this->contact->name;
             $this->save(false);
         }
@@ -130,5 +130,10 @@ class BankAccount extends \yii\db\ActiveRecord
                 ? ''
                 : ' (' . $item['name'] . ')');
         });
+    }
+
+    public function getLongName()
+    {
+        return $this->contact_name . ( empty($this->name) ? '' : ' - ' . $this->name);
     }
 }

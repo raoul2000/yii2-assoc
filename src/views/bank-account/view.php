@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\BankAccount */
 
-$this->title = $model->name;
+$this->title = $model->longName;
 $this->params['breadcrumbs'][] = ['label' => 'Bank Accounts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -33,9 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Contact',
                 'format' => 'raw',
-                'value' => function($model) {
-                    return Html::a( 
-                        Html::encode($model->contact->name), 
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::encode($model->contact->name),
                         ['contact/view', 'id' => $model->contact->id],
                         ['title' => 'view Contact']
                     );
