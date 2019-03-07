@@ -49,21 +49,21 @@ class Contact extends \yii\db\ActiveRecord
                 'softDeleteAttributeValues' => [
                     'is_deleted' => true
                 ],
-            ],*/            
+            ],*/
         ];
     }
 
     public static function find()
     {
         $query = parent::find();
-        // Hard code soft delete condition because I could not use 
+        // Hard code soft delete condition because I could not use
         // the SoftDeleteQueryBehavior behavior described in https://github.com/yii2tech/ar-softdelete
         //    $query->attachBehavior('softDelete', SoftDeleteQueryBehavior::className());
 
         // disable soft delete
         //$query->andWhere([ 'is_deleted' => 0]);
         return $query;
-    }    
+    }
     /**
      * {@inheritdoc}
      */
@@ -86,8 +86,8 @@ class Contact extends \yii\db\ActiveRecord
             'uuid' => 'UUID',
             'name' => 'name',
             'created_at' => 'Created At',
-            'updated_at' => 'Updated At',     
-            'is_deleted' => 'Is Deleted'       
+            'updated_at' => 'Updated At',
+            'is_deleted' => 'Is Deleted'
         ];
     }
     /**
@@ -98,9 +98,9 @@ class Contact extends \yii\db\ActiveRecord
     {
         foreach ($this->bankAccounts as $account) {
             $account->delete();
-        }        
+        }
         return true;
-    }    
+    }
 
     /**
      * Implement Synchro between contact.name and bankAccount.contact_name columns.
@@ -108,37 +108,38 @@ class Contact extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if( !$insert && isset($changedAttributes['name'])) {
-    		foreach ($this->bankAccounts as $bankAccount) {
+        if (!$insert && isset($changedAttributes['name'])) {
+            foreach ($this->bankAccounts as $bankAccount) {
                 $bankAccount->contact_name = $this->name;
                 $bankAccount->save(false);
-    		}            
+            }
         }
-    }     
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getBankAccounts()
     {
         return $this->hasMany(BankAccount::className(), ['contact_id' => 'id']);
-    }    
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getOrders()
     {
         return $this->hasMany(Order::className(), ['contact_id' => 'id']);
-    }     
+    }
 
     /**
      * Returns an array containing all contact names indexed by contact Id.
-     * 
+     *
      * @returns array list of [id, name] items
      */
-    public static function getNameIndex() {
+    public static function getNameIndex()
+    {
         return parent::find()
             ->select(['id','name'])
             ->asArray()
             ->all();
-    }    
+    }
 }

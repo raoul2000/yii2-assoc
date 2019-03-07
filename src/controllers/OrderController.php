@@ -72,7 +72,7 @@ class OrderController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        if( Yii::$app->request->isGet ) {
+        if (Yii::$app->request->isGet) {
             $model->transaction_id = $transaction_id;
             $model->contact_id = $contact_id;
         }

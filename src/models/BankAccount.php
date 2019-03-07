@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
+
 /**
  * This is the model class for table "bank_account".
  *
@@ -31,7 +32,7 @@ class BankAccount extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),         
+            TimestampBehavior::className(),
         ];
     }
     /**
@@ -42,7 +43,7 @@ class BankAccount extends \yii\db\ActiveRecord
         return [
             [['contact_id', 'name'], 'required'],
             [['contact_id'], 'integer'],
-            [['created_at', 'updated_at'], 'integer'],            
+            [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 45],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
         ];
@@ -58,7 +59,7 @@ class BankAccount extends \yii\db\ActiveRecord
             'contact_id' => 'Contact ID',
             'name' => 'Name',
             'created_at' => 'Created At',
-            'updated_at' => 'Updated At',     
+            'updated_at' => 'Updated At',
         ];
     }
     /**
@@ -69,26 +70,26 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         foreach ($this->fromTransactions as $transaction) {
             $transaction->delete();
-        }        
+        }
         foreach ($this->toTransactions as $transaction) {
             $transaction->delete();
-        }   
-        return true;     
-    }    
+        }
+        return true;
+    }
 
     /**
      * Initialize and save the 'contact_name' attribute with the name of the related contact.
-     * 
+     *
      * @see \app\models\Contact::afterSave()
      * @see \yii\db\BaseActiveRecord::afterSave($insert, $changedAttributes)
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if($insert && empty($this->contact_name)) {
+        if ($insert && empty($this->contact_name)) {
             $this->contact_name = $this->contact->name;
             $this->save(false);
         }
-    }  
+    }
         
     /**
      * @return \yii\db\ActiveQuery
@@ -104,7 +105,7 @@ class BankAccount extends \yii\db\ActiveRecord
     public function getFromTransactions()
     {
         return $this->hasMany(Transaction::className(), ['from_account_id' => 'id']);
-    }       
+    }
     /**
      * Returns all transaction having this account as target (to)
      * @return \yii\db\ActiveQuery
@@ -112,21 +113,20 @@ class BankAccount extends \yii\db\ActiveRecord
     public function getToTransactions()
     {
         return $this->hasMany(Transaction::className(), ['to_account_id' => 'id']);
-    }     
-
-
+    }
     /**
-     * Returns an array containing all bank account names indexed by account id. 
+     * Returns an array containing all bank account names indexed by account id.
      * Account names are prefixed with the contact name.
      */
-    public static function getNameIndex() {
+    public static function getNameIndex()
+    {
         $accounts = parent::find()
         ->asArray()
-        ->with(['contact'])          
+        ->with(['contact'])
         ->all();
         
-        return ArrayHelper::map($accounts, 'id', function($item) {
-            return $item['contact']['name'] . ( empty($item['name'] ) 
+        return ArrayHelper::map($accounts, 'id', function ($item) {
+            return $item['contact']['name'] . ( empty($item['name'])
                 ? ''
                 : ' (' . $item['name'] . ')');
         });

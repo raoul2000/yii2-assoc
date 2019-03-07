@@ -51,7 +51,7 @@ class TransactionController extends Controller
     /**
      * Displays a single Transaction model.
      * The view also displays a grid of all related orders
-     * 
+     *
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
