@@ -21,7 +21,7 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
-    <?= $form->field($model, 'initial_product_id')->listBox(ArrayHelper::map($products, 'id', 'name'), ['size'=>1])?>
+    <?= $form->field($model, 'initial_product_id')->listBox($products, ['size'=>1])?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

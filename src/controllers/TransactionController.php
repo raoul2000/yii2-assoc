@@ -101,7 +101,7 @@ class TransactionController extends Controller
         return $this->render('create', [
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
-            'products' => \app\models\Product::find()->all()
+            'products' => Product::getNameIndex()
         ]);
     }
 
