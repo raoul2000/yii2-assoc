@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BankAccountSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,12 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'contact_id',
-                'filter' 	=>  ArrayHelper::map($contacts,'id','name'),
-                'format' 	=> 'html',
-                'value' 	=> function($model, $key, $index, $column) {
-                    return Html::a(Html::encode($model->contact->name), ['contact/view','id'=>$model->contact_id]);
+                'filter'    =>  ArrayHelper::map($contacts, 'id', 'name'),
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) {
+                    return Html::a(Html::encode($model->contact_name), ['contact/view','id'=>$model->contact_id]);
                 }
-            ],	
+            ],
             'name',
             [
                 'attribute' => 'updated_at',
