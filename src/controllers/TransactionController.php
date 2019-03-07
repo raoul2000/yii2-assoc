@@ -6,6 +6,7 @@ use Yii;
 use app\models\BankAccount;
 use app\models\Transaction;
 use app\models\Product;
+use app\models\Contact;
 use app\models\Order;
 use app\models\OrderSearch;
 use app\models\TransactionSearch;
@@ -67,7 +68,8 @@ class TransactionController extends Controller
             'model' => $this->findModel($id),
             'orderSearchModel' => $orderSearchModel,
             'orderDataProvider' => $orderDataProvider,
-            'products' => Product::getNameIndex()
+            'products' => Product::getNameIndex(),
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 
@@ -122,6 +124,8 @@ class TransactionController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'bankAccounts' => BankAccount::getNameIndex(),
+            'products' => Product::getNameIndex()
         ]);
     }
 

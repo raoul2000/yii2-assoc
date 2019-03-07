@@ -67,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 [
                     'attribute' => 'product_id',
+                    'label'     => 'Product',
                     'filter'    => $products,
                     'format'    => 'html',
                     'value'     => function ($model, $key, $index, $column) use ($products) {
@@ -74,7 +75,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
                 'quantity',
-                'contact_id',
+                [
+                    'attribute' => 'contact_id',
+                    'label'     => 'Beneficiary',
+                    'filter'    => $contacts,
+                    'format'    => 'html',
+                    'value'     => function ($model, $key, $index, $column) use ($contacts) {
+                        return Html::a(Html::encode($contacts[$model->contact_id]), ['product/view','id'=>$model->contact_id]);
+                    }
+                ],
                 [
                     'attribute' => 'updated_at',
                     'format' => ['date', 'php:d/m/Y H:i']
