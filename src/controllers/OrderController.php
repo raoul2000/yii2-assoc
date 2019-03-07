@@ -76,20 +76,12 @@ class OrderController extends Controller
             $model->transaction_id = $transaction_id;
             $model->contact_id = $contact_id;
         }
-/*
-        if( $transaction_id ) {
-            $transaction = Transaction::find()
-                ->where( ['id' => $transaction_id])
-                ->with(['fromAccount','toAccount'])
-                ->one();
 
-        } else {
-            $transaction = null;
-        }
-*/
         return $this->render('create', [
             'model' => $model,
-            'transaction' => $transaction
+            'products' => \app\models\Product::getNameIndex(),
+            'contacts' => \app\models\Contact::getNameIndex(),
+            'transaction' => null
         ]);
     }
 

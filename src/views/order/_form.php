@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Order */
@@ -14,11 +15,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'quantity')->textInput() ?>
 
-    <?= $form->field($model, 'product_id')->textInput() ?>
+    <?= $form->field($model, 'product_id')->listBox(ArrayHelper::map($products,'id','name'),['size'=>1])?>
 
     <?= $form->field($model, 'transaction_id')->textInput() ?>
 
-    <?= $form->field($model, 'contact_id')->textInput() ?>
+    <?= $form->field($model, 'contact_id')->listBox(ArrayHelper::map($contacts,'id','name'),['size'=>1])?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

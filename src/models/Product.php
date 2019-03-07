@@ -65,4 +65,15 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Order::className(), ['product_id' => 'id']);
     }    
+    /**
+     * Returns an array containing all product names indexed by contact Id.
+     * 
+     * @returns array list of [id, name] items
+     */
+    public static function getNameIndex() {
+        return parent::find()
+            ->select(['id','name'])
+            ->asArray()
+            ->all();
+    }       
 }

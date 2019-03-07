@@ -32,7 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'label' => 'Contact',
-                'attribute' => 'contact.name'
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a( 
+                        Html::encode($model->contact->name), 
+                        ['contact/view', 'id' => $model->contact->id],
+                        ['title' => 'view Contact']
+                    );
+                }
             ],
             'name',
             [

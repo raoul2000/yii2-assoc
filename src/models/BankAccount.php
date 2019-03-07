@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property int $contact_id
+ * @property string $contact_name copy of the contact name
  * @property string $name
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -75,6 +76,20 @@ class BankAccount extends \yii\db\ActiveRecord
         return true;     
     }    
 
+    /**
+     * Initialize and save the 'contact_name' attribute with the name of the related contact.
+     * 
+     * @see \app\models\Contact::afterSave()
+     * @see \yii\db\BaseActiveRecord::afterSave($insert, $changedAttributes)
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert && empty($this->contact_name)) {
+            $this->contact_name = $this->contact->name;
+            $this->save(false);
+        }
+    }  
+        
     /**
      * @return \yii\db\ActiveQuery
      */
