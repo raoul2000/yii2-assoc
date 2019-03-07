@@ -22,6 +22,14 @@ use yii\behaviors\TimestampBehavior;
 class Transaction extends \yii\db\ActiveRecord
 {
     /**
+     * This attribute is used when creating a new transaction. It is used to optionnally store a product ID
+     * that will be used to automatically created an Order record.
+     *
+     * @var int
+     */
+    public $initial_product_id;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -50,6 +58,8 @@ class Transaction extends \yii\db\ActiveRecord
             ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number'],
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
+
+            [['initial_product_id'], 'integer'],
         ];
     }
 

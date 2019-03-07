@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
@@ -75,7 +76,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => ['date', 'php:d/m/Y H:i']
                 ],
 
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template' => '{view} {delete}',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        return Url::to(['order/' . $action, 'id' => $model->id]);
+                    }
+                ],
             ],
         ]); ?>
     <?php Pjax::end(); ?>    

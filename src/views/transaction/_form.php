@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
@@ -12,13 +13,15 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'from_account_id')->listBox($bankAccounts,['size'=>1])?>
+    <?= $form->field($model, 'from_account_id')->listBox($bankAccounts, ['size'=>1])?>
 
-    <?= $form->field($model, 'to_account_id')->listBox($bankAccounts,['size'=>1])?>    
+    <?= $form->field($model, 'to_account_id')->listBox($bankAccounts, ['size'=>1])?>    
 
-    <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>"off"]) ?>
+    <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>"off"]) ?>
+    <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+
+    <?= $form->field($model, 'initial_product_id')->listBox(ArrayHelper::map($products, 'id', 'name'), ['size'=>1])?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
