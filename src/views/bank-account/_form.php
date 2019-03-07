@@ -13,9 +13,9 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'contact_id')->listBox(ArrayHelper::map($contacts,'id','name'),['size'=>1])?>
+    <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>"off"]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

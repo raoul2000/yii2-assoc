@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TransactionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -27,20 +28,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'from_account_id',
-                'filter' 	=> $bankAccounts,
-                'format' 	=> 'html',
-                'value' 	=> function($model, $key, $index, $column) use ($bankAccounts) {
+                'filter'    => $bankAccounts,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
                     return Html::a(Html::encode($bankAccounts[$model->from_account_id]), ['bank-account/view','id'=>$model->from_account_id]);
                 }
-            ],	
+            ],
             [
                 'attribute' => 'to_account_id',
-                'filter' 	=>  $bankAccounts,
-                'format' 	=> 'html',
-                'value' 	=> function($model, $key, $index, $column) use ($bankAccounts) {
+                'filter'    =>  $bankAccounts,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
                     return Html::a(Html::encode($bankAccounts[$model->to_account_id]), ['bank-account/view','id'=>$model->to_account_id]);
                 }
-            ],	
+            ],
             'value',
             'description',
             [

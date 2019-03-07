@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "product".
@@ -73,9 +74,10 @@ class Product extends \yii\db\ActiveRecord
      */
     public static function getNameIndex()
     {
-        return parent::find()
+        $products = parent::find()
             ->select(['id','name'])
             ->asArray()
             ->all();
+        return ArrayHelper::map($products, 'id', 'name');
     }
 }

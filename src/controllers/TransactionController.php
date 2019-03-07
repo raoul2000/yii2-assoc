@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\BankAccount;
 use app\models\Transaction;
+use app\models\Product;
 use app\models\Order;
 use app\models\OrderSearch;
 use app\models\TransactionSearch;
@@ -65,7 +66,8 @@ class TransactionController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
             'orderSearchModel' => $orderSearchModel,
-            'orderDataProvider' => $orderDataProvider
+            'orderDataProvider' => $orderDataProvider,
+            'products' => Product::getNameIndex()
         ]);
     }
 

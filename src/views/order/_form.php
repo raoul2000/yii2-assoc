@@ -15,11 +15,11 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'quantity')->textInput() ?>
 
-    <?= $form->field($model, 'product_id')->listBox(ArrayHelper::map($products,'id','name'),['size'=>1])?>
+    <?= $form->field($model, 'product_id')->listBox($products, ['size'=>1])?>
 
     <?= $form->field($model, 'transaction_id')->textInput() ?>
 
-    <?= $form->field($model, 'contact_id')->listBox(ArrayHelper::map($contacts,'id','name'),['size'=>1])?>
+    <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

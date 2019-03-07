@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
@@ -64,7 +65,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $orderDataProvider,
             'filterModel' => $orderSearchModel,
             'columns' => [
-                'product_id',
+                [
+                    'attribute' => 'product_id',
+                    'filter'    => $products,
+                    'format'    => 'html',
+                    'value'     => function ($model, $key, $index, $column) use ($products) {
+                        return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
+                    }
+                ],
                 'quantity',
                 'contact_id',
                 [
@@ -75,7 +83,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'created_at',
                     'format' => ['date', 'php:d/m/Y H:i']
                 ],
-
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template' => '{view} {delete}',
