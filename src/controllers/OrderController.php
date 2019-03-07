@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Transaction;
 use app\models\Order;
+use app\models\Product;
 use app\models\OrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -102,6 +103,8 @@ class OrderController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'products' => \app\models\Product::getNameIndex(),
+            'contacts' => \app\models\Contact::getNameIndex(),
         ]);
     }
 
