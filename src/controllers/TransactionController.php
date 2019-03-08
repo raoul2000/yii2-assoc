@@ -19,6 +19,16 @@ use yii\filters\VerbFilter;
  */
 class TransactionController extends Controller
 {
+    public function actions()
+    {
+        return [
+            // declares "error" action using a class name
+            'delete-order' => [
+                'class' => 'app\components\actions\orders\DeleteAction',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */

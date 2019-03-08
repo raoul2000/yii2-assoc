@@ -95,6 +95,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action == 'delete') {
+                            return Url::to(['delete-order', 'id' => $model->id]);
+                        }
                         return Url::to(['order/' . $action, 'id' => $model->id]);
                     }
                 ],

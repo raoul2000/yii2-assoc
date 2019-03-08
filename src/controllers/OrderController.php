@@ -16,6 +16,15 @@ use yii\filters\VerbFilter;
  */
 class OrderController extends Controller
 {
+    public function actions()
+    {
+        return [
+            // declares "error" action using a class name
+            'delete' => [
+                'class' => 'app\components\actions\orders\DeleteAction',
+            ],
+        ];
+    }
     /**
      * {@inheritdoc}
      */
@@ -115,12 +124,13 @@ class OrderController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+    /*
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
+    }*/
 
     /**
      * Finds the Order model based on its primary key value.
