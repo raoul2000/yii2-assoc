@@ -8,11 +8,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1>Administration <small>website</small></h1>
 <hr/>
 <p>
-    <?php
-        if(Yii::$app->user->can('manageUser')) {
-            echo Html::a('Manage Users', ['user/admin'], ['class' => 'btn btn-primary']);
-        }
-    ?>
+    
+    <?php if (Yii::$app->user->can('manageUser')) {
+        echo Html::a('Manage Users', ['user/admin'], ['class' => 'btn btn-primary']);
+    }?>
     <?= Html::a('Manage Contacts', ['contact/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Manage Bank Accounts', ['bank-account/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Manage Transactions', ['transaction/index'], ['class' => 'btn btn-primary']) ?>
@@ -22,4 +21,5 @@ $this->params['breadcrumbs'][] = $this->title;
 <hr/>
 <p>
     <?= Html::a('Record History', ['/record-history'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Attachment', ['/attachment'], ['class' => 'btn btn-primary']) ?>
 </p>

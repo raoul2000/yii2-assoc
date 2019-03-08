@@ -35,6 +35,7 @@ class Contact extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
+             \app\components\behaviors\AttachmentBehavior::className(),
             TimestampBehavior::className(),
             [
                 'class' => HistoryBehavior::className(),
@@ -109,6 +110,8 @@ class Contact extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
+        parent::afterSave($insert, $changedAttributes);
+        
         if (!$insert && isset($changedAttributes['name'])) {
             foreach ($this->bankAccounts as $bankAccount) {
                 $bankAccount->contact_name = $this->name;
