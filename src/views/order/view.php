@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($model->product->name) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,11 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+            'product.name',
             'quantity',
-            'product_id',
-            'transaction_id',
-            'contact_id',
+            [
+                'attribute' => 'transaction_id',
+                'label'     => 'Transaction',
+                'format'    => 'html',
+                'value'     => function () use ($model) {
+                    return Html::a(Html::encode('transaction N°' . $model->transaction_id), ['transaction/view','id'=>$model->transaction_id]);
+                }
+            ],
+            [
+                'attribute' => 'contact.name',
+                'label'     => 'Beneficiary',
+            ],
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
