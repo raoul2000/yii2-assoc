@@ -105,13 +105,12 @@ class Contact extends \yii\db\ActiveRecord
     }
 
     /**
-     * Implement Synchro between contact.name and bankAccount.contact_name columns.
      * @see \app\models\BankAccount::afterSave()
      */
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
-        
+        // contact.name to all related account contact_name column 
         if (!$insert && isset($changedAttributes['name'])) {
             foreach ($this->bankAccounts as $bankAccount) {
                 $bankAccount->contact_name = $this->name;

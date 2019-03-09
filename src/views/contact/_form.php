@@ -8,7 +8,6 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 
 $uploadForm = new \app\models\forms\UploadForm();
-$uploadMetadataForm = new \app\models\forms\UploadMetadataForm();
 
 ?>
 
@@ -19,11 +18,9 @@ $uploadMetadataForm = new \app\models\forms\UploadMetadataForm();
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 
-    <?= $form->field($uploadMetadataForm, 'description[]')->textInput() ?>
-    <?= $form->field($uploadForm, 'file[]')->fileInput() ?>
+    <?= $form->field($uploadForm, 'note')->textInput() ?>
+    <?= $form->field($uploadForm, 'file')->fileInput() ?>
 
-    <?= $form->field($uploadMetadataForm, 'description[]')->textInput() ?>
-    <?= $form->field($uploadForm, 'file[]')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

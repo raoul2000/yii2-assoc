@@ -11,6 +11,8 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property string $name
  * @property string $model
+ * @property int $category_id
+ * @property string $note
  * @property string $hash
  * @property int $created_at
  * @property int $updated_at
@@ -44,8 +46,9 @@ class Attachment extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'hash'], 'required'],
-            [['created_at', 'updated_at', 'itemId', 'size'], 'integer'],
+            [['created_at', 'updated_at', 'itemId', 'size', 'category_id'], 'integer'],
             [['name', 'model', 'hash', 'type', 'mime'], 'string', 'max' => 45],
+            [['note'], 'string', 'max' => 128],
         ];
     }
 
@@ -58,6 +61,8 @@ class Attachment extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'model' => 'Model',
+            'category_id' => 'Category ID',
+            'note' => 'Notes',
             'hash' => 'Hash',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

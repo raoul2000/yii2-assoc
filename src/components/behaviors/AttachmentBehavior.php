@@ -34,14 +34,9 @@ class AttachmentBehavior extends Behavior
 
     public function saveUploads($event)
     {
-        $uploadMetadataForm = Yii::$app->request->post('UploadMetadataForm');
-        if (!isset($uploadMetadataForm)) {
-            return;
-        }
-        $metadata = $uploadMetadataForm['description'];
+        $uploadForm = new  \app\models\forms\UploadForm();
+        $uploadForm->load(Yii::$app->request->post());
 
-
-        
         $files = UploadedFile::getInstancesByName($this->inputName);
         $userDirPath =  $this->getUserDirPath();
 
@@ -51,34 +46,12 @@ class AttachmentBehavior extends Behavior
                 if (!$file->saveAs($userDirPath . $file->name)) {
                     throw new \Exception(\Yii::t('yii', 'File upload failed.'));
                 }
-                $metadata[$tmpFilepath] = $metadata[$key];
             }
         }
 
         $userTempDir = $userDirPath;
         foreach (FileHelper::findFiles($userTempDir) as $file) {
-            if (!$this->attachFile($file, $this->owner, $metadata[$file])) {
-                throw new \Exception(\Yii::t('yii', 'File upload failed.'));
-            }
-        }
-        rmdir($userTempDir);
-    }
-
-    public function originalSaveUploads($event)
-    {
-        $files = UploadedFile::getInstancesByName($this->inputName);
-
-        if (!empty($files)) {
-            foreach ($files as $file) {
-                if (!$file->saveAs($this->getUserDirPath() . $file->name)) {
-                    throw new \Exception(\Yii::t('yii', 'File upload failed.'));
-                }
-            }
-        }
-
-        $userTempDir = $this->getUserDirPath();
-        foreach (FileHelper::findFiles($userTempDir) as $file) {
-            if (!$this->attachFile($file, $this->owner)) {
+            if (!$this->attachFile($file, $this->owner, $uploadForm)) {
                 throw new \Exception(\Yii::t('yii', 'File upload failed.'));
             }
         }
@@ -175,7 +148,7 @@ class AttachmentBehavior extends Behavior
      * @throws Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function attachFile($filePath, $owner, $metadata = [])
+    public function attachFile($filePath, $owner, $uploadForm)
     {
         if (empty($owner->id)) {
             throw new Exception('Parent model must have ID when you attaching a file');
@@ -202,6 +175,9 @@ class AttachmentBehavior extends Behavior
         $file->size = filesize($filePath);
         $file->type = $fileType;
         $file->mime = FileHelper::getMimeType($filePath);
+
+        $file->category_id = $uploadForm->category_id;
+        $file->note = $uploadForm->note;
 
         if ($file->save()) {
             unlink($filePath);

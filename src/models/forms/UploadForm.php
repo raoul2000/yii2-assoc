@@ -13,7 +13,14 @@ class UploadForm extends Model
      */
     public $file;
 
-    //public $description;
+    /**
+     * @var int|nul optional attachment category identifier
+     */
+    public $category_id;
+    /**
+     * @var string|null optional note describinf the attachment
+     */
+    public $note;
 
     /**
      * @return array the validation rules.
@@ -22,8 +29,8 @@ class UploadForm extends Model
     {
         return [
             ['file', 'file'],
-           // ['description', 'string']
-            //ArrayHelper::merge(['file', 'file'], $this->getModule()->rules)
+            ['note', 'string'],
+            ['category_id', 'integer'],
         ];
     }
 }

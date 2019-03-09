@@ -20,6 +20,7 @@ class ContactController extends Controller
     /**
      * {@inheritdoc}
      */
+    /*
     public function behaviors()
     {
         return [
@@ -34,6 +35,7 @@ class ContactController extends Controller
             ],
         ];
     }
+    */
 
     /**
      * Lists all Contact models.
@@ -79,6 +81,7 @@ class ContactController extends Controller
             $bankAccount->name = '';
             $bankAccount->save(false);
 
+            // handle attachment
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
