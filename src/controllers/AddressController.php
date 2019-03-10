@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\Contact;
 use app\models\Address;
 use app\models\AddressSearch;
 use yii\web\Controller;
@@ -62,16 +63,32 @@ class AddressController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($contact_id = null)
     {
         $model = new Address();
+        $contact = null;
+
+        if( isset($contact_id)) {
+            $contact = Contact::findOne($contact_id);
+            if( $contact == null ) {
+                throw new NotFoundHttpException('Contact not found.');
+            }
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if( isset($contact)) {
+                $contact->updateAttributes([
+                    'address_id' => $model->id
+                ]);
+                return $this->redirect(['contact/view', 'id' => $contact->id]);
+            } else {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
             'model' => $model,
+            'contact' => $contact
         ]);
     }
 
@@ -82,16 +99,30 @@ class AddressController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $contact_id = null)
     {
         $model = $this->findModel($id);
 
+        $contact = null;
+        if( isset($contact_id)) {
+            $contact = Contact::findOne($contact_id);
+            if( $contact == null ) {
+                throw new NotFoundHttpException('Contact not found.');
+            }
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if( isset($contact)) {
+                return $this->redirect(['contact/view', 'id' => $contact->id]);
+            } else {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'contact' => $contact
         ]);
     }
 

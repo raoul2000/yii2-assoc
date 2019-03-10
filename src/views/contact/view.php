@@ -55,4 +55,34 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <h2>Address</h2>
+    <hr/>
+    <?php if( ! isset($model->address) ):?>
+
+        <p>No Address registered for this contact</p>
+        <?= Html::a('Create Address', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Link to Existing Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    
+    <?php else : ?>
+        <p>
+            <?= Html::a('Create New Address For this Contact', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Update This Address', ['address/update', 'id' => $model->address->id, 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Link to Another Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Unlink from Address', ['contact/unlink-address', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
+        </p>
+        <?= DetailView::widget([
+            'model' => $model->address,
+            'attributes' => [
+                'line_1',
+                'line_2',
+                'line_3',
+                'zip_code',
+                'city',
+                'country',
+                'note',
+            ],
+        ]) ?>        
+    <?php endif; ?>
+
+
 </div>

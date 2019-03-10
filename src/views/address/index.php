@@ -24,15 +24,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'line_1',
             'line_2',
             'line_3',
             'zip_code',
-            //'city',
-            //'country',
+            'city',
+            'country',
             //'note',
             //'created_at',
             //'updated_at',
