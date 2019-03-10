@@ -60,7 +60,15 @@ class Address extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            yii\behaviors\TimestampBehavior::className(),
+        ];
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -80,6 +80,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'city',
                 'country',
                 'note',
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],            
             ],
         ]) ?>        
     <?php endif; ?>
