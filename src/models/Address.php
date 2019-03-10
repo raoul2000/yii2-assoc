@@ -68,4 +68,17 @@ class Address extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Contact::className(), ['address_id' => 'id']);
     }
+    /**
+     * (non-PHPdoc)
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete()
+    {
+        foreach ($this->contacts as $contact) {
+            $contact->updateAttributes([
+                'address_id' => null
+            ]);
+        }
+        return true;
+    }    
 }
