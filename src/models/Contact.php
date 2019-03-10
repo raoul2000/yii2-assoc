@@ -16,6 +16,7 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property binary $uuid
  * @property string $name name
+ * @property int $address_id
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property bool $is_deleted used by soft delete behavior to flag a record as soft deleted
@@ -118,6 +119,13 @@ class Contact extends \yii\db\ActiveRecord
             }
         }
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddress()
+    {
+        return $this->hasOne(Address::className(), ['id' => 'address_id']);
+    }    
     /**
      * @return \yii\db\ActiveQuery
      */
