@@ -18,7 +18,7 @@ class AttachmentSearch extends Attachment
     {
         return [
             [['id', 'created_at', 'updated_at', 'itemId', 'size'], 'integer'],
-            [['name', 'model', 'hash', 'type', 'mime'], 'safe'],
+            [['name', 'model', 'hash', 'type', 'mime', 'category_id', 'note'], 'safe'],
         ];
     }
 
@@ -67,6 +67,7 @@ class AttachmentSearch extends Attachment
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'model', $this->model])
+            ->andFilterWhere(['like', 'note', $this->model])
             ->andFilterWhere(['like', 'hash', $this->hash])
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'mime', $this->mime]);

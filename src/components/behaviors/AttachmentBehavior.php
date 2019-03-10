@@ -60,7 +60,7 @@ class AttachmentBehavior extends Behavior
 
     public function deleteUploads($event)
     {
-        foreach ($this->getFiles() as $file) {
+        foreach ($this->getAttachments() as $file) {
             $this->detachFile($file->id);
         }
     }
@@ -69,7 +69,7 @@ class AttachmentBehavior extends Behavior
      * @return Attachment[]
      * @throws \Exception
      */
-    public function getFiles()
+    public function getAttachments()
     {
         $fileQuery = Attachment::find()
             ->where([
