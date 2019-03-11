@@ -17,6 +17,7 @@ use yii\helpers\ArrayHelper;
  * @property binary $uuid
  * @property string $name name
  * @property int $address_id
+ * @property int $is_natural_person TRUE if this contact represent a natural person, FALSE if it represent a legal person
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property bool $is_deleted used by soft delete behavior to flag a record as soft deleted
@@ -73,6 +74,8 @@ class Contact extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['is_natural_person'], 'required'],
+            [['is_natural_person'], 'boolean'],
             [['uuid'], 'default', 'value' => UuidHelper::uuid()],
             [['created_at', 'updated_at','is_deleted'], 'integer'],
             [['name'], 'string', 'max' => 128],

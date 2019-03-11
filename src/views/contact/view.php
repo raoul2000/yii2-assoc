@@ -32,19 +32,20 @@ $contactModel = $model;
         'attributes' => [
             'id',
             [
-                'label' => "Bank Account",
+                'label' => 'Bank Account',
                 'format' => 'raw',
-                'value' => function($model) {
-                    if( $model->bankAccounts ) {
-                        return count($model->bankAccounts) 
+                'value' => function ($model) {
+                    if ($model->bankAccounts) {
+                        return count($model->bankAccounts)
                             . ' '
-                            . Html::a('(view)',['bank-account/index','BankAccountSearch[contact_id]' => $model->id]);
+                            . Html::a('(view)', ['bank-account/index','BankAccountSearch[contact_id]' => $model->id]);
                     } else {
                         return 'No account' ;
                     }
                 }
             ],
             'name',
+            'is_natural_person:boolean',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
@@ -58,7 +59,7 @@ $contactModel = $model;
 
     <h2>Address</h2>
     <hr/>
-    <?php if (! isset($model->address) ) :?>
+    <?php if (!isset($model->address)):?>
 
         <p>No Address registered for this contact :</p>
         <?= Html::a('Create Address', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -119,6 +120,4 @@ $contactModel = $model;
             ],
         ]) ?>        
     <?php endif; ?>
-
-
 </div>
