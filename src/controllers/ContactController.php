@@ -38,7 +38,15 @@ class ContactController extends Controller
         ];
     }
     */
-
+    public function actions()
+    {
+        return [
+            // declares "error" action using a class name
+            'download-attachment' => [
+                'class' => 'app\components\actions\attachments\DownloadAction',
+            ],
+        ];
+    }
     /**
      * Lists all Contact models.
      * @return mixed

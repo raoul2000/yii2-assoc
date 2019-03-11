@@ -13,12 +13,6 @@ use app\models\Attachment;
 
 class AttachmentBehavior extends Behavior
 {
-    public $controllerNamespace = 'app\controllers';
-
-    public $storePath = '@app/uploads/store';
-
-    public $tempPath = '@app/uploads/temp';
-
     public $rules = [];
 
     public $inputName = 'UploadForm[file]';
@@ -38,7 +32,7 @@ class AttachmentBehavior extends Behavior
         $uploadForm->load(Yii::$app->request->post());
 
         $files = UploadedFile::getInstancesByName($this->inputName);
-        $userDirPath =  $this->getUserDirPath();
+        $userDirPath =  \Yii::$app->attachmentStorageManager->getUserDirPath();
 
         if (!empty($files)) {
             foreach ($files as $key => $file) {
@@ -81,57 +75,6 @@ class AttachmentBehavior extends Behavior
         return $fileQuery->all();
     }
 
-    public function getStorePath()
-    {
-        return \Yii::getAlias($this->storePath);
-    }
-
-    public function getTempPath()
-    {
-        return \Yii::getAlias($this->tempPath);
-    }
-
-    /**
-     * @param $fileHash
-     * @return string
-     */
-    public function getFilesDirPath($fileHash)
-    {
-        $path = $this->getStorePath() . DIRECTORY_SEPARATOR . $this->getSubDirs($fileHash);
-
-        FileHelper::createDirectory($path);
-
-        return $path;
-    }
-
-    public function getSubDirs($fileHash, $depth = 3)
-    {
-        $depth = min($depth, 9);
-        $path = '';
-
-        for ($i = 0; $i < $depth; $i++) {
-            $folder = substr($fileHash, $i * 3, 2);
-            $path .= $folder;
-            if ($i != $depth - 1) {
-                $path .= DIRECTORY_SEPARATOR;
-            }
-        }
-
-        return $path;
-    }
-
-    public function getUserDirPath()
-    {
-        \Yii::$app->session->open();
-
-        $userDirPath = $this->getTempPath() . DIRECTORY_SEPARATOR . \Yii::$app->session->id;
-        FileHelper::createDirectory($userDirPath);
-
-        \Yii::$app->session->close();
-
-        return $userDirPath . DIRECTORY_SEPARATOR;
-    }
-
     public function getShortClass($obj)
     {
         $className = get_class($obj);
@@ -160,7 +103,7 @@ class AttachmentBehavior extends Behavior
         $fileHash = md5(microtime(true) . $filePath);
         $fileType = pathinfo($filePath, PATHINFO_EXTENSION);
         $newFileName = "$fileHash.$fileType";
-        $fileDirPath = $this->getFilesDirPath($fileHash);
+        $fileDirPath = \Yii::$app->attachmentStorageManager->getFilesDirPath($fileHash);
         $newFilePath = $fileDirPath . DIRECTORY_SEPARATOR . $newFileName;
 
         if (!copy($filePath, $newFilePath)) {
@@ -194,7 +137,8 @@ class AttachmentBehavior extends Behavior
         if (empty($file)) {
             return false;
         }
-        $filePath = $this->getFilesDirPath($file->hash) . DIRECTORY_SEPARATOR . $file->hash . '.' . $file->type;
+        $filesDirPath = \Yii::$app->attachmentStorageManager->getFilesDirPath($file->hash);
+        $filePath = $filesDirPath . DIRECTORY_SEPARATOR . $file->hash . '.' . $file->type;
         
         // this is the important part of the override.
         // the original methods doesn't check for file_exists to be

@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
@@ -11,6 +13,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $contactModel = $model;
+$allAttachments = $model->attachments;
+
 ?>
 <div class="contact-view">
 
@@ -57,9 +61,46 @@ $contactModel = $model;
         ],
     ]) ?>
 
+
+
+    <h2>Attachment</h2>
+    <hr/>
+    <?php if (count($allAttachments) == 0): ?>
+        no attachment
+    <?php else: ?>
+        <?= GridView::widget([
+            'dataProvider' => new ArrayDataProvider(['allModels' => $model->attachments]),
+            'layout' => '{items}',
+            'columns' => [
+                'name',
+                'note',
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'class' 	=> 'yii\grid\ActionColumn',
+                    'template' 	=> '{view} {delete}',
+                    'buttons'   => [
+                        'view' => function ($url, $attachment, $key) use ($contactModel) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-ok"></span>',
+                                ['contact/download-attachment', 'id'=> $attachment->id],
+                                ['title' => 'download this attachment', 'pjax'=>0]
+                            );
+                        },
+                    ]
+                ],
+            ],
+        ]); ?> 
+    <?php endif; ?>
+
+   
+
+
     <h2>Address</h2>
     <hr/>
-    <?php if (!isset($model->address)):?>
+    <?php if (!isset($model->address)): ?>
 
         <p>No Address registered for this contact :</p>
         <?= Html::a('Create Address', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -68,7 +109,7 @@ $contactModel = $model;
             <?= Html::a('Use an Existing Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php endif;?>
     
-    <?php else : ?>
+    <?php else: ?>
         <p>
             <?= Html::a('Create New Address For this Contact', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Update This Address', ['address/update', 'id' => $model->address->id, 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>

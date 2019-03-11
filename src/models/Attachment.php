@@ -72,4 +72,13 @@ class Attachment extends \yii\db\ActiveRecord
             'mime' => 'Mime',
         ];
     }
+
+    public function getUrl()
+    {
+        return Url::to(['/attachments/file/download', 'id' => $this->id]);
+    }
+    public function getPath()
+    {
+        return $this->getFilesDirPath($this->hash) . DIRECTORY_SEPARATOR . $this->hash . '.' . $this->type;
+    }
 }

@@ -47,6 +47,11 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'attachmentStorageManager' => [
+            'class' => 'app\components\AttachmentStorageManager',
+            'storePath' => '@app/uploads/store',
+            'tempPath' => '@app/uploads/temp'
+        ]
     ],
     'params' => $params,
     'modules' => [
