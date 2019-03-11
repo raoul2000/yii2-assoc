@@ -76,6 +76,7 @@ class Contact extends \yii\db\ActiveRecord
             [['uuid'], 'default', 'value' => UuidHelper::uuid()],
             [['created_at', 'updated_at','is_deleted'], 'integer'],
             [['name'], 'string', 'max' => 128],
+            [['address_id'], 'default','value' => null],
         ];
     }
 

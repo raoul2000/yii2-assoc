@@ -46,7 +46,7 @@ $config = [
         'db' => $db,
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
-        ],        
+        ],
     ],
     'params' => $params,
     'modules' => [
@@ -59,7 +59,7 @@ $config = [
         ],
         'arhistory' => [
             'class' => 'bupy7\activerecord\history\Module',
-        ],        
+        ],
     ]
 ];
 

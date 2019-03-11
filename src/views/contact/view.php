@@ -10,6 +10,7 @@ $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$contactModel = $model;
 ?>
 <div class="contact-view">
 
@@ -57,18 +58,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h2>Address</h2>
     <hr/>
-    <?php if( ! isset($model->address) ):?>
+    <?php if (! isset($model->address) ) :?>
 
-        <p>No Address registered for this contact</p>
+        <p>No Address registered for this contact :</p>
         <?= Html::a('Create Address', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Link to Existing Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+
+        <?php if ($addressCount != 0 ): ?>
+            <?= Html::a('Use an Existing Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php endif;?>
     
     <?php else : ?>
         <p>
             <?= Html::a('Create New Address For this Contact', ['address/create', 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('Update This Address', ['address/update', 'id' => $model->address->id, 'contact_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Link to Another Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?= Html::a('Unlink from Address', ['contact/unlink-address', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
+            <?= Html::a('Use Another Existing Address', ['contact/link-address', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Leave This Address', ['contact/unlink-address', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
         </p>
         <?= DetailView::widget([
             'model' => $model->address,
@@ -87,7 +91,31 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'created_at',
                     'format' => ['date', 'php:d/m/Y H:i']
-                ],            
+                ],
+                [
+                    'label' => 'Also Used By',
+                    'format' => 'raw',
+                    'value' => function ($model) use ($contactModel) {
+                        $count = count($model->contacts);
+                        if ($count == 1) {
+                            return '(not used by another contact)';
+                        } else {
+                            $linkedContacts = [];
+                            foreach ($model->contacts as $contact) {
+                                if ($contactModel->id == $contact->id) {
+                                    continue;
+                                }
+                                $linkedContacts[] = Html::a(
+                                    Html::encode($contact->name),
+                                    ['contact/view', 'id' => $contact->id],
+                                    ['title' => 'view Contact']
+                                );
+                            }
+                            
+                            return implode(', ', $linkedContacts);
+                        }
+                    }
+                ],
             ],
         ]) ?>        
     <?php endif; ?>

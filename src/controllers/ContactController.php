@@ -64,6 +64,7 @@ class ContactController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'addressCount' => Address::find()->count()
         ]);
     }
 

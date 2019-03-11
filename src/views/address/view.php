@@ -44,7 +44,27 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y H:i']
-            ],            
+            ],
+            [
+                'label' => 'Used  By',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $count = count($model->contacts);
+                    if ($count == 0) {
+                        return '<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> this address is not used by any contact';
+                    } else {
+                        $linkedContacts = [];
+                        foreach ($model->contacts as $contact) {
+                            $linkedContacts[] = Html::a(
+                                Html::encode($contact->name),
+                                ['contact/view', 'id' => $contact->id],
+                                ['title' => 'view Contact']
+                            );
+                        }
+                        return implode(', ', $linkedContacts);
+                    }
+                }
+            ],
         ],
     ]) ?>
 
