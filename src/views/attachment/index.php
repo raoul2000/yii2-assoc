@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AttachmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -16,10 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Attachment', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -28,13 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'note',
             'category_id',
             'model',
-            'hash',
-            'created_at',
-            //'updated_at',
-            //'itemId',
-            //'size',
-            //'type',
-            //'mime',
+            'itemId',
+            'type',
+            'mime',
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:d/m/Y H:i']
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

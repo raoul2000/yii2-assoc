@@ -45,10 +45,9 @@ class Attachment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'hash'], 'required'],
-            [['created_at', 'updated_at', 'itemId', 'size', 'category_id'], 'integer'],
-            [['name', 'model', 'hash', 'type', 'mime'], 'string', 'max' => 45],
+            [['name'], 'required'],
             [['note'], 'string', 'max' => 128],
+            [['category_id'], 'integer'],
         ];
     }
 
@@ -71,14 +70,5 @@ class Attachment extends \yii\db\ActiveRecord
             'type' => 'Type',
             'mime' => 'Mime',
         ];
-    }
-
-    public function getUrl()
-    {
-        return Url::to(['/attachments/file/download', 'id' => $this->id]);
-    }
-    public function getPath()
-    {
-        return $this->getFilesDirPath($this->hash) . DIRECTORY_SEPARATOR . $this->hash . '.' . $this->type;
     }
 }

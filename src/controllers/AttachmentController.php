@@ -28,7 +28,15 @@ class AttachmentController extends Controller
             ],
         ];
     }
-
+    
+    public function actions()
+    {
+        return [
+            'preview' => [
+                'class' => 'app\components\actions\attachments\PreviewAction',
+            ],
+        ];
+    }
     /**
      * Lists all Attachment models.
      * @return mixed
@@ -54,24 +62,6 @@ class AttachmentController extends Controller
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Attachment model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Attachment();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
         ]);
     }
 
