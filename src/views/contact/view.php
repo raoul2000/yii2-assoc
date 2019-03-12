@@ -81,12 +81,14 @@ $allAttachments = $model->attachments;
                 ],
                 [
                     'class'     => 'yii\grid\ActionColumn',
-                    'template'  => '{download} {delete}',
+                    'template'  => '{preview} {download} {delete}',
                     'urlCreator' => function ($action, $model, $key, $index) {
                         if ($action == 'delete') {
                             return Url::to(['delete-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ]);
                         } elseif ($action == 'download') {
                             return Url::to(['download-attachment', 'id' => $model->id]);
+                        } elseif ($action == 'preview') {
+                            return Url::to(['preview-attachment', 'id' => $model->id]);
                         }
                         return Url::to(['order/' . $action, 'id' => $model->id]);
                     },
@@ -96,6 +98,13 @@ $allAttachments = $model->attachments;
                                 '<span class="glyphicon glyphicon-download-alt"></span>',
                                 $url,
                                 ['title' => 'download', 'pjax'=>0]
+                            );
+                        },
+                        'preview' => function ($url, $attachment, $key) use ($contactModel) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-eye-open"></span>',
+                                $url,
+                                ['title' => 'preview in a new window', 'target' => '_blank', 'pjax'=>0]
                             );
                         },
                     ]

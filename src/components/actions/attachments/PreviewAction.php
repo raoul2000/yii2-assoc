@@ -6,7 +6,7 @@ use yii\base\Action;
 use app\models\Attachment;
 use yii\web\NotFoundHttpException;
 
-class DownloadAction extends Action
+class PreviewAction extends Action
 {
     public function run($id)
     {
@@ -16,7 +16,12 @@ class DownloadAction extends Action
 
             $filePath = $filesDirPath . DIRECTORY_SEPARATOR . $file->hash . '.' . $file->type;
 
-            return Yii::$app->response->sendFile($filePath, "$file->name.$file->type");
+            Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+            Yii::$app->response->statusCode = 200;
+            $headers = Yii::$app->response->headers;
+            $headers->set('Content-Type', $file->mime);
+            Yii::$app->response->data = file_get_contents($filePath);
+            Yii::$app->response->send();
         }
         throw new NotFoundHttpException('The requested page does not exist.');
     }

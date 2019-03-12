@@ -45,6 +45,9 @@ class ContactController extends Controller
             'download-attachment' => [
                 'class' => 'app\components\actions\attachments\DownloadAction',
             ],
+            'preview-attachment' => [
+                'class' => 'app\components\actions\attachments\PreviewAction',
+            ],
             'delete-attachment' => [
                 'class' => 'app\components\actions\attachments\DeleteAction',
             ],
