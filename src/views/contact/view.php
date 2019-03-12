@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
@@ -79,14 +80,22 @@ $allAttachments = $model->attachments;
                     'format' => ['date', 'php:d/m/Y H:i']
                 ],
                 [
-                    'class' 	=> 'yii\grid\ActionColumn',
-                    'template' 	=> '{view} {delete}',
+                    'class'     => 'yii\grid\ActionColumn',
+                    'template'  => '{download} {delete}',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action == 'delete') {
+                            return Url::to(['delete-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ]);
+                        } elseif ($action == 'download') {
+                            return Url::to(['download-attachment', 'id' => $model->id]);
+                        }
+                        return Url::to(['order/' . $action, 'id' => $model->id]);
+                    },
                     'buttons'   => [
-                        'view' => function ($url, $attachment, $key) use ($contactModel) {
+                        'download' => function ($url, $attachment, $key) use ($contactModel) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-ok"></span>',
-                                ['contact/download-attachment', 'id'=> $attachment->id],
-                                ['title' => 'download this attachment', 'pjax'=>0]
+                                '<span class="glyphicon glyphicon-download-alt"></span>',
+                                $url,
+                                ['title' => 'download', 'pjax'=>0]
                             );
                         },
                     ]
