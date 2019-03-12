@@ -21,6 +21,8 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
+    <?= $form->field($model, 'is_verified')->checkbox() ?>
+    
     <?php
     if ($isCreate == true) {
         echo $form->field($model, 'initial_product_id')->listBox($products, ['size'=>1]);

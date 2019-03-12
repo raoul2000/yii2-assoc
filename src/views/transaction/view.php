@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'fromAccount.longName',
             'toAccount.longName',
             'value',
+            'is_verified:boolean',
             'description',
             [
                 'attribute' => 'updated_at',

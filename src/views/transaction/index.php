@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'value',
             'description',
+            'is_verified:boolean',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']

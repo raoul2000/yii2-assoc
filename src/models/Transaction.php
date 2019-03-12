@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $from_account_id
  * @property int $to_account_id
+ * @property int $is_verified (boolean) is this transaction verified ?
  * @property string $value
  * @property string $description
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
@@ -60,6 +61,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
 
             [['initial_product_id'], 'integer'],
+            [['is_verified'], 'boolean'],
         ];
     }
 
@@ -73,6 +75,7 @@ class Transaction extends \yii\db\ActiveRecord
             'from_account_id' => 'From Account ID',
             'to_account_id' => 'To Account ID',
             'value' => 'Value',
+            'is_verified' => 'Is Verified',
             'description' => 'Description',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
