@@ -32,6 +32,7 @@ class AttachmentBehavior extends Behavior
         $uploadForm->load(Yii::$app->request->post());
 
         $files = UploadedFile::getInstancesByName($this->inputName);
+        $attachedFiles = [];
         $userDirPath =  \Yii::$app->attachmentStorageManager->getUserDirPath();
 
         if (!empty($files)) {
@@ -47,9 +48,13 @@ class AttachmentBehavior extends Behavior
         foreach (FileHelper::findFiles($userTempDir) as $file) {
             if (!$this->attachFile($file, $this->owner, $uploadForm)) {
                 throw new \Exception(\Yii::t('yii', 'File upload failed.'));
+            } else {
+                $attachedFiles[] = $file;
             }
         }
         rmdir($userTempDir);
+
+        return $attachedFiles;
     }
 
     public function deleteUploads($event)

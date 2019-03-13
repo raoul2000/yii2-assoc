@@ -66,6 +66,9 @@ $allAttachments = $model->attachments;
 
     <h2>Attachment</h2>
     <hr/>
+    <p>
+        <?= Html::a('Add Attachment Address', ['create-attachment', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p>
     <?php if (count($allAttachments) == 0): ?>
         no attachment
     <?php else: ?>
