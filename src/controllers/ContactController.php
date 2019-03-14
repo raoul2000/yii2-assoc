@@ -51,6 +51,10 @@ class ContactController extends Controller
             'delete-attachment' => [
                 'class' => 'app\components\actions\attachments\DeleteAction',
             ],
+            'create-attachment' => [
+                'class' => 'app\components\actions\attachments\CreateAction',
+                //'modelFinder' => $this->findModel
+            ],
         ];
     }
     /**
@@ -104,27 +108,6 @@ class ContactController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-        ]);
-    }
-
-    // TODO: convert this method to an Action so it can be used for various other models
-    public function actionCreateAttachment($id)
-    {
-        $model = $this->findModel($id);
-        $uploadModel = new \app\models\forms\UploadForm();
-
-        if ($uploadModel->load(Yii::$app->request->post()) && $uploadModel->validate()) {
-            
-            $attachedFiles = $model->saveUploads(true);
-            if (count($attachedFiles) != 0) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                $uploadModel->addError('file', 'failed to upload file');
-            }
-        }
-
-        return $this->render('attachment', [
-            'model' => $uploadModel,
         ]);
     }
 
@@ -210,7 +193,7 @@ class ContactController extends Controller
      * @return Contact the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    public function findModel($id)
     {
         if (($model = Contact::findOne($id)) !== null) {
             return $model;
