@@ -22,7 +22,8 @@ class PreviewAction extends Action
             $headers->set('Content-Type', $file->mime);
             Yii::$app->response->data = file_get_contents($filePath);
             Yii::$app->response->send();
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
-        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
