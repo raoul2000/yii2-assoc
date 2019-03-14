@@ -18,10 +18,11 @@ $uploadForm = new \app\models\forms\UploadForm();
         
         <?= $form->field($model, 'is_natural_person')->checkbox() ?>
 
-        <?= $form->field($uploadForm, 'note')->textInput() ?>
-        
-        <?= $form->field($uploadForm, 'file')->fileInput() ?>
-
+        <?php if ($model->isNewRecord): ?>
+            <?= $form->field($uploadForm, 'note')->textInput() ?>
+            
+            <?= $form->field($uploadForm, 'file')->fileInput() ?>
+        <?php endif; ?>
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
