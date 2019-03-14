@@ -28,7 +28,7 @@ class UploadForm extends Model
     public function rules()
     {
         return [
-            ['file', 'file'],
+            ['file', 'file', 'maxFiles' => 1], // no limit
             ['note', 'string'],
             ['category_id', 'integer'],
         ];

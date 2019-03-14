@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
         
         <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
         
-        <?= $form->field($model, 'file')->fileInput() ?>
+        <?= $form->field($model, 'file[]')->fileInput(['multiple' => true]) ?>
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
