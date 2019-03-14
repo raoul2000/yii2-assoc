@@ -84,7 +84,7 @@ $allAttachments = $model->attachments;
                 ],
                 [
                     'class'     => 'yii\grid\ActionColumn',
-                    'template'  => '{preview} {download} {delete}',
+                    'template'  => '{preview} {update} {download} {delete} ',
                     'urlCreator' => function ($action, $model, $key, $index) {
                         if ($action == 'delete') {
                             return Url::to(['delete-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ]);
@@ -92,6 +92,8 @@ $allAttachments = $model->attachments;
                             return Url::to(['download-attachment', 'id' => $model->id]);
                         } elseif ($action == 'preview') {
                             return Url::to(['preview-attachment', 'id' => $model->id]);
+                        } elseif ($action == 'update') {
+                            return Url::to(['update-attachment', 'id' => $model->id, 'redirect_url' => Url::current()]);
                         }
                         return Url::to(['order/' . $action, 'id' => $model->id]);
                     },

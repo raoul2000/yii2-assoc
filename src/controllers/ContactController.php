@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 
 use yii\filters\AccessControl;
+use app\models\Attachment;
 use app\models\Address;
 use app\models\AddressSearch;
 use app\models\BankAccount;
@@ -53,7 +54,9 @@ class ContactController extends Controller
             ],
             'create-attachment' => [
                 'class' => 'app\components\actions\attachments\CreateAction',
-                //'modelFinder' => $this->findModel
+            ],
+            'update-attachment' => [
+                'class' => 'app\components\actions\attachments\UpdateAction',
             ],
         ];
     }
@@ -139,12 +142,12 @@ class ContactController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionLinkAddress($id, $address_id = null) 
+    public function actionLinkAddress($id, $address_id = null)
     {
         $model = $this->findModel($id);
-        if( isset($address_id)) {
+        if (isset($address_id)) {
             $address = Address::findOne($address_id);
-            if( !isset($address)) {
+            if (!isset($address)) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
             $model->updateAttributes([
@@ -163,7 +166,13 @@ class ContactController extends Controller
         ]);
     }
 
-    public function actionUnlinkAddress($id) 
+    /**
+     * Unlink a contact its current linked address
+     * @param string $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUnlinkAddress($id)
     {
         $model = $this->findModel($id);
         $model->updateAttributes([
