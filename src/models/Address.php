@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "address".
@@ -28,6 +29,15 @@ class Address extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'address';
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
     }
 
     /**
@@ -58,15 +68,6 @@ class Address extends \yii\db\ActiveRecord
             'note' => 'Note',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-        ];
-    }
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            yii\behaviors\TimestampBehavior::className(),
         ];
     }
     /**
