@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter'    => $contacts,
                     'format'    => 'html',
                     'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                        return Html::a(Html::encode($contacts[$model->contact_id]), ['product/view','id'=>$model->contact_id]);
+                        return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
                     }
                 ],
                 [
