@@ -102,14 +102,14 @@ $allAttachments = $model->attachments;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-download-alt"></span>',
                                 $url,
-                                ['title' => 'download', 'pjax'=>0]
+                                ['title' => 'download', 'data-pjax'=>0]
                             );
                         },
                         'preview' => function ($url, $attachment, $key) use ($contactModel) {
                             return Html::a(
                                 '<span class="glyphicon glyphicon-eye-open"></span>',
                                 $url,
-                                ['title' => 'preview in a new window', 'target' => '_blank', 'pjax'=>0]
+                                ['title' => 'preview in a new window', 'target' => '_blank', 'data-pjax'=>0]
                             );
                         },
                     ]

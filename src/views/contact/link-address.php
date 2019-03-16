@@ -30,7 +30,7 @@ $contact = $model;
 			        	return Html::a(
                             '<span class="glyphicon glyphicon-ok"></span>', 
                             ['contact/link-address', 'id'=> $contact->id, 'address_id' => $address->id],
-                            ['title' => 'select this address', 'pjax'=>0]
+                            ['title' => 'select this address', 'data-pjax'=>0]
                         );
 			        },
 				]
