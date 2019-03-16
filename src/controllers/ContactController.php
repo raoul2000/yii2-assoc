@@ -75,6 +75,29 @@ class ContactController extends Controller
         ]);
     }
 
+    public function actionExportCsv() 
+    {
+        $exporter = new \yii2tech\csvgrid\CsvGrid([
+            'dataProvider' => new \yii\data\ActiveDataProvider([
+                'query' => Contact::find(),
+                'pagination' => [
+                    'pageSize' => 100, // export batch size
+                ],
+            ]),
+            'columns' => [
+                [
+                    'attribute' => 'name',
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => 'date',
+                ],
+            ],
+            ]
+        );
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        return $exporter->export()->send('contacts.csv');
+    }
     /**
      * Displays a single Contact model.
      * @param string $id

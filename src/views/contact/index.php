@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Contact', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Export CSV', ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
     </p>
 
     <?= GridView::widget([

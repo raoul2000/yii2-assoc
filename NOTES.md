@@ -67,3 +67,7 @@ composer require 2amigos/yii2-usuario:~1.0
 composer require --prefer-dist bupy7/yii2-activerecord-history "*"
 ./yii migrate/up --migrationPath=@bupy7/activerecord/history/migrations
 ```
+
+## Export CSV
+
+- using https://github.com/yii2tech/csv-grid
