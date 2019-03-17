@@ -6,7 +6,9 @@ use Yii;
 use app\models\Transaction;
 use app\models\Order;
 use app\models\Product;
+use app\models\Contact;
 use app\models\OrderSearch;
+use app\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,6 +54,8 @@ class OrderController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'products' => Product::getNameIndex(),
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 
@@ -63,17 +67,26 @@ class OrderController extends Controller
      */
     public function actionView($id)
     {
+        $order = $this->findModel($id);
+        $transactionSearchModel = new TransactionSearch();
+        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams, $order->getTransactions());
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $order,
+            'transactionSearchModel' => $transactionSearchModel,
+            'transactionDataProvider' => $transactionDataProvider,
+            'products' => Product::getNameIndex(),
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 
     /**
      * Creates a new Order model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $transaction_id ID of the transaction to link to the newly created order
      * @return mixed
      */
-    public function actionCreate($transaction_id = null, $contact_id = null)
+    public function actionCreate($transaction_id = null)
     {
         $model = new Order();
         $transaction = null;
@@ -83,12 +96,9 @@ class OrderController extends Controller
                 throw new NotFoundHttpException('The requested transaction does not exist.');
             }
         }
-        // TODO : refactor this method to use many_many relations with transaction
 
-        // user submitted the form
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if( $transaction_id != null ) {
-                $transaction = Transaction::findOne($transaction_id);
+            if( $transaction != null ) {
                 $model->link('transactions', $transaction);
                 return $this->redirect(['transaction/view', 'id' => $transaction_id]);    
             } else {
@@ -96,8 +106,8 @@ class OrderController extends Controller
             }
         }
 
-        if ( $contact_id !== null) {
-            $model->contact_id = $contact_id;
+        if ( $model->contact_id == null && $transaction !== null) {
+            $model->contact_id = $transaction->fromAccount->contact_id;
         }
 
         return $this->render('create', [
@@ -125,26 +135,38 @@ class OrderController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'products' => \app\models\Product::getNameIndex(),
-            'contacts' => \app\models\Contact::getNameIndex(),
+            'products' => Product::getNameIndex(),
+            'contacts' => Contact::getNameIndex(),
         ]);
     }
 
-    /**
-     * Deletes an existing Order model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    /*
-    public function actionDelete($id)
+    public function actionLinkTransaction($id, $transaction_id = null)
     {
-        $this->findModel($id)->delete();
+        $order = $this->findModel($id);
+        if (isset($transaction_id)) {
+            $transaction = Transaction::findOne($transaction_id);
+            if (!isset($transaction)) {
+                throw new NotFoundHttpException('The requested page does not exist.');
+            }
+            $order->link('transactions', $transaction);
+            return $this->redirect(['view', 'id' => $order->id]);
+        }        
 
-        return $this->redirect(['index']);
-    }*/
+        $transactionSearchModel = new TransactionSearch();
+        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
+        // search only transaction not already linked to this order
+        $linkedTransactionIds = [];
+        foreach($order->transactions as $transaction) {
+            $linkedTransactionIds[] = $transaction->id;
+        }
+        $transactionDataProvider->query->andWhere([ 'not in', 'id', $linkedTransactionIds]);
 
+        return $this->render('link-transaction', [
+            'order' => $order,
+            'transactionSearchModel' => $transactionSearchModel,
+            'transactionDataProvider' => $transactionDataProvider,
+        ]);        
+    }
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

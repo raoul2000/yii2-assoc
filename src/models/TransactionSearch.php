@@ -40,9 +40,12 @@ class TransactionSearch extends Transaction
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,  $query = null)
     {
-        $query = Transaction::find();
+        if ($query == null) {
+            $query = Transaction::find();
+        }
+
 
         // add conditions that should always apply here
 

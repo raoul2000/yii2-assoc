@@ -20,13 +20,31 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Order', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'quantity',
-            'product_id',
-            'contact_id',
+
+            [
+                'attribute' => 'product_id',
+                'label'     => 'Product',
+                'filter'    => $products,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($products) {
+                    return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
+                }
+            ],   
+            'quantity',                     
+            [
+                'attribute' => 'contact_id',
+                'label'     => 'Beneficiary',
+                'filter'    => $contacts,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($contacts) {
+                    return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
+                }
+            ],
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']

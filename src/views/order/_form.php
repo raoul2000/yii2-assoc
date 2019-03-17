@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php if ($transaction !== null) : ?>
+<?php if ( isset($transaction) && $transaction !== null) : ?>
     <?= Html::a('go back to transaction', ['transaction/view', 'id' => $transaction->id], ['class' => 'btn btn-default']) ?>
 <?php endif; ?>
 <div class="order-form">

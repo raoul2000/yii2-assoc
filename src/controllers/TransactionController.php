@@ -107,6 +107,7 @@ class TransactionController extends Controller
         ]);
     }
 
+
     /**
      * Displays a single Transaction model.
      * The view also displays a grid of all related orders
@@ -134,14 +135,26 @@ class TransactionController extends Controller
      * Creates a new Transaction.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * When the form contains the field 'initial_product_id' it is used to automatically create an order.
+     * 
+     * @param $order_id ID of the order to link to the newly created transaction
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($order_id = null)
     {
         $model = new Transaction();
 
+        $order = null;
+        if( $order_id != null ) {
+            $order = Order::findOne($order_id);
+            if( $order === null ) {
+                throw new NotFoundHttpException('The requested order does not exist.');
+            }
+        }
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if (isset($model->initial_product_id)) {
+            if ( $order !== null ) {
+                $model->link('orders',$order);
+            } else if (isset($model->initial_product_id)) {
                 $initialProduct = \app\models\Product::findOne($model->initial_product_id);
                 if ($initialProduct) {
                     // create the related order
@@ -157,6 +170,10 @@ class TransactionController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
      
+        if ( $model->from_account_id == null && $order !== null) {
+            $model->from_account_id = $order->contact->bankAccounts[0];
+        }
+        
         return $this->render('create', [
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
