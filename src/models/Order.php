@@ -11,7 +11,6 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $quantity
  * @property int $product_id
- * @property int $transaction_id
  * @property int $contact_id
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -44,13 +43,12 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity', 'product_id', 'transaction_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
-            [['product_id', 'transaction_id', 'contact_id'], 'required'],
+            [['quantity', 'product_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
+            [['product_id', 'contact_id'], 'required'],
             ['quantity', 'number', 'min' => 1],
             ['quantity', 'default', 'value' => 1],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
-            [['transaction_id'], 'exist', 'skipOnError' => true, 'targetClass' => Transaction::className(), 'targetAttribute' => ['transaction_id' => 'id']],
         ];
     }
 
@@ -63,13 +61,21 @@ class Order extends \yii\db\ActiveRecord
             'id' => 'ID',
             'quantity' => 'Quantity',
             'product_id' => 'Product ID',
-            'transaction_id' => 'Transaction ID',
             'contact_id' => 'Contact ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
-
+    /**
+     * Delete all links to transactions
+     */
+    public function beforeDelete()
+    {
+        foreach ($this->transactions as $transaction) {
+            $this->unlink('transactions',$transaction, true);
+        }
+        return true;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -89,8 +95,19 @@ class Order extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTransaction()
+    public function getTransactions()
     {
-        return $this->hasOne(Transaction::className(), ['id' => 'transaction_id']);
-    }
+        return $this
+            ->hasMany(Transaction::className(), ['id' => 'transaction_id'])
+            ->viaTable('order_transaction', ['order_id' => 'id']);
+    }    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderTransactions()
+    {
+        return $this
+            ->hasMany(OrderTransaction::className(), ['order_id' => 'id']);
+    }    
+
 }

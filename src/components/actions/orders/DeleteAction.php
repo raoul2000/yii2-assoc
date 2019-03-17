@@ -7,20 +7,20 @@ use yii\web\NotFoundHttpException;
 
 class DeleteAction extends Action
 {
-    public function run($id)
+    public function run($id, $redirect_url)
     {
         if (($model = Order::findOne($id)) !== null) {
-            $transaction_id = $model->transaction_id;
-            
             $model->delete();
-
+            return $this->controller->redirect($redirect_url);
+            /*
             switch ($this->controller->id) {
                 case 'transaction':
-                    return $this->controller->redirect(['transaction/view', 'id' => $transaction_id]);
+                    return $this->controller->redirect(['transaction/view']);
                 break;
                 default:
                     return $this->controller->redirect(['index']);
             }
+            */
         }
         throw new NotFoundHttpException('The requested page does not exist.');
     }

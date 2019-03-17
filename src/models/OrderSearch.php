@@ -17,7 +17,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'quantity', 'product_id', 'transaction_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'quantity', 'product_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
@@ -37,9 +37,11 @@ class OrderSearch extends Order
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query = null)
     {
-        $query = Order::find();
+        if ($query == null) {
+            $query = Order::find();
+        }
 
         // add conditions that should always apply here
 
@@ -60,7 +62,6 @@ class OrderSearch extends Order
             'id' => $this->id,
             'quantity' => $this->quantity,
             'product_id' => $this->product_id,
-            'transaction_id' => $this->transaction_id,
             'contact_id' => $this->contact_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

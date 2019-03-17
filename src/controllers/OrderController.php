@@ -76,14 +76,27 @@ class OrderController extends Controller
     public function actionCreate($transaction_id = null, $contact_id = null)
     {
         $model = new Order();
+        $transaction = null;
+        if( $transaction_id != null ) {
+            $transaction = Transaction::findOne($transaction_id);
+            if( $transaction === null ) {
+                throw new NotFoundHttpException('The requested transaction does not exist.');
+            }
+        }
+        // TODO : refactor this method to use many_many relations with transaction
 
         // user submitted the form
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if( $transaction_id != null ) {
+                $transaction = Transaction::findOne($transaction_id);
+                $model->link('transactions', $transaction);
+                return $this->redirect(['transaction/view', 'id' => $transaction_id]);    
+            } else {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
-        if (Yii::$app->request->isGet) {
-            $model->transaction_id = $transaction_id;
+        if ( $contact_id !== null) {
             $model->contact_id = $contact_id;
         }
 
@@ -91,7 +104,7 @@ class OrderController extends Controller
             'model' => $model,
             'products' => \app\models\Product::getNameIndex(),
             'contacts' => \app\models\Contact::getNameIndex(),
-            'transaction' => null
+            'transaction' => $transaction
         ]);
     }
 

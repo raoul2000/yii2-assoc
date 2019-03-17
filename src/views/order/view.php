@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Go To Transaction', ['transaction/view', 'id' => $model->transaction_id], ['class' => 'btn btn-default']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -32,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'product.name',
             'quantity',
+            /*
             [
                 'attribute' => 'transaction_id',
                 'label'     => 'Transaction',
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function () use ($model) {
                     return Html::a(Html::encode('transaction N°' . $model->transaction_id), ['transaction/view','id'=>$model->transaction_id]);
                 }
-            ],
+            ],*/
             [
                 'attribute' => 'contact.name',
                 'label'     => 'Beneficiary',

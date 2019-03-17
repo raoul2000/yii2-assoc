@@ -81,6 +81,13 @@ class Transaction extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+    public function beforeDelete()
+    {
+        foreach ($this->orders as $order) {
+            $this->unlink('orders',$order, true);
+        }
+        return true;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -97,4 +104,20 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this->hasOne(BankAccount::className(), ['id' => 'to_account_id']);
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderTransactions()
+    {
+        return $this->hasMany(OrderTransaction::className(), ['transaction_id' => 'id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrders()
+    {
+        return $this
+            ->hasMany(Order::className(), ['id' => 'order_id'])
+            ->viaTable('order_transaction', ['transaction_id' => 'id']);
+    }        
 }

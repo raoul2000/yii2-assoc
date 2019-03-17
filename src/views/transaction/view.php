@@ -14,6 +14,7 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$transactionModel = $model;
 ?>
 <div class="transaction-view">
 
@@ -51,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <h2>Orders</h2>
+    <hr />
     <?php Pjax::begin(); ?>
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -59,7 +61,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'order/create',
                 'transaction_id' => $model->id,
                 'contact_id' => $model->fromAccount->contact->id
-                ], ['class' => 'btn btn-success']) ?>
+                ], ['class' => 'btn btn-success', 'data-pjax'=>0]) ?>
+            
+            <?= Html::a('Link To Existing Order', [
+                'link-order',
+                'id' => $model->id
+                ], ['class' => 'btn btn-primary', 'data-pjax'=>0]) ?>
         </p>
 
         <?= GridView::widget([
@@ -95,12 +102,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'class' => 'yii\grid\ActionColumn',
-                    'urlCreator' => function ($action, $model, $key, $index) {
-                        if ($action == 'delete') {
-                            return Url::to(['delete-order', 'id' => $model->id]);
+                    'template'  => '{view} {unlink} ',
+                    'urlCreator' => function ($action, $model, $key, $index) use ($transactionModel) {
+                        if ($action == 'unlink') {
+                            return Url::to(['unlink-order', 'id' =>  $transactionModel->id, 'order_id' => $model->id, 'redirect_url' => Url::current()]);
                         }
                         return Url::to(['order/' . $action, 'id' => $model->id]);
-                    }
+                    },
+                    'buttons'   => [
+                        'unlink' => function ($url, $order, $key) use ($transactionModel) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-remove"></span>',
+                                $url,
+                                ['title' => 'unlink', 'data-pjax'=>0]
+                            );
+                        },
+                    ]
                 ],
             ],
         ]); ?>

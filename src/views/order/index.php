@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'quantity',
             'product_id',
-            'transaction_id',
             'contact_id',
             [
                 'attribute' => 'updated_at',

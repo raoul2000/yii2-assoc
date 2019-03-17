@@ -9,15 +9,16 @@ use yii\helpers\ArrayHelper;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php if ($transaction !== null) : ?>
+    <?= Html::a('go back to transaction', ['transaction/view', 'id' => $transaction->id], ['class' => 'btn btn-default']) ?>
+<?php endif; ?>
 <div class="order-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'quantity')->textInput() ?>
+    <?= $form->field($model, 'quantity')->textInput(['autocomplete'=> 'off' ]) ?>
 
     <?= $form->field($model, 'product_id')->listBox($products, ['size'=>1])?>
-
-    <?= $form->field($model, 'transaction_id')->textInput() ?>
 
     <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
 

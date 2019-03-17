@@ -13,6 +13,7 @@ use app\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\ActiveDataProvider;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -45,6 +46,52 @@ class TransactionController extends Controller
     }
 
     /**
+     * Link a transaction with one existing order
+     * @param $id transaction Id
+     * @param $order_id Id of the order to link to
+     */
+    public function actionLinkOrder($id, $order_id = null)
+    {
+        $transaction = $this->findModel($id);
+        if (isset($order_id)) {
+            $order = Order::findOne($order_id);
+            if (!isset($order)) {
+                throw new NotFoundHttpException('The requested page does not exist.');
+            }
+            $transaction->link('orders', $order);
+            return $this->redirect(['view', 'id' => $transaction->id]);
+        }
+
+        $orderSearchModel = new OrderSearch();
+        $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams);
+        // search only order not already linked to this transaction
+        $linkedOrderIds = [];
+        foreach($transaction->orders as $order) {
+            $linkedOrderIds[] = $order->id;
+        }
+        $orderDataProvider->query->andWhere([ 'not in', 'id', $linkedOrderIds]);
+
+        return $this->render('link-order', [
+            'transaction' => $transaction,
+            'orderSearchModel' => $orderSearchModel,
+            'orderDataProvider' => $orderDataProvider,
+        ]);
+    }
+
+    /**
+     * 
+     */
+    public function actionUnlinkOrder($id, $order_id, $redirect_url)
+    {
+        $transaction = $this->findModel($id);
+        $order = Order::findOne($order_id);
+        if (!isset($order)) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        $transaction->unlink('orders', $order, true);
+        return $this->redirect($redirect_url);
+    }
+    /**
      * Lists all Transaction models.
      * @return mixed
      */
@@ -70,12 +117,12 @@ class TransactionController extends Controller
      */
     public function actionView($id)
     {
+        $transaction = $this->findModel($id);
         $orderSearchModel = new OrderSearch();
-        $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams);
-        $orderDataProvider->query->andWhere(['transaction_id' => $id]);
+        $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams, $transaction->getOrders());
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $transaction,
             'orderSearchModel' => $orderSearchModel,
             'orderDataProvider' => $orderDataProvider,
             'products' => Product::getNameIndex(),
@@ -84,7 +131,7 @@ class TransactionController extends Controller
     }
 
     /**
-     * Creates a new Transaction model.
+     * Creates a new Transaction.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * When the form contains the field 'initial_product_id' it is used to automatically create an order.
      * @return mixed
@@ -101,10 +148,10 @@ class TransactionController extends Controller
                     $order = new Order();
                     $order->setAttributes([
                         'product_id' => $initialProduct->id,
-                        'transaction_id' => $model->id,
                         'contact_id' => $model->fromAccount->contact_id
                     ]);
                     $order->save();
+                    $model->link('orders', $order);
                 }
             }
             return $this->redirect(['view', 'id' => $model->id]);
