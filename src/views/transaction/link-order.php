@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = 'link Order';
                 ]
             ],
             'id',
-            'quantity',
             [
                 'attribute' => 'product_id',
                 'label'     => 'Product',

@@ -83,7 +83,6 @@ $transactionModel = $model;
                         return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
                     }
                 ],
-                'quantity',
                 [
                     'attribute' => 'contact_id',
                     'label'     => 'Beneficiary',

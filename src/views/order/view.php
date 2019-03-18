@@ -35,7 +35,6 @@ $orderModel = $model;
         'model' => $model,
         'attributes' => [
             'product.name',
-            'quantity',
             [
                 'attribute' => 'contact.name',
                 'label'     => 'Beneficiary',

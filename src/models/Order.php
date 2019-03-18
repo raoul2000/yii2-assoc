@@ -9,7 +9,6 @@ use yii\behaviors\TimestampBehavior;
  * This is the model class for table "order".
  *
  * @property int $id
- * @property int $quantity
  * @property int $product_id
  * @property int $contact_id
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
@@ -43,10 +42,8 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity', 'product_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
+            [[ 'product_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
             [['product_id', 'contact_id'], 'required'],
-            ['quantity', 'number', 'min' => 1],
-            ['quantity', 'default', 'value' => 1],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
         ];
@@ -59,7 +56,6 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'quantity' => 'Quantity',
             'product_id' => 'Product ID',
             'contact_id' => 'Contact ID',
             'created_at' => 'Created At',
@@ -72,7 +68,7 @@ class Order extends \yii\db\ActiveRecord
     public function beforeDelete()
     {
         foreach ($this->transactions as $transaction) {
-            $this->unlink('transactions',$transaction, true);
+            $this->unlink('transactions', $transaction, true);
         }
         return true;
     }
