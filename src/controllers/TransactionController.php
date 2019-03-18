@@ -154,27 +154,29 @@ class TransactionController extends Controller
         $model = new Transaction();
 
         $order = null;
-        if( $order_id != null ) {
+        if ($order_id != null) {
             $order = Order::findOne($order_id);
-            if( $order === null ) {
+            if ($order === null) {
                 throw new NotFoundHttpException('The requested order does not exist.');
             }
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ( $order !== null ) {
-                $model->link('orders',$order);
+            if ($order !== null) {
+                $model->link('orders', $order);
             } else if (isset($model->initial_product_id)) {
                 $initialProduct = \app\models\Product::findOne($model->initial_product_id);
                 if ($initialProduct) {
-                    // create the related order
-                    $order = new Order();
-                    $order->setAttributes([
-                        'product_id' => $initialProduct->id,
-                        'contact_id' => $model->fromAccount->contact_id
-                    ]);
-                    $order->save();
-                    $model->link('orders', $order);
+                    // create the related orders
+                    for ($iCount=0; $iCount < $model->initial_product_quantity; $iCount++) {
+                        $order = new Order();
+                        $order->setAttributes([
+                            'product_id' => $initialProduct->id,
+                            'contact_id' => $model->fromAccount->contact_id
+                        ]);
+                        $order->save();
+                        $model->link('orders', $order);
+                    }
                 }
             }
             return $this->redirect(['view', 'id' => $model->id]);

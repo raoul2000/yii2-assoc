@@ -29,6 +29,12 @@ class Transaction extends \yii\db\ActiveRecord
      * @var int
      */
     public $initial_product_id;
+    /**
+     * Used when creating a transaction. Quantity of orders to created for the initial product ID selected
+     *
+     * @var int
+     */
+    public $initial_product_quantity;
 
     /**
      * {@inheritdoc}
@@ -55,6 +61,10 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id', 'to_account_id','value'], 'required'],
             [['from_account_id', 'to_account_id', 'created_at', 'updated_at'], 'integer'],
             [['value'], 'number', 'min' => 0],
+
+            [['initial_product_quantity'], 'number', 'min' => 1, 'integerOnly' => true],
+            [['initial_product_quantity'], 'default', 'value' => 1],
+            
             [['description'], 'string', 'max' => 128],
             ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number'],
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],

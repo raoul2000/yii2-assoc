@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
     <?php
     if ($isCreate == true) {
         echo $form->field($model, 'initial_product_id')->listBox($products, ['size'=>1]);
+        echo $form->field($model, 'initial_product_quantity')->textInput(['autocomplete'=>'off']);
     }
     ?>
 
