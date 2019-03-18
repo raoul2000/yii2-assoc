@@ -17,7 +17,11 @@ use yii\helpers\ArrayHelper;
     <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'product_id')->listBox($products, ['size'=>1])?>
-
+        <?php
+        if ($model->getIsNewRecord()) {
+            echo $form->field($model, 'initial_quantity')->textInput(['autocomplete'=>'off']);
+        }
+        ?>
         <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
 
         <div class="form-group">

@@ -99,12 +99,25 @@ class OrderController extends Controller
             }
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($transaction != null ) {
-                $model->link('transactions', $transaction);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $saveModel = null;
+            for ($iCount=0; $iCount < $model->initial_quantity; $iCount++) {
+                $saveModel = new Order([
+                    'attributes' => $model->getAttributes()
+                ]);
+                $saveModel->save(false);
+
+                if ($transaction != null) {
+                    $saveModel->link('transactions', $transaction);
+                }
+            }
+
+            if ($transaction != null) {
                 return $this->redirect(['transaction/view', 'id' => $transaction_id]);
+            } elseif ($model->initial_quantity == 1) {
+                return $this->redirect(['view', 'id' => $saveModel->id]);
             } else {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         }
 
