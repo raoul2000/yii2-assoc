@@ -62,11 +62,19 @@ class TransactionController extends Controller
             return $this->redirect(['view', 'id' => $transaction->id]);
         }
 
+        // prepare the form model holding filter values
         $orderSearchModel = new OrderSearch();
+
+        // if no filter is applied, use tge first account of the beneficiary to populate the from_account_id field
+        if (array_key_exists('OrderSearch', Yii::$app->request->getQueryParams()) == false) {
+            $orderSearchModel->contact_id = $transaction->fromAccount->contact_id;
+        }
+        // apply user enetered filter values
         $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams);
+        
         // search only order not already linked to this transaction
         $linkedOrderIds = [];
-        foreach($transaction->orders as $order) {
+        foreach ($transaction->orders as $order) {
             $linkedOrderIds[] = $order->id;
         }
         $orderDataProvider->query->andWhere([ 'not in', 'id', $linkedOrderIds]);
@@ -75,6 +83,8 @@ class TransactionController extends Controller
             'transaction' => $transaction,
             'orderSearchModel' => $orderSearchModel,
             'orderDataProvider' => $orderDataProvider,
+            'products' => Product::getNameIndex(),
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 

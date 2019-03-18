@@ -15,35 +15,49 @@ $this->params['breadcrumbs'][] = 'link Order';
 \yii\web\YiiAsset::register($this);
 ?>
 
-<?php if ($transactionDataProvider->totalCount == 0): ?>
-
-    <p>No transaction available : they are all linked to this order. </p>
+<p>
     <?= Html::a('Back To Order', ['view', 'id' => $order->id], ['class' => 'btn btn-default']) ?>
+</p>
 
-<?php else : ?>
+<?php Pjax::begin(); ?>
 
-    <?php Pjax::begin(); ?>
-
-        <?= GridView::widget([
-            'dataProvider' => $transactionDataProvider,
-            'filterModel' => $transactionSearchModel,
-            'columns' => [
-                [
-                    'class' 	=> 'yii\grid\ActionColumn',
-                    'template' 	=> '{select}',
-                    'buttons'   => [
-                        'select' => function ($url, $transaction, $key) use ($order) {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-ok"></span>', 
-                                ['link-transaction', 'id'=> $order->id, 'transaction_id' => $transaction->id],
-                                ['title' => 'select this transaction', 'data-pjax'=>0]
-                            );
-                        },
-                    ]
-                ],			
-                'id',            
+    <?= GridView::widget([
+        'dataProvider' => $transactionDataProvider,
+        'filterModel' => $transactionSearchModel,
+        'columns' => [
+            [
+                'class'     => 'yii\grid\ActionColumn',
+                'template'  => '{select}',
+                'buttons'   => [
+                    'select' => function ($url, $transaction, $key) use ($order) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-ok"></span>',
+                            ['link-transaction', 'id'=> $order->id, 'transaction_id' => $transaction->id],
+                            ['title' => 'select this transaction', 'data-pjax'=>0]
+                        );
+                    },
+                ]
             ],
-        ]); ?>
-    <?php Pjax::end(); ?>
-
-<?php endif; ?>
+            'id',
+            [
+                'attribute' => 'from_account_id',
+                'filter'    => $bankAccounts,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                    return Html::a(Html::encode($bankAccounts[$model->from_account_id]), ['bank-account/view','id'=>$model->from_account_id]);
+                }
+            ],
+            [
+                'attribute' => 'to_account_id',
+                'filter'    =>  $bankAccounts,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                    return Html::a(Html::encode($bankAccounts[$model->to_account_id]), ['bank-account/view','id'=>$model->to_account_id]);
+                }
+            ],
+            'value',
+            'description',
+            'is_verified:boolean',
+        ],
+    ]); ?>
+<?php Pjax::end(); ?>

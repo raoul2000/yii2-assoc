@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\OrderSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-
             [
                 'attribute' => 'product_id',
                 'label'     => 'Product',
@@ -34,8 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function ($model, $key, $index, $column) use ($products) {
                     return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
                 }
-            ],   
-            'quantity',                     
+            ],
+            'quantity',
             [
                 'attribute' => 'contact_id',
                 'label'     => 'Beneficiary',

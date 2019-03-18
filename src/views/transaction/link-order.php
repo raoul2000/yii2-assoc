@@ -14,39 +14,49 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id
 $this->params['breadcrumbs'][] = 'link Order';
 \yii\web\YiiAsset::register($this);
 ?>
-
-<?php if ($orderDataProvider->totalCount == 0): ?>
-
-    <p>No order available : they are all linked to this transaction. </p>
+<p>
     <?= Html::a('Back To Transaction', ['view', 'id' => $transaction->id], ['class' => 'btn btn-default']) ?>
+</p>
+<?php Pjax::begin(); ?>
 
-<?php else : ?>
-
-    <?php Pjax::begin(); ?>
-
-        <?= GridView::widget([
-            'dataProvider' => $orderDataProvider,
-            'filterModel' => $orderSearchModel,
-            'columns' => [
-                [
-                    'class' 	=> 'yii\grid\ActionColumn',
-                    'template' 	=> '{select}',
-                    'buttons'   => [
-                        'select' => function ($url, $order, $key) use ($transaction) {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-ok"></span>', 
-                                ['link-order', 'id'=> $transaction->id, 'order_id' => $order->id],
-                                ['title' => 'select this order', 'data-pjax'=>0]
-                            );
-                        },
-                    ]
-                ],			
-                'id',            
-                'quantity',
-                'product_id',
-                'contact_id',
+    <?= GridView::widget([
+        'dataProvider' => $orderDataProvider,
+        'filterModel' => $orderSearchModel,
+        'columns' => [
+            [
+                'class'     => 'yii\grid\ActionColumn',
+                'template'  => '{select}',
+                'buttons'   => [
+                    'select' => function ($url, $order, $key) use ($transaction) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-ok"></span>',
+                            ['link-order', 'id'=> $transaction->id, 'order_id' => $order->id],
+                            ['title' => 'select this order', 'data-pjax'=>0]
+                        );
+                    },
+                ]
             ],
-        ]); ?>
-    <?php Pjax::end(); ?>
+            'id',
+            'quantity',
+            [
+                'attribute' => 'product_id',
+                'label'     => 'Product',
+                'filter'    => $products,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($products) {
+                    return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
+                }
+            ],
+            [
+                'attribute' => 'contact_id',
+                'label'     => 'Beneficiary',
+                'filter'    => $contacts,
+                'format'    => 'html',
+                'value'     => function ($model, $key, $index, $column) use ($contacts) {
+                    return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
+                }
+            ],
+        ],
+    ]); ?>
+<?php Pjax::end(); ?>
 
-<?php endif; ?>

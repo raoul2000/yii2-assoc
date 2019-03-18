@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\BankAccount;
 use app\models\Transaction;
 use app\models\Order;
 use app\models\Product;
@@ -76,7 +77,8 @@ class OrderController extends Controller
             'transactionSearchModel' => $transactionSearchModel,
             'transactionDataProvider' => $transactionDataProvider,
             'products' => Product::getNameIndex(),
-            'contacts' => Contact::getNameIndex()
+            'contacts' => Contact::getNameIndex(),
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
 
@@ -90,23 +92,23 @@ class OrderController extends Controller
     {
         $model = new Order();
         $transaction = null;
-        if( $transaction_id != null ) {
+        if ($transaction_id != null) {
             $transaction = Transaction::findOne($transaction_id);
-            if( $transaction === null ) {
+            if ($transaction === null) {
                 throw new NotFoundHttpException('The requested transaction does not exist.');
             }
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if( $transaction != null ) {
+            if ($transaction != null ) {
                 $model->link('transactions', $transaction);
-                return $this->redirect(['transaction/view', 'id' => $transaction_id]);    
+                return $this->redirect(['transaction/view', 'id' => $transaction_id]);
             } else {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
 
-        if ( $model->contact_id == null && $transaction !== null) {
+        if ($model->contact_id == null && $transaction !== null) {
             $model->contact_id = $transaction->fromAccount->contact_id;
         }
 
@@ -139,7 +141,13 @@ class OrderController extends Controller
             'contacts' => Contact::getNameIndex(),
         ]);
     }
-
+    /**
+     * Link the current order with a transaction
+     *
+     * @param int $id Id of the order
+     * @param int $transaction_id id of the transaction to link to the order
+     * @return mixed
+     */
     public function actionLinkTransaction($id, $transaction_id = null)
     {
         $order = $this->findModel($id);
@@ -150,13 +158,21 @@ class OrderController extends Controller
             }
             $order->link('transactions', $transaction);
             return $this->redirect(['view', 'id' => $order->id]);
-        }        
+        }
 
+        // prepare the form model holding filter values
         $transactionSearchModel = new TransactionSearch();
+
+        // if no filter is applied, use the first account of the beneficiary to populate the from_account_id field
+        if (array_key_exists('TransactionSearch', Yii::$app->request->getQueryParams()) == false) {
+            $transactionSearchModel->from_account_id = $order->contact->bankAccounts[0]->id;
+        }
+        // apply user enetered filter values
         $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
+
         // search only transaction not already linked to this order
         $linkedTransactionIds = [];
-        foreach($order->transactions as $transaction) {
+        foreach ($order->transactions as $transaction) {
             $linkedTransactionIds[] = $transaction->id;
         }
         $transactionDataProvider->query->andWhere([ 'not in', 'id', $linkedTransactionIds]);
@@ -165,7 +181,8 @@ class OrderController extends Controller
             'order' => $order,
             'transactionSearchModel' => $transactionSearchModel,
             'transactionDataProvider' => $transactionDataProvider,
-        ]);        
+            'bankAccounts' => BankAccount::getNameIndex()
+        ]);
     }
     /**
      * Finds the Order model based on its primary key value.

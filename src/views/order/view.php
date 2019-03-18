@@ -36,15 +36,6 @@ $orderModel = $model;
         'attributes' => [
             'product.name',
             'quantity',
-            /*
-            [
-                'attribute' => 'transaction_id',
-                'label'     => 'Transaction',
-                'format'    => 'html',
-                'value'     => function () use ($model) {
-                    return Html::a(Html::encode('transaction N°' . $model->transaction_id), ['transaction/view','id'=>$model->transaction_id]);
-                }
-            ],*/
             [
                 'attribute' => 'contact.name',
                 'label'     => 'Beneficiary',
@@ -84,6 +75,23 @@ $orderModel = $model;
             'columns' => [
                 'id',
                 [
+                    'attribute' => 'from_account_id',
+                    'filter'    => $bankAccounts,
+                    'format'    => 'html',
+                    'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                        return Html::a(Html::encode($bankAccounts[$model->from_account_id]), ['bank-account/view','id'=>$model->from_account_id]);
+                    }
+                ],
+                [
+                    'attribute' => 'to_account_id',
+                    'filter'    =>  $bankAccounts,
+                    'format'    => 'html',
+                    'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                        return Html::a(Html::encode($bankAccounts[$model->to_account_id]), ['bank-account/view','id'=>$model->to_account_id]);
+                    }
+                ],
+                'value',
+                [
                     'attribute' => 'updated_at',
                     'format' => ['date', 'php:d/m/Y H:i']
                 ],
@@ -113,7 +121,4 @@ $orderModel = $model;
             ],
         ]); ?>
     <?php Pjax::end(); ?>    
-
-
-
 </div>
