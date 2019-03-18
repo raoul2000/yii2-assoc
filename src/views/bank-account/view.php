@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Transactions From', ['transaction/index', 'TransactionSearch[from_account_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Transactions To', ['transaction/index', 'TransactionSearch[to_account_id]' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= DetailView::widget([

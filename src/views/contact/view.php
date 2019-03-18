@@ -19,7 +19,7 @@ $allAttachments = $model->attachments;
 ?>
 <div class="contact-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,6 +30,8 @@ $allAttachments = $model->attachments;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Orders', ['order/index', 'OrderSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Accounts', ['bank-account/index', 'BankAccountSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= DetailView::widget([
