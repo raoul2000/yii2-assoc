@@ -128,6 +128,6 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
-            ->viaTable('order_transaction', ['transaction_id' => 'id']);
-    }        
+            ->via('orderTransactions');
+    }
 }
