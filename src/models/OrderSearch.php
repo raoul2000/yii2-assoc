@@ -18,6 +18,7 @@ class OrderSearch extends Order
     {
         return [
             [['id', 'product_id', 'contact_id', 'created_at', 'updated_at'], 'integer'],
+            [['value'], 'number', 'min' => 0],
         ];
     }
 
@@ -60,6 +61,7 @@ class OrderSearch extends Order
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'value' => $this->value,
             'product_id' => $this->product_id,
             'contact_id' => $this->contact_id,
             'created_at' => $this->created_at,

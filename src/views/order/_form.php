@@ -17,6 +17,9 @@ use yii\helpers\ArrayHelper;
     <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'product_id')->listBox($products, ['size'=>1])?>
+
+        <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
+        
         <?php
         if ($model->getIsNewRecord()) {
             echo $form->field($model, 'initial_quantity')->textInput(['autocomplete'=>'off']);

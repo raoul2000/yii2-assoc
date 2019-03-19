@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
                 }
             ],
+            'value',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']

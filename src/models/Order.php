@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $id
  * @property int $product_id
  * @property int $contact_id
+ * @property int $value
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  *
@@ -55,6 +56,9 @@ class Order extends \yii\db\ActiveRecord
 
             [['initial_quantity'], 'number', 'min' => 1, 'integerOnly' => true],
             [['initial_quantity'], 'default', 'value' => 1],
+
+            [['value'], 'default', 'value' => 0],
+            [['value'], 'number', 'min' => 0],
         ];
     }
 
@@ -65,6 +69,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'value' => 'Value',
             'product_id' => 'Product ID',
             'contact_id' => 'Contact ID',
             'created_at' => 'Created At',
