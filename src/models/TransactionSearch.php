@@ -40,7 +40,7 @@ class TransactionSearch extends Transaction
      *
      * @return ActiveDataProvider
      */
-    public function search($params,  $query = null)
+    public function search($params, $query = null)
     {
         if ($query == null) {
             $query = Transaction::find();

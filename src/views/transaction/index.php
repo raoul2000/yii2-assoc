@@ -53,7 +53,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y H:i']
             ],
-
+            [
+                'label'     => 'Dispatch',
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) {
+                    return $model->orderValuesDiff;
+                }
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

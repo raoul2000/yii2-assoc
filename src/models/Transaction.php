@@ -35,7 +35,6 @@ class Transaction extends \yii\db\ActiveRecord
      * @var int
      */
     public $initial_product_quantity;
-
     /**
      * {@inheritdoc}
      */
@@ -91,14 +90,42 @@ class Transaction extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+    /**
+     * {@inheritdoc}
+     */
     public function beforeDelete()
     {
         foreach ($this->orders as $order) {
-            $this->unlink('orders',$order, true);
+            $this->unlink('orders', $order, true);
         }
         return true;
     }
-
+    /**
+     * Getter for the orderValueDiff virtual attribute.
+     * This attribute represent the difference between the transaction's value and the sum of all its
+     * related orders value.
+     * If the value is negative, all the value of the transaction is dispatched amon orders. This is a normal situation as
+     * order's value can be covered by more than one transaction.
+     * If the value is positive, it means that not all the value of this transaction is assigned to an order.
+     * If the value is zero, all the value of the transaction covers value of order(s)
+     *
+     * @return int
+     */
+    public function getOrderValuesDiff()
+    {
+        if ($this->isNewRecord) {
+            return null;
+        }
+        if (empty($this->orders)) {
+            return $this->value;
+        } else {
+            $sum = 0;
+            foreach ($this->orders as $order) {
+                $sum += $order->value;
+            }
+            return $this->value - $sum;
+        }
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -106,7 +133,6 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this->hasOne(BankAccount::className(), ['id' => 'from_account_id']);
     }
-
     /**
      * @return \yii\db\ActiveQuery
      */
