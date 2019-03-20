@@ -40,6 +40,7 @@ $transactionModel = $model;
             'value',
             'is_verified:boolean',
             'description',
+            'orderValuesDiff',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
