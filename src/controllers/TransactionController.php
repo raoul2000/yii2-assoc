@@ -190,7 +190,7 @@ class TransactionController extends Controller
         return $this->render('create', [
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
-            'products' => Product::getNameIndex(),
+            'products' => isset($order) ? null : Product::getNameIndex(),
             'order' => $order
         ]);
     }
@@ -213,7 +213,7 @@ class TransactionController extends Controller
         return $this->render('update', [
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
-            'products' => Product::getNameIndex()
+            'products' => isset($order) ? null : Product::getNameIndex(),
         ]);
     }
 
