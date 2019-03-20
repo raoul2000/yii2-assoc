@@ -86,6 +86,33 @@ class Order extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    /**
+     * Getter for the transactionValueDiff virtual attribute.
+     * This attribute represent the difference between the complete values provided by all related transactions, and the value of this order.
+     * If the value is negative, we may have a problem : all related transaction's values are not covering the value of this order.
+     * If the value is positive, it's ok : all transaction values are covering more than the value of this order which is possible because a transaction
+     * can cover more than one order.
+     * If the value is zero, the value of this order is fully covered by related transactions
+     *
+     * @return int
+     */
+    public function getTransactionValuesDiff()
+    {
+        if ($this->isNewRecord) {
+            return null;
+        }
+        if (empty($this->transactions)) {
+            return $this->value;
+        } else {
+            $sum = 0;
+            foreach ($this->transactions as $transaction) {
+                $sum += $transaction->value;
+            }
+            return $sum - $this->value;
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

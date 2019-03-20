@@ -40,6 +40,7 @@ $orderModel = $model;
                 'label'     => 'Beneficiary',
             ],
             'value',
+            'transactionValuesDiff',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
