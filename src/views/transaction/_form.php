@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'is_verified')->checkbox() ?>
     
     <?php
-    if ($isCreate == true) {
+    if ($model->isNewRecord == true && isset($order) == false) {
         echo $form->field($model, 'initial_product_id')->listBox($products, ['size'=>1]);
         echo $form->field($model, 'initial_product_quantity')->textInput(['autocomplete'=>'off']);
     }

@@ -17,7 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'isCreate' => true,
         'model' => $model,
         'bankAccounts' => $bankAccounts,
-        'products' => $products
+        'products' => $products,
+        'order' => $order
     ]) ?>
 
 </div>

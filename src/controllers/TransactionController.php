@@ -146,7 +146,7 @@ class TransactionController extends Controller
      * Creates a new Transaction.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * When the form contains the field 'initial_product_id' it is used to automatically create an order.
-     * 
+     *
      * @param $order_id ID of the order to link to the newly created transaction
      * @return mixed
      */
@@ -183,14 +183,15 @@ class TransactionController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
      
-        if ( $model->from_account_id == null && $order !== null) {
+        if ($model->from_account_id == null && $order !== null) {
             $model->from_account_id = $order->contact->bankAccounts[0];
         }
         
         return $this->render('create', [
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
-            'products' => Product::getNameIndex()
+            'products' => Product::getNameIndex(),
+            'order' => $order
         ]);
     }
 
