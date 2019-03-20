@@ -197,6 +197,21 @@ class OrderController extends Controller
             'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
+
+    /**
+     * Remove relation between and order and a transition
+     */
+    public function actionUnlinkTransaction($id, $transaction_id, $redirect_url)
+    {
+        $order = $this->findModel($id);
+        $transaction = Transaction::findOne($transaction_id);
+        if (!isset($transaction)) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        $order->unlink('transactions', $transaction, true);
+        return $this->redirect($redirect_url);
+    }
+
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
