@@ -19,6 +19,7 @@ class BankAccountSearch extends BankAccount
         return [
             [['id', 'contact_id'], 'integer'],
             [['name'], 'safe'],
+            [['initial_value'], 'number'],
         ];
     }
 
@@ -60,6 +61,7 @@ class BankAccountSearch extends BankAccount
         $query->andFilterWhere([
             'id' => $this->id,
             'contact_id' => $this->contact_id,
+            'initial_value' => $this->initial_value
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

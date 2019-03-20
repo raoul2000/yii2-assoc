@@ -17,6 +17,8 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
+    <?= $form->field($model, 'initial_value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
+    
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>

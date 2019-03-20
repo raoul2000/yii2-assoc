@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  * @property int $contact_id
  * @property string $contact_name copy of the contact name
  * @property string $name
+ * @property int $initial_value initial value of the account
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property Contact $contact
@@ -46,6 +47,9 @@ class BankAccount extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 45],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
+
+            [['initial_value'], 'default', 'value' => 0],
+            [['initial_value'], 'number'],
         ];
     }
 
@@ -60,6 +64,7 @@ class BankAccount extends \yii\db\ActiveRecord
             'name' => 'Name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'initial_value' => 'Initial Value',
         ];
     }
     /**
