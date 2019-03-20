@@ -46,6 +46,7 @@ class BankAccount extends \yii\db\ActiveRecord
             [['contact_id'], 'integer'],
             [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 45],
+            ['name', 'unique', 'targetAttribute' => ['contact_id', 'name'], 'message' => 'Account name already used'],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
 
             [['initial_value'], 'default', 'value' => 0],
