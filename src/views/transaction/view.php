@@ -116,7 +116,7 @@ $transactionModel = $model;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-remove"></span>',
                                 $url,
-                                ['title' => 'unlink', 'data-pjax'=>0]
+                                ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => 'Are you sure you want to unlink this order ?']
                             );
                         },
                     ]
