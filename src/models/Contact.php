@@ -106,6 +106,9 @@ class Contact extends \yii\db\ActiveRecord
         foreach ($this->bankAccounts as $account) {
             $account->delete();
         }
+        foreach ($this->orders as $order) {
+            $order->delete();
+        }
         return true;
     }
 
@@ -115,7 +118,7 @@ class Contact extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
-        // contact.name to all related account contact_name column 
+        // contact.name to all related account contact_name column
         if (!$insert && isset($changedAttributes['name'])) {
             foreach ($this->bankAccounts as $bankAccount) {
                 $bankAccount->contact_name = $this->name;
@@ -129,7 +132,7 @@ class Contact extends \yii\db\ActiveRecord
     public function getAddress()
     {
         return $this->hasOne(Address::className(), ['id' => 'address_id']);
-    }    
+    }
     /**
      * @return \yii\db\ActiveQuery
      */

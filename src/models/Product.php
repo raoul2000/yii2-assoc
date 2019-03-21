@@ -61,6 +61,17 @@ class Product extends \yii\db\ActiveRecord
         ];
     }
     /**
+     * (non-PHPdoc)
+     * @see \yii\db\BaseActiveRecord::beforeDelete()
+     */
+    public function beforeDelete()
+    {
+        foreach ($this->orders as $order) {
+            $order->delete();
+        }
+        return true;
+    }
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getOrders()
