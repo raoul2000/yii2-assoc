@@ -25,3 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::a('Record History', ['/record-history'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Attachment', ['/attachment'], ['class' => 'btn btn-primary']) ?>
 </p>
+<hr/>
+<p>
+    <?= Html::a('User Admin', ['/user/admin'], ['class' => 'btn btn-danger']) ?>
+    <?= Html::a('DB Backup/Restore', ['/db-manager'], ['class' => 'btn btn-danger']) ?>
+    
+</p>

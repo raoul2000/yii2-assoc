@@ -71,3 +71,8 @@ composer require --prefer-dist bupy7/yii2-activerecord-history "*"
 ## Export CSV
 
 - using https://github.com/yii2tech/csv-grid
+
+## DB Manager
+
+- using the great https://github.com/Beaten-Sect0r/yii2-db-manager
+
