@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\components\Constant;
 
 AppAsset::register($this);
 ?>
@@ -57,8 +58,12 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
-
-    <div class="container">
+    <?php
+        $containerClass = array_key_exists(Constant::PARAM_FLUID_LAYOUT, Yii::$app->params) && Yii::$app->params[Constant::PARAM_FLUID_LAYOUT] ===  true
+            ? 'container-fluid'
+            : 'container';
+    ?>
+    <div class="<?= $containerClass ?>">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>

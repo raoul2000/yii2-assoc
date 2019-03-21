@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Action;
 use app\models\Attachment;
 use yii\web\NotFoundHttpException;
+use app\components\Constant;
 
 class UpdateAction extends Action
 {
@@ -18,7 +19,7 @@ class UpdateAction extends Action
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        $this->controller->layout = 'main-fluid';
+        Yii::$app->params[Constant::PARAM_FLUID_LAYOUT] = true;
         return $this->controller->render('/common/update-attachment', [
             'model' => $attachment,
             'redirect_url' => $redirect_url
