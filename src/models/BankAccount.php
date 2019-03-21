@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
  */
 class BankAccount extends \yii\db\ActiveRecord
 {
+    const DEFAULT_NAME = 'principal';
     /**
      * {@inheritdoc}
      */
@@ -42,9 +43,9 @@ class BankAccount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contact_id', 'name'], 'required'],
-            [['contact_id'], 'integer'],
-            [['created_at', 'updated_at'], 'integer'],
+            [['contact_id'], 'required'],
+            [['created_at', 'updated_at', 'contact_id'], 'integer'],
+            [['name'], 'default', 'value' => BankAccount::DEFAULT_NAME],
             [['name'], 'string', 'max' => 45],
             ['name', 'unique', 'targetAttribute' => ['contact_id', 'name'], 'message' => 'Account name already used'],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
@@ -127,9 +128,9 @@ class BankAccount extends \yii\db\ActiveRecord
     public static function getNameIndex()
     {
         $accounts = parent::find()
-        ->asArray()
-        ->with(['contact'])
-        ->all();
+            ->asArray()
+            ->with(['contact'])
+            ->all();
         
         return ArrayHelper::map($accounts, 'id', function ($item) {
             return $item['contact']['name'] . ( empty($item['name'])
