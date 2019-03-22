@@ -16,11 +16,16 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property binary $uuid
  * @property string $name name
+ * @property string $firstname 
  * @property int $address_id
  * @property int $is_natural_person TRUE if this contact represent a natural person, FALSE if it represent a legal person
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property bool $is_deleted used by soft delete behavior to flag a record as soft deleted
+ * @property string $birthday
+ * @property int $gender 1 = Male 2 = female
+ * @property string $email
+ * @property string $note
  */
 class Contact extends \yii\db\ActiveRecord
 {
@@ -78,7 +83,9 @@ class Contact extends \yii\db\ActiveRecord
             [['is_natural_person'], 'boolean'],
             [['uuid'], 'default', 'value' => UuidHelper::uuid()],
             [['created_at', 'updated_at','is_deleted'], 'integer'],
-            [['name'], 'string', 'max' => 128],
+            [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
+            ['email', 'email'],
+            [['birthday'], 'date'],
             [['address_id'], 'default','value' => null],
         ];
     }
@@ -92,9 +99,15 @@ class Contact extends \yii\db\ActiveRecord
             'id' => 'ID',
             'uuid' => 'UUID',
             'name' => 'name',
+            'firstname' => 'Firstname',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'is_deleted' => 'Is Deleted'
+            'is_deleted' => 'Is Deleted',
+            'is_natural_person' => 'Is Natural Person',
+            'birthday' => 'Birthday',
+            'gender' => 'Gender',
+            'email' => 'Email',
+            'note' => 'Note',            
         ];
     }
     /**

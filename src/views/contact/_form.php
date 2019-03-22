@@ -18,10 +18,20 @@ $uploadForm = new \app\models\forms\UploadForm();
         
         <?= $form->field($model, 'is_natural_person')->checkbox() ?>
 
+        <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+
+        <?= $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+
+        <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+
+        <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+        
+
         <?php if ($model->isNewRecord): ?>
+            <hr/>
             <?= $form->field($uploadForm, 'note')->textInput() ?>
-            
             <?= $form->field($uploadForm, 'file')->fileInput() ?>
+            <hr/>
         <?php endif; ?>
 
         <div class="form-group">
