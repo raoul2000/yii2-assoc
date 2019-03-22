@@ -23,7 +23,6 @@ class ContactController extends Controller
     /**
      * {@inheritdoc}
      */
-    /*
     public function behaviors()
     {
         return [
@@ -32,13 +31,13 @@ class ContactController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'permissions' => ['contact-manager'],
+                        'roles' => ['@'],
+                        //'permissions' => ['contact-manager'],
                     ]
                 ],
             ],
         ];
     }
-    */
     public function actions()
     {
         return [
