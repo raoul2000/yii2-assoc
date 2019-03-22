@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="yii2-assoc" default="help" basedir=".">
-    <property file="./ftp.dev.properties" />
+    <property file="./dev.ftp" />
 
     <property name="package"     value="${phing.project.name}" override="true" />
     <property name="buildSite"   value="./build/site"          override="true" />
