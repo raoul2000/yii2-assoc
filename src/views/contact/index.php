@@ -27,6 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             'name',
+            'firstname',
+            'gender:gender',
+            'email:email',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']

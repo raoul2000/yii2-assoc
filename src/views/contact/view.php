@@ -52,7 +52,11 @@ $allAttachments = $model->attachments;
                 }
             ],
             'name',
+            'firstname',
+            'gender:gender',
+            'birthday:date',
             'is_natural_person:boolean',
+            'email:email',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
@@ -63,8 +67,6 @@ $allAttachments = $model->attachments;
             ],
         ],
     ]) ?>
-
-
 
     <h2>Attachment</h2>
     <hr/>
@@ -119,9 +121,6 @@ $allAttachments = $model->attachments;
             ],
         ]); ?> 
     <?php endif; ?>
-
-   
-
 
     <h2>Address</h2>
     <hr/>

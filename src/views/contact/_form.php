@@ -22,11 +22,12 @@ $uploadForm = new \app\models\forms\UploadForm();
 
         <?= $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 
+        <?= $form->field($model, 'gender')->radioList(['1' => 'Male', '2' => 'Female', '0' => 'don\'t know']) ?>
+
         <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 
         <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
         
-
         <?php if ($model->isNewRecord): ?>
             <hr/>
             <?= $form->field($uploadForm, 'note')->textInput() ?>

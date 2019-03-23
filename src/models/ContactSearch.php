@@ -17,7 +17,7 @@ class ContactSearch extends Contact
     public function rules()
     {
         return [
-            [['id', 'name','is_deleted'], 'safe'],
+            [['id', 'name', 'firstname', 'is_deleted', 'email'], 'safe'],
         ];
     }
 
@@ -57,7 +57,9 @@ class ContactSearch extends Contact
 
         // grid filtering conditions
         $query->andFilterWhere(['like', 'id', $this->id])
-            ->andFilterWhere(['like', 'name', $this->name]);
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'firstname', $this->firstname]);
 
         return $dataProvider;
     }
