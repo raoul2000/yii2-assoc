@@ -13,6 +13,7 @@ use yii\behaviors\TimestampBehavior;
  * @property int $to_account_id
  * @property int $is_verified (boolean) is this transaction verified ?
  * @property string $value
+ * @property date $reference_date 
  * @property string $description
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -71,6 +72,8 @@ class Transaction extends \yii\db\ActiveRecord
 
             [['initial_product_id'], 'integer'],
             [['is_verified'], 'boolean'],
+
+            [['reference_date'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
 
@@ -88,6 +91,7 @@ class Transaction extends \yii\db\ActiveRecord
             'description' => 'Description',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'reference_date' => 'Reference Date'
         ];
     }
     /**

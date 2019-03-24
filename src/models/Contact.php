@@ -22,7 +22,7 @@ use yii\helpers\ArrayHelper;
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property bool $is_deleted used by soft delete behavior to flag a record as soft deleted
- * @property string $birthday
+ * @property date $birthday
  * @property int $gender 1 = Male 2 = female
  * @property string $email
  * @property string $note

@@ -45,14 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'value',
             'description',
             'is_verified:boolean',
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
+            'reference_date:date',
             'orderValuesDiff',
             ['class' => 'yii\grid\ActionColumn'],
         ],

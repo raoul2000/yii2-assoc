@@ -19,6 +19,8 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
+    <?= $form->field($model, 'reference_date')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+
     <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
     <?= $form->field($model, 'is_verified')->checkbox() ?>

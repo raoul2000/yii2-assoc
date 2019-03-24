@@ -38,6 +38,7 @@ $transactionModel = $model;
             'fromAccount.longName',
             'toAccount.longName',
             'value',
+            'reference_date:date',
             'is_verified:boolean',
             'description',
             'orderValuesDiff',
