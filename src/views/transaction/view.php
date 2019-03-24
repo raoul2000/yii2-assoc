@@ -40,6 +40,7 @@ $transactionModel = $model;
             'toAccount.longName',
             'value',
             'reference_date:date',
+            'code',
             'is_verified:boolean',
             'description',
             'orderValuesDiff',

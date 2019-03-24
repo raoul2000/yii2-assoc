@@ -15,6 +15,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $value
  * @property date $reference_date 
  * @property string $description
+ * @property string $code a free value describing the transaction
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  *
@@ -78,6 +79,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['initial_product_quantity'], 'number', 'min' => 0, 'integerOnly' => true],
             
             [['description'], 'string', 'max' => 128],
+            [['code'], 'string', 'max' => 10],
             // from and to account must not be the same, expect when transaction value is 0. This is a 
             // particular case used to cancel a bank check for example
             ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number',
@@ -112,7 +114,8 @@ class Transaction extends \yii\db\ActiveRecord
             'description' => 'Description',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'reference_date' => 'Reference Date'
+            'reference_date' => 'Reference Date',
+            'code' => 'Code'
         ];
     }
     /**

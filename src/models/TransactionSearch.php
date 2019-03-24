@@ -22,7 +22,7 @@ class TransactionSearch extends Transaction
             [['id', 'from_account_id', 'to_account_id', 'created_at', 'updated_at'], 'integer'],
             [['is_verified'], 'boolean'],
             [['value'], 'number'],
-            [['description'], 'safe'],
+            [['description', 'code'], 'safe'],
         ];
     }
 
@@ -77,6 +77,7 @@ class TransactionSearch extends Transaction
             'to_account_id' => $this->to_account_id,
             'value' => $this->value,
             'is_verified' => $this->is_verified,
+            'code' => $this->code,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

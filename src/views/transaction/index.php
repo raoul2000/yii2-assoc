@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(Html::encode($bankAccounts[$model->to_account_id]), ['bank-account/view','id'=>$model->to_account_id]);
                 }
             ],
+            'code',
             'value',
             'description',
             'is_verified:boolean',
