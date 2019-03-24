@@ -2,9 +2,11 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Transaction;
+use app\components\Constant;
 
 /**
  * TransactionSearch represents the model behind the search form of `app\models\Transaction`.
@@ -46,6 +48,13 @@ class TransactionSearch extends Transaction
             $query = Transaction::find();
         }
 
+        $session = Yii::$app->session;
+        if ($session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+            $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
+            $query->andWhere([ 
+                'between', 
+                'reference_date', $range[Constant::SESS_PARAM_NAME_STARTDATE], $range[Constant::SESS_PARAM_NAME_ENDDATE]]);
+        }
 
         // add conditions that should always apply here
 

@@ -55,22 +55,20 @@ $orderModel = $model;
 
     <h2>Transactions</h2>
     <hr />
+    <p>
+        <?= Html::a('Create Transaction For This Order', [
+            'transaction/create',
+            'order_id' => $model->id,
+            ], ['class' => 'btn btn-success', 'data-pjax'=>0]) ?>
+        
+        <?= Html::a('Link To Existing Transaction', [
+            'link-transaction',
+            'id' => $model->id
+            ], ['class' => 'btn btn-primary', 'data-pjax'=>0]) ?>
 
+        <?= \app\components\widgets\DateRangeWidget::widget() ?>                
+    </p>
     <?php Pjax::begin(); ?>
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-        <p>
-            <?= Html::a('Create Transaction For This Order', [
-                'transaction/create',
-                'order_id' => $model->id,
-                ], ['class' => 'btn btn-success', 'data-pjax'=>0]) ?>
-            
-            <?= Html::a('Link To Existing Transaction', [
-                'link-transaction',
-                'id' => $model->id
-                ], ['class' => 'btn btn-primary', 'data-pjax'=>0]) ?>
-        </p>
-
         <?= GridView::widget([
             'dataProvider' => $transactionDataProvider,
             'filterModel' => $transactionSearchModel,

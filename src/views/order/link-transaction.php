@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = 'link Order';
 ?>
 
 <p>
+    <?= \app\components\widgets\DateRangeWidget::widget() ?>       
     <?= Html::a('Back To Order', ['view', 'id' => $order->id], ['class' => 'btn btn-default']) ?>
 </p>
 
@@ -58,6 +59,7 @@ $this->params['breadcrumbs'][] = 'link Order';
             'value',
             'description',
             'is_verified:boolean',
+            'reference_date:date',
         ],
     ]); ?>
 <?php Pjax::end(); ?>
