@@ -29,6 +29,7 @@ $orderModel = $model;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Create ANother Order', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([

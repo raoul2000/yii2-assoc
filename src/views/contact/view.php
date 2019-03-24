@@ -30,8 +30,9 @@ $allAttachments = $model->attachments;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Orders', ['order/index', 'OrderSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Accounts', ['bank-account/index', 'BankAccountSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Create Another Contact', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('View Orders', ['order/index', 'OrderSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('View Accounts', ['bank-account/index', 'BankAccountSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= DetailView::widget([

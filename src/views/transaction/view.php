@@ -29,6 +29,7 @@ $transactionModel = $model;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Create Another Transaction', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
