@@ -174,7 +174,7 @@ class TransactionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($order !== null) {
                 $model->link('orders', $order);
-            } else if (isset($model->initial_product_id)) {
+            } else if (isset($model->initial_product_id) && $model->initial_product_quantity > 0) {
                 $initialProduct = \app\models\Product::findOne($model->initial_product_id);
                 if ($initialProduct) {
                     // create the related orders

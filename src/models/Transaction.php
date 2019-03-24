@@ -35,7 +35,7 @@ class Transaction extends \yii\db\ActiveRecord
      *
      * @var int
      */
-    public $initial_product_quantity;
+    public $initial_product_quantity = 0;
     /**
      * {@inheritdoc}
      */
@@ -62,8 +62,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id', 'to_account_id', 'created_at', 'updated_at'], 'integer'],
             [['value'], 'number', 'min' => 0],
 
-            [['initial_product_quantity'], 'number', 'min' => 1, 'integerOnly' => true],
-            [['initial_product_quantity'], 'default', 'value' => 1],
+            [['initial_product_quantity'], 'number', 'min' => 0, 'integerOnly' => true],
             
             [['description'], 'string', 'max' => 128],
             // from and to account must not be the same, expect when transaction value is 0. This is a 
