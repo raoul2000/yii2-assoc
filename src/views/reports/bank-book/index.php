@@ -1,7 +1,8 @@
 <?php
 /* @var $this yii\web\View */
 ?>
-<h1>reports/bank-book/index</h1>
+<h1>Bank Book</h1>
+<hr/>
 
 <p>
     You may change the content of this page by modifying
