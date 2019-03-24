@@ -167,7 +167,7 @@ class TransactionController extends Controller
      */
     public function actionCreate($order_id = null)
     {
-        $model = new Transaction();
+        $model = Transaction::create();
 
         $order = null;
         if ($order_id != null) {

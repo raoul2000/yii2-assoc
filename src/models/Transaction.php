@@ -35,7 +35,20 @@ class Transaction extends \yii\db\ActiveRecord
      *
      * @var int
      */
-    public $initial_product_quantity = 0;
+    public $initial_product_quantity;
+    /**
+     * Create a new instance of this model with default attributes values
+     *
+     * @return Transaction
+     */
+    public static function create() 
+    {
+        return new Transaction([
+            'reference_date' => date('Y-m-d'),
+            'initial_product_quantity' => 0,
+            'value' => 0
+        ]);
+    }
     /**
      * {@inheritdoc}
      */

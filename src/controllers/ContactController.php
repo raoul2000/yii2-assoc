@@ -118,7 +118,7 @@ class ContactController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Contact();
+        $model = Contact::create();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             // by default, create an account for new contact

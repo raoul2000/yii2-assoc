@@ -37,6 +37,18 @@ class Contact extends \yii\db\ActiveRecord
         return 'contact';
     }
     /**
+     * Create a new instance of this model with default attributes values
+     *
+     * @return Contact
+     */
+    public static function create() 
+    {
+        return new Contact([
+            'gender' => 0,
+        ]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function behaviors()
@@ -83,12 +95,10 @@ class Contact extends \yii\db\ActiveRecord
             [['is_natural_person'], 'boolean'],
             [['uuid'], 'default', 'value' => UuidHelper::uuid()],
             [['created_at', 'updated_at','is_deleted', 'gender'], 'integer'],
-            ['gender','default', 'value' => 0 ],
             ['gender','in', 'range' => [0,1,2] ],
             [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
             ['email', 'email'],
             [['birthday'], 'date', 'format' => 'php:Y-m-d'],
-            [['address_id'], 'default','value' => null],
         ];
     }
 
