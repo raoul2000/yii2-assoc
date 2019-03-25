@@ -56,6 +56,7 @@ class AddressController extends Controller
 
     /**
      * Displays a single Address model.
+     * 
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found

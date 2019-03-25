@@ -77,7 +77,7 @@ class OrderController extends Controller
 
     /**
      * Displays a single Order model.
-     * @param integer $id
+     * @param integer $id the id of the model
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -98,8 +98,10 @@ class OrderController extends Controller
     }
 
     /**
-     * Creates a new Order model.
+     * Creates a one or more Order models depending on the initial_quantity value.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * If a transaction_id is provided, the newly created order is link to the transaction and the browser
+     * is redirected to the transaction 'view' page. 
      * @param $transaction_id ID of the transaction to link to the newly created order
      * @return mixed
      */
@@ -151,7 +153,7 @@ class OrderController extends Controller
     /**
      * Updates an existing Order model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
+     * @param integer $id the id of the order model to update
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -170,7 +172,9 @@ class OrderController extends Controller
         ]);
     }
     /**
-     * Link the current order with a transaction
+     * Link the current order with a transaction.
+     * This method displays a list of all transactions candidates to be linked
+     * with this order
      *
      * @param int $id Id of the order
      * @param int $transaction_id id of the transaction to link to the order
@@ -215,6 +219,11 @@ class OrderController extends Controller
 
     /**
      * Remove relation between and order and a transition
+     *
+     * @param int $id the id of the order
+     * @param int $transaction_id the id of the transaction to unlink
+     * @param string $redirect_url the url to redirect the browser to
+     * @return mixed
      */
     public function actionUnlinkTransaction($id, $transaction_id, $redirect_url)
     {
@@ -230,7 +239,7 @@ class OrderController extends Controller
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
+     * @param integer $id the id of the order
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

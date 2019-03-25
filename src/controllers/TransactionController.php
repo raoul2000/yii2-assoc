@@ -104,7 +104,12 @@ class TransactionController extends Controller
     }
 
     /**
-     * 
+     * Unlink a transaction from an order
+     *
+     * @param int $id the id of the transaction
+     * @param int $order_id the id of the order to unlink
+     * @param string $redirect_url the url to redirect the browser to
+     * @return mixed
      */
     public function actionUnlinkOrder($id, $order_id, $redirect_url)
     {
@@ -132,8 +137,6 @@ class TransactionController extends Controller
             'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
-
-
     /**
      * Displays a single Transaction model.
      * The view also displays a grid of all related orders

@@ -74,6 +74,11 @@ class ContactController extends Controller
         ]);
     }
 
+    /**
+     * Export all contacts as a CSV file
+     *
+     * @return void
+     */
     public function actionExportCsv() 
     {
         $exporter = new \yii2tech\csvgrid\CsvGrid([
@@ -158,11 +163,11 @@ class ContactController extends Controller
 
     /**
      * Link a contact with an address
-     * If update is successful, the browser will be redirected to the 'contact/view' page.
-     * @param string $id
-     * @param string $address_id
+     * If link is successful, the browser will be redirected to the 'contact/view' page.
+     * @param string $id the cpntact id
+     * @param string $address_id the address id
      * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @throws NotFoundHttpException if the contact model or the address model cannot be found
      */
     public function actionLinkAddress($id, $address_id = null)
     {
@@ -189,8 +194,10 @@ class ContactController extends Controller
     }
 
     /**
-     * Unlink a contact its current linked address
-     * @param string $id
+     * Unlink a contact from its current linked address.
+     * If the contact is not link to any address, this method has no effect.
+     * When done, the browser is redirected to the 'view' page of the contact.
+     * @param string $id the contact Id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
