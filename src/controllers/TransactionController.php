@@ -32,6 +32,9 @@ class TransactionController extends Controller
             ],
             'delete-date-range' => [
                 'class' => 'app\components\actions\DeleteDateRangeAction',
+            ],
+            'ajax-link-orders' => [
+                'class' => 'app\components\actions\transactions\AjaxLinkOrdersAction'
             ]
         ];
     }
@@ -56,34 +59,26 @@ class TransactionController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
-            ],            
+            ],
         ];
     }
 
     /**
-     * Link a transaction with one existing order
+     * Link a transaction with one or more existing order
      * @param $id transaction Id
-     * @param $order_id Id of the order to link to
      */
-    public function actionLinkOrder($id, $order_id = null)
+    public function actionLinkOrder($id)
     {
         $transaction = $this->findModel($id);
-        if (isset($order_id)) {
-            $order = Order::findOne($order_id);
-            if (!isset($order)) {
-                throw new NotFoundHttpException('The requested page does not exist.');
-            }
-            $transaction->link('orders', $order);
-            return $this->redirect(['view', 'id' => $transaction->id]);
-        }
 
         // prepare the form model holding filter values
         $orderSearchModel = new OrderSearch();
 
-        // if no filter is applied, use tge first account of the beneficiary to populate the from_account_id field
+        // if no filter is applied, use the first account of the beneficiary to populate the from_account_id fiel
+        /*
         if (array_key_exists('OrderSearch', Yii::$app->request->getQueryParams()) == false) {
             $orderSearchModel->contact_id = $transaction->fromAccount->contact_id;
-        }
+        }*/
         // apply user enetered filter values
         $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams);
         
@@ -102,7 +97,6 @@ class TransactionController extends Controller
             'contacts' => Contact::getNameIndex()
         ]);
     }
-
     /**
      * Unlink a transaction from an order
      *
