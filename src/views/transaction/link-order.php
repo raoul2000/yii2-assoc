@@ -17,11 +17,13 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id
 $this->params['breadcrumbs'][] = 'link Order';
 \yii\web\YiiAsset::register($this);
 
+// Client Js script 
+// Hanlde user click on 'unlink order' button 
 $urlLinkOrders = Url::toRoute(['transaction/ajax-link-orders']);
-
+$gridViewElementId = 'unlinked-orders';
 $jsScript=<<<EOS
     $('#btn-link-orders').on('click', (ev) => {
-        let selectedOrderIds = $('#unlinked-orders').yiiGridView('getSelectedRows');
+        let selectedOrderIds = $('#{$gridViewElementId}').yiiGridView('getSelectedRows');
         if( selectedOrderIds.length !== 0) {
             $.post({
                 url: '{$urlLinkOrders}',
@@ -31,29 +33,26 @@ $jsScript=<<<EOS
                     selectedOrderIds: selectedOrderIds
                 },
                 success: function(data) {
-                    location.reload();
+                    //location.reload();
+                    $.pjax.reload({container: '#pjax_{$gridViewElementId}', async: true});
                 },
              });            
         } else {
-            alert('Not order selected');
+            alert('No order selected');
         }
     });
 EOS;
 
-$this->registerJs(
-    $jsScript,
-    View::POS_READY,
-    'transaction-order-link-handler'
-);
+$this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
 
 ?>
 <p>
     <?= Html::a('Back To Transaction', ['view', 'id' => $transaction->id], ['class' => 'btn btn-default']) ?>
 </p>
 
-    <?php Pjax::begin(); ?>
+    <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
         <?= GridView::widget([
-            'id' => 'unlinked-orders',
+            'id' => $gridViewElementId,
             'dataProvider' => $orderDataProvider,
             'filterModel' => $orderSearchModel,
             'columns' => [
@@ -86,10 +85,6 @@ $this->registerJs(
         ]); ?>
     <?php Pjax::end(); ?>
     
-
     <div class="form-group">
         <?= Html::Button('Link Selected Orders', ['id' => 'btn-link-orders', 'class' => 'btn btn-success']) ?>
     </div>
-
-
-
