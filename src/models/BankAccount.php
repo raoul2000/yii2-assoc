@@ -121,6 +121,47 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Transaction::className(), ['to_account_id' => 'id']);
     }
+
+    /**
+     * Returns a query to find all transactions for this order, no matter if they are
+     * incoming or outgoing transactions
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransactions()
+    {
+        return Transaction::find()
+            ->where(  ['from_account_id' => $this->id])
+            ->orWhere(['to_account_id' => $this->id]);
+    }
+
+    /**
+     * Compute and returns the current account balance and total Deb/Cred
+     *
+     * @return array
+     */
+    public function getBalance()
+    {
+        $transactions = $this->getTransactions()
+            ->select(['from_account_id', 'to_account_id', 'value'])
+            ->asArray()
+            ->all();
+
+        $totalDeb = $totalCred = 0;
+        foreach($transactions as $transaction) {
+            if( $transaction['from_account_id'] == $this->id) {
+                $totalDeb += $transaction['value'];
+            } else if ($transaction['to_account_id'] == $this->id) {
+                $totalCred += $transaction['value'];
+            } 
+        }
+
+        return [
+            'value' => $this->value + $totalCred - $totalDeb,
+            'totalDeb' => $totalDeb,
+            'totalCred' => $totalCred,
+        ];
+    }
     /**
      * Returns an array containing all bank account names indexed by account id.
      * Account names are prefixed with the contact name.

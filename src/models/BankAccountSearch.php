@@ -39,9 +39,11 @@ class BankAccountSearch extends BankAccount
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query = null)
     {
-        $query = BankAccount::find();
+        if ($query == null) {
+            $query = BankAccount::find();
+        }
 
         // add conditions that should always apply here
 

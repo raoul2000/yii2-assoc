@@ -6,6 +6,7 @@ use Yii;
 use app\models\Contact;
 use app\models\BankAccount;
 use app\models\BankAccountSearch;
+use app\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,8 +64,19 @@ class BankAccountController extends Controller
      */
     public function actionView($id)
     {
+        $bankAccount =  $this->findModel($id);
+        $transactionSearchModel = new TransactionSearch();
+        $transactionDataProvider = $transactionSearchModel->search(
+            Yii::$app->request->queryParams,
+            $bankAccount->getTransactions()
+        );
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $bankAccount,
+            'accountBalance' => $bankAccount->getBalance(),
+            'transactionSearchModel' => $transactionSearchModel,
+            'transactionDataProvider' => $transactionDataProvider,
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
 

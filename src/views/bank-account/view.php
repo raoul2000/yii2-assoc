@@ -1,7 +1,12 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
+use yii\helpers\ArrayHelper;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\BankAccount */
@@ -10,6 +15,7 @@ $this->title = $model->longName;
 $this->params['breadcrumbs'][] = ['label' => 'Bank Accounts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+$bankAccountModel = $model;
 ?>
 <div class="bank-account-view">
 
@@ -45,6 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'name',
+            [
+                'label' => 'Current Value',
+                'format' => 'raw',
+                'value' => function ($model) use($accountBalance){
+                    return '<b>' . Html::encode($accountBalance['value']) . '</b>';
+                }
+            ],
             'initial_value',
             [
                 'attribute' => 'updated_at',
@@ -57,5 +70,56 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]) ?>
+
+    <h2>Transactions</h2>
+    <hr/>
+
+    <?php Pjax::begin(); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $transactionDataProvider,
+        //'filterModel' => $transactionSearchModel,
+        'columns' => [
+            'reference_date:date',
+            'code',
+            [
+                'attribute' => 'label',
+                'format'    => 'html',
+                'value'     => function ($transactionModel, $key, $index, $column) {
+                    return Html::encode($transactionModel->description);
+                }
+
+            ],
+            [
+                'attribute' => 'Débit',
+                'format'    => 'html',
+                'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
+                    return $transactionModel->from_account_id == $bankAccountModel->id
+                        ? $transactionModel->value
+                        : '';
+                }
+            ],
+            [
+                'attribute' => 'Crédit',
+                'format'    => 'html',
+                'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
+                    return $transactionModel->from_account_id == $bankAccountModel->id
+                    ? ''
+                    : $transactionModel->value;
+                }
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'  => '{view}',
+                'urlCreator' => function ($action, $model, $key, $index) {
+                    if ($action == 'view') {
+                        return Url::to(['transaction/view', 'id' =>  $model->id, 'redirect_url' => Url::current()]);
+                    }
+                },
+            ],
+        ],
+    ]); ?>
+    <?php Pjax::end(); ?>
+
 
 </div>
