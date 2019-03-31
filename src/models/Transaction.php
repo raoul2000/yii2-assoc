@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property date $reference_date 
  * @property string $description
  * @property string $code a free value describing the transaction
+ * @property int $transaction_pack_id Id of the pack that inlcudes this transaction or NULL 
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  *
@@ -73,7 +74,7 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             [['from_account_id', 'to_account_id','value'], 'required'],
-            [['from_account_id', 'to_account_id', 'created_at', 'updated_at'], 'integer'],
+            [['from_account_id', 'to_account_id', 'transaction_pack_id', 'created_at', 'updated_at'], 'integer'],
             [['value'], 'number', 'min' => 0],
 
             [['initial_product_quantity'], 'number', 'min' => 0, 'integerOnly' => true],
@@ -115,7 +116,8 @@ class Transaction extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'reference_date' => 'Reference Date',
-            'code' => 'Code'
+            'code' => 'Code',
+            'transaction_pack_id' => 'Pack ID',
         ];
     }
     /**
@@ -183,5 +185,12 @@ class Transaction extends \yii\db\ActiveRecord
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
             ->via('orderTransactions');
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPack()
+    {
+        return $this->hasOne(TransactionPack::className(), ['id' => 'transaction_pack_id']);
     }
 }
