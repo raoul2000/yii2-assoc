@@ -35,11 +35,38 @@ $orderModel = $model;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'product.name',
             [
-                'attribute' => 'contact.name',
-                'label'     => 'Beneficiary',
-            ],
+                'label' => 'Product',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::encode($model->product->name), 
+                        [
+                            'product/view', 
+                            'id' => $model->product->id
+                        ],
+                        [
+                            'title' => 'view Product'
+                        ]
+                    );
+                }
+            ],            
+            [
+                'label' => 'Beneficiary',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::encode($model->contact->name), 
+                        [
+                            'contact/view', 
+                            'id' => $model->contact->id
+                        ],
+                        [
+                            'title' => 'view Contact'
+                        ]
+                    );
+                }
+            ],            
             'value',
             'transactionValuesDiff',
             [

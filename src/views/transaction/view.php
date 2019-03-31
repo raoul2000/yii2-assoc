@@ -36,8 +36,38 @@ $transactionModel = $model;
         'model' => $model,
         'attributes' => [
             'id',
-            'fromAccount.longName',
-            'toAccount.longName',
+            [
+                'label' => 'From',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::encode($model->fromAccount->longName), 
+                        [
+                            'bank-account/view', 
+                            'id' => $model->fromAccount->id
+                        ],
+                        [
+                            'title' => 'view Account'
+                        ]
+                    );
+                }
+            ],            
+            [
+                'label' => 'To',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::encode($model->toAccount->longName), 
+                        [
+                            'bank-account/view', 
+                            'id' => $model->toAccount->id
+                        ],
+                        [
+                            'title' => 'view Account'
+                        ]
+                    );
+                }
+            ],            
             'value',
             'reference_date:date',
             'code',
