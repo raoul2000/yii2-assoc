@@ -41,7 +41,6 @@ class TransactionPack extends \yii\db\ActiveRecord
     {
         return [
             [['reference_date'], 'safe'],
-            [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 128],
         ];
     }
