@@ -73,7 +73,7 @@ class BankAccountController extends Controller
 
         return $this->render('view', [
             'model' => $bankAccount,
-            'accountBalance' => $bankAccount->getBalance(),
+            'accountBalance' => $bankAccount->getBalanceInfo(),
             'transactionSearchModel' => $transactionSearchModel,
             'transactionDataProvider' => $transactionDataProvider,
             'bankAccounts' => BankAccount::getNameIndex()

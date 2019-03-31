@@ -140,21 +140,15 @@ class BankAccount extends \yii\db\ActiveRecord
      *
      * @return array
      */
-    public function getBalance()
+    public function getBalanceInfo()
     {
-        $transactions = $this->getTransactions()
-            ->select(['from_account_id', 'to_account_id', 'value'])
-            ->asArray()
-            ->all();
+        $totalDeb = Transaction::find()
+            ->where(['from_account_id' => $this->id])
+            ->sum('value');
 
-        $totalDeb = $totalCred = 0;
-        foreach($transactions as $transaction) {
-            if( $transaction['from_account_id'] == $this->id) {
-                $totalDeb += $transaction['value'];
-            } else if ($transaction['to_account_id'] == $this->id) {
-                $totalCred += $transaction['value'];
-            } 
-        }
+        $totalCred = Transaction::find()
+            ->where(['to_account_id' => $this->id])
+            ->sum('value');
 
         return [
             'value' => $this->value + $totalCred - $totalDeb,
