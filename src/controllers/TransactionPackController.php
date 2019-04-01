@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\TransactionPack;
 use app\models\TransactionPackSearch;
+use app\models\TransactionSearch;
+use app\models\BankAccount;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -14,6 +16,14 @@ use yii\filters\VerbFilter;
  */
 class TransactionPackController extends Controller
 {
+    public function actions()
+    {
+        return [
+            'ajax-link-transactions' => [
+                'class' => 'app\components\actions\transactionPack\AjaxLinkTransactionsAction'
+            ]
+        ];
+    }
     /**
      * {@inheritdoc}
      */
@@ -43,7 +53,28 @@ class TransactionPackController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    /**
+     * Link a transaction pack with one or more existing transactions
+     * @param $id transaction Id
+     */
+    public function actionLinkTransaction($id)
+    {
+        $transactionPack = $this->findModel($id);
 
+        // prepare the form model holding filter values
+        $transactionSearchModel = new TransactionSearch();
+
+        // apply user enetered filter values
+        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
+        $transactionDataProvider->query->andWhere(['transaction_pack_id' => null]);
+        
+        return $this->render('link-transaction', [
+            'transactionPack' => $transactionPack,
+            'transactionSearchModel' => $transactionSearchModel,
+            'transactionDataProvider' => $transactionDataProvider,
+            'bankAccounts' => BankAccount::getNameIndex()
+        ]);
+    }
     /**
      * Displays a single TransactionPack model.
      * @param integer $id
@@ -52,8 +83,16 @@ class TransactionPackController extends Controller
      */
     public function actionView($id)
     {
+        $model =  $this->findModel($id);
+        $transactionSearchModel = new TransactionSearch();
+        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
+        $transactionDataProvider->query->andWhere(['transaction_pack_id' => $model->id]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'transactionSearchModel' => $transactionSearchModel,
+            'transactionDataProvider' => $transactionDataProvider,
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
 
