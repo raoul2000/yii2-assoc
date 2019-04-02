@@ -100,7 +100,10 @@ $orderModel = $model;
             'dataProvider' => $transactionDataProvider,
             'filterModel' => $transactionSearchModel,
             'columns' => [
-                'id',
+                [
+                    'attribute' => 'id',
+                    'label'     => 'N°'
+                ],
                 [
                     'attribute' => 'from_account_id',
                     'filter'    => $bankAccounts,

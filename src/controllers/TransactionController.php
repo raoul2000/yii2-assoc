@@ -112,7 +112,7 @@ class TransactionController extends Controller
         if (!isset($order)) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        $transaction->unlink('orders', $order, true);
+        $transaction->unlink('orders', $order);
         return $this->redirect($redirect_url);
     }
     /**

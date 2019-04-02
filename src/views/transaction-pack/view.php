@@ -57,6 +57,10 @@ $transactionPackModel = $model;
         'filterModel' => $transactionSearchModel,
         'columns' => [
             [
+                'attribute' => 'id',
+                'label'     => 'N°'
+            ],
+            [
                 'attribute' => 'from_account_id',
                 'filter'    => $bankAccounts,
                 'format'    => 'html',

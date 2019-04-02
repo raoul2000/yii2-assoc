@@ -6,6 +6,7 @@ use Yii;
 use app\models\TransactionPack;
 use app\models\TransactionPackSearch;
 use app\models\TransactionSearch;
+use app\models\Transaction;
 use app\models\BankAccount;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -74,6 +75,24 @@ class TransactionPackController extends Controller
             'transactionDataProvider' => $transactionDataProvider,
             'bankAccounts' => BankAccount::getNameIndex()
         ]);
+    }
+    /**
+     * Unlink a transaction from this transaction pack
+     *
+     * @param int $id id of the transaction pack
+     * @param int $transaction_id id of the transaction to unlink
+     * @param string $redirect_url redirect url
+     * @return void
+     */
+    public function actionUnlinkTransaction($id, $transaction_id, $redirect_url)
+    {
+        $transactionPack = $this->findModel($id);
+        $transaction = Transaction::findOne($transaction_id);
+        if (!isset($transaction)) {
+            throw new NotFoundHttpException('The requested transaction does not exist.');
+        }
+        $transactionPack->unlink('transactions', $transaction);
+        return $this->redirect($redirect_url);
     }
     /**
      * Displays a single TransactionPack model.

@@ -18,7 +18,7 @@ $transactionModel = $model;
 ?>
 <div class="transaction-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>Transaction N°<?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -35,15 +35,14 @@ $transactionModel = $model;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             [
                 'label' => 'From',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->fromAccount->longName), 
+                        Html::encode($model->fromAccount->longName),
                         [
-                            'bank-account/view', 
+                            'bank-account/view',
                             'id' => $model->fromAccount->id
                         ],
                         [
@@ -51,15 +50,15 @@ $transactionModel = $model;
                         ]
                     );
                 }
-            ],            
+            ],
             [
                 'label' => 'To',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->toAccount->longName), 
+                        Html::encode($model->toAccount->longName),
                         [
-                            'bank-account/view', 
+                            'bank-account/view',
                             'id' => $model->toAccount->id
                         ],
                         [
@@ -67,13 +66,28 @@ $transactionModel = $model;
                         ]
                     );
                 }
-            ],            
+            ],
             'value',
             'reference_date:date',
             'code',
             'is_verified:boolean',
             'description',
             'orderValuesDiff',
+            [
+                'label' => 'pack',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->transaction_pack_id) {
+                        return Html::a(
+                            'pack',
+                            ['transaction-pack/view', 'id' => $model->transaction_pack_id],
+                            ['title' => 'view pack']
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            ],
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']

@@ -27,6 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             [
+                'attribute' => 'id',
+                'label'     => 'N°'
+            ],
+            [
                 'attribute' => 'from_account_id',
                 'filter'    => $bankAccounts,
                 'format'    => 'html',
