@@ -13,10 +13,10 @@ use yii\behaviors\TimestampBehavior;
  * @property int $to_account_id
  * @property int $is_verified (boolean) is this transaction verified ?
  * @property string $value
- * @property date $reference_date 
+ * @property date $reference_date
  * @property string $description
  * @property string $code a free value describing the transaction
- * @property int $transaction_pack_id Id of the pack that inlcudes this transaction or NULL 
+ * @property int $transaction_pack_id Id of the pack that inlcudes this transaction or NULL
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  *
@@ -43,7 +43,7 @@ class Transaction extends \yii\db\ActiveRecord
      *
      * @return Transaction
      */
-    public static function create() 
+    public static function create()
     {
         return new Transaction([
             'reference_date' => date('Y-m-d'),
@@ -84,7 +84,7 @@ class Transaction extends \yii\db\ActiveRecord
             // from and to account must not be the same, expect when transaction value is 0. This is a 
             // particular case used to cancel a bank check for example
             ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number',
-                'when' => function($model) {
+                'when' => function ($model) {
                     return $model->value != 0;
                 },
                 'whenClient' => "function(attribute, value) {
@@ -132,9 +132,9 @@ class Transaction extends \yii\db\ActiveRecord
     }
     /**
      * Getter for the orderValueDiff virtual attribute.
-     * This attribute represent the difference between the transaction's value and the sum of all its
+     * This attribute represents the difference between the transaction's value and the sum of all its
      * related orders value.
-     * If the value is negative, all the value of the transaction is dispatched amon orders. This is a normal situation as
+     * If the value is negative, all the value of the transaction is dispatched among orders. This is a normal situation as
      * order's value can be covered by more than one transaction.
      * If the value is positive, it means that not all the value of this transaction is assigned to an order.
      * If the value is zero, all the value of the transaction covers value of order(s)

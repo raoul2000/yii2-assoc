@@ -40,9 +40,9 @@ $orderModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->product->name), 
+                        Html::encode($model->product->name),
                         [
-                            'product/view', 
+                            'product/view',
                             'id' => $model->product->id
                         ],
                         [
@@ -50,15 +50,15 @@ $orderModel = $model;
                         ]
                     );
                 }
-            ],            
+            ],
             [
                 'label' => 'Beneficiary',
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->contact->name), 
+                        Html::encode($model->contact->name),
                         [
-                            'contact/view', 
+                            'contact/view',
                             'id' => $model->contact->id
                         ],
                         [
@@ -66,9 +66,21 @@ $orderModel = $model;
                         ]
                     );
                 }
-            ],            
+            ],
+            [
+                'label' => 'Value Diff',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->transactionValuesDiff < 0) {
+                        return "<span class=\"label label-danger\" title=\"value not covered by transaction(s)\">missing ($model->transactionValuesDiff)</span>";
+                    } elseif ($model->transactionValuesDiff > 0) {
+                        return "<span class=\"label label-default\" title=\"value more than covered by transaction(s)\">extra (+$model->transactionValuesDiff)</span>";
+                    } else {
+                        return '<span class="label label-success" title="value exact covered by transaction(s)">covered</span>';
+                    }
+                }
+            ],
             'value',
-            'transactionValuesDiff',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
