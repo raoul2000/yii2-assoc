@@ -63,17 +63,25 @@ $transactionPackModel = $model;
             [
                 'attribute' => 'from_account_id',
                 'filter'    => $bankAccounts,
-                'format'    => 'html',
+                'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                    return Html::a(Html::encode($bankAccounts[$model->from_account_id]), ['bank-account/view','id'=>$model->from_account_id]);
+                    return Html::a(
+                        Html::encode($bankAccounts[$model->from_account_id]),
+                        ['bank-account/view','id'=>$model->from_account_id],
+                        ['data-pjax' => 0]
+                    );
                 }
             ],
             [
                 'attribute' => 'to_account_id',
                 'filter'    =>  $bankAccounts,
-                'format'    => 'html',
+                'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                    return Html::a(Html::encode($bankAccounts[$model->to_account_id]), ['bank-account/view','id'=>$model->to_account_id]);
+                    return Html::a(
+                        Html::encode($bankAccounts[$model->to_account_id]),
+                        ['bank-account/view','id'=>$model->to_account_id],
+                        ['data-pjax' => 0]
+                    );
                 }
             ],
             'code',

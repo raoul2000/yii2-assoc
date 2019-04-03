@@ -67,18 +67,26 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
                     'attribute' => 'product_id',
                     'label'     => 'Product',
                     'filter'    => $products,
-                    'format'    => 'html',
+                    'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($products) {
-                        return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
+                        return Html::a(
+                            Html::encode($products[$model->product_id]),
+                            ['product/view','id'=>$model->product_id],
+                            [ 'data-pjax' => 0 ]
+                        );
                     }
                 ],
                 [
                     'attribute' => 'contact_id',
                     'label'     => 'Beneficiary',
                     'filter'    => $contacts,
-                    'format'    => 'html',
+                    'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                        return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
+                        return Html::a(
+                            Html::encode($contacts[$model->contact_id]),
+                            ['contact/view','id'=>$model->contact_id],
+                            [ 'data-pjax' => 0 ]
+                        );
                     }
                 ],
                 'value'

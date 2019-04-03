@@ -41,13 +41,8 @@ $transactionModel = $model;
                 'value' => function ($model) {
                     return Html::a(
                         Html::encode($model->fromAccount->longName),
-                        [
-                            'bank-account/view',
-                            'id' => $model->fromAccount->id
-                        ],
-                        [
-                            'title' => 'view Account'
-                        ]
+                        ['bank-account/view','id' => $model->fromAccount->id],
+                        ['title' => 'view Account', 'data-pjax' => 0]
                     );
                 }
             ],
@@ -57,13 +52,8 @@ $transactionModel = $model;
                 'value' => function ($model) {
                     return Html::a(
                         Html::encode($model->toAccount->longName),
-                        [
-                            'bank-account/view',
-                            'id' => $model->toAccount->id
-                        ],
-                        [
-                            'title' => 'view Account'
-                        ]
+                        ['bank-account/view','id' => $model->toAccount->id],
+                        ['title' => 'view Account', 'data-pjax' => 0]
                     );
                 }
             ],
@@ -93,7 +83,7 @@ $transactionModel = $model;
                         return Html::a(
                             'pack',
                             ['transaction-pack/view', 'id' => $model->transaction_pack_id],
-                            ['title' => 'view pack']
+                            ['title' => 'view pack', 'data-pjax' => 0]
                         );
                     } else {
                         return null;
@@ -138,18 +128,26 @@ $transactionModel = $model;
                     'attribute' => 'product_id',
                     'label'     => 'Product',
                     'filter'    => $products,
-                    'format'    => 'html',
+                    'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($products) {
-                        return Html::a(Html::encode($products[$model->product_id]), ['product/view','id'=>$model->product_id]);
+                        return Html::a(
+                            Html::encode($products[$model->product_id]),
+                            ['product/view','id'=>$model->product_id],
+                            [ 'data-pjax' => 0 ]
+                        );
                     }
                 ],
                 [
                     'attribute' => 'contact_id',
                     'label'     => 'Beneficiary',
                     'filter'    => $contacts,
-                    'format'    => 'html',
+                    'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                        return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
+                        return Html::a(
+                            Html::encode($contacts[$model->contact_id]),
+                            ['contact/view','id'=>$model->contact_id],
+                            [ 'data-pjax' => 0 ]
+                        );
                     }
                 ],
                 'value',
@@ -175,7 +173,7 @@ $transactionModel = $model;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-remove"></span>',
                                 $url,
-                                ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => 'Are you sure you want to unlink this order ?']
+                                ['title' => 'unlink', 'data-pjax' => 0, 'data-confirm' => 'Are you sure you want to unlink this order ?']
                             );
                         },
                     ]

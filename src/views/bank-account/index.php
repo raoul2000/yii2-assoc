@@ -29,9 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'contact_id',
                 'filter'    =>  $contacts,
-                'format'    => 'html',
+                'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) {
-                    return Html::a(Html::encode($model->contact_name), ['contact/view','id'=>$model->contact_id]);
+                    return Html::a(
+                        Html::encode($model->contact_name),
+                        ['contact/view','id'=>$model->contact_id],
+                        ['data-pjax' => 0]
+                    );
                 }
             ],
             'name',
