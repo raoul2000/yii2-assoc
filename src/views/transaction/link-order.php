@@ -81,6 +81,7 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
                         return Html::a(Html::encode($contacts[$model->contact_id]), ['contact/view','id'=>$model->contact_id]);
                     }
                 ],
+                'value'
             ],
         ]); ?>
     <?php Pjax::end(); ?>

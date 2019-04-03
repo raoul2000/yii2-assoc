@@ -121,7 +121,11 @@ $orderModel = $model;
                     'filter'    => $bankAccounts,
                     'format'    => 'html',
                     'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                        return Html::a(Html::encode($bankAccounts[$model->from_account_id]), ['bank-account/view','id'=>$model->from_account_id]);
+                        return Html::a(
+                            Html::encode($bankAccounts[$model->from_account_id]),
+                            ['bank-account/view','id'=>$model->from_account_id],
+                            [ 'title' => 'view bank account', 'any' => '1', 'data' => [ 'pjax' => '0' ]]
+                        );
                     }
                 ],
                 [

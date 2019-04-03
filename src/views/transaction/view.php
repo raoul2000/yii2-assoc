@@ -72,7 +72,6 @@ $transactionModel = $model;
             'code',
             'is_verified:boolean',
             'description',
-            'orderValuesDiff',
             [
                 'label' => 'Order Value Cover',
                 'format' => 'raw',
