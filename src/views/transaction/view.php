@@ -62,19 +62,7 @@ $transactionModel = $model;
             'code',
             'is_verified:boolean',
             'description',
-            [
-                'label' => 'Order Value Cover',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    if ($model->orderValuesDiff < 0) {
-                        return "<span class=\"label label-default\" title=\"all value assigned but not enough to cover orders\">not enough ($model->orderValuesDiff)</span>";
-                    } elseif ($model->orderValuesDiff > 0) {
-                        return "<span class=\"label label-danger\" title=\"not all value assigned\">unassigned (+$model->orderValuesDiff)</span>";
-                    } else {
-                        return '<span class="label label-success" title="exact value match">complete</span>';
-                    }
-                }
-            ],
+            'orderValuesDiff:orderValuesDiff',
             [
                 'label' => 'pack',
                 'format' => 'raw',

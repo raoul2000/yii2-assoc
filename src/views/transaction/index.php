@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'description',
             'is_verified:boolean',
             'reference_date:date',
-            'orderValuesDiff',
+            'orderValuesDiff:orderValuesDiff',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

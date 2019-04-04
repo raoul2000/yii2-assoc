@@ -67,19 +67,7 @@ $orderModel = $model;
                     );
                 }
             ],
-            [
-                'label' => 'Value Diff',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    if ($model->transactionValuesDiff < 0) {
-                        return "<span class=\"label label-danger\" title=\"value not covered by transaction(s)\">missing ($model->transactionValuesDiff)</span>";
-                    } elseif ($model->transactionValuesDiff > 0) {
-                        return "<span class=\"label label-default\" title=\"value more than covered by transaction(s)\">extra (+$model->transactionValuesDiff)</span>";
-                    } else {
-                        return '<span class="label label-success" title="value exact covered by transaction(s)">covered</span>';
-                    }
-                }
-            ],
+            'transactionValuesDiff:transactionValuesDiff',
             'value',
             [
                 'attribute' => 'updated_at',
