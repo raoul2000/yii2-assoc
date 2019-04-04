@@ -17,7 +17,7 @@ $transactionPackModel = $model;
 ?>
 <div class="transaction-pack-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>Pack N°1 : <?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -36,8 +36,14 @@ $transactionPackModel = $model;
             'id',
             'name',
             'reference_date',
-            'created_at',
-            'updated_at',
+            [
+                'attribute' => 'updated_at',
+                'format' => ['date', 'php:d/m/Y H:i']
+            ],
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d/m/Y H:i']
+            ],
         ],
     ]) ?>
 
