@@ -136,6 +136,13 @@ class BankAccount extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransactionPacks()
+    {
+        return $this->hasMany(TransactionPack::className(), ['bank_account_id' => 'id']);
+    }
+    /**
      * Compute and returns the current account balance and total Deb/Cred
      *
      * @return array

@@ -12,6 +12,8 @@ use Yii;
  * @property string $reference_date
  * @property int $created_at
  * @property int $updated_at
+ * @property int $bank_account_id
+ * @property int $type 
  *
  * @property Transaction[] $transactions
  */
@@ -42,6 +44,8 @@ class TransactionPack extends \yii\db\ActiveRecord
         return [
             [['reference_date'], 'safe'],
             [['name'], 'string', 'max' => 128],
+            [['bank_account_id', 'type'], 'integer'],
+            [['bank_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['bank_account_id' => 'id']],
         ];
     }
 
@@ -56,6 +60,8 @@ class TransactionPack extends \yii\db\ActiveRecord
             'reference_date' => 'Reference Date',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'bank_account_id' => 'Bank Account ID',
+            'type' => 'Type',            
         ];
     }
 
@@ -66,4 +72,11 @@ class TransactionPack extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Transaction::className(), ['transaction_pack_id' => 'id']);
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBankAccount()
+    {
+        return $this->hasOne(BankAccount::className(), ['id' => 'bank_account_id']);
+    }    
 }

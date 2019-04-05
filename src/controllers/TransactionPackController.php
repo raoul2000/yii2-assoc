@@ -52,6 +52,7 @@ class TransactionPackController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
     /**
@@ -130,6 +131,7 @@ class TransactionPackController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }
 

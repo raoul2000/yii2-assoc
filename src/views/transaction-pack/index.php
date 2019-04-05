@@ -29,6 +29,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
+            [
+                'attribute' => 'bank_account_id',
+                'filter'    => $bankAccounts,
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                    if( $model->bank_account_id ) {
+                        return Html::a(
+                            Html::encode($bankAccounts[$model->bank_account_id]),
+                            ['bank-account/view','id'=>$model->bank_account_id],
+                            [ 'data-pjax' => 0 ]
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+
             'reference_date',
             [
                 'attribute' => 'updated_at',

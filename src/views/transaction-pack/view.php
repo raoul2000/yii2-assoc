@@ -34,6 +34,22 @@ $transactionPackModel = $model;
         'model' => $model,
         'attributes' => [
             'id',
+            [
+                'label' => 'Bank Account',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if( $model->bankAccount ) {
+                        return Html::a(
+                            Html::encode($model->bankAccount->name),
+                            ['bank-account/view','id' => $model->bankAccount->id],
+                            ['title' => 'view Account', 'data-pjax' => 0]
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+            'type',
             'name',
             'reference_date',
             [

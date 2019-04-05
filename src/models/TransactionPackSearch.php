@@ -18,7 +18,7 @@ class TransactionPackSearch extends TransactionPack
     {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'reference_date'], 'safe'],
+            [['name', 'reference_date', 'bank_account_id'], 'safe'],
         ];
     }
 
@@ -62,6 +62,7 @@ class TransactionPackSearch extends TransactionPack
             'reference_date' => $this->reference_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'bank_account_id' => $this->bank_account_id
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
