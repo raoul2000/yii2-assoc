@@ -1,93 +1,32 @@
 <?php
 
-namespace app\controllers\reports;
+namespace app\components;
 
 use Yii;
 use app\models\Transaction;
 use app\models\TransactionPack;
 use app\models\BankAccount;
+use yii\helpers\FileHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\VarDumper;
 
-class BankBookController extends \yii\web\Controller
+class BankBookBuilder extends yii\base\BaseObject 
 {
-    public function compareByTimeStamp($item1, $item2)
-    { 
-        $time1 = $item1['date'];
-        $time2 = $item2['date'];
-        if (strtotime($time1) < strtotime($time2)) 
-            return 1; 
-        else if (strtotime($time1) > strtotime($time2))  
-            return -1; 
-        else
-            return 0; 
+    public function createQuery() 
+    {
+
     }
+
     /**
-     * Select a bank account to produce the report view from
-     *
-     * @return mixed
+     * Creates and returns the bank book for the given bank account
+     * **WARNING** : in its current implementation, this method only works if 
+     * it processes ALL transactions for the bank account
+     * @param int $bankAccountId
+     * @return array
      */
-    public function actionIndex_v1()
+    public function build($bankAccountId) 
     {
-        $bankBook = [];
-
-        $transactionQuery = Transaction::find()
-            ->asArray()
-            ->where(['transaction_pack_id' => null]);
-
-        foreach ($transactionQuery->each(10) as $transaction) {
-            Yii::info($transaction['id']);
-            $bankBook[] = [
-                'date' => $transaction['reference_date'],
-                'code' => $transaction['code'],
-                'description' => $transaction['description'],
-                'value' => $transaction['value'],
-            ];
-        }
-
-
-        $packQuery = TransactionPack::find()
-            ->asArray()
-            ->with('transactions');
-
-        foreach ($packQuery->each(10) as $pack) {
-            Yii::info('pack : ' . VarDumper::dumpAsString($pack));
-            Yii::info('transactions : ' . count($pack['transactions']));
-            $transactionValueSum = 0;
-
-            foreach ($pack['transactions'] as $linkedTransaction) {
-                $transactionValueSum += $linkedTransaction['value'];
-            }
-
-            $bankBook[] = [
-                'date' => $pack['reference_date'],
-                'code' => 'no code',
-                'description' => $pack['name'],
-                'value' => $transactionValueSum,
-            ];
-        }
-        
-        usort($bankBook , [$this, 'compareByTimeStamp']);
-        
-        return $this->render('index', [
-            'bankBook' => $bankBook
-        ]);
-    }
-
-    public function actionIndex()
-    {
-        $builder = new \app\components\BankBookBuilder();
-
-        return $this->render('index', [
-            'bankBook' => $builder->build()
-        ]);
-
-    }
-    public function actionIndex_v2()
-    {
-        $bankAccountId = 4;
-        $builder = new \app\components\BankBookBuilder();
-        $builder->build();
-
         // load bank account model
         $bankAccount = BankAccount::findOne($bankAccountId);
         if ($bankAccount === null) {
@@ -141,16 +80,7 @@ class BankBookController extends \yii\web\Controller
         }
 
         $bankBook = \array_merge($transactionLines, $packLines);
-        return $this->render('index', [
-            'bankBook' => $bankBook
-        ]);
-    
 
-
+        return $bankBook;
     }
-    public function actionView($account_id)
-    {
-        return $this->render('view');
-    }
-
 }
