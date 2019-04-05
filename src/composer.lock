@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1b3970144fa9f8ab70637364a1109ee",
+    "content-hash": "59fcd2d2206a571d042a14583fcb0698",
     "packages": [
         {
             "name": "2amigos/2fa-library",

@@ -13,7 +13,17 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'from_account_id')->listBox($bankAccounts, ['size'=>1])?>
+        <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+            'name' => Html::getInputName($model, 'from_account_id'),
+            'value' => $model->from_account_id,
+            'items' => $bankAccounts,
+            'clientOptions' => [
+                // ...
+            ],
+        ]); ?>
+
+        <?php // $form->field($model, 'from_account_id')->listBox($bankAccounts, ['size'=>1])?>
+
 
         <?= $form->field($model, 'to_account_id')->listBox($bankAccounts, ['size'=>1])?>    
 

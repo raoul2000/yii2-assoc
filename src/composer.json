@@ -23,7 +23,8 @@
         "yii2tech/ar-softdelete": "^1.0",
         "thamtech/yii2-uuid": "^1.1",
         "yii2tech/csv-grid": "^1.0",
-        "beaten-sect0r/yii2-db-manager": "*"
+        "beaten-sect0r/yii2-db-manager": "*",
+        "2amigos/yii2-selectize-widget": "~1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
