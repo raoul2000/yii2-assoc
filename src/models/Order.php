@@ -14,6 +14,8 @@ use yii\behaviors\TimestampBehavior;
  * @property int $value
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
+ * @property string $valid_date_start
+ * @property string $valid_date_end
  *
  * @property Contact $contact
  * @property Product $product
@@ -57,6 +59,8 @@ class Order extends \yii\db\ActiveRecord
             [['initial_quantity'], 'number', 'min' => 1, 'integerOnly' => true],
             [['initial_quantity'], 'default', 'value' => 1],
 
+            [['valid_date_start', 'valid_date_end'], 'date', 'format' => 'php:Y-m-d'],
+
             [['value'], 'default', 'value' => 0],
             [['value'], 'number', 'min' => 0],
         ];
@@ -74,6 +78,8 @@ class Order extends \yii\db\ActiveRecord
             'contact_id' => 'Contact ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'valid_date_start' => 'Valid Date Start',
+            'valid_date_end' => 'Valid Date End',            
         ];
     }
     /**

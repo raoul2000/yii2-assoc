@@ -68,6 +68,8 @@ $orderModel = $model;
                 }
             ],
             'transactionValuesDiff:transactionValuesDiff',
+            'valid_date_start',
+            'valid_date_end',
             'value',
             [
                 'attribute' => 'updated_at',

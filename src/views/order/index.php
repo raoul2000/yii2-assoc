@@ -53,14 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'value',
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
             'transactionValuesDiff:transactionValuesDiff',
             ['class' => 'yii\grid\ActionColumn'],
         ],
