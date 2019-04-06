@@ -81,8 +81,10 @@ class Transaction extends \yii\db\ActiveRecord
             
             [['description'], 'string', 'max' => 128],
             [['code'], 'string', 'max' => 10],
+            /*
             // from and to account must not be the same, expect when transaction value is 0. This is a 
             // particular case used to cancel a bank check for example
+            // This rule is specific and should not be part of the base class
             ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number',
                 'when' => function ($model) {
                     return $model->value != 0;
@@ -90,7 +92,7 @@ class Transaction extends \yii\db\ActiveRecord
                 'whenClient' => "function(attribute, value) {
                     return $('#transaction-value').val() != '0';
                 }
-            "],
+            "],*/
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
 
