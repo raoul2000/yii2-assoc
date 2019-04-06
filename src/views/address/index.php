@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
+        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

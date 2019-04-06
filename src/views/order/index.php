@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Order', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-
     <?= GridView::widget([
+        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

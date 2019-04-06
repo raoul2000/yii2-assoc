@@ -99,6 +99,7 @@ $orderModel = $model;
     </p>
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
+            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $transactionDataProvider,
             'filterModel' => $transactionSearchModel,
             'columns' => [

@@ -19,6 +19,7 @@ $contact = $model;
 <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
+        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $addressDataProvider,
         'filterModel' => $addressSearchModel,
         'columns' => [

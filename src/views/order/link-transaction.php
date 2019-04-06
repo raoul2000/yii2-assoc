@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = 'link Order';
 <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
+        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $transactionDataProvider,
         'filterModel' => $transactionSearchModel,
         'columns' => [

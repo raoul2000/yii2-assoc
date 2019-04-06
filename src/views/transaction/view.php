@@ -109,6 +109,7 @@ $transactionModel = $model;
         </p>
 
         <?= GridView::widget([
+            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $orderDataProvider,
             'filterModel' => $orderSearchModel,
             'columns' => [

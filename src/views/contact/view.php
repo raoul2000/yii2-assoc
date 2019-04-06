@@ -78,6 +78,7 @@ $allAttachments = $model->attachments;
         no attachment
     <?php else: ?>
         <?= GridView::widget([
+            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
             'dataProvider' => new ArrayDataProvider(['allModels' => $model->attachments]),
             'layout' => '{items}',
             'columns' => [
