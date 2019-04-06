@@ -69,7 +69,7 @@ $allAttachments = $model->attachments;
         ],
     ]) ?>
 
-    <h2>Attachment</h2>
+    <h2>Attachments</h2>
     <hr/>
     <p>
         <?= Html::a('Add Attachment', ['create-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ], ['class' => 'btn btn-primary']) ?>
@@ -77,51 +77,9 @@ $allAttachments = $model->attachments;
     <?php if (count($allAttachments) == 0): ?>
         no attachment
     <?php else: ?>
-        <?= GridView::widget([
-            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
-            'dataProvider' => new ArrayDataProvider(['allModels' => $model->attachments]),
-            'layout' => '{items}',
-            'columns' => [
-                'name',
-                'note',
-                [
-                    'attribute' => 'updated_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
-                    'class'     => 'yii\grid\ActionColumn',
-                    'template'  => '{preview} {update} {download} {delete} ',
-                    'urlCreator' => function ($action, $model, $key, $index) {
-                        if ($action == 'delete') {
-                            return Url::to(['delete-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ]);
-                        } elseif ($action == 'download') {
-                            return Url::to(['download-attachment', 'id' => $model->id]);
-                        } elseif ($action == 'preview') {
-                            return Url::to(['preview-attachment', 'id' => $model->id]);
-                        } elseif ($action == 'update') {
-                            return Url::to(['update-attachment', 'id' => $model->id, 'redirect_url' => Url::current()]);
-                        }
-                        return Url::to(['order/' . $action, 'id' => $model->id]);
-                    },
-                    'buttons'   => [
-                        'download' => function ($url, $attachment, $key) use ($contactModel) {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-download-alt"></span>',
-                                $url,
-                                ['title' => 'download', 'data-pjax'=>0]
-                            );
-                        },
-                        'preview' => function ($url, $attachment, $key) use ($contactModel) {
-                            return Html::a(
-                                '<span class="glyphicon glyphicon-eye-open"></span>',
-                                $url,
-                                ['title' => 'preview in a new window', 'target' => '_blank', 'data-pjax'=>0]
-                            );
-                        },
-                    ]
-                ],
-            ],
-        ]); ?> 
+        <?= \app\components\widgets\AttachmentGridView::widget([
+            'dataProvider' => new ArrayDataProvider(['allModels' => $model->attachments]),            
+        ]) ?>
     <?php endif; ?>
 
     <h2>Address</h2>
