@@ -65,6 +65,7 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::className(),
+            \app\components\behaviors\AttachmentBehavior::className(),
         ];
     }
     /**

@@ -14,6 +14,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
+use app\models\Attachment;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -35,7 +36,26 @@ class TransactionController extends Controller
             ],
             'ajax-link-orders' => [
                 'class' => 'app\components\actions\transactions\AjaxLinkOrdersAction'
-            ]
+            ],
+
+            // attachments Actions /////////////////////////////////////////
+            
+            'download-attachment' => [
+                'class' => 'app\components\actions\attachments\DownloadAction',
+            ],
+            'preview-attachment' => [
+                'class' => 'app\components\actions\attachments\PreviewAction',
+            ],
+            'delete-attachment' => [
+                'class' => 'app\components\actions\attachments\DeleteAction',
+            ],
+            'create-attachment' => [
+                'class' => 'app\components\actions\attachments\CreateAction',
+            ],
+            'update-attachment' => [
+                'class' => 'app\components\actions\attachments\UpdateAction',
+            ],
+
         ];
     }
 
@@ -250,7 +270,7 @@ class TransactionController extends Controller
      * @return Transaction the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    public function findModel($id)
     {
         if (($model = Transaction::findOne($id)) !== null) {
             return $model;

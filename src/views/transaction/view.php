@@ -171,4 +171,17 @@ $transactionModel = $model;
         ]); ?>
     <?php Pjax::end(); ?>    
 
+    <h2>Attachments</h2>
+    <hr/>
+    <p>
+        <?= Html::a('Add Attachment', ['create-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ], ['class' => 'btn btn-primary']) ?>
+    </p>
+    <?php if (count($model->attachments) == 0): ?>
+        no attachment
+    <?php else: ?>
+        <?= \app\components\widgets\AttachmentGridView::widget([
+            'dataProvider' => new yii\data\ArrayDataProvider(['allModels' => $model->attachments]),            
+        ]) ?>
+    <?php endif; ?>
+
 </div>
