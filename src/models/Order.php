@@ -59,7 +59,17 @@ class Order extends \yii\db\ActiveRecord
             [['initial_quantity'], 'number', 'min' => 1, 'integerOnly' => true],
             [['initial_quantity'], 'default', 'value' => 1],
 
+            // Validity Date Range ///////////////////////////////////////////////////
+            
             [['valid_date_start', 'valid_date_end'], 'date', 'format' => 'php:Y-m-d'],
+            ['valid_date_start', 'compare', 
+                'when' => function($model) {
+                    return $model->valid_date_end != null;
+                },
+                'compareAttribute' => 'valid_date_end', 
+                'operator' => '<', 
+                'enableClientValidation' => false
+            ],
 
             [['value'], 'default', 'value' => 0],
             [['value'], 'number', 'min' => 0],
