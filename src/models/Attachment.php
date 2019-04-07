@@ -36,7 +36,7 @@ class Attachment extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            \app\components\behaviors\TimestampBehavior::className(),
         ];
     }
     /**

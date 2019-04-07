@@ -34,7 +34,7 @@ class BankAccount extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            \app\components\behaviors\TimestampBehavior::className(),
         ];
     }
     /**
@@ -44,7 +44,7 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         return [
             [['contact_id'], 'required'],
-            [['created_at', 'updated_at', 'contact_id'], 'integer'],
+            [['contact_id'], 'integer'],
             [['name'], 'default', 'value' => BankAccount::DEFAULT_NAME],
             [['name'], 'string', 'max' => 45],
             ['name', 'unique', 'targetAttribute' => ['contact_id', 'name'], 'message' => 'Account name already used'],

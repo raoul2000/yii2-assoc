@@ -64,7 +64,7 @@ class Transaction extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            \app\components\behaviors\TimestampBehavior::className(),
             \app\components\behaviors\AttachmentBehavior::className(),
         ];
     }
@@ -75,7 +75,7 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             [['from_account_id', 'to_account_id','value'], 'required'],
-            [['from_account_id', 'to_account_id', 'transaction_pack_id', 'created_at', 'updated_at'], 'integer'],
+            [['from_account_id', 'to_account_id', 'transaction_pack_id'], 'integer'],
             [['value'], 'number', 'min' => 0],
 
             [['initial_product_quantity'], 'number', 'min' => 0, 'integerOnly' => true],

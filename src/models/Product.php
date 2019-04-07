@@ -30,7 +30,7 @@ class Product extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            \app\components\behaviors\TimestampBehavior::className(),
         ];
     }
     /**
@@ -41,7 +41,6 @@ class Product extends \yii\db\ActiveRecord
         return [
             [['name', 'value'], 'required'],
             [['value'], 'number', 'min' => 0],
-            [['created_at', 'updated_at'], 'integer'],
             [['name'], 'string', 'max' => 45],
             [['name'], 'unique'],
         ];

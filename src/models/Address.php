@@ -36,7 +36,7 @@ class Address extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            \app\components\behaviors\TimestampBehavior::className(),
         ];
     }
 
@@ -46,7 +46,6 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'updated_at'], 'integer'],
             [['line_1', 'line_2', 'line_3', 'note'], 'string', 'max' => 128],
             [['zip_code', 'city', 'country'], 'string', 'max' => 45],
         ];

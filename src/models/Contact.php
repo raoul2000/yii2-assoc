@@ -55,7 +55,7 @@ class Contact extends \yii\db\ActiveRecord
     {
         return [
              \app\components\behaviors\AttachmentBehavior::className(),
-            TimestampBehavior::className(),
+             \app\components\behaviors\TimestampBehavior::className(),
             [
                 'class' => HistoryBehavior::className(),
                 'skipAttributes' => [
@@ -94,7 +94,7 @@ class Contact extends \yii\db\ActiveRecord
             [['is_natural_person'], 'required'],
             [['is_natural_person'], 'boolean'],
             [['uuid'], 'default', 'value' => UuidHelper::uuid()],
-            [['created_at', 'updated_at','is_deleted', 'gender'], 'integer'],
+            [['is_deleted', 'gender'], 'integer'],
             ['gender','in', 'range' => [0,1,2] ],
             [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
             ['email', 'email'],
