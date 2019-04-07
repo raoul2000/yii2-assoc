@@ -7,9 +7,11 @@ use yii\base\Behavior;
 
 class TimestampBehavior extends \yii\behaviors\TimestampBehavior
 {
+    //public $value =  new \yii\db\Expression('NOW()');
     public function init()
     {
-        parent::init();
         $this->value = new \yii\db\Expression('NOW()');
+
+        parent::init();
     }
 }

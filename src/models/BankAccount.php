@@ -158,7 +158,7 @@ class BankAccount extends \yii\db\ActiveRecord
             ->sum('value');
 
         return [
-            'value' => $this->value + $totalCred - $totalDeb,
+            'value' => $this->initial_value + $totalCred - $totalDeb,
             'totalDeb' => $totalDeb,
             'totalCred' => $totalCred,
         ];
