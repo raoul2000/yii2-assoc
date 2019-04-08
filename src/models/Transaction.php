@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "transaction".
@@ -66,6 +67,13 @@ class Transaction extends \yii\db\ActiveRecord
         return [
             \app\components\behaviors\TimestampBehavior::className(),
             \app\components\behaviors\AttachmentBehavior::className(),
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
         ];
     }
     /**

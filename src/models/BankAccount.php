@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "bank_account".
@@ -35,6 +36,13 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         return [
             \app\components\behaviors\TimestampBehavior::className(),
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
         ];
     }
     /**
@@ -92,6 +100,7 @@ class BankAccount extends \yii\db\ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
+        parent::afterSave($insert, $changedAttributes);
         if ($insert || (!$insert && isset($changedAttributes['contact_id']))) {
             $this->contact_name = $this->contact->name;
             $this->save(false);

@@ -22,10 +22,17 @@ class RecordHistory extends \yii\db\ActiveRecord
     const EVENT_LABELS = [
         '1' => 'insert',
         '2' => 'update',
-        '"' => 'delete'
+        '3' => 'delete'
     ];
     const TABLE_NAMES = [
-        'contact' => 'contact'
+        'contact' => 'contact',
+        'transaction' => 'transaction',
+        'order' => 'order',
+        'address' => 'address',
+        'attachment' => 'attachment',
+        'bank_account' => 'bank_account',
+        'product' => 'product',
+        'transaction_pack' => 'transaction_pack',
     ];
     /**
      * {@inheritdoc}
@@ -44,7 +51,7 @@ class RecordHistory extends \yii\db\ActiveRecord
     public static function getTableName($idx = null)
     {
         return $idx != null
-            ? RecordHistory::TABLE_NAMES[$idx]
+            ? (array_key_exists($idx, RecordHistory::TABLE_NAMES) ? RecordHistory::TABLE_NAMES[$idx] : $idx)
             : RecordHistory::TABLE_NAMES;
     }
     /**

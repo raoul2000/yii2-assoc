@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "attachment".
@@ -37,6 +38,13 @@ class Attachment extends \yii\db\ActiveRecord
     {
         return [
             \app\components\behaviors\TimestampBehavior::className(),
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
         ];
     }
     /**

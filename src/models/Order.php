@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "order".
@@ -43,6 +44,13 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             \app\components\behaviors\TimestampBehavior::className(),
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
         ];
     }
     /**
@@ -62,8 +70,8 @@ class Order extends \yii\db\ActiveRecord
             // Validity Date Range ///////////////////////////////////////////////////
             
             [['valid_date_start', 'valid_date_end'], 'date', 'format' => 'php:Y-m-d'],
-            ['valid_date_start', 'compare', 
-                'when' => function($model) {
+            ['valid_date_start', 'compare',
+                'when' => function ($model) {
                     return $model->valid_date_end != null;
                 },
                 'compareAttribute' => 'valid_date_end', 
@@ -89,7 +97,7 @@ class Order extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'valid_date_start' => 'Valid Date Start',
-            'valid_date_end' => 'Valid Date End',            
+            'valid_date_end' => 'Valid Date End',
         ];
     }
     /**

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "transaction_pack".
@@ -13,7 +14,7 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  * @property int $bank_account_id
- * @property int $type 
+ * @property int $type
  *
  * @property Transaction[] $transactions
  */
@@ -32,14 +33,14 @@ class TransactionPack extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
-            //\yii\behaviors\TimestampBehavior::className(),
-            /*
-            [
-                'class' => \yii\behaviors\TimestampBehavior::className(),
-                'value' => new \yii\db\Expression('NOW()'),
-            ],*/            
             \app\components\behaviors\TimestampBehavior::className(),
-            //\yii\behaviors\BlameableBehavior::className(),
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
         ];
     }
 

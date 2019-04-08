@@ -16,7 +16,7 @@ use yii\helpers\ArrayHelper;
  * @property int $id
  * @property binary $uuid
  * @property string $name name
- * @property string $firstname 
+ * @property string $firstname
  * @property int $address_id
  * @property int $is_natural_person TRUE if this contact represent a natural person, FALSE if it represent a legal person
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
@@ -41,7 +41,7 @@ class Contact extends \yii\db\ActiveRecord
      *
      * @return Contact
      */
-    public static function create() 
+    public static function create()
     {
         return new Contact([
             'gender' => 0,
@@ -119,7 +119,7 @@ class Contact extends \yii\db\ActiveRecord
             'birthday' => 'Birthday',
             'gender' => 'Gender',
             'email' => 'Email',
-            'note' => 'Note',            
+            'note' => 'Note',
         ];
     }
     /**
