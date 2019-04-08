@@ -19,6 +19,14 @@ use Yii;
  */
 class RecordHistory extends \yii\db\ActiveRecord
 {
+    const EVENT_LABELS = [
+        '1' => 'insert',
+        '2' => 'update',
+        '"' => 'delete'
+    ];
+    const TABLE_NAMES = [
+        'contact' => 'contact'
+    ];
     /**
      * {@inheritdoc}
      */
@@ -27,6 +35,18 @@ class RecordHistory extends \yii\db\ActiveRecord
         return 'arhistory';
     }
 
+    public static function getEventName($idx = null)
+    {
+        return $idx != null
+            ? RecordHistory::EVENT_LABELS[$idx]
+            : RecordHistory::EVENT_LABELS;
+    }
+    public static function getTableName($idx = null)
+    {
+        return $idx != null
+            ? RecordHistory::TABLE_NAMES[$idx]
+            : RecordHistory::TABLE_NAMES;
+    }
     /**
      * {@inheritdoc}
      */
@@ -43,5 +63,12 @@ class RecordHistory extends \yii\db\ActiveRecord
             'old_value' => 'Old Value',
             'new_value' => 'New Value',
         ];
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(\Da\User\Model\User::className(), ['id' => 'created_by']);
     }
 }

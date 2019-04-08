@@ -34,7 +34,7 @@ class RecordHistoryController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
-            ],            
+            ],
         ];
     }
 
@@ -46,6 +46,7 @@ class RecordHistoryController extends Controller
     {
         $searchModel = new RecordHistorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->with('user');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
