@@ -7,7 +7,6 @@ use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-
 /* @var $this yii\web\View */
 /* @var $model app\models\BankAccount */
 
@@ -55,7 +54,7 @@ $bankAccountModel = $model;
             [
                 'label' => 'Current Value',
                 'format' => 'raw',
-                'value' => function ($model) use($accountBalance){
+                'value' => function ($model) use ($accountBalance) {
                     return '<b>' . Html::encode($accountBalance['value']) . '</b>';
                 }
             ],

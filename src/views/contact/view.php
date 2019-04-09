@@ -66,6 +66,13 @@ $allAttachments = $model->attachments;
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y H:i']
             ],
+            [
+                'label' => 'History',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex($model));
+                }
+            ],
         ],
     ]) ?>
 

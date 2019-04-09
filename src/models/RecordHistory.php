@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "arhistory".
@@ -33,6 +34,43 @@ class RecordHistory extends \yii\db\ActiveRecord
         'bank_account' => 'bank_account',
         'product' => 'product',
         'transaction_pack' => 'transaction_pack',
+    ];
+    const ROUTES = [
+        'contact' => 'contact/view'
+    ];
+    const TABLE_MAP = [
+        'contact' => [
+            'label' => 'Contact',
+            'viewRoute' => 'contact/view'
+        ],
+        'transaction' => [
+            'label' => 'transaction',
+            'viewRoute' => 'transaction/view'
+        ],
+        'order' => [
+            'label' => 'order',
+            'viewRoute' => 'order/view'
+        ],
+        'address' => [
+            'label' => 'address',
+            'viewRoute' => 'address/view'
+        ],
+        'attachment' => [
+            'label' => 'attachment',
+            'viewRoute' => 'attachment/view'
+        ],
+        'bank_account' => [
+            'label' => 'bank account',
+            'viewRoute' => 'bank_account/view'
+        ],
+        'product' => [
+            'label' => 'product',
+            'viewRoute' => 'product/view'
+        ],
+        'transaction_pack' => [
+            'label' => 'transaction_pack',
+            'viewRoute' => 'transaction_pack/view'
+        ],
     ];
     /**
      * {@inheritdoc}
@@ -77,5 +115,32 @@ class RecordHistory extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(\Da\User\Model\User::className(), ['id' => 'created_by']);
+    }
+
+    public function getRecordViewUrl()
+    {
+        /*
+        if (!\array_key_exists($this->table_name, RecordHistory::ROUTES)) {
+            return null;
+        }
+        return Url::toRoute([RecordHistory::ROUTES[$this->table_name], 'id' => $this->row_id]);
+        */
+        return Url::toRoute([$this->table_name . '/view', 'id' => $this->row_id]);
+    }
+
+    public static function getRecordHistoryIndex($model)
+    {
+        //http://localhost/dev/ws/lab/yii2-assoc/src/web/index.php?
+        //  RecordHistorySearch%5Btable_name%5D=transaction&
+        //  RecordHistorySearch%5Brow_id%5D=4&
+        //
+        $tableName = $model->getTableName();
+        $id = $moçdel->id;
+
+        return Url::toRoute([
+            'record-history/index',
+            'RecordHistorySearch[table_name]' => $tableName,
+            'RecordHistorySearch[5Brow_id]' => $id
+        ]);
     }
 }

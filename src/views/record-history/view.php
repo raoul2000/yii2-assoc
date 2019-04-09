@@ -20,7 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'table_name',
-            'row_id',
+            [
+                'label' => 'Record ID',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $url = $model->getRecordViewUrl();
+                    return $model->row_id . ($url == null
+                        ? ''
+                        : ' ' . Html::a('(view)', $url, ['title' => 'view Record']));
+                }
+            ],
             'event',
             [
                 'attribute' => 'created_at',
