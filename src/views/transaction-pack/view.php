@@ -35,12 +35,19 @@ $transactionPackModel = $model;
         'attributes' => [
             'id',
             [
+                'label' => 'Total Value',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return '<b>' . $model->getValueSum() . '</b>';
+                }
+            ],
+            [
                 'label' => 'Bank Account',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    if( $model->bankAccount ) {
+                    if ($model->bankAccount) {
                         return Html::a(
-                            Html::encode($model->bankAccount->name),
+                            Html::encode($model->bankAccount->contact_name . ' / ' . $model->bankAccount->name),
                             ['bank-account/view','id' => $model->bankAccount->id],
                             ['title' => 'view Account', 'data-pjax' => 0]
                         );

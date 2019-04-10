@@ -69,7 +69,7 @@ class TransactionPack extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'bank_account_id' => 'Bank Account ID',
-            'type' => 'Type',            
+            'type' => 'Type',
         ];
     }
 
@@ -86,5 +86,12 @@ class TransactionPack extends \yii\db\ActiveRecord
     public function getBankAccount()
     {
         return $this->hasOne(BankAccount::className(), ['id' => 'bank_account_id']);
-    }    
+    }
+
+    public function getValueSum()
+    {
+        return Transaction::find()
+            ->where(['transaction_pack_id' => $this->id])
+            ->sum('value');
+    }
 }
