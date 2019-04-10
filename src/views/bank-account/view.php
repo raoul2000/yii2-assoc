@@ -55,7 +55,9 @@ $bankAccountModel = $model;
                 'label' => 'Current Value',
                 'format' => 'raw',
                 'value' => function ($model) use ($accountBalance) {
-                    return '<b>' . Html::encode($accountBalance['value']) . '</b>';
+                    return '<b>' . Html::encode($accountBalance['value']) . '</b>'
+                    . ' (<em>total debit : ' . $accountBalance['totalDeb'] . '</em>'
+                    . ' / <em>total credit : ' . $accountBalance['totalCred'] . '</em>)' ;
                 }
             ],
             'initial_value',
@@ -77,19 +79,33 @@ $bankAccountModel = $model;
     <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
-        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
+        'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $transactionDataProvider,
         //'filterModel' => $transactionSearchModel,
         'columns' => [
             'reference_date:date',
             'code',
             [
+                'attribute' => 'pack',
+                'format'    => 'raw',
+                'value'     => function ($transactionModel, $key, $index, $column) {
+                    if ($transactionModel->transaction_pack_id) {
+                        return Html::a(
+                            Html::encode($transactionModel->transaction_pack_id),
+                            ['transaction-pack/view','id' => $transactionModel->transaction_pack_id],
+                            ['title' => 'view pack', 'data-pjax' => 0]
+                        );
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+            [
                 'attribute' => 'label',
                 'format'    => 'html',
                 'value'     => function ($transactionModel, $key, $index, $column) {
                     return Html::encode($transactionModel->description);
                 }
-
             ],
             [
                 'attribute' => 'Débit',

@@ -19,7 +19,7 @@ class TransactionSearch extends Transaction
     public function rules()
     {
         return [
-            [['id', 'from_account_id', 'to_account_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'from_account_id', 'to_account_id', 'created_at', 'updated_at', 'transaction_pack_id'], 'integer'],
             [['is_verified'], 'boolean'],
             [['value'], 'number'],
             [['description', 'code'], 'safe'],
@@ -51,8 +51,8 @@ class TransactionSearch extends Transaction
         $session = Yii::$app->session;
         if ($session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
             $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
-            $query->andWhere([ 
-                'between', 
+            $query->andWhere([
+                'between',
                 'reference_date', $range[Constant::SESS_PARAM_NAME_STARTDATE], $range[Constant::SESS_PARAM_NAME_ENDDATE]]);
         }
 
@@ -80,6 +80,7 @@ class TransactionSearch extends Transaction
             'code' => $this->code,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'transaction_pack_id' => $this->transaction_pack_id,
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);
