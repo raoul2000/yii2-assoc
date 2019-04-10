@@ -70,7 +70,7 @@ $allAttachments = $model->attachments;
                 'label' => 'History',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex($model));
+                    return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
                 }
             ],
         ],
