@@ -13,6 +13,15 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'session' => [
+            'class' => 'yii\web\DbSession',
+            'writeCallback' => function ($session) {
+                return [
+                   'user_id' => Yii::$app->user->id,
+                   'last_write' => time(),
+                ];
+            },
+        ],
         'formatter' => [
             'class' => '\app\components\Formatter'
         ],

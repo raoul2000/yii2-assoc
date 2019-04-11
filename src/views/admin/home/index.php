@@ -28,6 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <hr/>
 <p>
     <?= Html::a('User Admin', ['/user/admin'], ['class' => 'btn btn-danger']) ?>
+    <?= Html::a('Session Admin', ['/session'], ['class' => 'btn btn-danger']) ?>
     <?= Html::a('DB Backup/Restore', ['/db-manager'], ['class' => 'btn btn-danger']) ?>
-    
 </p>
