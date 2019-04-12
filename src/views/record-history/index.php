@@ -45,14 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'created_by',
+                'filter'    => $usernames,
                 'format'    => 'html',
                 'value'     => function ($model, $key, $index, $column) {
                     return $model->user->username;
+
                 }
             ],
             'field_name',
-            //'old_value:ntext',
-            //'new_value:ntext',
             ['class' => 'yii\grid\ActionColumn', 'template' => '{view}']
         ],
     ]); ?>

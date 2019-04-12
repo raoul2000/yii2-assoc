@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "arhistory".
@@ -119,7 +120,25 @@ class RecordHistory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(\Da\User\Model\User::className(), ['id' => 'created_by']);
     }
-
+    /**
+     * Returns the map of all users having a row in the session table.
+     * The list returned is a user_id,username map, suitable to be used to initialize
+     * select box
+     *
+     * @return void
+     */
+    public static function getUsernameIndex()
+    {
+        $sessions = parent::find()
+            ->asArray()
+            ->with(['user'])
+            ->groupBy('created_by')
+            ->all();
+        
+        return ArrayHelper::map($sessions, 'created_by', function ($item) {
+            return $item['user']['username'];
+        });
+    }    
     /**
      * Creates and returns the URL of the record described by this history item
      * The URL returned is the one of the model view page.

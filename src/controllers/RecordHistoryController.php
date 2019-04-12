@@ -51,6 +51,7 @@ class RecordHistoryController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'usernames' => RecordHistory::getUsernameIndex()
         ]);
     }
 
