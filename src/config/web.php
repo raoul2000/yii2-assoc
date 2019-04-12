@@ -68,6 +68,9 @@ $config = [
     ],
     'params' => $params,
     'modules' => [
+        'gymv' => [
+            'class' => 'app\modules\gymv\Module',
+        ],
         'user' => [
             'class' => Da\User\Module::class,
             'enableRegistration' => true,
