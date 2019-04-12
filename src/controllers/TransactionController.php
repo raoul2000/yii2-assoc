@@ -142,8 +142,10 @@ class TransactionController extends Controller
     public function actionIndex()
     {
         $searchModel = new TransactionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Transaction::find()->with('orders'));
-        //$dataProvider->query->with('orders');
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams, 
+            Transaction::find()->with('orders')
+        );
 
         return $this->render('index', [
             'searchModel' => $searchModel,

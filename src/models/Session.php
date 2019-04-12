@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "session".
@@ -57,4 +58,24 @@ class Session extends \yii\db\ActiveRecord
     {
         return $this->hasOne(\Da\User\Model\User::className(), ['id' => 'user_id']);
     }
+
+    /**
+     * Returns the map of all users having a row in the session table.
+     * The list returned is a user_id,username map, suitable to be used to initialize
+     * select box
+     *
+     * @return void
+     */
+    public static function getUsernameIndex()
+    {
+        $sessions = parent::find()
+            ->asArray()
+            ->with(['user'])
+            ->groupBy('user_id')
+            ->all();
+        
+        return ArrayHelper::map($sessions, 'user_id', function ($item) {
+            return $item['user']['username'];
+        });
+    }    
 }

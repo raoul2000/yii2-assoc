@@ -21,16 +21,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
-                'id',
-                'expire:relativeTime',
                 [
                     'attribute' => 'user_id',
+                    'filter'    =>  $usernames,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) {
                         // check record-history/index.php for same case : username in filter
                         return Html::encode($model->user->username . ' ( id = ' . $model->user_id . ')');
                     }
                 ],
+                'expire:relativeTime',    
                 [
                     'attribute' => 'last_write',
                     'format' => ['date', 'php:d/m/Y H:i']
