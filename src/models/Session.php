@@ -72,6 +72,7 @@ class Session extends \yii\db\ActiveRecord
             ->asArray()
             ->with(['user'])
             ->groupBy('user_id')
+            ->andWhere(['NOT', 'user_id IS NULL'])
             ->all();
         
         return ArrayHelper::map($sessions, 'user_id', function ($item) {

@@ -27,7 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) {
                         // check record-history/index.php for same case : username in filter
-                        return Html::encode($model->user->username . ' ( id = ' . $model->user_id . ')');
+                        return $model->user != null 
+                            ? Html::encode($model->user->username . ' ( id = ' . $model->user_id . ')')
+                            : null;
                     }
                 ],
                 'expire:relativeTime',    
