@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
+
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -76,6 +78,42 @@ $allAttachments = $model->attachments;
         ],
     ]) ?>
 
+    <h2>Bank Accounts</h2>
+    <hr/>
+
+    <?php Pjax::begin(); ?>
+        <?= GridView::widget([
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
+            'dataProvider' => $bankAccountDataProvider,
+            'columns' => [
+                'name',
+                'initial_value',    
+                [
+                    'label' => 'total Deb.',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return $model->getBalanceInfo(false)['totalDeb'];
+                    }
+                ],
+                [
+                    'label' => 'total Cred.',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return $model->getBalanceInfo(false)['totalCred'];
+                    }
+                ],
+                [
+                    'label' => 'Value',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return $model->getBalanceInfo(false)['value'];
+                    }
+                ],
+            ],
+        ]); ?>
+
+    <?php Pjax::end(); ?>
+
+
+
+
     <h2>Attachments</h2>
     <hr/>
     <p>
@@ -88,6 +126,9 @@ $allAttachments = $model->attachments;
             'dataProvider' => new ArrayDataProvider(['allModels' => $model->attachments]),            
         ]) ?>
     <?php endif; ?>
+
+
+
 
     <h2>Address</h2>
     <hr/>

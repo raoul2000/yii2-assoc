@@ -110,9 +110,14 @@ class ContactController extends Controller
      */
     public function actionView($id)
     {
+        $bankAccountSearchModel = new \app\models\BankAccountSearch();
+        $bankAccountDataProvider = $bankAccountSearchModel->search(Yii::$app->request->queryParams);
+        $bankAccountDataProvider->query->andWhere(['contact_id' => $id]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'addressCount' => Address::find()->count()
+            'addressCount' => Address::find()->count(),
+            'bankAccountDataProvider' => $bankAccountDataProvider
         ]);
     }
 

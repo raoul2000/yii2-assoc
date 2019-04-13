@@ -73,6 +73,7 @@ $bankAccountModel = $model;
         ],
     ]) ?>
 
+
     <h2>Transactions</h2>
     <hr/>
 
