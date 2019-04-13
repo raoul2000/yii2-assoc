@@ -168,8 +168,8 @@ class BankAccount extends \yii\db\ActiveRecord
 
         return [
             'value' => $this->initial_value + $totalCred - $totalDeb,
-            'totalDeb' => $totalDeb,
-            'totalCred' => $totalCred,
+            'totalDeb' => $totalDeb ? $totalDeb : 0,
+            'totalCred' => $totalCred ? $totalCred : 0,
         ];
     }
     /**
