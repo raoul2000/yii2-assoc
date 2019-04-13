@@ -23,6 +23,12 @@ class BankAccount extends \yii\db\ActiveRecord
 {
     const DEFAULT_NAME = 'principal';
     /**
+     * holds the latest balance info data for this bank account
+     * @var array|null
+     */
+    private $_balanceInfo = null;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -154,23 +160,28 @@ class BankAccount extends \yii\db\ActiveRecord
     /**
      * Compute and returns the current account balance and total Deb/Cred
      *
+     * @param bool $refresh
      * @return array
      */
-    public function getBalanceInfo()
+    public function getBalanceInfo($refresh = true)
     {
-        $totalDeb = Transaction::find()
-            ->where(['from_account_id' => $this->id])
-            ->sum('value');
+        if( $this->_balanceInfo == null || $refresh === true ) {
+            $totalDeb = Transaction::find()
+                ->where(['from_account_id' => $this->id])
+                ->sum('value');
+    
+            $totalCred = Transaction::find()
+                ->where(['to_account_id' => $this->id])
+                ->sum('value');
+    
+            $this->_balanceInfo = [
+                'value' => $this->initial_value + $totalCred - $totalDeb,
+                'totalDeb' => $totalDeb ? $totalDeb : 0,
+                'totalCred' => $totalCred ? $totalCred : 0,
+            ];
+        }
 
-        $totalCred = Transaction::find()
-            ->where(['to_account_id' => $this->id])
-            ->sum('value');
-
-        return [
-            'value' => $this->initial_value + $totalCred - $totalDeb,
-            'totalDeb' => $totalDeb ? $totalDeb : 0,
-            'totalCred' => $totalCred ? $totalCred : 0,
-        ];
+        return $this->_balanceInfo;
     }
     /**
      * Returns an array containing all bank account names indexed by account id.
