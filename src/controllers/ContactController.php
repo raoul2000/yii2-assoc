@@ -108,17 +108,55 @@ class ContactController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 'account')
     {
         $bankAccountSearchModel = new \app\models\BankAccountSearch();
         $bankAccountDataProvider = $bankAccountSearchModel->search(Yii::$app->request->queryParams);
         $bankAccountDataProvider->query->andWhere(['contact_id' => $id]);
-
+/*
         return $this->render('view', [
             'model' => $this->findModel($id),
             'addressCount' => Address::find()->count(),
-            'bankAccountDataProvider' => $bankAccountDataProvider
+            'bankAccountDataProvider' => $bankAccountDataProvider,
+            'tab' => $tab
         ]);
+*/
+        $model = $this->findModel($id);
+        switch ($tab) {
+            case 'account':
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-account', [
+                        'bankAccountDataProvider' => $bankAccountDataProvider
+                    ])
+                ]);
+                break;
+
+            case 'attachment':
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-attachment', [
+                        'model' => $model,
+                    ])
+                ]);
+                break;
+
+            case 'address':
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-address', [
+                        'model' => $model,
+                    ])
+                ]);
+                break;
+            
+            default:
+                # code...
+                break;
+        }
     }
 
     /**
@@ -184,7 +222,7 @@ class ContactController extends Controller
             $model->updateAttributes([
                 'address_id' => $address->id
             ]);
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->id, 'tab' => 'address']);
         }
 
         $addressSearchModel = new AddressSearch();
@@ -211,7 +249,7 @@ class ContactController extends Controller
         $model->updateAttributes([
             'address_id' => null
         ]);
-        return $this->redirect(['view', 'id' => $model->id]);
+        return $this->redirect(['view', 'id' => $model->id, 'tab' => 'address']);
     }
     /**
      * Deletes an existing Contact model.

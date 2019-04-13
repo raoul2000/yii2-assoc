@@ -73,7 +73,7 @@ class AddressController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($contact_id = null)
+    public function actionCreate($contact_id = null, $redirect_url = null)
     {
         $model = new Address();
         $contact = null;
@@ -90,10 +90,11 @@ class AddressController extends Controller
                 $contact->updateAttributes([
                     'address_id' => $model->id
                 ]);
-                return $this->redirect(['contact/view', 'id' => $contact->id]);
-            } else {
-                return $this->redirect(['view', 'id' => $model->id]);
             }
+            if( $redirect_url ) {
+                return $this->redirect($redirect_url);
+            } 
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -109,7 +110,7 @@ class AddressController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id, $contact_id = null)
+    public function actionUpdate($id, $contact_id = null, $redirect_url = null)
     {
         $model = $this->findModel($id);
 
@@ -122,10 +123,8 @@ class AddressController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if( isset($contact)) {
-                return $this->redirect(['contact/view', 'id' => $contact->id]);
-            } else {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if( $redirect_url ) {
+                return $this->redirect($redirect_url);
             }
             return $this->redirect(['view', 'id' => $model->id]);
         }
