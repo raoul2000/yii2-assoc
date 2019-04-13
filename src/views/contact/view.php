@@ -106,6 +106,17 @@ $allAttachments = $model->attachments;
                         return $model->getBalanceInfo(false)['value'];
                     }
                 ],
+                [
+                    'class'     => 'yii\grid\ActionColumn',
+                    'template'  => '{view}',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action == 'view') {
+                            return Url::to(['bank-account/view', 'id' => $model->id ]);
+                        }
+                        return '';
+                    },
+    
+                ]
             ],
         ]); ?>
 
