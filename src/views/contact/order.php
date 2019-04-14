@@ -11,6 +11,10 @@ $this->params['breadcrumbs'][] = 'Orders';
 \yii\web\YiiAsset::register($this);
 
 ?>
+
+    <h2>Orders <small>for <?= Html::encode($model->name) ?></small></h2>
+    <hr/>
+
     <?= GridView::widget([
         'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $orderDataProvider,

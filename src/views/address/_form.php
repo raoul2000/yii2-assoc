@@ -28,6 +28,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Cancel', $redirect_url, ['class' => 'btn btn-default'])  ?>
     </div>
 
     <?php ActiveForm::end(); ?>

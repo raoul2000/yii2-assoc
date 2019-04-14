@@ -11,17 +11,21 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="address-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <?= Html::encode($this->title) ?>
+        <?php if( isset($contact)) : ?>
+            <small>
+                for <b><?= Html::encode($contact->name) ?></b>.
+            </small>
+        <?php endif; ?>
+    </h1>
+    
     <hr/>
-    <?php if( isset($contact)) : ?>
-        <p>
-            Creating Address for <b><?= Html::encode($contact->name) ?></b>.
-        </p>
-    <?php endif; ?>
 
     <?= $this->render('_form', [
         'model' => $model,
-        'contact' => $contact
+        'contact' => $contact,
+        'redirect_url' => $redirect_url
     ]) ?>
 
 </div>

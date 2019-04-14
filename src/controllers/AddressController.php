@@ -71,6 +71,9 @@ class AddressController extends Controller
     /**
      * Creates a new Address model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * 
+     * @param int $contact_id
+     * @param string $redirect_url
      * @return mixed
      */
     public function actionCreate($contact_id = null, $redirect_url = null)
@@ -91,22 +94,26 @@ class AddressController extends Controller
                     'address_id' => $model->id
                 ]);
             }
-            if( $redirect_url ) {
-                return $this->redirect($redirect_url);
-            } 
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($redirect_url === null) {
+                $redirect_url = ['view', 'id' => $model->id];
+            }
+            return $this->redirect($redirect_url);
         }
 
         return $this->render('create', [
             'model' => $model,
-            'contact' => $contact
+            'contact' => $contact,
+            'redirect_url' => ($redirect_url ? $redirect_url : ['index'])
         ]);
     }
 
     /**
      * Updates an existing Address model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     * 
      * @param integer $id
+     * @param int $contact_id
+     * @param string $redirect_url
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -121,17 +128,24 @@ class AddressController extends Controller
                 throw new NotFoundHttpException('Contact not found.');
             }
         }
+        // if this address is shared by several contact, list them in $otherContact
+        // but ignore the current contact (if defined)
+        $otherContacts = array_filter($model->contacts, function($value) use ($contact_id) {
+            return $value->id != $contact_id;
+        });
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if( $redirect_url ) {
-                return $this->redirect($redirect_url);
+            if ($redirect_url === null) {
+                $redirect_url = ['view', 'id' => $model->id];
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect($redirect_url);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'contact' => $contact
+            'contact' => $contact,
+            'otherContacts' => $otherContacts,
+            'redirect_url' => ($redirect_url ? $redirect_url : ['index'])
         ]);
     }
 
