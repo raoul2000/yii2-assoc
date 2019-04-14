@@ -108,22 +108,16 @@ class ContactController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id, $tab = 'account')
+    public function actionView($id, $tab = 'address')
     {
-        $bankAccountSearchModel = new \app\models\BankAccountSearch();
-        $bankAccountDataProvider = $bankAccountSearchModel->search(Yii::$app->request->queryParams);
-        $bankAccountDataProvider->query->andWhere(['contact_id' => $id]);
-/*
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'addressCount' => Address::find()->count(),
-            'bankAccountDataProvider' => $bankAccountDataProvider,
-            'tab' => $tab
-        ]);
-*/
+        // load main contact model
         $model = $this->findModel($id);
         switch ($tab) {
             case 'account':
+                $bankAccountSearchModel = new \app\models\BankAccountSearch();
+                $bankAccountDataProvider = $bankAccountSearchModel->search(Yii::$app->request->queryParams);
+                $bankAccountDataProvider->query->andWhere(['contact_id' => $id]);
+    
                 return $this->render('view', [
                     'model' => $model,
                     'tab' => $tab,
@@ -154,11 +148,35 @@ class ContactController extends Controller
                 break;
             
             default:
-                # code...
+                return $this->redirect(['view', 'id' => $model->id, 'tab' => 'account']);
                 break;
         }
     }
 
+    /**
+     * Display order for a contact, given the contact id.
+     *
+     * @param int $id the contact model id
+     * @return mixed
+     */
+    public function actionOrder($id)
+    {
+        $model = $this->findModel($id);
+        $orderSearchModel = new \app\models\OrderSearch();
+        $orderDataProvider = $orderSearchModel->search(
+            Yii::$app->request->queryParams,
+            \app\models\Order::find()->with('transactions')
+        );
+        $orderDataProvider->query->andWhere(['contact_id' => $id]);
+
+        return $this->render('order', [
+            'model' => $model,
+            'orderSearchModel' => $orderSearchModel,
+            'orderDataProvider' => $orderDataProvider,
+            'products' => \app\models\Product::getNameIndex(),
+        ]);
+
+    }
     /**
      * Creates a new Contact model.
      * If creation is successful, the browser will be redirected to the 'view' page.

@@ -32,8 +32,7 @@ $allAttachments = $model->attachments;
             ],
         ]) ?>
         <?= Html::a('Create Another Contact', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('View Orders', ['order/index', 'OrderSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('View Accounts', ['bank-account/index', 'BankAccountSearch[contact_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('View Orders', ['order', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -68,6 +67,11 @@ $allAttachments = $model->attachments;
             'options' => ['class' =>'nav-tabs'],
             'items' => [
                 [
+                    'label' => 'Address',
+                    'url' => ['view', 'id' => $model->id,'tab'=>'address'],
+                    'active' => $tab == 'address'
+                ],
+                [
                     'label' => 'Account',
                     'url' => ['view', 'id' => $model->id,'tab'=>'account'],
                     'active' => $tab == 'account'
@@ -77,16 +81,11 @@ $allAttachments = $model->attachments;
                     'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
                     'active' => $tab == 'attachment'
                 ],
-                [
-                    'label' => 'Address',
-                    'url' => ['view', 'id' => $model->id,'tab'=>'address'],
-                    'active' => $tab == 'address'
-                ],
             ]
         ]) ?>
         <div style="margin-top:1em;">
             <?= $tabContent ?>
         </div>
     <?php Pjax::end(); ?>
-    
+
 </div>
