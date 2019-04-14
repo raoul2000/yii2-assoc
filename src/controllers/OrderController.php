@@ -85,7 +85,10 @@ class OrderController extends Controller
     {
         $order = $this->findModel($id);
         $transactionSearchModel = new TransactionSearch();
-        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams, $order->getTransactions());
+        $transactionDataProvider = $transactionSearchModel->search(
+            Yii::$app->request->queryParams,             
+            $order->getTransactions()
+        );
 
         return $this->render('view', [
             'model' => $order,

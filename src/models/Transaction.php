@@ -158,7 +158,7 @@ class Transaction extends \yii\db\ActiveRecord
             return null;
         }
         if (empty($this->orders)) {
-            return $this->value;
+            return null;
         } else {
             $sum = 0;
             foreach ($this->orders as $order) {

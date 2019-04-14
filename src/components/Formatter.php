@@ -22,10 +22,12 @@ class Formatter extends \yii\i18n\Formatter
      */
     public function asTransactionValuesDiff($value)
     {
-        if ($value < 0) {
+        if( $value === null) {
+            return "<span class=\"label label-default\" title=\"no transaction\">no transac.</span>";
+        } else if ($value < 0) {
             return "<span class=\"label label-danger\" title=\"value not covered by transaction(s)\">missing ($value)</span>";
         } elseif ($value > 0) {
-            return "<span class=\"label label-default\" title=\"value more than covered by transaction(s)\">extra (+$value)</span>";
+            return "<span class=\"label label-warning\" title=\"value more than covered by transaction(s)\">extra (+$value)</span>";
         } else {
             return '<span class="label label-success" title="value exact covered by transaction(s)">covered</span>';
         }
@@ -40,8 +42,10 @@ class Formatter extends \yii\i18n\Formatter
      */
     public function asOrderValuesDiff($value)
     {
-        if ($value < 0) {
-            return "<span class=\"label label-default\" title=\"all value assigned but not enough to cover orders\">not enough ($value)</span>";
+        if( $value === null) {
+            return "<span class=\"label label-default\" title=\"no related order\">no order</span>";
+        } else if ($value < 0) {
+            return "<span class=\"label label-warning\" title=\"all value assigned but not enough to cover orders\">not enough ($value)</span>";
         } elseif ($value > 0) {
             return "<span class=\"label label-danger\" title=\"not all value assigned\">unassigned (+$value)</span>";
         } else {
