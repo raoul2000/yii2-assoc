@@ -56,7 +56,7 @@ class AddressController extends Controller
 
     /**
      * Displays a single Address model.
-     * 
+     *
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -71,7 +71,7 @@ class AddressController extends Controller
     /**
      * Creates a new Address model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * 
+     *
      * @param int $contact_id
      * @param string $redirect_url
      * @return mixed
@@ -81,15 +81,15 @@ class AddressController extends Controller
         $model = new Address();
         $contact = null;
 
-        if( isset($contact_id)) {
+        if (isset($contact_id)) {
             $contact = Contact::findOne($contact_id);
-            if( $contact == null ) {
+            if ($contact == null) {
                 throw new NotFoundHttpException('Contact not found.');
             }
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if( isset($contact)) {
+            if (isset($contact)) {
                 $contact->updateAttributes([
                     'address_id' => $model->id
                 ]);
@@ -110,7 +110,7 @@ class AddressController extends Controller
     /**
      * Updates an existing Address model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * 
+     *
      * @param integer $id
      * @param int $contact_id
      * @param string $redirect_url
@@ -122,15 +122,15 @@ class AddressController extends Controller
         $model = $this->findModel($id);
 
         $contact = null;
-        if( isset($contact_id)) {
+        if (isset($contact_id)) {
             $contact = Contact::findOne($contact_id);
-            if( $contact == null ) {
+            if ($contact == null) {
                 throw new NotFoundHttpException('Contact not found.');
             }
         }
         // if this address is shared by several contact, list them in $otherContact
         // but ignore the current contact (if defined)
-        $otherContacts = array_filter($model->contacts, function($value) use ($contact_id) {
+        $otherContacts = array_filter($model->contacts, function ($value) use ($contact_id) {
             return $value->id != $contact_id;
         });
 

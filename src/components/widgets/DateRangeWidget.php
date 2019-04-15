@@ -12,19 +12,19 @@ use app\components\Constant;
 class DateRangeWidget extends Widget
 {
     /**
-	 * (non-PHPdoc)
-	 * @see \yii\base\Widget::run()
-	 */
-	public function run()
-	{
+    * (non-PHPdoc)
+    * @see \yii\base\Widget::run()
+    */
+    public function run()
+    {
         $session = Yii::$app->session;
-        if( $session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+        if ($session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
             $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
             $label = Html::encode(
-                'Clear Range (' 
-                . $range[Constant::SESS_PARAM_NAME_STARTDATE] 
-                . ' ' 
-                . $range[Constant::SESS_PARAM_NAME_ENDDATE] 
+                'Clear Range ('
+                . $range[Constant::SESS_PARAM_NAME_STARTDATE]
+                . ' '
+                . $range[Constant::SESS_PARAM_NAME_ENDDATE]
                 . ')'
             ) ;
             $html = Html::a($label, ['delete-date-range', 'redirect_url' => Url::current() ], ['class' => 'btn btn-default']);

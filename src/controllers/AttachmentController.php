@@ -34,7 +34,7 @@ class AttachmentController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
-            ],            
+            ],
         ];
     }
     

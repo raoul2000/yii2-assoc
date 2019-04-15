@@ -18,8 +18,8 @@ class CreateDateRangeAction extends Action
                 Constant::SESS_PARAM_NAME_STARTDATE => $model->start_date,
                 Constant::SESS_PARAM_NAME_ENDDATE => $model->end_date,
             ];
-            return $this->controller->redirect($redirect_url);  
-        }     
+            return $this->controller->redirect($redirect_url);
+        }
 
         return $this->controller->render('/common/create-date-range', [
             'model' => $model,

@@ -31,6 +31,7 @@ class SessionController extends Controller
 
     /**
      * Lists all Session models.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -48,6 +49,7 @@ class SessionController extends Controller
 
     /**
      * Displays a single Session model.
+     *
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -61,6 +63,7 @@ class SessionController extends Controller
     /**
      * Deletes an existing Session model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param string $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -75,6 +78,7 @@ class SessionController extends Controller
     /**
      * Finds the Session model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param string $id
      * @return Session the loaded model
      * @throws NotFoundHttpException if the model cannot be found

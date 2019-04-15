@@ -11,11 +11,10 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\VarDumper;
 
-class BankBookBuilder extends yii\base\BaseObject 
+class BankBookBuilder extends yii\base\BaseObject
 {
-    public function createQuery() 
+    public function createQuery()
     {
-
     }
 
     /**
@@ -25,7 +24,7 @@ class BankBookBuilder extends yii\base\BaseObject
      * @param int $bankAccountId
      * @return array
      */
-    public function build($bankAccountId) 
+    public function build($bankAccountId)
     {
         // load bank account model
         $bankAccount = BankAccount::findOne($bankAccountId);
@@ -60,13 +59,13 @@ class BankBookBuilder extends yii\base\BaseObject
                     'code' => $transaction['code'],
                     'description' => $transaction['description'],
                     'value' => $transaction['value'],
-                ];    
+                ];
             } else {
                 // include the pack
-                // WARNING : if the date of the pack is not in the current range, it 
+                // WARNING : if the date of the pack is not in the current range, it
                 // should be ingored
                 $pack = $transaction['pack'];
-                if ( ! array_key_exists($packId, $packLines)) {
+                if (! array_key_exists($packId, $packLines)) {
                     $packLines[$packId] = [
                         'date' => $pack['reference_date'],
                         'code' => $transaction['code'], // TODO: how to handle pack code/transaction code ?
@@ -80,7 +79,6 @@ class BankBookBuilder extends yii\base\BaseObject
         }
 
         $bankBook = \array_merge($transactionLines, $packLines);
-
         return $bankBook;
     }
 }

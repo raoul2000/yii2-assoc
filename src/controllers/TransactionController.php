@@ -143,7 +143,7 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(
-            Yii::$app->request->queryParams, 
+            Yii::$app->request->queryParams,
             Transaction::find()->with('orders')
         );
 

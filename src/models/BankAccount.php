@@ -146,7 +146,7 @@ class BankAccount extends \yii\db\ActiveRecord
     public function getTransactions()
     {
         return Transaction::find()
-            ->where(  ['from_account_id' => $this->id])
+            ->where(['from_account_id' => $this->id])
             ->orWhere(['to_account_id' => $this->id]);
     }
 
@@ -165,7 +165,7 @@ class BankAccount extends \yii\db\ActiveRecord
      */
     public function getBalanceInfo($refresh = true)
     {
-        if( $this->_balanceInfo == null || $refresh === true ) {
+        if ($this->_balanceInfo == null || $refresh === true) {
             $totalDeb = Transaction::find()
                 ->where(['from_account_id' => $this->id])
                 ->sum('value');

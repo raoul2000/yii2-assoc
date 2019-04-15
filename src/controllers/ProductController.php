@@ -34,7 +34,7 @@ class ProductController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
-            ],            
+            ],
         ];
     }
 

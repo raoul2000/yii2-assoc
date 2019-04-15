@@ -6,12 +6,12 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-class AttachmentGridView extends GridView 
+class AttachmentGridView extends GridView
 {
     public function init()
     {
         $this->tableOptions = ['class' => 'table table-hover table-condensed'];
-        $this->layout = "{items}";
+        $this->layout = '{items}';
         $this->columns = [
             'name',
             'note',
@@ -54,5 +54,4 @@ class AttachmentGridView extends GridView
         ];
         parent::init();
     }
-
 }

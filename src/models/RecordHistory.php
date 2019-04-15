@@ -138,7 +138,7 @@ class RecordHistory extends \yii\db\ActiveRecord
         return ArrayHelper::map($sessions, 'created_by', function ($item) {
             return $item['user']['username'];
         });
-    }    
+    }
     /**
      * Creates and returns the URL of the record described by this history item
      * The URL returned is the one of the model view page.

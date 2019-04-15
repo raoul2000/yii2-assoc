@@ -74,8 +74,8 @@ class Order extends \yii\db\ActiveRecord
                 'when' => function ($model) {
                     return $model->valid_date_end != null;
                 },
-                'compareAttribute' => 'valid_date_end', 
-                'operator' => '<', 
+                'compareAttribute' => 'valid_date_end',
+                'operator' => '<',
                 'enableClientValidation' => false
             ],
 

@@ -20,7 +20,7 @@ class Application extends \yii\web\Application
          * user component is not loaded.
          * One option would be to rely to a file exist to enable/disable the overload behavior
          */
-        $controller = parent::createController('gymv/'.$route);
+        $controller = parent::createController('gymv/' . $route);
         return $controller === false
             ? parent::createController($route)
             : $controller;

@@ -79,9 +79,10 @@ class ContactController extends Controller
      *
      * @return void
      */
-    public function actionExportCsv() 
+    public function actionExportCsv()
     {
-        $exporter = new \yii2tech\csvgrid\CsvGrid([
+        $exporter = new \yii2tech\csvgrid\CsvGrid(
+            [
             'dataProvider' => new \yii\data\ActiveDataProvider([
                 'query' => Contact::find(),
                 'pagination' => [
@@ -175,7 +176,6 @@ class ContactController extends Controller
             'orderDataProvider' => $orderDataProvider,
             'products' => \app\models\Product::getNameIndex(),
         ]);
-
     }
     /**
      * Creates a new Contact model.

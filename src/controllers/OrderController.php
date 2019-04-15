@@ -54,7 +54,7 @@ class OrderController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
-            ],            
+            ],
         ];
     }
 
@@ -86,7 +86,7 @@ class OrderController extends Controller
         $order = $this->findModel($id);
         $transactionSearchModel = new TransactionSearch();
         $transactionDataProvider = $transactionSearchModel->search(
-            Yii::$app->request->queryParams,             
+            Yii::$app->request->queryParams,
             $order->getTransactions()
         );
 
@@ -104,7 +104,8 @@ class OrderController extends Controller
      * Creates a one or more Order models depending on the initial_quantity value.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * If a transaction_id is provided, the newly created order is link to the transaction and the browser
-     * is redirected to the transaction 'view' page. 
+     * is redirected to the transaction 'view' page.
+     * 
      * @param $transaction_id ID of the transaction to link to the newly created order
      * @return mixed
      */

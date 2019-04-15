@@ -11,7 +11,6 @@ class DeleteAction extends Action
     public function run($id, $redirect_url)
     {
         if (($file = Attachment::findOne(['id' => $id])) !== null) {
-
             $file->delete();
             return $this->controller->redirect($redirect_url);
         }

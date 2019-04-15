@@ -36,7 +36,7 @@ class BankAccountController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
-            ],            
+            ],
         ];
     }
 
