@@ -70,7 +70,8 @@ class AddressController extends Controller
 
     /**
      * Creates a new Address model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * If creation is successful, the browser will be redirected to the 'view' page or to
+     * $redirect_url if it is not null.
      *
      * @param int $contact_id
      * @param string $redirect_url
@@ -109,10 +110,12 @@ class AddressController extends Controller
 
     /**
      * Updates an existing Address model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * If update is successful, the browser will be redirected to the 'view' pageor to
+     * $redirect_url if it is not null.
      *
      * @param integer $id
-     * @param int $contact_id
+     * @param int $contact_id if not null, the form is displayed as an address related to this
+     * contact
      * @param string $redirect_url
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -152,6 +155,7 @@ class AddressController extends Controller
     /**
      * Deletes an existing Address model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -166,6 +170,7 @@ class AddressController extends Controller
     /**
      * Finds the Address model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
      * @return Address the loaded model
      * @throws NotFoundHttpException if the model cannot be found

@@ -103,9 +103,9 @@ class OrderController extends Controller
     /**
      * Creates a one or more Order models depending on the initial_quantity value.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * If a transaction_id is provided, the newly created order is link to the transaction and the browser
+     * If a transaction_id is provided, the newly created order(s) is/are linked to the transaction and the browser
      * is redirected to the transaction 'view' page.
-     * 
+     *
      * @param $transaction_id ID of the transaction to link to the newly created order
      * @return mixed
      */
@@ -113,6 +113,7 @@ class OrderController extends Controller
     {
         $model = new Order();
         $transaction = null;
+        // do we have a transaction_id ? if yes, check it is valid
         if ($transaction_id != null) {
             $transaction = Transaction::findOne($transaction_id);
             if ($transaction === null) {
@@ -122,6 +123,7 @@ class OrderController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $saveModel = null;
+            // create, save and link one or more orders to transaction if required
             for ($iCount=0; $iCount < $model->initial_quantity; $iCount++) {
                 $saveModel = new Order([
                     'attributes' => $model->getAttributes()
@@ -157,6 +159,7 @@ class OrderController extends Controller
     /**
      * Updates an existing Order model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id the id of the order model to update
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -176,7 +179,7 @@ class OrderController extends Controller
         ]);
     }
     /**
-     * Link the current order with a transaction.
+     * Link an order with a transaction.
      * This method displays a list of all transactions candidates to be linked
      * with this order
      *
@@ -203,6 +206,7 @@ class OrderController extends Controller
         if (array_key_exists('TransactionSearch', Yii::$app->request->getQueryParams()) == false) {
             $transactionSearchModel->from_account_id = $order->contact->bankAccounts[0]->id;
         }
+
         // apply user enetered filter values
         $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
 
@@ -222,7 +226,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Remove relation between and order and a transition
+     * Remove relation between an order and a transaction.
      *
      * @param int $id the id of the order
      * @param int $transaction_id the id of the transaction to unlink
@@ -243,6 +247,7 @@ class OrderController extends Controller
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id the id of the order
      * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found

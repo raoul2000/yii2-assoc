@@ -155,7 +155,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Display order for a contact, given the contact id.
+     * Display orders for a contact, given the contact id.
      *
      * @param int $id the contact model id
      * @return mixed
@@ -222,9 +222,10 @@ class ContactController extends Controller
     }
 
     /**
-     * Link a contact with an address
+     * Link a contact to an address
      * If link is successful, the browser will be redirected to the 'contact/view' page.
-     * @param string $id the cpntact id
+     *
+     * @param string $id the contact id
      * @param string $address_id the address id
      * @return mixed
      * @throws NotFoundHttpException if the contact model or the address model cannot be found
@@ -233,16 +234,20 @@ class ContactController extends Controller
     {
         $model = $this->findModel($id);
         if (isset($address_id)) {
+            // address has been selected by the user : validate it
             $address = Address::findOne($address_id);
             if (!isset($address)) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
+            // link contact with address
             $model->updateAttributes([
                 'address_id' => $address->id
             ]);
             return $this->redirect(['view', 'id' => $model->id, 'tab' => 'address']);
         }
 
+        // Search for all existing addresses, including the onens already linked (as
+        // an address can be linked to several contacts)
         $addressSearchModel = new AddressSearch();
         $addressDataProvider = $addressSearchModel->search(Yii::$app->request->queryParams);
 
@@ -257,6 +262,7 @@ class ContactController extends Controller
      * Unlink a contact from its current linked address.
      * If the contact is not link to any address, this method has no effect.
      * When done, the browser is redirected to the 'view' page of the contact.
+     *
      * @param string $id the contact Id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
