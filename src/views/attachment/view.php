@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="attachment-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <hr/>
     <p>
         <?= Html::a('Preview', ['preview', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

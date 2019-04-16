@@ -15,43 +15,42 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="bank-account-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <hr/>
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+        <p>
+            <?= Html::a('Create Bank Account', ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
 
-    <p>
-        <?= Html::a('Create Bank Account', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <?= GridView::widget([
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                [
+                    'attribute' => 'contact_id',
+                    'filter'    =>  $contacts,
+                    'format'    => 'raw',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return Html::a(
+                            Html::encode($model->contact_name),
+                            ['contact/view','id'=>$model->contact_id],
+                            ['data-pjax' => 0]
+                        );
+                    }
+                ],
+                'name',
+                'initial_value',
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
 
-    <?= GridView::widget([
-        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            [
-                'attribute' => 'contact_id',
-                'filter'    =>  $contacts,
-                'format'    => 'raw',
-                'value'     => function ($model, $key, $index, $column) {
-                    return Html::a(
-                        Html::encode($model->contact_name),
-                        ['contact/view','id'=>$model->contact_id],
-                        ['data-pjax' => 0]
-                    );
-                }
+                ['class' => 'yii\grid\ActionColumn'],
             ],
-            'name',
-            'initial_value',
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+        ]); ?>
     <?php Pjax::end(); ?>
 </div>

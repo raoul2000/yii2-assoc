@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="record-history-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    <hr/>
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [

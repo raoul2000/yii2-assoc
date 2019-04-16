@@ -14,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="contact-index">
 
     <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?= Html::encode($this->title) ?></h1>
+    <hr/>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 

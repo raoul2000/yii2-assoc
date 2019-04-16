@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
         <?= Html::encode($this->title) ?>
-        <?php if( isset($contact)) : ?>
+        <?php if (isset($contact)): ?>
             <small>
                 for <b><?= Html::encode($contact->name) ?></b>.
             </small>

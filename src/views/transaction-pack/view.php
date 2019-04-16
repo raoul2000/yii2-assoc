@@ -18,7 +18,7 @@ $transactionPackModel = $model;
 <div class="transaction-pack-view">
 
     <h1>Pack N°1 : <?= Html::encode($this->title) ?></h1>
-
+    <hr/>
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [

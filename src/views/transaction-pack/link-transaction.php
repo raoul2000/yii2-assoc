@@ -47,9 +47,17 @@ EOS;
 $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
 
 ?>
-<p>
-    <?= Html::a('Back To Transaction Pack', ['view', 'id' => $transactionPack->id], ['class' => 'btn btn-default']) ?>
-</p>
+<div>
+    <div class="alert alert-info" role="alert">
+        <p>
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one or
+             more transactions to add to this pack.
+        </p>
+    </div>    
+
+    <p>
+        <?= Html::a('Back To Transaction Pack', ['view', 'id' => $transactionPack->id], ['class' => 'btn btn-default']) ?>
+    </p>
 
     <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
         <?= GridView::widget([
@@ -101,3 +109,4 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
     <div class="form-group">
         <?= Html::Button('Link Selected Transaction(s)', ['id' => 'btn-link-transactions', 'class' => 'btn btn-success']) ?>
     </div>
+</div>

@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="record-history-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <hr/>
     <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
