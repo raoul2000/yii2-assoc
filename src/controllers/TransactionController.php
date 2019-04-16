@@ -217,8 +217,9 @@ class TransactionController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
      
+        // try to guess the source bank account if not provided
         if ($model->from_account_id == null && $order !== null && count($order->contact->bankAccounts) > 0) {
-            $model->from_account_id = $order->contact->bankAccounts[0];
+            $model->from_account_id = $order->contact->bankAccounts[0]->id;
         }
         
         return $this->render('create', [
