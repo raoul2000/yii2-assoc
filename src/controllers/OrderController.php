@@ -192,6 +192,7 @@ class OrderController extends Controller
             'model' => $model,
             'products' => Product::getNameIndex(),
             'contacts' => Contact::getNameIndex(),
+            'contact' => null,
         ]);
     }
     /**
