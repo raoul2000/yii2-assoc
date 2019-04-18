@@ -12,9 +12,11 @@ $this->params['breadcrumbs'][] = 'Orders';
 
 ?>
 
-    <h2>Orders <small>for <?= Html::encode($model->name) ?></small></h2>
+    <h2>Orders <small>for <?= Html::a(Html::encode($model->name), ['view', 'id' => $model->id], ['title' => 'view contact']) ?></small></h2>
     <hr/>
-
+    <p>
+        <?= Html::a('Create Order', ['order/create', 'contact_id' => $model->id], ['class' => 'btn btn-success']) ?>
+    </p>
     <?= GridView::widget([
         'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $orderDataProvider,

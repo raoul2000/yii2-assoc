@@ -105,14 +105,17 @@ class OrderController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * If a transaction_id is provided, the newly created order(s) is/are linked to the transaction and the browser
      * is redirected to the transaction 'view' page.
+     * If a contact_id is provided, it is used as the benefeciary for the order(s) created
      *
      * @param $transaction_id ID of the transaction to link to the newly created order
+     * @param $contact_id ID of the contact beneficiary fo this order
      * @return mixed
      */
-    public function actionCreate($transaction_id = null)
+    public function actionCreate($transaction_id = null, $contact_id = null)
     {
         $model = new Order();
         $transaction = null;
+        
         // do we have a transaction_id ? if yes, check it is valid
         if ($transaction_id != null) {
             $transaction = Transaction::findOne($transaction_id);
@@ -121,6 +124,17 @@ class OrderController extends Controller
             }
         }
 
+        $contact = null;
+        if ($contact_id != null) {
+            $contact = Contact::findOne($contact_id);
+            if ($contact === null) {
+                throw new NotFoundHttpException('The requested contact does not exist.');
+            }
+        }
+
+        if ($contact != null) {
+            $model->contact_id = $contact->id;
+        }
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $saveModel = null;
             // create, save and link one or more orders to transaction if required
@@ -128,6 +142,7 @@ class OrderController extends Controller
                 $saveModel = new Order([
                     'attributes' => $model->getAttributes()
                 ]);
+
                 $saveModel->save(false);
 
                 if ($transaction != null) {
@@ -152,6 +167,7 @@ class OrderController extends Controller
             'model' => $model,
             'products' => \app\models\Product::getNameIndex(),
             'contacts' => \app\models\Contact::getNameIndex(),
+            'contact' => $contact,
             'transaction' => $transaction
         ]);
     }
