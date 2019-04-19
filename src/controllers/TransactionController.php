@@ -15,6 +15,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use app\models\Attachment;
+use app\components\SessionQueryParams;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -146,6 +147,8 @@ class TransactionController extends Controller
             Yii::$app->request->queryParams,
             Transaction::find()->with('orders')
         );
+
+        SessionQueryParams::applyDateRange($dataProvider, $searchModel);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

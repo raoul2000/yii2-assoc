@@ -47,15 +47,7 @@ class TransactionSearch extends Transaction
         if ($query == null) {
             $query = Transaction::find();
         }
-
-        $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
-            $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
-            $query->andWhere([
-                'between',
-                'reference_date', $range[Constant::SESS_PARAM_NAME_STARTDATE], $range[Constant::SESS_PARAM_NAME_ENDDATE]]);
-        }
-
+        
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

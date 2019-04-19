@@ -13,11 +13,7 @@ class CreateDateRangeAction extends Action
     {
         $model = new DateRangeForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $session = Yii::$app->session;
-            $session[Constant::SESS_PARAM_NAME_DATERANGE] = [
-                Constant::SESS_PARAM_NAME_STARTDATE => $model->start_date,
-                Constant::SESS_PARAM_NAME_ENDDATE => $model->end_date,
-            ];
+            \app\components\SessionQueryParams::setDateRange($model->start_date, $model->end_date);
             return $this->controller->redirect($redirect_url);
         }
 
