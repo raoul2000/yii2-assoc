@@ -8,6 +8,8 @@ use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\Constant;
+use \app\components\SessionQueryParams;
+
 
 class DateRangeWidget extends Widget
 {
@@ -17,19 +19,26 @@ class DateRangeWidget extends Widget
     */
     public function run()
     {
-        $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
-            $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
+        $dateRange = SessionQueryParams::getDateRange();
+        if( $dateRange ) {
             $label = Html::encode(
                 'Clear Range ('
-                . $range[Constant::SESS_PARAM_NAME_STARTDATE]
+                . $dateRange[0]
                 . ' '
-                . $range[Constant::SESS_PARAM_NAME_ENDDATE]
+                . $dateRange[1]
                 . ')'
-            ) ;
-            $html = Html::a($label, ['delete-date-range', 'redirect_url' => Url::current() ], ['class' => 'btn btn-default']);
+            );
+            $html = Html::a(
+                $label, 
+                ['delete-date-range', 'redirect_url' => Url::current() ], 
+                ['class' => 'btn btn-default']
+            );
         } else {
-            $html = Html::a('Date Range', ['create-date-range', 'redirect_url' => Url::current()], ['class' => 'btn btn-default']);
+            $html = Html::a(
+                'Date Range', 
+                ['create-date-range', 'redirect_url' => Url::current()], 
+                ['class' => 'btn btn-default']
+            );
         }
         return $html;
     }

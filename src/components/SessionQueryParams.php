@@ -5,6 +5,12 @@ namespace app\components;
 use Yii;
 use app\components\Constant;
 
+/**
+ * This class is a wrapper around specific session variables :
+ * - *dateRange* 
+ * - *contact* and related *bank account*
+ * 
+ */
 class SessionQueryParams
 {
     /**
@@ -20,6 +26,29 @@ class SessionQueryParams
         $session[Constant::SESS_PARAM_NAME_DATERANGE] = [
             Constant::SESS_PARAM_NAME_STARTDATE => $start_date,
             Constant::SESS_PARAM_NAME_ENDDATE => $end_date,
+        ];
+    }
+
+    /**
+     * Returns the current date range info or NULL if not date range is defined.
+     * If an array is returned, it contains 2 items : the start and the end date.
+     * example : `[ '2019-01-31', '2019-12-31']`
+     * 
+     * @return NULL|array
+     */
+    public static function getDateRange()
+    {
+        $session = Yii::$app->session;
+
+        // no date range found in session : do nothing and return
+        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+            return null;
+        }           
+        $dateRange = $session[Constant::SESS_PARAM_NAME_DATERANGE];
+
+        return [    
+            $dateRange[Constant::SESS_PARAM_NAME_STARTDATE],
+            $dateRange[Constant::SESS_PARAM_NAME_ENDDATE],
         ];
     }
 
