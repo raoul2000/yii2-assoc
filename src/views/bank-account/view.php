@@ -73,10 +73,12 @@ $bankAccountModel = $model;
         ],
     ]) ?>
 
-
     <h2>Transactions</h2>
     <hr/>
-
+    <p>
+        <?= Html::a('Create Debit', ['transaction/create', 'from_account_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Create Credit', ['transaction/create', 'to_account_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    </p>
     <?php Pjax::begin(); ?>
 
     <?= GridView::widget([

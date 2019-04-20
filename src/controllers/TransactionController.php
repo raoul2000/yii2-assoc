@@ -187,7 +187,7 @@ class TransactionController extends Controller
      * @param $order_id ID of the order to link to the newly created transaction
      * @return mixed
      */
-    public function actionCreate($order_id = null)
+    public function actionCreate($order_id = null, $from_account_id = null, $to_account_id = null)
     {
         $model = Transaction::create();
 
@@ -220,13 +220,24 @@ class TransactionController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
      
+        if ($from_account_id != null) {
+            $model->from_account_id = $from_account_id;
+        }
+
+        if ($to_account_id != null) {
+            $model->to_account_id = $to_account_id;
+        }
+
         if ($order !== null) {
             // try to guess the source bank account if not provided
+            // RULE : Use the first bank account belonging to the contact referenced 
+            // as beneficiary in the order instance
             if ($model->from_account_id == null && count($order->contact->bankAccounts) > 0) {
                 $model->from_account_id = $order->contact->bankAccounts[0]->id;
             }
 
             // try to guess the transaction value
+            // RULE : use the order's value as transaction value
             if ($model->value == null) {
                 $model->value = $order->value;
             }
