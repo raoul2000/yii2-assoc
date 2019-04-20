@@ -8,6 +8,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <h1>Administration <small>website</small></h1>
 <hr/>
 <p>
+    <?= \app\components\widgets\DateRangeWidget::widget() ?>      
+    <?= \app\components\widgets\UserContactWidget::widget() ?>      
+</p>
+<hr/>
+<p>
     <?php if (Yii::$app->user->can('manageUser')) {
         echo Html::a('Manage Users', ['user/admin'], ['class' => 'btn btn-primary']);
     }?>
