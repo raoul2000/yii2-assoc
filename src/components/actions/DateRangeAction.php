@@ -18,6 +18,7 @@ class DateRangeAction extends Action
             return $this->controller->redirect($redirect_url);    
         }
 
+        // set date range
         $model = new DateRangeForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             SessionQueryParams::setDateRange($model->start_date, $model->end_date);

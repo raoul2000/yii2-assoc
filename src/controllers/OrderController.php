@@ -29,9 +29,6 @@ class OrderController extends Controller
             'date-range' => [
                 'class' => 'app\components\actions\DateRangeAction',
             ],
-            'delete-date-range' => [
-                'class' => 'app\components\actions\DateRangeAction',
-            ]
         ];
     }
     /**
