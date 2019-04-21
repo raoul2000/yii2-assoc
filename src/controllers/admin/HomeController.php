@@ -8,8 +8,8 @@ class HomeController extends \yii\web\Controller
     public function actions()
     {
         return [
-            'create-user-contact' => [
-                'class' => 'app\components\actions\CreateUserContactAction',
+            'user-contact' => [
+                'class' => 'app\components\actions\UserContactAction',
             ],
             'date-range' => [
                 'class' => 'app\components\actions\DateRangeAction',

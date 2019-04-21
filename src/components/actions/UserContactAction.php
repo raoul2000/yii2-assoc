@@ -7,8 +7,10 @@ use app\models\forms\UserContactForm;
 use yii\web\NotFoundHttpException;
 use app\components\Constant;
 use app\models\Contact;
+use app\components\SessionQueryParams;
 
-class CreateUserContactAction extends Action
+
+class UserContactAction extends Action
 {
     public function run($redirect_url = null, $clear = 0)
     {
@@ -25,28 +27,20 @@ class CreateUserContactAction extends Action
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model = $this->findContactModel($model->contact_id);
-
-            $data = [
-                'id' => $model->id,
-                'name' => $model->name
-            ];
+            SessionQueryParams::setContact($model->id, $model->name);
             $banAccounts = $model->bankAccounts;
             if (count($banAccounts) != 0) {
-                $data['bankAccount'] = [
-                    'id' => $banAccounts[0]->id,
-                    'name' => $banAccounts[0]->name,
-                ];
+                SessionQueryParams::setBankAccount($banAccounts[0]->id, $banAccounts[0]->name);
             }
-            $session[Constant::SESS_PARAM_NAME_CONTACT] = $data;
 
             return $this->controller->redirect($redirect_url);
         }
-
+/*
         if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
             $model->contact_id = $session[Constant::SESS_PARAM_NAME_CONTACT]['id'];
         }  
-
-        return $this->controller->render('/common/create-user-contact', [
+*/
+        return $this->controller->render('/common/user-contact', [
             'model' => $model,
             'contactNames' => \app\models\Contact::getNameIndex(),
             'redirect_url' => $redirect_url

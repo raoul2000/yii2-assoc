@@ -24,13 +24,13 @@ class UserContactWidget extends Widget
             ) ;
             $html = Html::a(
                 $label, 
-                ['create-user-contact', 'redirect_url' => Url::current(), 'clear' => true ], 
+                ['user-contact', 'redirect_url' => Url::current(), 'clear' => true ], 
                 ['class' => 'btn btn-default']
             );
         } else {
             $html = Html::a(
                 'User Contact', 
-                ['create-user-contact', 'redirect_url' => Url::current()], 
+                ['user-contact', 'redirect_url' => Url::current()], 
                 ['class' => 'btn btn-default']
             );
         }

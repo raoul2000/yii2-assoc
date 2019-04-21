@@ -9,7 +9,6 @@ use app\components\Constant;
  * This class is a wrapper around specific session variables :
  * - *dateRange* 
  * - *contact* and related *bank account*
- * 
  */
 class SessionQueryParams
 {
@@ -97,5 +96,55 @@ class SessionQueryParams
             $query->andWhere(['between', 'reference_date', $startDate, $endDate]);
         }
         return $queryOrDataprovider;
+    }
+
+    static public function setContact($id, $name)
+    {
+        $session = Yii::$app->session;
+        $session[Constant::SESS_PARAM_NAME_CONTACT] = [
+            'id' => $id,
+            'name' => $name
+        ];
+    }
+    
+    static public function getContactId() 
+    {
+        if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
+            return $session[Constant::SESS_PARAM_NAME_CONTACT]['id'];
+        }
+        return null;
+    }
+
+    static public function getContactName() 
+    {
+        if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
+            return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
+        }
+        return null;
+    }
+
+    static public function setBankAccount($id, $name)
+    {
+        $session = Yii::$app->session;
+        $session[Constant::SESS_PARAM_NAME_BANK_ACCOUNT] = [
+            'id' => $id,
+            'name' => $name
+        ];
+    }
+
+    static public function getBankAccountId() 
+    {
+        if ($session->has(Constant::SESS_PARAM_NAME_BANK_ACCOUNT)) {
+            return $session[Constant::SESS_PARAM_NAME_BANK_ACCOUNT]['id'];
+        }
+        return null;
+    }
+
+    static public function getBankAccountName() 
+    {
+        if ($session->has(Constant::SESS_PARAM_NAME_BANK_ACCOUNT)) {
+            return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
+        }
+        return null;
     }
 }

@@ -17,11 +17,11 @@ class Constant
     const SESS_PARAM_NAME_ENDDATE = 'end_date';
 
     /**
-     * session param name used to store current Contact ID and default bank account
+     * session param name used to store current Contact info
      */
     const SESS_PARAM_NAME_CONTACT = 'contact';
-    const SESS_PARAM_NAME_CONTACT_ID = 'contact_id';
-    const SESS_PARAM_NAME_CONTACT_NAME = 'contact_name';
-    const SESS_PARAM_NAME_BANK_ACCOUNT_ID = 'bank_account_id';
-    const SESS_PARAM_NAME_BANK_ACCOUNT_NAME = 'bank_account_name';
+    /**
+     * session param name used to store current Bank Account info
+     */    
+    const SESS_PARAM_NAME_BANK_ACCOUNT = 'bank_account';
 }
