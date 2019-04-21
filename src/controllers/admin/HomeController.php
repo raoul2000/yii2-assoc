@@ -11,11 +11,11 @@ class HomeController extends \yii\web\Controller
             'create-user-contact' => [
                 'class' => 'app\components\actions\CreateUserContactAction',
             ],
-            'create-date-range' => [
-                'class' => 'app\components\actions\CreateDateRangeAction',
+            'date-range' => [
+                'class' => 'app\components\actions\DateRangeAction',
             ],
             'delete-date-range' => [
-                'class' => 'app\components\actions\DeleteDateRangeAction',
+                'class' => 'app\components\actions\DateRangeAction',
             ],
         ];
     }

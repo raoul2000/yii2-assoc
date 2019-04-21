@@ -30,13 +30,13 @@ class DateRangeWidget extends Widget
             );
             $html = Html::a(
                 $label, 
-                ['delete-date-range', 'redirect_url' => Url::current() ], 
+                ['delete-date-range', 'redirect_url' => Url::current(), 'clear' => '1'], 
                 ['class' => 'btn btn-default']
             );
         } else {
             $html = Html::a(
                 'Date Range', 
-                ['create-date-range', 'redirect_url' => Url::current()], 
+                ['date-range', 'redirect_url' => Url::current()], 
                 ['class' => 'btn btn-default']
             );
         }

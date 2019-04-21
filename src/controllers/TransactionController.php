@@ -29,11 +29,11 @@ class TransactionController extends Controller
             'delete-order' => [
                 'class' => 'app\components\actions\orders\DeleteAction',
             ],
-            'create-date-range' => [
-                'class' => 'app\components\actions\CreateDateRangeAction',
+            'date-range' => [
+                'class' => 'app\components\actions\DateRangeAction',
             ],
             'delete-date-range' => [
-                'class' => 'app\components\actions\DeleteDateRangeAction',
+                'class' => 'app\components\actions\DateRangeAction',
             ],
             'ajax-link-orders' => [
                 'class' => 'app\components\actions\transactions\AjaxLinkOrdersAction'
