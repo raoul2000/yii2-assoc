@@ -70,6 +70,8 @@ class BankAccountController extends Controller
             Yii::$app->request->queryParams,
             $bankAccount->getTransactions()
         );
+        $transactionDataProvider->query
+            ->with(['fromAccount', 'toAccount']);
 
         return $this->render('view', [
             'model' => $bankAccount,

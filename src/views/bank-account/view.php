@@ -38,7 +38,6 @@ $bankAccountModel = $model;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             [
                 'label' => 'Contact',
                 'format' => 'raw',
@@ -94,12 +93,12 @@ $bankAccountModel = $model;
                 'value'     => function ($transactionModel, $key, $index, $column) {
                     if ($transactionModel->transaction_pack_id) {
                         return Html::a(
-                            Html::encode($transactionModel->transaction_pack_id),
+                            Html::encode('n°' . $transactionModel->transaction_pack_id),
                             ['transaction-pack/view','id' => $transactionModel->transaction_pack_id],
                             ['title' => 'view pack', 'data-pjax' => 0]
                         );
                     } else {
-                        return null;
+                        return ' ';
                     }
                 }
             ],
@@ -108,6 +107,17 @@ $bankAccountModel = $model;
                 'format'    => 'html',
                 'value'     => function ($transactionModel, $key, $index, $column) {
                     return Html::encode($transactionModel->description);
+                }
+            ],
+            [
+                'attribute' => 'account',
+                'format'    => 'html',
+                'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel){
+                    if ($bankAccountModel->id == $transactionModel->from_account_id) {
+                        return Html::encode($transactionModel->toAccount->contact_name);
+                    } else {
+                        return Html::encode($transactionModel->fromAccount->contact_name);
+                    }
                 }
             ],
             [
