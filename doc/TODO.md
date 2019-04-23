@@ -1,3 +1,19 @@
+## Link User to Contact
+
+A site user (i.e. registered and able to login) should be related to a row in the *Contact* table. By doing so, a logged-in user would be considered as having Contact info which would provide direct access to all info related to this Contact :
+- the contact info itself
+- the optional address
+
+### Default Bank Account
+
+A site user linked to a Contact is also linked to a default bank account.
+- the Contact has only one bank account : it is considered as **default**
+- the Contact has more than one bank account
+    - Automatic option : the bank account having the lower ID value is the **default** account
+    - manuel option : the site user must choose the **default** account
+- the contact has no bank account : this is not a normal situation as a bank account is always created just after the Contact itself is created.
+
+
 ## integrate with Yii2tech/config
 
 see https://github.com/yii2tech/config for a complete config manager component
