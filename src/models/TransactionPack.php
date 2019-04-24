@@ -72,7 +72,16 @@ class TransactionPack extends \yii\db\ActiveRecord
             'type' => 'Type',
         ];
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeDelete()
+    {
+        foreach ($this->transactions as $transaction) {
+            $this->unlink('transactions', $transaction, true);
+        }
+        return true;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
