@@ -121,16 +121,28 @@ class TransactionPackController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($bank_account_id = null)
     {
         $model = new TransactionPack();
 
+        $bankAccount = null;
+        if ($bank_account_id != null) {
+            $bankAccount = BankAccount::findOne($bank_account_id);
+            if ($bankAccount == null) {
+                throw new NotFoundHttpException('The requested bank account does not exist.');
+            }
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($bankAccount) {
+                $model->link('bankAccount', $bankAccount);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'bankAccount' => $bankAccount,
             'bankAccounts' => BankAccount::getNameIndex()
         ]);
     }

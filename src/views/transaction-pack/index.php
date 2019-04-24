@@ -27,7 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'id',
+            [
+                'attribute' => 'id',
+                'label'     => 'N°'
+            ],
             'name',
             [
                 'attribute' => 'bank_account_id',

@@ -6,6 +6,7 @@ use Yii;
 use app\models\Contact;
 use app\models\BankAccount;
 use app\models\BankAccountSearch;
+use app\models\TransactionPackSearch;
 use app\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -62,16 +63,61 @@ class BankAccountController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 'transaction')
     {
         $bankAccount =  $this->findModel($id);
-        $transactionSearchModel = new TransactionSearch();
-        $transactionDataProvider = $transactionSearchModel->search(
-            Yii::$app->request->queryParams,
-            $bankAccount->getTransactions()
-        );
-        $transactionDataProvider->query
-            ->with(['fromAccount', 'toAccount']);
+
+        switch ($tab) {
+            case 'transaction':
+                $transactionSearchModel = new TransactionSearch();
+                $transactionDataProvider = $transactionSearchModel->search(
+                    Yii::$app->request->queryParams,
+                    $bankAccount->getTransactions()
+                );
+        
+                $transactionDataProvider->query
+                    ->with(['fromAccount', 'toAccount']);
+
+                return $this->render('view', [
+                    'model' => $bankAccount,
+                    'tab' => $tab,
+                    'accountBalance' => $bankAccount->getBalanceInfo(),
+                    'tabContent' => $this->renderPartial('_tab-transaction', [
+                        'model' => $bankAccount,
+                        'transactionSearchModel' => $transactionSearchModel,
+                        'transactionDataProvider' => $transactionDataProvider,
+                        'bankAccounts' => BankAccount::getNameIndex()
+                    ])
+                ]);
+            break;
+            case 'pack':
+                $transactionPackSearchModel = new TransactionPackSearch();
+                $transactionPackDataProvider = $transactionPackSearchModel->search(
+                    Yii::$app->request->queryParams
+                );
+                $transactionPackDataProvider
+                    ->query
+                    ->andWhere(['bank_account_id' => $bankAccount->id ]);
+    
+                return $this->render('view', [
+                    'model' => $bankAccount,
+                    'tab' => $tab,
+                    'accountBalance' => $bankAccount->getBalanceInfo(),
+                    'tabContent' => $this->renderPartial('_tab-transaction-pack', [
+                        'model' => $bankAccount,
+                        'transactionPackSearchModel' => $transactionPackSearchModel,
+                        'transactionPackDataProvider' => $transactionPackDataProvider,
+                        'bankAccounts' => BankAccount::getNameIndex()
+                    ])
+                ]);
+            break;
+            default:
+                return $this->redirect(['view', 'id' => $bankAccount->id, 'tab' => 'transaction']);
+                break;
+
+        }
+
+/*
 
         return $this->render('view', [
             'model' => $bankAccount,
@@ -80,6 +126,7 @@ class BankAccountController extends Controller
             'transactionDataProvider' => $transactionDataProvider,
             'bankAccounts' => BankAccount::getNameIndex()
         ]);
+        */
     }
 
     /**

@@ -11,15 +11,16 @@ use yii\helpers\VarDumper;
 class BankBookController extends \yii\web\Controller
 {
     public function compareByTimeStamp($item1, $item2)
-    { 
+    {
         $time1 = $item1['date'];
         $time2 = $item2['date'];
-        if (strtotime($time1) < strtotime($time2)) 
-            return 1; 
-        else if (strtotime($time1) > strtotime($time2))  
-            return -1; 
-        else
-            return 0; 
+        if (strtotime($time1) < strtotime($time2)) {
+            return 1;
+        } elseif (strtotime($time1) > strtotime($time2)) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
     /**
      * Select a bank account to produce the report view from
