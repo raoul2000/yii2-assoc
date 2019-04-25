@@ -15,7 +15,7 @@ class DateRangeAction extends Action
         // request to clear date range
         if ($clear == 1) {
             SessionVars::clearDateRange();
-            return $this->controller->redirect($redirect_url);    
+            return $this->controller->redirect($redirect_url);
         }
 
         // set date range

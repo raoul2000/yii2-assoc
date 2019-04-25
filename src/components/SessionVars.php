@@ -98,6 +98,11 @@ class SessionVars
         return $queryOrDataprovider;
     }
 
+    public static function clearContact()
+    {
+        Yii::$app->session->remove(Constant::SESS_PARAM_NAME_CONTACT);
+    }
+
     public static function setContact($id, $name)
     {
         $session = Yii::$app->session;
@@ -123,6 +128,11 @@ class SessionVars
             return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
         }
         return null;
+    }
+
+    public static function clearBankAccount()
+    {
+        Yii::$app->session->remove(Constant::SESS_PARAM_NAME_BANK_ACCOUNT);
     }
 
     public static function setBankAccount($id, $name)

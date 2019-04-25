@@ -10,7 +10,6 @@ use yii\helpers\Url;
 use app\components\Constant;
 use \app\components\SessionVars;
 
-
 class DateRangeWidget extends Widget
 {
     /**
@@ -20,7 +19,7 @@ class DateRangeWidget extends Widget
     public function run()
     {
         $dateRange = SessionVars::getDateRange();
-        if( $dateRange ) {
+        if ($dateRange) {
             $label = Html::encode(
                 'Clear Range ('
                 . $dateRange[0]
@@ -29,14 +28,14 @@ class DateRangeWidget extends Widget
                 . ')'
             );
             $html = Html::a(
-                $label, 
-                ['date-range', 'redirect_url' => Url::current(), 'clear' => '1'], 
+                $label,
+                ['date-range', 'redirect_url' => Url::current(), 'clear' => '1'],
                 ['class' => 'btn btn-default']
             );
         } else {
             $html = Html::a(
-                'Date Range', 
-                ['date-range', 'redirect_url' => Url::current()], 
+                'Date Range',
+                ['date-range', 'redirect_url' => Url::current()],
                 ['class' => 'btn btn-default']
             );
         }
