@@ -15,6 +15,12 @@ $this->params['breadcrumbs'][] = 'link Order';
 \yii\web\YiiAsset::register($this);
 ?>
 <div>
+    <p>
+        <?= Html::a(
+            '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Order',
+            ['view', 'id' => $order->id]
+        ) ?>
+    </p>
     <div class="alert alert-info" role="alert">
         <p>
             <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one transaction to pay this order
@@ -23,7 +29,6 @@ $this->params['breadcrumbs'][] = 'link Order';
 
     <p>
         <?= \app\components\widgets\DateRangeWidget::widget() ?>       
-        <?= Html::a('Back To Order', ['view', 'id' => $order->id], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

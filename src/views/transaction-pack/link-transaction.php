@@ -48,6 +48,12 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
 
 ?>
 <div>
+    <p>
+        <?= Html::a(
+            '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction Pack',
+            ['view', 'id' => $transactionPack->id]
+        )?>
+    </p>
     <div class="alert alert-info" role="alert">
         <p>
             <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one or
@@ -55,9 +61,6 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
         </p>
     </div>    
 
-    <p>
-        <?= Html::a('Back To Transaction Pack', ['view', 'id' => $transactionPack->id], ['class' => 'btn btn-default']) ?>
-    </p>
 
     <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
         <?= GridView::widget([

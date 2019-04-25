@@ -17,8 +17,9 @@ $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id
 $this->params['breadcrumbs'][] = 'link Order';
 \yii\web\YiiAsset::register($this);
 
-// Client Js script 
-// Hanlde user click on 'unlink order' button 
+// Client Js script
+// Hanlde user click on 'unlink order' button
+
 $urlLinkOrders = Url::toRoute(['transaction/ajax-link-orders']);
 $gridViewElementId = 'unlinked-orders';
 $jsScript=<<<EOS
@@ -47,8 +48,17 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
 
 ?>
 <p>
-    <?= Html::a('Back To Transaction', ['view', 'id' => $transaction->id], ['class' => 'btn btn-default']) ?>
+    <?= Html::a(
+        '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction',
+        ['view', 'id' => $transaction->id]
+    )?>
 </p>
+
+<div class="alert alert-info" role="alert">
+    <p>
+        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one or more orders for this transaction
+    </p>
+</div>  
 
     <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
         <?= GridView::widget([
