@@ -10,7 +10,7 @@ use app\components\Constant;
  * - *dateRange*
  * - *contact* and related *bank account*
  */
-class SessionQueryParams
+class SessionVars
 {
     /**
      * Set the date range values in the current session

@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-use \app\components\SessionQueryParams;
+use \app\components\SessionVars;
 
 /* @var $this yii\web\View */
 $this->title = 'Administration';
@@ -11,17 +11,17 @@ $this->params['breadcrumbs'][] = $this->title;
 <p>
     <?= \app\components\widgets\DateRangeWidget::widget() ?>      
     <?= \app\components\widgets\UserContactWidget::widget() ?>   
-    <?php if (SessionQueryParams::getContactId() != null):?>
+    <?php if (SessionVars::getContactId() != null):?>
         <?= Html::a(
-            Html::encode('View Contact ' . SessionQueryParams::getContactName()),
-            ['contact/view', 'id' => SessionQueryParams::getContactId()],
+            Html::encode('View Contact ' . SessionVars::getContactName()),
+            ['contact/view', 'id' => SessionVars::getContactId()],
             ['class' => 'btn btn-success']
         ) ?>
     <?php endif; ?>   
-    <?php if (SessionQueryParams::getBankAccountId() != null):?>
+    <?php if (SessionVars::getBankAccountId() != null):?>
         <?= Html::a(
             'View Bank Account',
-            ['bank-account/view', 'id' => SessionQueryParams::getBankAccountId()],
+            ['bank-account/view', 'id' => SessionVars::getBankAccountId()],
             ['class' => 'btn btn-success']
         ) ?>
     <?php endif; ?>   

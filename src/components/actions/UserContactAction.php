@@ -7,7 +7,7 @@ use app\models\forms\UserContactForm;
 use yii\web\NotFoundHttpException;
 use app\components\Constant;
 use app\models\Contact;
-use app\components\SessionQueryParams;
+use app\components\SessionVars;
 
 
 class UserContactAction extends Action
@@ -27,10 +27,10 @@ class UserContactAction extends Action
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model = $this->findContactModel($model->contact_id);
-            SessionQueryParams::setContact($model->id, $model->name);
+            SessionVars::setContact($model->id, $model->name);
             $banAccounts = $model->bankAccounts;
             if (count($banAccounts) != 0) {
-                SessionQueryParams::setBankAccount($banAccounts[0]->id, $banAccounts[0]->name);
+                SessionVars::setBankAccount($banAccounts[0]->id, $banAccounts[0]->name);
             }
 
             return $this->controller->redirect($redirect_url);
