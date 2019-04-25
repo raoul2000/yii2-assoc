@@ -7,7 +7,7 @@ use app\components\Constant;
 
 /**
  * This class is a wrapper around specific session variables :
- * - *dateRange* 
+ * - *dateRange*
  * - *contact* and related *bank account*
  */
 class SessionQueryParams
@@ -19,7 +19,7 @@ class SessionQueryParams
      * @param string $end_date
      * @return void
      */
-    public static function setDateRange($start_date, $end_date) 
+    public static function setDateRange($start_date, $end_date)
     {
         $session = Yii::$app->session;
         $session[Constant::SESS_PARAM_NAME_DATERANGE] = [
@@ -32,7 +32,7 @@ class SessionQueryParams
      * Returns the current date range info or NULL if not date range is defined.
      * If an array is returned, it contains 2 items : the start and the end date.
      * example : `[ '2019-01-31', '2019-12-31']`
-     * 
+     *
      * @return NULL|array
      */
     public static function getDateRange()
@@ -42,10 +42,10 @@ class SessionQueryParams
         // no date range found in session : do nothing and return
         if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
             return null;
-        }           
+        }
         $dateRange = $session[Constant::SESS_PARAM_NAME_DATERANGE];
 
-        return [    
+        return [
             $dateRange[Constant::SESS_PARAM_NAME_STARTDATE],
             $dateRange[Constant::SESS_PARAM_NAME_ENDDATE],
         ];
@@ -69,7 +69,7 @@ class SessionQueryParams
      * @param object instance of yii\base\Model
      * @return mixed
      */
-    public static function applyDateRange($queryOrDataprovider, $model) 
+    public static function applyDateRange($queryOrDataprovider, $model)
     {
         if ($queryOrDataprovider instanceof \yii\data\ActiveDataProvider) {
             $query = $queryOrDataprovider->query;
@@ -82,7 +82,7 @@ class SessionQueryParams
         // no date range found in session : do nothing and return
         if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
             return $queryOrDataprovider;
-        }    
+        }
 
         // apply date range criteria to model
         $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
@@ -92,13 +92,13 @@ class SessionQueryParams
         // depending on model's attributes, SQL condition is modified to apply
         // date range criteria
         $attributeNames = array_keys($model->getAttributes());
-        if( in_array('reference_date', $attributeNames)) {
+        if (in_array('reference_date', $attributeNames)) {
             $query->andWhere(['between', 'reference_date', $startDate, $endDate]);
         }
         return $queryOrDataprovider;
     }
 
-    static public function setContact($id, $name)
+    public static function setContact($id, $name)
     {
         $session = Yii::$app->session;
         $session[Constant::SESS_PARAM_NAME_CONTACT] = [
@@ -107,23 +107,25 @@ class SessionQueryParams
         ];
     }
     
-    static public function getContactId() 
+    public static function getContactId()
     {
+        $session = Yii::$app->session;
         if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
             return $session[Constant::SESS_PARAM_NAME_CONTACT]['id'];
         }
         return null;
     }
 
-    static public function getContactName() 
+    public static function getContactName()
     {
+        $session = Yii::$app->session;
         if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
             return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
         }
         return null;
     }
 
-    static public function setBankAccount($id, $name)
+    public static function setBankAccount($id, $name)
     {
         $session = Yii::$app->session;
         $session[Constant::SESS_PARAM_NAME_BANK_ACCOUNT] = [
@@ -132,16 +134,18 @@ class SessionQueryParams
         ];
     }
 
-    static public function getBankAccountId() 
+    public static function getBankAccountId()
     {
+        $session = Yii::$app->session;
         if ($session->has(Constant::SESS_PARAM_NAME_BANK_ACCOUNT)) {
             return $session[Constant::SESS_PARAM_NAME_BANK_ACCOUNT]['id'];
         }
         return null;
     }
 
-    static public function getBankAccountName() 
+    public static function getBankAccountName()
     {
+        $session = Yii::$app->session;
         if ($session->has(Constant::SESS_PARAM_NAME_BANK_ACCOUNT)) {
             return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
         }
