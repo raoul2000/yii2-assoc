@@ -191,11 +191,10 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         $accounts = parent::find()
             ->asArray()
-            ->with(['contact'])
             ->all();
         
         return ArrayHelper::map($accounts, 'id', function ($item) {
-            return $item['contact']['name'] . ( empty($item['name'])
+            return $item['contact_name'] . ( empty($item['name'])
                 ? ''
                 : ' (' . $item['name'] . ')');
         });

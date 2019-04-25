@@ -59,7 +59,11 @@ class BankAccountController extends Controller
 
     /**
      * Displays a single BankAccount model.
-     * @param integer $id
+     * This view displays details info about a bank account and a tab widget
+     * focusing on TRANSACTIONS and TRANSACTION PACKS.
+     *
+     * @param integer $id ID of the bank account to display
+     * @param string $tab the ID of the tab to display
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -68,11 +72,10 @@ class BankAccountController extends Controller
         $bankAccount =  $this->findModel($id);
 
         switch ($tab) {
-            case 'transaction':
+            case 'transaction': // --------------------------------------------
                 $transactionSearchModel = new TransactionSearch();
                 $transactionDataProvider = $transactionSearchModel->search(
-                    Yii::$app->request->queryParams,
-                    $bankAccount->getTransactions()
+                    Yii::$app->request->queryParams
                 );
         
                 $transactionDataProvider->query
@@ -84,13 +87,11 @@ class BankAccountController extends Controller
                     'accountBalance' => $bankAccount->getBalanceInfo(),
                     'tabContent' => $this->renderPartial('_tab-transaction', [
                         'model' => $bankAccount,
-                        'transactionSearchModel' => $transactionSearchModel,
                         'transactionDataProvider' => $transactionDataProvider,
-                        'bankAccounts' => BankAccount::getNameIndex()
                     ])
                 ]);
             break;
-            case 'pack':
+            case 'pack': // ----------------------------------------------------
                 $transactionPackSearchModel = new TransactionPackSearch();
                 $transactionPackDataProvider = $transactionPackSearchModel->search(
                     Yii::$app->request->queryParams
@@ -107,26 +108,13 @@ class BankAccountController extends Controller
                         'model' => $bankAccount,
                         'transactionPackSearchModel' => $transactionPackSearchModel,
                         'transactionPackDataProvider' => $transactionPackDataProvider,
-                        'bankAccounts' => BankAccount::getNameIndex()
                     ])
                 ]);
             break;
             default:
                 return $this->redirect(['view', 'id' => $bankAccount->id, 'tab' => 'transaction']);
-                break;
-
+            break;
         }
-
-/*
-
-        return $this->render('view', [
-            'model' => $bankAccount,
-            'accountBalance' => $bankAccount->getBalanceInfo(),
-            'transactionSearchModel' => $transactionSearchModel,
-            'transactionDataProvider' => $transactionDataProvider,
-            'bankAccounts' => BankAccount::getNameIndex()
-        ]);
-        */
     }
 
     /**

@@ -14,7 +14,6 @@ $bankAccountModel = $model;
     <?= GridView::widget([
         'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $transactionDataProvider,
-        //'filterModel' => $transactionSearchModel,
         'columns' => [
             'reference_date:date',
             [

@@ -43,8 +43,8 @@ $bankAccountModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->contact->name),
-                        ['contact/view', 'id' => $model->contact->id],
+                        Html::encode($model->contact_name),
+                        ['contact/view', 'id' => $model->contact_id],
                         ['title' => 'view Contact']
                     );
                 }
