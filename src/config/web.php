@@ -1,6 +1,7 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
+$configManager = require __DIR__ . '/configManager.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
@@ -13,6 +14,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'config' => $configManager,
         'session' => [
             'class' => 'yii\web\DbSession',
             'writeCallback' => function ($session) {
@@ -102,6 +104,8 @@ $config = [
 ];
 
 $config['bootstrap'][] = 'arhistory';
+//$config['bootstrap'][] = 'configManager';
+
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment

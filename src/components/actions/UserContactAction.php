@@ -28,11 +28,16 @@ class UserContactAction extends Action
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model = $this->findContactModel($model->contact_id);
             SessionVars::setContact($model->id, $model->name);
+
+            Yii::$app->config->getItem('contact_id')->setValue($model->id);
+            
             $banAccounts = $model->bankAccounts;
             if (count($banAccounts) != 0) {
                 SessionVars::setBankAccount($banAccounts[0]->id, $banAccounts[0]->name);
+                Yii::$app->config->getItem('bank_account_id')->setValue($banAccounts[0]->id);
             }
 
+            Yii::$app->config->saveValues();
             return $this->controller->redirect($redirect_url);
         }
 

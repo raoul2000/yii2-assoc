@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59fcd2d2206a571d042a14583fcb0698",
+    "content-hash": "d6653502d70bb480a6e1ee4767beb7cc",
     "packages": [
         {
             "name": "2amigos/2fa-library",
@@ -1327,6 +1327,54 @@
                 "yii2"
             ],
             "time": "2019-01-25T15:57:39+00:00"
+        },
+        {
+            "name": "yii2tech/config",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yii2tech/config.git",
+                "reference": "8b5df0d7677158adeceba8ee79091ff960450968"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yii2tech/config/zipball/8b5df0d7677158adeceba8ee79091ff960450968",
+                "reference": "8b5df0d7677158adeceba8ee79091ff960450968",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii2tech\\config\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "Provides support for Yii2 application runtime configuration",
+            "keywords": [
+                "config",
+                "configuration",
+                "database",
+                "runtime",
+                "yii2"
+            ],
+            "time": "2019-01-24T15:18:50+00:00"
         },
         {
             "name": "yii2tech/csv-grid",
