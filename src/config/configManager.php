@@ -24,5 +24,14 @@ return [
                 ['integer']
             ],
         ],
+        'order.setProductValue' => [
+            'value' => false,
+            'label' => 'assign product value',
+            'description' => 'When order value is not set by user, assign the related product value if defined',
+            'inputOptions' => ['type' => 'checkbox'],
+            'rules' => [
+                ['boolean']
+            ],
+        ],
     ],
 ];
