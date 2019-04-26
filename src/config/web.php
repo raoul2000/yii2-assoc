@@ -14,7 +14,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'config' => $configManager,
+        'configManager' => $configManager,
         'session' => [
             'class' => 'yii\web\DbSession',
             'writeCallback' => function ($session) {

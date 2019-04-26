@@ -9,7 +9,7 @@ return [
     ],
     'items' => [
         'contact_id' => [
-            'value' => null,
+            'value' => 0,
             'label' => 'Contact',
             'description' => 'Contact that is used as default for all connected users',
             'rules' => [
@@ -17,7 +17,7 @@ return [
             ],
         ],
         'bank_account_id' => [
-            'value' => null,
+            'value' => 0,
             'label' => 'Bank Account ',
             'description' => 'The default bank account',
             'rules' => [

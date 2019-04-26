@@ -15,11 +15,11 @@ use app\models\BankAccount;
 Event::on(SecurityController::class, FormEvent::EVENT_AFTER_LOGIN, function (FormEvent $event) {
     
     try {
-        $contact_id = \Yii::$app->config->getItemValue('contact_id');
+        $contact_id = \Yii::$app->configManager->getItemValue('contact_id');
         $contact = Contact::findOne($contact_id);
         SessionVars::setContact($contact->id, $contact->name);
 
-        $bank_account_id = \Yii::$app->config->getItemValue('bank_account_id');
+        $bank_account_id = \Yii::$app->configManager->getItemValue('bank_account_id');
         $bankAccount = BankAccount::findOne($bank_account_id);
         SessionVars::setBankAccount($bankAccount->id, $bankAccount->name
     );

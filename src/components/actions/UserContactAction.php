@@ -29,15 +29,15 @@ class UserContactAction extends Action
             $model = $this->findContactModel($model->contact_id);
             SessionVars::setContact($model->id, $model->name);
 
-            Yii::$app->config->getItem('contact_id')->setValue($model->id);
+            Yii::$app->configManager->getItem('contact_id')->setValue($model->id);
             
             $banAccounts = $model->bankAccounts;
             if (count($banAccounts) != 0) {
                 SessionVars::setBankAccount($banAccounts[0]->id, $banAccounts[0]->name);
-                Yii::$app->config->getItem('bank_account_id')->setValue($banAccounts[0]->id);
+                Yii::$app->configManager->getItem('bank_account_id')->setValue($banAccounts[0]->id);
             }
 
-            Yii::$app->config->saveValues();
+            Yii::$app->configManager->saveValues();
             return $this->controller->redirect($redirect_url);
         }
 
