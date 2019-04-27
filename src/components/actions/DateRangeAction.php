@@ -6,7 +6,7 @@ use yii\base\Action;
 use app\models\forms\DateRangeForm;
 use yii\web\NotFoundHttpException;
 use app\components\Constant;
-use app\components\SessionVars;
+use app\components\SessionDateRange;
 
 class DateRangeAction extends Action
 {
@@ -14,14 +14,14 @@ class DateRangeAction extends Action
     {
         // request to clear date range
         if ($clear == 1) {
-            SessionVars::clearDateRange();
+            SessionDateRange::clearDateRange();
             return $this->controller->redirect($redirect_url);
         }
 
         // set date range
         $model = new DateRangeForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            SessionVars::setDateRange($model->start_date, $model->end_date);
+            SessionDateRange::setDateRange($model->start_date, $model->end_date);
             return $this->controller->redirect($redirect_url);
         }
 

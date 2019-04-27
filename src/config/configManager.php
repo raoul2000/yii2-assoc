@@ -9,7 +9,7 @@ return [
     ],
     'items' => [
         'contact_id' => [
-            'value' => 0,
+            'value' => null,
             'label' => 'Contact',
             'description' => 'Contact that is used as default for all connected users',
             'rules' => [
@@ -17,7 +17,7 @@ return [
             ],
         ],
         'bank_account_id' => [
-            'value' => 0,
+            'value' => null,
             'label' => 'Bank Account ',
             'description' => 'The default bank account',
             'rules' => [
@@ -26,7 +26,7 @@ return [
         ],
         'order.setProductValue' => [
             'value' => false,
-            'label' => 'assign product value',
+            'label' => 'Assign product value to order',
             'description' => 'When order value is not set by user, assign the related product value if defined',
             'inputOptions' => ['type' => 'checkbox'],
             'rules' => [

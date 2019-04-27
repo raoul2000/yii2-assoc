@@ -19,9 +19,9 @@ class Constant
     /**
      * session param name used to store current Contact info
      */
-    const SESS_PARAM_NAME_CONTACT = 'contact';
+    const SESS_CONTACT = 'contact';
     /**
      * session param name used to store current Bank Account info
      */    
-    const SESS_PARAM_NAME_BANK_ACCOUNT = 'bank_account';
+    const SESS_BANK_ACCOUNT = 'bank_account';
 }

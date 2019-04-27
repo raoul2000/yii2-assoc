@@ -8,7 +8,7 @@ use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\Constant;
-use \app\components\SessionVars;
+use \app\components\SessionDateRange;
 
 class DateRangeWidget extends Widget
 {
@@ -18,7 +18,7 @@ class DateRangeWidget extends Widget
     */
     public function run()
     {
-        $dateRange = SessionVars::getDateRange();
+        $dateRange = SessionDateRange::getDateRange();
         if ($dateRange) {
             $label = Html::encode(
                 'Clear Range ('

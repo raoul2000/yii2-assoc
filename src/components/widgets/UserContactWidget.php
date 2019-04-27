@@ -8,6 +8,7 @@ use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\components\Constant;
+use app\components\SessionContact;
 
 class UserContactWidget extends Widget
 {
@@ -17,10 +18,11 @@ class UserContactWidget extends Widget
     */
     public function run()
     {
+
         $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
+        if (SessionContact::getContactId() != null) {
             $label = Html::encode(
-                'Clear User Contact (' . Html::encode($session[Constant::SESS_PARAM_NAME_CONTACT]['name']) . ')'
+                'Clear User Contact (' . Html::encode(SessionContact::getContactName()) . ')'
             ) ;
             $html = Html::a(
                 $label, 

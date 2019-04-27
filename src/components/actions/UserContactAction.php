@@ -7,18 +7,22 @@ use app\models\forms\UserContactForm;
 use yii\web\NotFoundHttpException;
 use app\components\Constant;
 use app\models\Contact;
-use app\components\SessionVars;
+use app\components\SessionContact;
 
 class UserContactAction extends Action
 {
     public function run($redirect_url = null, $clear = 0)
     {
+        //shortcuts
         $session = Yii::$app->session;
+        $conf = Yii::$app->configManager; 
 
         // request to clear contact data
         if (Yii::$app->request->isGet && $clear == 1) {
-            SessionVars::clearContact();
-            SessionVars::clearBankAccount();
+            SessionContact::clear();
+            $conf->clearValue('contact_id');
+            $conf->clearValue('bank_account_id');
+
             return $this->controller->redirect($redirect_url);
         }
 
@@ -26,18 +30,11 @@ class UserContactAction extends Action
         $model = new UserContactForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $model = $this->findContactModel($model->contact_id);
-            SessionVars::setContact($model->id, $model->name);
-
-            Yii::$app->configManager->getItem('contact_id')->setValue($model->id);
+            SessionContact::setContact($model->contact_id);
+            $conf->getItem('contact_id')->setValue(SessionContact::getContactId());
+            $conf->getItem('bank_account_id')->setValue(SessionContact::getBankAccountId());
+            $conf->saveValues();
             
-            $banAccounts = $model->bankAccounts;
-            if (count($banAccounts) != 0) {
-                SessionVars::setBankAccount($banAccounts[0]->id, $banAccounts[0]->name);
-                Yii::$app->configManager->getItem('bank_account_id')->setValue($banAccounts[0]->id);
-            }
-
-            Yii::$app->configManager->saveValues();
             return $this->controller->redirect($redirect_url);
         }
 

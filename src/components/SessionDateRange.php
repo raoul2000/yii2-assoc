@@ -10,7 +10,7 @@ use app\components\Constant;
  * - *dateRange*
  * - *contact* and related *bank account*
  */
-class SessionVars
+class SessionDateRange
 {
     /**
      * Set the date range values in the current session
@@ -96,69 +96,5 @@ class SessionVars
             $query->andWhere(['between', 'reference_date', $startDate, $endDate]);
         }
         return $queryOrDataprovider;
-    }
-
-    public static function clearContact()
-    {
-        Yii::$app->session->remove(Constant::SESS_PARAM_NAME_CONTACT);
-    }
-
-    public static function setContact($id, $name)
-    {
-        $session = Yii::$app->session;
-        $session[Constant::SESS_PARAM_NAME_CONTACT] = [
-            'id' => $id,
-            'name' => $name
-        ];
-    }
-    
-    public static function getContactId()
-    {
-        $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
-            return $session[Constant::SESS_PARAM_NAME_CONTACT]['id'];
-        }
-        return null;
-    }
-
-    public static function getContactName()
-    {
-        $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_CONTACT)) {
-            return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
-        }
-        return null;
-    }
-
-    public static function clearBankAccount()
-    {
-        Yii::$app->session->remove(Constant::SESS_PARAM_NAME_BANK_ACCOUNT);
-    }
-
-    public static function setBankAccount($id, $name)
-    {
-        $session = Yii::$app->session;
-        $session[Constant::SESS_PARAM_NAME_BANK_ACCOUNT] = [
-            'id' => $id,
-            'name' => $name
-        ];
-    }
-
-    public static function getBankAccountId()
-    {
-        $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_BANK_ACCOUNT)) {
-            return $session[Constant::SESS_PARAM_NAME_BANK_ACCOUNT]['id'];
-        }
-        return null;
-    }
-
-    public static function getBankAccountName()
-    {
-        $session = Yii::$app->session;
-        if ($session->has(Constant::SESS_PARAM_NAME_BANK_ACCOUNT)) {
-            return $session[Constant::SESS_PARAM_NAME_CONTACT]['name'];
-        }
-        return null;
     }
 }
