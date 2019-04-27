@@ -12,20 +12,36 @@ use yii\helpers\ArrayHelper;
 <div class="transaction-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-        <?= \dosamigos\selectize\SelectizeDropDownList::widget([
-            'name' => Html::getInputName($model, 'from_account_id'),
-            'value' => $model->from_account_id,
-            'items' => $bankAccounts,
-            'clientOptions' => [
-                // ...
-            ],
-        ]); ?>
-
-        <?php // $form->field($model, 'from_account_id')->listBox($bankAccounts, ['size'=>1])?>
-
-
-        <?= $form->field($model, 'to_account_id')->listBox($bankAccounts, ['size'=>1])?>    
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label" for="from_account-selectized">Source Account</label>
+                    <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                        'name' => Html::getInputName($model, 'from_account_id'),
+                        'value' => $model->from_account_id,
+                        'id' => 'from_account-selectized',
+                        'items' => $bankAccounts,
+                        'clientOptions' => [
+                            // ...
+                        ],
+                    ]); ?>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label" for="to_account-selectized">Target Account</label>
+                    <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                        'name' => Html::getInputName($model, 'to_account_id'),
+                        'id' => 'to_account-selectized',
+                        'value' => $model->to_account_id,
+                        'items' => $bankAccounts,
+                        'clientOptions' => [
+                            // ...
+                        ],
+                    ]); ?>
+                </div>
+            </div>
+        </div>
 
         <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
@@ -34,16 +50,11 @@ use yii\helpers\ArrayHelper;
         <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
-
-        <?= $form->field($model, 'is_verified')->checkbox() ?>
         
-        <?php
-        if ($model->isNewRecord == true && isset($order) == false) {
-            echo $form->field($model, 'initial_product_id')->listBox($products, ['size'=>1]);
-            echo $form->field($model, 'initial_product_quantity')->textInput(['autocomplete'=>'off']);
-        }
-        ?>
-
+        <?php if (!$model->isNewRecord):?>
+            <?= $form->field($model, 'is_verified')->checkbox() ?>
+        <?php endif; ?>
+        
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         </div>
