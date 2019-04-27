@@ -13,7 +13,9 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
+    <?php if ( ! isset($contact) ):?>
+        <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 

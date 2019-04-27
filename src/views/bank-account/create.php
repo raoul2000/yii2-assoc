@@ -11,10 +11,22 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="bank-account-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <?= Html::encode($this->title) ?>
+        <?php if ($contact): ?>
+            <small>
+                for <?= Html::a(
+                    Html::encode($contact->name),
+                    ['contact/view', 'id' => $contact->id],
+                    ['title' => 'view contact']
+                )?>
+            </small>
+        <?php endif; ?>
+    </h1>
     <hr/>
     <?= $this->render('_form', [
         'model' => $model,
+        'contact' => $contact,
         'contacts' => $contacts
     ]) ?>
 

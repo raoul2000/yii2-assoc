@@ -122,9 +122,20 @@ class BankAccountController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate( $contact_id = null)
     {
         $model = new BankAccount();
+
+        $contact = null;
+        if ($contact_id !== null) {
+            $contact = Contact::findOne($contact_id);
+            if ($contact == null) {
+                throw new NotFoundHttpException('The requested contact does not exist.');
+            }
+            if ($model->contact_id == null) {
+                $model->contact_id = $contact->id;
+            }
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -132,6 +143,7 @@ class BankAccountController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'contact' => $contact,
             'contacts' => Contact::getNameIndex()
         ]);
     }

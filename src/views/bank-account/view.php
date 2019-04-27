@@ -29,10 +29,7 @@ $bankAccountModel = $model;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Create Another Bank Account', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Transactions From', ['transaction/index', 'TransactionSearch[from_account_id]' => $model->id], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Transactions To', ['transaction/index', 'TransactionSearch[to_account_id]' => $model->id], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Transactions Packs', ['transaction-pack/index', 'TransactionPackSearch[bank_account_id]' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Create Another Bank Account', ['create', 'contact_id' => $model->contact_id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
