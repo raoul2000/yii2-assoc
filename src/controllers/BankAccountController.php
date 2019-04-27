@@ -75,7 +75,8 @@ class BankAccountController extends Controller
             case 'transaction': // --------------------------------------------
                 $transactionSearchModel = new TransactionSearch();
                 $transactionDataProvider = $transactionSearchModel->search(
-                    Yii::$app->request->queryParams
+                    Yii::$app->request->queryParams,
+                    $bankAccount->getTransactions()
                 );
         
                 $transactionDataProvider->query
