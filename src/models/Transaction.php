@@ -27,19 +27,6 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 class Transaction extends \yii\db\ActiveRecord
 {
     /**
-     * This attribute is used when creating a new transaction. It is used to optionnally store a product ID
-     * that will be used to automatically created an Order record.
-     *
-     * @var int
-     */
-    public $initial_product_id;
-    /**
-     * Used when creating a transaction. Quantity of orders to created for the initial product ID selected
-     *
-     * @var int
-     */
-    public $initial_product_quantity;
-    /**
      * Create a new instance of this model with default attributes values
      *
      * @return Transaction
@@ -48,7 +35,6 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return new Transaction([
             'reference_date' => date('Y-m-d'),
-            'initial_product_quantity' => 0,
             'value' => 0
         ]);
     }
@@ -86,8 +72,6 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id', 'to_account_id', 'transaction_pack_id'], 'integer'],
             [['value'], 'number', 'min' => 0],
 
-            [['initial_product_quantity'], 'number', 'min' => 0, 'integerOnly' => true],
-            
             [['description'], 'string', 'max' => 128],
             [['code'], 'string', 'max' => 10],
             /*
@@ -105,7 +89,6 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
 
-            [['initial_product_id'], 'integer'],
             [['is_verified'], 'boolean'],
 
             [['reference_date'], 'date', 'format' => 'php:Y-m-d'],

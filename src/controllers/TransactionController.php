@@ -179,7 +179,6 @@ class TransactionController extends Controller
     /**
      * Creates a new Transaction.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * When the form contains the field 'initial_product_id' it is used to automatically create an order.
      *
      * @param $order_id ID of the order to link to the newly created transaction
      * @return mixed
@@ -199,22 +198,6 @@ class TransactionController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($order !== null) {
                 $model->link('orders', $order);
-            } elseif (isset($model->initial_product_id) && $model->initial_product_quantity > 0) {
-                $initialProduct = \app\models\Product::findOne($model->initial_product_id);
-                if ($initialProduct) {
-                    // create the related orders
-                    for ($iCount=0; $iCount < $model->initial_product_quantity; $iCount++) {
-                        $order = new Order();
-                        $order->setAttributes([
-                            'product_id' => $initialProduct->id,
-                            'contact_id' => $model->fromAccount->contact_id
-                        ]);
-                        $order->save();
-                        $model->link('orders', $order);
-                    }
-                } else {
-                    throw new NotFoundHttpException('The requested product does not exist.');
-                }
             }
             return $this->redirect(['view', 'id' => $model->id]);
         }
