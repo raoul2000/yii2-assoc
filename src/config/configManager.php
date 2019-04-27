@@ -27,7 +27,7 @@ return [
         'order.setProductValue' => [
             'value' => false,
             'label' => 'Assign product value to order',
-            'description' => 'When order value is not set by user, assign the related product value if defined',
+            'description' => 'On order creation, if no value is set by the user, assign the value of the product',
             'inputOptions' => ['type' => 'checkbox'],
             'rules' => [
                 ['boolean']

@@ -134,6 +134,15 @@ class OrderController extends Controller
         }
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $saveModel = null;
+
+            if ($model->value == 0 && Yii::$app->configManager->getItemValue('order.setProductValue') == true) {
+                // use the related product value (if not null) for this order
+                $product = Product::findOne($model->product_id);
+                if (!empty($product->value)) {
+                    $model->value = $product->value;
+                }
+            }
+
             // create, save and link one or more orders to transaction if required
             for ($iCount=0; $iCount < $model->initial_quantity; $iCount++) {
                 $saveModel = new Order([

@@ -212,6 +212,8 @@ class TransactionController extends Controller
                         $order->save();
                         $model->link('orders', $order);
                     }
+                } else {
+                    throw new NotFoundHttpException('The requested product does not exist.');
                 }
             }
             return $this->redirect(['view', 'id' => $model->id]);
