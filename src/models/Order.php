@@ -25,12 +25,6 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 class Order extends \yii\db\ActiveRecord
 {
     /**
-     * Allow creation of multiple orders in a row
-     *
-     * @var int
-     */
-    public $initial_quantity;
-    /**
      * {@inheritdoc}
      */
     public static function tableName()
@@ -63,9 +57,6 @@ class Order extends \yii\db\ActiveRecord
             [['product_id', 'contact_id'], 'required'],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
-
-            [['initial_quantity'], 'number', 'min' => 1, 'integerOnly' => true],
-            [['initial_quantity'], 'default', 'value' => 1],
 
             // Validity Date Range ///////////////////////////////////////////////////
             

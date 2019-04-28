@@ -112,8 +112,10 @@ class OrderController extends Controller
     {
         $model = new Order();
         $transaction = null;
-        
-        // do we have a transaction_id ? if yes, check it is valid
+        $contact = null;
+
+        // do we have a transaction_id ? if yes and it is valid, it will be linked to the
+        // newly created order(s)
         if ($transaction_id != null) {
             $transaction = Transaction::findOne($transaction_id);
             if ($transaction === null) {
@@ -121,17 +123,17 @@ class OrderController extends Controller
             }
         }
 
-        $contact = null;
+        // do we have a contact_id ? if yes and valid, it is used as beneficiary contact
+        // for the newly created order
         if ($contact_id != null) {
             $contact = Contact::findOne($contact_id);
             if ($contact === null) {
                 throw new NotFoundHttpException('The requested contact does not exist.');
+            } else {
+                $model->contact_id = $contact->id;  // assign beneficiary contact
             }
         }
 
-        if ($contact != null) {
-            $model->contact_id = $contact->id;
-        }
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $saveModel = null;
 
@@ -143,26 +145,17 @@ class OrderController extends Controller
                 }
             }
 
-            // create, save and link one or more orders to transaction if required
-            for ($iCount=0; $iCount < $model->initial_quantity; $iCount++) {
-                $saveModel = new Order([
-                    'attributes' => $model->getAttributes()
-                ]);
+            $saveModel = new Order([
+                'attributes' => $model->getAttributes()
+            ]);
 
-                $saveModel->save(false);
-
-                if ($transaction != null) {
-                    $saveModel->link('transactions', $transaction);
-                }
-            }
+            $saveModel->save(false);
 
             if ($transaction != null) {
-                return $this->redirect(['transaction/view', 'id' => $transaction_id]);
-            } elseif ($model->initial_quantity == 1) {
-                return $this->redirect(['view', 'id' => $saveModel->id]);
-            } else {
-                return $this->redirect(['index']);
+                $saveModel->link('transactions', $transaction);
             }
+
+            return $this->redirect(['view', 'id' => $saveModel->id]);
         }
 
         if ($model->contact_id == null && $transaction !== null) {

@@ -20,11 +20,6 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
         
-        <?php
-        if ($model->getIsNewRecord()) {
-            echo $form->field($model, 'initial_quantity')->textInput(['autocomplete'=>'off']);
-        }
-        ?>
         <?php if ($contact == null): ?>
             <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
         <?php endif; ?>
