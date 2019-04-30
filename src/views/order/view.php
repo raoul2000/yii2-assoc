@@ -56,10 +56,10 @@ $orderModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->contact->name),
+                        Html::encode($model->toContact->name),
                         [
                             'contact/view',
-                            'id' => $model->contact->id
+                            'id' => $model->toContact->id
                         ],
                         [
                             'title' => 'view Contact'

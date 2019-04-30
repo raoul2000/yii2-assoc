@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'product_id') ?>
 
-        <?= $form->field($model, 'contact_id') ?>
+        <?= $form->field($model, 'to_contact_id') ?>
 
         <?php // echo $form->field($model, 'created_at') ?>
 

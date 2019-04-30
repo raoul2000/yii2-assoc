@@ -21,7 +21,7 @@ use yii\helpers\ArrayHelper;
         <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
         
         <?php if ($contact == null): ?>
-            <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
+            <?= $form->field($model, 'to_contact_id')->listBox($contacts, ['size'=>1])?>
         <?php endif; ?>
 
         <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
