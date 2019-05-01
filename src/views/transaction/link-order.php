@@ -49,7 +49,7 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
 ?>
 <p>
     <?= Html::a(
-        '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction',
+        '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction N°' . $transaction->id,
         ['view', 'id' => $transaction->id]
     )?>
 </p>
@@ -88,14 +88,14 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
                     }
                 ],
                 [
-                    'attribute' => 'contact_id',
+                    'attribute' => 'to_contact_id',
                     'label'     => 'Beneficiary',
                     'filter'    => $contacts,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($contacts) {
                         return Html::a(
-                            Html::encode($contacts[$model->contact_id]),
-                            ['contact/view','id'=>$model->contact_id],
+                            Html::encode($contacts[$model->to_contact_id]),
+                            ['contact/view','id'=>$model->to_contact_id],
                             [ 'data-pjax' => 0 ]
                         );
                     }
