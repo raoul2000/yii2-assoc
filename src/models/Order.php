@@ -12,6 +12,7 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property int $id
  * @property int $product_id
  * @property int $to_contact_id
+ * @property int $from_contact_id
  * @property int $value
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -56,6 +57,7 @@ class Order extends \yii\db\ActiveRecord
             [[ 'product_id', 'to_contact_id'], 'integer'],
             [['product_id', 'to_contact_id'], 'required'],
             [['to_contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['to_contact_id' => 'id']],
+            [['from_contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['from_contact_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
 
             // Validity Date Range ///////////////////////////////////////////////////
@@ -84,7 +86,8 @@ class Order extends \yii\db\ActiveRecord
             'id' => 'ID',
             'value' => 'Value',
             'product_id' => 'Product ID',
-            'to_contact_id' => 'Contact ID',
+            'to_contact_id' => 'Destinataire',
+            'from_contact_id' => 'Fournisseur',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'valid_date_start' => 'Valid Date Start',
@@ -134,6 +137,14 @@ class Order extends \yii\db\ActiveRecord
     public function getToContact()
     {
         return $this->hasOne(Contact::className(), ['id' => 'to_contact_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromContact()
+    {
+        return $this->hasOne(Contact::className(), ['id' => 'from_contact_id']);
     }
 
     /**
