@@ -9,9 +9,6 @@ use yii\helpers\ArrayHelper;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php if (isset($transaction) && $transaction !== null): ?>
-    <?= Html::a('go back to transaction', ['transaction/view', 'id' => $transaction->id], ['class' => 'btn btn-default']) ?>
-<?php endif; ?>
 <div class="order-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -20,11 +17,14 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
         
-        <?php if ($toContact == null): ?>
-            <?= $form->field($model, 'to_contact_id')->listBox($contacts, ['size'=>1])?>
-        <?php endif; ?>
-
-        <?= $form->field($model, 'from_contact_id')->listBox($contacts, ['size'=>1])?>
+        <div class="row">
+            <div class="col-md-6">
+                <?= $form->field($model, 'from_contact_id')->listBox($contacts, ['size'=>1])?>
+            </div>
+            <div class="col-md-6">
+                <?= $form->field($model, 'to_contact_id')->listBox($contacts, ['size'=>1])?>
+            </div>
+        </div>
 
         <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 

@@ -137,25 +137,21 @@ class OrderController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $saveModel = null;
 
+            // if configured and if the current order has no value, try to use related product value
             if ($model->value == 0 && Yii::$app->configManager->getItemValue('order.setProductValue') == true) {
-                // use the related product value (if not null) for this order
                 $product = Product::findOne($model->product_id);
                 if (!empty($product->value)) {
                     $model->value = $product->value;
                 }
             }
 
-            $saveModel = new Order([
-                'attributes' => $model->getAttributes()
-            ]);
-
-            $saveModel->save(false);
+            $model->save(false);
 
             if ($transaction != null) {
-                $saveModel->link('transactions', $transaction);
+                $model->link('transactions', $transaction);
             }
 
-            return $this->redirect(['view', 'id' => $saveModel->id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         if ($model->to_contact_id == null && $transaction !== null) {

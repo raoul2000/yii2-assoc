@@ -10,7 +10,14 @@ $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="order-create">
-
+    <?php if (isset($transaction) && $transaction !== null): ?>
+        <p>
+            <?= Html::a(
+                '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction N°' . $transaction->id,
+                ['transaction/view', 'id' => $transaction->id]
+            ) ?>
+        </p>
+    <?php endif; ?>
     <h1>
         <?= Html::encode($this->title) ?>
         <?php if ($toContact != null): ?>
@@ -27,5 +34,4 @@ $this->params['breadcrumbs'][] = $this->title;
         'transaction' => $transaction,
         'toContact' => $toContact
     ]) ?>
-
 </div>
