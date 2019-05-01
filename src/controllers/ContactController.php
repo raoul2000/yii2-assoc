@@ -168,7 +168,7 @@ class ContactController extends Controller
             Yii::$app->request->queryParams,
             \app\models\Order::find()->with('transactions')
         );
-        $orderDataProvider->query->andWhere(['contact_id' => $id]);
+        $orderDataProvider->query->andWhere(['to_contact_id' => $id]);
 
         return $this->render('order', [
             'model' => $model,

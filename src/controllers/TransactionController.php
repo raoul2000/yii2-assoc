@@ -214,8 +214,8 @@ class TransactionController extends Controller
             // try to guess the source bank account if not provided
             // RULE : Use the first bank account belonging to the contact referenced 
             // as beneficiary in the order instance
-            if ($model->from_account_id == null && count($order->contact->bankAccounts) > 0) {
-                $model->from_account_id = $order->contact->bankAccounts[0]->id;
+            if ($model->from_account_id == null && count($order->toContact->bankAccounts) > 0) {
+                $model->from_account_id = $order->toContact->bankAccounts[0]->id;
             }
 
             // try to guess the transaction value

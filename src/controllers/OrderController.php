@@ -105,14 +105,14 @@ class OrderController extends Controller
      * If a contact_id is provided, it is used as the benefeciary for the order(s) created
      *
      * @param $transaction_id ID of the transaction to link to the newly created order
-     * @param $contact_id ID of the contact beneficiary fo this order
+     * @param $to_contact_id ID of the contact beneficiary fo this order
      * @return mixed
      */
-    public function actionCreate($transaction_id = null, $contact_id = null)
+    public function actionCreate($transaction_id = null, $to_contact_id = null)
     {
         $model = new Order();
         $transaction = null;
-        $contact = null;
+        $toContact = null;
 
         // do we have a transaction_id ? if yes and it is valid, it will be linked to the
         // newly created order(s)
@@ -123,14 +123,14 @@ class OrderController extends Controller
             }
         }
 
-        // do we have a contact_id ? if yes and valid, it is used as beneficiary contact
+        // do we have a to_contact_id ? if yes and valid, it is used as beneficiary contact
         // for the newly created order
-        if ($contact_id != null) {
-            $contact = Contact::findOne($contact_id);
-            if ($contact === null) {
+        if ($to_contact_id != null) {
+            $toContact = Contact::findOne($to_contact_id);
+            if ($toContact === null) {
                 throw new NotFoundHttpException('The requested contact does not exist.');
             } else {
-                $model->contact_id = $contact->id;  // assign beneficiary contact
+                $model->to_contact_id = $toContact->id;  // assign beneficiary contact
             }
         }
 
@@ -158,15 +158,15 @@ class OrderController extends Controller
             return $this->redirect(['view', 'id' => $saveModel->id]);
         }
 
-        if ($model->contact_id == null && $transaction !== null) {
-            $model->contact_id = $transaction->fromAccount->contact_id;
+        if ($model->to_contact_id == null && $transaction !== null) {
+            $model->to_contact_id = $transaction->fromAccount->contact_id;
         }
 
         return $this->render('create', [
             'model' => $model,
             'products' => \app\models\Product::getNameIndex(),
             'contacts' => \app\models\Contact::getNameIndex(),
-            'contact' => $contact,
+            'toContact' => $toContact,
             'transaction' => $transaction
         ]);
     }
@@ -191,7 +191,7 @@ class OrderController extends Controller
             'model' => $model,
             'products' => Product::getNameIndex(),
             'contacts' => Contact::getNameIndex(),
-            'contact' => null,
+            'toContact' => null,
         ]);
     }
     /**
@@ -220,7 +220,7 @@ class OrderController extends Controller
 
         // if no filter is applied, use the first account of the beneficiary to populate the from_account_id field
         if (array_key_exists('TransactionSearch', Yii::$app->request->getQueryParams()) == false) {
-            $transactionSearchModel->from_account_id = $order->contact->bankAccounts[0]->id;
+            $transactionSearchModel->from_account_id = $order->toContact->bankAccounts[0]->id;
         }
 
         // apply user enetered filter values

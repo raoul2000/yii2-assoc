@@ -13,9 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1>
         <?= Html::encode($this->title) ?>
-        <?php if ($contact != null): ?>
+        <?php if ($toContact != null): ?>
             <small>
-                for <?= Html::a(Html::encode($contact->name), ['contact/view', 'id' => $contact->id], ['title' => 'view contact']) ?>
+                for <?= Html::a(Html::encode($toContact->name), ['contact/view', 'id' => $toContact->id], ['title' => 'view contact']) ?>
             </small>
         <?php endif; ?>
     </h1>
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'products' => $products,
         'contacts' => $contacts,
         'transaction' => $transaction,
-        'contact' => $contact
+        'toContact' => $toContact
     ]) ?>
 
 </div>

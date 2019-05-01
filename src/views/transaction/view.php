@@ -127,14 +127,14 @@ $transactionModel = $model;
                     }
                 ],
                 [
-                    'attribute' => 'contact_id',
+                    'attribute' => 'to_contact_id',
                     'label'     => 'Beneficiary',
                     'filter'    => $contacts,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($contacts) {
                         return Html::a(
-                            Html::encode($contacts[$model->contact_id]),
-                            ['contact/view','id'=>$model->contact_id],
+                            Html::encode($contacts[$model->to_contact_id]),
+                            ['contact/view','id'=>$model->to_contact_id],
                             [ 'data-pjax' => 0 ]
                         );
                     }
