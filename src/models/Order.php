@@ -94,6 +94,16 @@ class Order extends \yii\db\ActiveRecord
             'valid_date_end' => 'Valid Date End',
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     * @return OrderQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new OrderQuery(get_called_class());
+    }
+        
     /**
      * Delete all links to transactions
      */

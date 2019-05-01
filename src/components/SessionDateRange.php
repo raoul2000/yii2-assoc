@@ -52,6 +52,33 @@ class SessionDateRange
     }
 
     /**
+     * Returns the current Range start date or NULL if no date range is defined
+     *
+     * @return void
+     */
+    public static function getStart()
+    {
+        $session = Yii::$app->session;
+        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+            return null;
+        }
+        return $session[Constant::SESS_PARAM_NAME_DATERANGE][Constant::SESS_PARAM_NAME_STARTDATE];
+    }
+
+    /**
+     * Returns the current Range start date or NULL if no date range is defined
+     *
+     * @return void
+     */
+    public static function getEnd()
+    {
+        $session = Yii::$app->session;
+        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+            return null;
+        }
+        return $session[Constant::SESS_PARAM_NAME_DATERANGE][Constant::SESS_PARAM_NAME_ENDDATE];
+    }
+    /**
      * Remove the date range criteria from the session
      *
      * @return void

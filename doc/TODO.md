@@ -40,6 +40,28 @@ Example :
 - current date : 2019-05-01
 - ownership : **NO**
 
+### Item Selection
+
+Given a simple date interval, the figure below show selected items (orders) depending on their `valid_date_start` and `valid_date_end` values.
+
+```
+date range : ---------|**********|------------- :
+order1     : --|**|---------------------------- : NOT selected
+order1     : --|******************************* : selected
+order2     : --------------------------|**|---- : NOT selected
+order3     : ----|**********|------------------ : selected
+order4     : -----------|*******|-------------- : selected
+order5     : ---------------|*********|-------- : selected
+order5     : ********************************** : selected
+```
+
+In terms of expression :
+
+```
+valid_start_date <= endRange or valid_start_date IS NULL
+AND
+valid_end_date >= startRange or valid_end_date IS NULL
+```
 
 ## integrate with Yii2tech/config
 

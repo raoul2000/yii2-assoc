@@ -13,6 +13,7 @@ use app\models\TransactionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\components\SessionDateRange;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -62,7 +63,12 @@ class OrderController extends Controller
     public function actionIndex()
     {
         $searchModel = new OrderSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Order::find()->with('transactions'));
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams, 
+            Order::find()
+                ->inDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd() ) //'2018-01-12','2019-01-01')
+                ->with('transactions')
+        );
         //$dataProvider->pagination->pageSize = 3;
         return $this->render('index', [
             'searchModel' => $searchModel,
