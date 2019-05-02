@@ -20,6 +20,13 @@ use yii\widgets\ActiveForm;
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?php if (!empty($model->start_date) || !empty($model->end_date)): ?>
+                <?= Html::a(
+                    'Clear Date Range', 
+                    ['date-range', 'clear' => 1, 'redirect_url' => $redirect_url], 
+                    ['class' => 'btn btn-danger']
+                )?>
+            <?php endif;?>
             <?= Html::a('Cancel', $redirect_url, ['class' => 'btn btn-default']) ?>
         </div>
 
