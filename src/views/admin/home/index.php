@@ -12,6 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= \app\components\widgets\DateRangeWidget::widget() ?>      
     <?= \app\components\widgets\UserContactWidget::widget() ?>   
     <?= Html::a('Configuration', ['config/index'], ['class' => 'btn btn-primary']) ?>
+</p>    
+<p>    
     <?php if (SessionContact::getContactId() != null):?>
         <?= Html::a(
             Html::encode('View Contact ' . SessionContact::getContactName()),

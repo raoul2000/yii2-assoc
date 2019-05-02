@@ -66,7 +66,7 @@ class OrderController extends Controller
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams, 
             Order::find()
-                ->inDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd() ) //'2018-01-12','2019-01-01')
+                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd()) 
                 ->with('transactions')
         );
         //$dataProvider->pagination->pageSize = 3;
@@ -225,15 +225,19 @@ class OrderController extends Controller
             $transactionSearchModel->from_account_id = $order->toContact->bankAccounts[0]->id;
         }
 
-        // apply user enetered filter values
-        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
-
         // search only transaction not already linked to this order
         $linkedTransactionIds = [];
         foreach ($order->transactions as $transaction) {
             $linkedTransactionIds[] = $transaction->id;
         }
-        $transactionDataProvider->query->andWhere([ 'not in', 'id', $linkedTransactionIds]);
+
+        // apply user enetered filter values and built-in conditions
+        $transactionDataProvider = $transactionSearchModel->search(
+            Yii::$app->request->queryParams,
+            Transaction::find()
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->andWhere([ 'not in', 'id', $linkedTransactionIds])
+        );
 
         return $this->render('link-transaction', [
             'order' => $order,

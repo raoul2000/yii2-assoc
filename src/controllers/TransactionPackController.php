@@ -11,6 +11,7 @@ use app\models\BankAccount;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\components\SessionDateRange;
 
 /**
  * TransactionPackController implements the CRUD actions for TransactionPack model.
@@ -41,13 +42,18 @@ class TransactionPackController extends Controller
     }
 
     /**
-     * Lists all TransactionPack models.
+     * Lists TransactionPack models.
+     * If a date range is defined, only thoses models valid for the date range are displayed
      * @return mixed
      */
     public function actionIndex()
     {
         $searchModel = new TransactionPackSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            TransactionPack::find()
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+        );
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -67,8 +73,12 @@ class TransactionPackController extends Controller
         $transactionSearchModel = new TransactionSearch();
 
         // apply user enetered filter values
-        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
-        $transactionDataProvider->query->andWhere(['transaction_pack_id' => null]);
+        $transactionDataProvider = $transactionSearchModel->search(
+            Yii::$app->request->queryParams,
+            Transaction::find()
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())            
+                ->andWhere(['transaction_pack_id' => null])
+        );
         
         return $this->render('link-transaction', [
             'transactionPack' => $transactionPack,
@@ -96,7 +106,7 @@ class TransactionPackController extends Controller
         return $this->redirect($redirect_url);
     }
     /**
-     * Displays a single TransactionPack model.
+     * Displays a single TransactionPack model with all its linked transactions
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found

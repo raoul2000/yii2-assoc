@@ -3,17 +3,17 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Order]].
+ * This is the ActiveQuery class for [[Transaction]].
  *
- * @see Order
+ * @see Transaction
  */
-class OrderQuery extends \yii\db\ActiveQuery
+class TransactionQuery extends \yii\db\ActiveQuery
 {
-    use \app\components\ValidInDateRangeTrait;
+    use \app\components\DateInRangeTrait;
 
     /**
      * {@inheritdoc}
-     * @return Order[]|array
+     * @return Transaction[]|array
      */
     public function all($db = null)
     {
@@ -22,7 +22,7 @@ class OrderQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Order|array|null
+     * @return Transaction|array|null
      */
     public function one($db = null)
     {

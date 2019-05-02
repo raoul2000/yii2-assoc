@@ -38,9 +38,11 @@ class TransactionPackSearch extends TransactionPack
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query = null)
     {
-        $query = TransactionPack::find();
+        if ($query == null) {
+            $query = TransactionPack::find();
+        }
 
         // add conditions that should always apply here
 

@@ -98,7 +98,11 @@ class TransactionController extends Controller
             $orderSearchModel->contact_id = $transaction->fromAccount->contact_id;
         }*/
         // apply user enetered filter values
-        $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams);
+        $orderDataProvider = $orderSearchModel->search(
+            Yii::$app->request->queryParams,
+            Order::find()
+                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd()) 
+        );
         
         // search only order not already linked to this transaction
         $linkedOrderIds = [];
@@ -142,7 +146,9 @@ class TransactionController extends Controller
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
-            Transaction::find()->with('orders')
+            Transaction::find()
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->with('orders')
         );
 
         SessionDateRange::applyDateRange($dataProvider, $searchModel);

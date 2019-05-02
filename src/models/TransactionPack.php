@@ -43,7 +43,14 @@ class TransactionPack extends \yii\db\ActiveRecord
             ],
         ];
     }
-
+    /**
+     * {@inheritdoc}
+     * @return TransactionPackQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TransactionPackQuery(get_called_class());
+    }
     /**
      * {@inheritdoc}
      */

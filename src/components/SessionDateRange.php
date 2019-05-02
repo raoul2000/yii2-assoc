@@ -6,9 +6,7 @@ use Yii;
 use app\components\Constant;
 
 /**
- * This class is a wrapper around specific session variables :
- * - *dateRange*
- * - *contact* and related *bank account*
+ * This class is a wrapper around Date range variables stored in the current Session
  */
 class SessionDateRange
 {

@@ -47,6 +47,14 @@ class Transaction extends \yii\db\ActiveRecord
     }
     /**
      * {@inheritdoc}
+     * @return TransactionQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TransactionQuery(get_called_class());
+    }    
+    /**
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -88,6 +96,7 @@ class Transaction extends \yii\db\ActiveRecord
             "],*/
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
+            [['transaction_pack_id'], 'exist', 'skipOnError' => true, 'targetClass' => TransactionPack::className(), 'targetAttribute' => ['transaction_pack_id' => 'id']],
 
             [['is_verified'], 'boolean'],
 
@@ -178,7 +187,12 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
+            ->viaTable('order_transaction', ['transaction_id' => 'id']);        
+/*            
+        return $this
+            ->hasMany(Order::className(), ['id' => 'order_id'])
             ->via('orderTransactions');
+*/            
     }
     /**
      * @return \yii\db\ActiveQuery
