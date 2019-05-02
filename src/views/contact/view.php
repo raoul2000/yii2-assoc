@@ -67,7 +67,8 @@ $allAttachments = $model->attachments;
             'options' => ['class' =>'nav-tabs'],
             'items' => [
                 [
-                    'label' => 'Address',
+                    'label' => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Address',
+                    'encode' => false,
                     'url' => ['view', 'id' => $model->id,'tab'=>'address'],
                     'active' => $tab == 'address'
                 ],

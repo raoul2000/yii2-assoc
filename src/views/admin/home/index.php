@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo Html::a('Manage Users', ['user/admin'], ['class' => 'btn btn-primary']);
     }?>
     <?= Html::a('Manage Contacts', ['contact/index'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Manage Address', ['address/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Manage Address', ['address/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Manage Products', ['product/index'], ['class' => 'btn btn-primary']) ?>
     <hr/>
     <?= Html::a('Manage Bank Accounts', ['bank-account/index'], ['class' => 'btn btn-primary']) ?>

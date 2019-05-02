@@ -13,7 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="address-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+        <?= Html::encode($this->title) ?>
+    </h1>
     <hr/>
 
     <p>
