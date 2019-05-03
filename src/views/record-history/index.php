@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => $usernames,
                 'format'    => 'html',
                 'value'     => function ($model, $key, $index, $column) {
-                    return $model->user->username;
+                    return ($model->user != null ? $model->user->username : null);
 
                 }
             ],
