@@ -20,8 +20,13 @@ $allAttachments = $model->attachments;
 ?>
 <div class="contact-view">
 
-    <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?= Html::encode($this->title) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <?= Html::encode($this->title) ?>
+    </h1>
+
     <hr/>
+    
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
