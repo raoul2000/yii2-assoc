@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
 
-$this->title = $model->id;
+$this->title = 'N°' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -19,7 +19,8 @@ $transactionModel = $model;
 <div class="transaction-view">
 
     <h1>
-        Transaction N°<?= Html::encode($this->title) ?>
+        <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
+        Transaction <?= Html::encode($this->title) ?>
     </h1>
     <hr/>
     <p>

@@ -75,7 +75,8 @@ $bankAccountModel = $model;
             'options' => ['class' =>'nav-tabs'],
             'items' => [
                 [
-                    'label' => 'Transaction',
+                    'label' => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Transaction',
+                    'encode' => false,
                     'url' => ['view', 'id' => $model->id,'tab'=>'transaction'],
                     'active' => $tab == 'transaction'
                 ],

@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="transaction-create">
 
     <h1>
+        <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
         <?= Html::encode($this->title) ?>
         <?php if ($model->from_account_id != null): ?>
             <small>Debit From <?= Html::a(

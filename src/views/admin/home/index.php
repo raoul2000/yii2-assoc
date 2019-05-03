@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <p>
     <?= \app\components\widgets\DateRangeWidget::widget() ?>      
     <?= \app\components\widgets\UserContactWidget::widget() ?>   
-    <?= Html::a('Configuration', ['config/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuration', ['config/index'], ['class' => 'btn btn-primary']) ?>
 </p>    
 <p>    
     <?php if (SessionContact::getContactId() != null):?>
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::a('Manage Products', ['product/index'], ['class' => 'btn btn-primary']) ?>
     <hr/>
     <?= Html::a('Manage Bank Accounts', ['bank-account/index'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Manage Transactions', ['transaction/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Manage Transactions', ['transaction/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Manage Transaction Packs', ['transaction-pack/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Manage Orders', ['order/index'], ['class' => 'btn btn-primary']) ?>
 </p>
