@@ -83,7 +83,8 @@ $allAttachments = $model->attachments;
                     'active' => $tab == 'account'
                 ],
                 [
-                    'label' => 'Attachment',
+                    'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                    'encode' => false,
                     'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
                     'active' => $tab == 'attachment'
                 ],

@@ -10,7 +10,10 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="contact-form">
-    <h1>Upload File</h1>
+    <h1>
+        <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+        Upload File
+    </h1>
     <hr/>
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 

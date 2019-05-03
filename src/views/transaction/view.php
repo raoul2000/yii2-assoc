@@ -173,7 +173,10 @@ $transactionModel = $model;
         ]); ?>
     <?php Pjax::end(); ?>    
 
-    <h2>Attachments</h2>
+    <h2>
+        <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+        Attachments
+    </h2>
     <hr/>
     <p>
         <?= Html::a('Add Attachment', ['create-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ], ['class' => 'btn btn-primary']) ?>

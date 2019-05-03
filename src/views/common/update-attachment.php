@@ -11,6 +11,11 @@ use yii\helpers\Url;
 ?>
 <div class="row">
     <div class="col-sm-5">
+        <h1>
+            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+            Update
+        </h1>
+        <hr/>
         <div class="attachment-form">
 
             <?php $form = ActiveForm::begin(); ?>

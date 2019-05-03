@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <hr/>
 <p>
     <?= Html::a('Record History', ['/record-history'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Attachment', ['/attachment'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment', ['/attachment'], ['class' => 'btn btn-primary']) ?>
 </p>
 <hr/>
 <p>

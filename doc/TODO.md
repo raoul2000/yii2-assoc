@@ -13,6 +13,8 @@ A site user linked to a Contact is also linked to a default bank account.
     - manual option : the site user must choose the **default** account
 - the contact has no bank account : this is not a normal situation as a bank account is always created just after the Contact itself is created.
 
+## Add attachment to Transaction pack records
+
 ## integrate with Yii2tech/config
 
 see https://github.com/yii2tech/config for a complete config manager component
