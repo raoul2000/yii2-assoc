@@ -23,7 +23,26 @@ class TransactionPackController extends Controller
         return [
             'ajax-link-transactions' => [
                 'class' => 'app\components\actions\transactionPack\AjaxLinkTransactionsAction'
-            ]
+            ],
+
+            // attachments Actions /////////////////////////////////////////
+            
+            'download-attachment' => [
+                'class' => 'app\components\actions\attachments\DownloadAction',
+            ],
+            'preview-attachment' => [
+                'class' => 'app\components\actions\attachments\PreviewAction',
+            ],
+            'delete-attachment' => [
+                'class' => 'app\components\actions\attachments\DeleteAction',
+            ],
+            'create-attachment' => [
+                'class' => 'app\components\actions\attachments\CreateAction',
+            ],
+            'update-attachment' => [
+                'class' => 'app\components\actions\attachments\UpdateAction',
+            ],
+
         ];
     }
     /**
@@ -106,24 +125,49 @@ class TransactionPackController extends Controller
         return $this->redirect($redirect_url);
     }
     /**
-     * Displays a single TransactionPack model with all its linked transactions
+     * Displays a single TransactionPack model with all its linked transactions and attachement
+     * presented in tabs
+     * 
      * @param integer $id
+     * @param string $tab
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 'transaction')
     {
         $model =  $this->findModel($id);
-        $transactionSearchModel = new TransactionSearch();
-        $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
-        $transactionDataProvider->query->andWhere(['transaction_pack_id' => $model->id]);
+        switch ($tab) {
+            case 'transaction':
+                $transactionSearchModel = new TransactionSearch();
+                $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
+                $transactionDataProvider->query->andWhere(['transaction_pack_id' => $model->id]);
+        
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-transaction', [
+                        'model' => $model,
+                        'transactionSearchModel' => $transactionSearchModel,
+                        'transactionDataProvider' => $transactionDataProvider,
+                        'bankAccounts' => BankAccount::getNameIndex()
+                    ])
+                ]);
+                break;
 
-        return $this->render('view', [
-            'model' => $model,
-            'transactionSearchModel' => $transactionSearchModel,
-            'transactionDataProvider' => $transactionDataProvider,
-            'bankAccounts' => BankAccount::getNameIndex()
-        ]);
+            case 'attachment':
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('/common/_tab-attachment', [
+                        'model' => $model,
+                    ])
+                ]);
+                break;
+
+            default:
+                return $this->redirect(['view', 'id' => $model->id, 'tab' => 'transaction']);
+                break;                
+        }
     }
 
     /**
@@ -198,7 +242,7 @@ class TransactionPackController extends Controller
      * @return TransactionPack the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    public function findModel($id)
     {
         if (($model = TransactionPack::findOne($id)) !== null) {
             return $model;

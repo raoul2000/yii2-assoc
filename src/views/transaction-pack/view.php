@@ -70,75 +70,26 @@ $transactionPackModel = $model;
         ],
     ]) ?>
 
-    <h2>Transactions</h2>
-    <hr/>
-    <p>
-        <?= Html::a('Select Transactions', [
-            'link-transaction',
-            'id' => $model->id
-            ], ['class' => 'btn btn-primary']) ?>
-    </p>    
-
     <?php Pjax::begin(); ?>
-
-    <?= GridView::widget([
-        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
-        'dataProvider' => $transactionDataProvider,
-        'filterModel' => $transactionSearchModel,
-        'columns' => [
-            [
-                'attribute' => 'id',
-                'label'     => 'N°'
-            ],
-            [
-                'attribute' => 'from_account_id',
-                'filter'    => $bankAccounts,
-                'format'    => 'raw',
-                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                    return Html::a(
-                        Html::encode($bankAccounts[$model->from_account_id]),
-                        ['bank-account/view','id'=>$model->from_account_id],
-                        ['data-pjax' => 0]
-                    );
-                }
-            ],
-            [
-                'attribute' => 'to_account_id',
-                'filter'    =>  $bankAccounts,
-                'format'    => 'raw',
-                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                    return Html::a(
-                        Html::encode($bankAccounts[$model->to_account_id]),
-                        ['bank-account/view','id'=>$model->to_account_id],
-                        ['data-pjax' => 0]
-                    );
-                }
-            ],
-            'code',
-            'value',
-            'description',
-            'is_verified:boolean',
-            'reference_date:date',
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template'  => '{view} {unlink} ',
-                'urlCreator' => function ($action, $model, $key, $index) use ($transactionPackModel) {
-                    if ($action == 'unlink') {
-                        return Url::to(['unlink-transaction', 'id' =>  $transactionPackModel->id, 'transaction_id' => $model->id, 'redirect_url' => Url::current()]);
-                    }
-                    return Url::to(['transaction/' . $action, 'id' => $model->id]);
-                },
-                'buttons'   => [
-                    'unlink' => function ($url, $order, $key) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-remove"></span>',
-                            $url,
-                            ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => 'Are you sure you want to unlink this Transaction ?']
-                        );
-                    },
-                ]
-            ],
-        ],
-    ]); ?>
-    <?php Pjax::end(); ?>    
+        <?= yii\bootstrap\Nav::widget([
+            'options' => ['class' =>'nav-tabs'],
+            'items' => [
+                [
+                    'label' => 'Transaction',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id, 'tab'=>'transaction'],
+                    'active' => $tab == 'transaction'
+                ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
+                    'active' => $tab == 'attachment'
+                ],
+            ]
+        ]) ?>
+        <div style="margin-top:1em;">
+            <?= $tabContent ?>
+        </div>
+    <?php Pjax::end(); ?>
 </div>

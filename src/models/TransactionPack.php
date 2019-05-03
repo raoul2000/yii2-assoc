@@ -34,6 +34,7 @@ class TransactionPack extends \yii\db\ActiveRecord
     {
         return [
             \app\components\behaviors\TimestampBehavior::className(),
+            \app\components\behaviors\AttachmentBehavior::className(),
             [
                 'class' => HistoryBehavior::className(),
                 'skipAttributes' => [
