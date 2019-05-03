@@ -132,7 +132,7 @@ class ContactController extends Controller
                 return $this->render('view', [
                     'model' => $model,
                     'tab' => $tab,
-                    'tabContent' => $this->renderPartial('_tab-attachment', [
+                    'tabContent' => $this->renderPartial('/common/_tab-attachment', [
                         'model' => $model,
                     ])
                 ]);
