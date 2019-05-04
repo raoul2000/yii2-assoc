@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\TransactionPack */
 
-$this->title = $model->name;
+$this->title = 'N°' . $model->id . ' - ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Transaction Packs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -17,7 +17,7 @@ $transactionPackModel = $model;
 ?>
 <div class="transaction-pack-view">
 
-    <h1>Pack N°<?= $model->id ?> : <?= Html::encode($this->title) ?></h1>
+    <h1>Pack N°<?= $model->id ?> : <?= Html::encode($model->name) ?></h1>
     <hr/>
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -69,27 +69,26 @@ $transactionPackModel = $model;
             ],
         ],
     ]) ?>
-
-    <?php Pjax::begin(); ?>
-        <?= yii\bootstrap\Nav::widget([
-            'options' => ['class' =>'nav-tabs'],
-            'items' => [
-                [
-                    'label' => 'Transaction',
-                    'encode' => false,
-                    'url' => ['view', 'id' => $model->id, 'tab'=>'transaction'],
-                    'active' => $tab == 'transaction'
-                ],
-                [
-                    'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
-                    'encode' => false,
-                    'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
-                    'active' => $tab == 'attachment'
-                ],
-            ]
-        ]) ?>
-        <div style="margin-top:1em;">
-            <?= $tabContent ?>
-        </div>
-    <?php Pjax::end(); ?>
+    
+    <?= yii\bootstrap\Nav::widget([
+        'options' => ['class' =>'nav-tabs'],
+        'items' => [
+            [
+                'label' => 'Transaction',
+                'encode' => false,
+                'url' => ['view', 'id' => $model->id, 'tab'=>'transaction'],
+                'active' => $tab == 'transaction'
+            ],
+            [
+                'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                'encode' => false,
+                'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
+                'active' => $tab == 'attachment'
+            ],
+        ]
+    ]) ?>
+    <div style="margin-top:1em;">
+        <?= $tabContent ?>
+    </div>
+    
 </div>
