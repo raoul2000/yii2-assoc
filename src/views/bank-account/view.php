@@ -70,25 +70,25 @@ $bankAccountModel = $model;
     ]) ?>
 
 
-    <?php Pjax::begin(); ?>
-        <?= yii\bootstrap\Nav::widget([
-            'options' => ['class' =>'nav-tabs'],
-            'items' => [
-                [
-                    'label' => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Transaction',
-                    'encode' => false,
-                    'url' => ['view', 'id' => $model->id,'tab'=>'transaction'],
-                    'active' => $tab == 'transaction'
-                ],
-                [
-                    'label' => 'Pack',
-                    'url' => ['view', 'id' => $model->id,'tab'=>'pack'],
-                    'active' => $tab == 'pack'
-                ],
-            ]
-        ]) ?>
-        <div style="margin-top:1em;">
-            <?= $tabContent ?>
-        </div>
-    <?php Pjax::end(); ?>
+    
+    <?= yii\bootstrap\Nav::widget([
+        'options' => ['class' =>'nav-tabs'],
+        'items' => [
+            [
+                'label' => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Transaction',
+                'encode' => false,
+                'url' => ['view', 'id' => $model->id,'tab'=>'transaction'],
+                'active' => $tab == 'transaction'
+            ],
+            [
+                'label' => 'Pack',
+                'url' => ['view', 'id' => $model->id,'tab'=>'pack'],
+                'active' => $tab == 'pack'
+            ],
+        ]
+    ]) ?>
+    <div style="margin-top:1em;">
+        <?= $tabContent ?>
+    </div>
+    
 </div>

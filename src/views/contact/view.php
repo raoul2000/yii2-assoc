@@ -67,32 +67,31 @@ $allAttachments = $model->attachments;
         ],
     ]) ?>
 
-    <?php Pjax::begin(); ?>
-        <?= yii\bootstrap\Nav::widget([
-            'options' => ['class' =>'nav-tabs'],
-            'items' => [
-                [
-                    'label' => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Address',
-                    'encode' => false,
-                    'url' => ['view', 'id' => $model->id,'tab'=>'address'],
-                    'active' => $tab == 'address'
-                ],
-                [
-                    'label' => 'Account',
-                    'url' => ['view', 'id' => $model->id,'tab'=>'account'],
-                    'active' => $tab == 'account'
-                ],
-                [
-                    'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
-                    'encode' => false,
-                    'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
-                    'active' => $tab == 'attachment'
-                ],
-            ]
-        ]) ?>
-        <div style="margin-top:1em;">
-            <?= $tabContent ?>
-        </div>
-    <?php Pjax::end(); ?>
+    
+    <?= yii\bootstrap\Nav::widget([
+        'options' => ['class' =>'nav-tabs'],
+        'items' => [
+            [
+                'label' => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Address',
+                'encode' => false,
+                'url' => ['view', 'id' => $model->id,'tab'=>'address'],
+                'active' => $tab == 'address'
+            ],
+            [
+                'label' => 'Account',
+                'url' => ['view', 'id' => $model->id,'tab'=>'account'],
+                'active' => $tab == 'account'
+            ],
+            [
+                'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                'encode' => false,
+                'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
+                'active' => $tab == 'attachment'
+            ],
+        ]
+    ]) ?>
+    <div style="margin-top:1em;">
+        <?= $tabContent ?>
+    </div>
 
 </div>
