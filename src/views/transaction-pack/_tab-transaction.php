@@ -58,6 +58,15 @@ $transactionPackModel = $model;
             }
         ],
         'code',
+        [
+            'attribute' => 'type',
+            'filter'    => \app\components\Constant::getTransactionTypes(),
+            'format'    => 'raw',
+            'value'     => function ($model, $key, $index, $column) {
+                return Html::encode( \app\components\Constant::getTransactionType($model->type));
+                
+            }
+        ],
         'value',
         'description',
         'is_verified:boolean',

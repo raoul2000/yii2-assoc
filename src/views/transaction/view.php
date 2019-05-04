@@ -61,6 +61,13 @@ $transactionModel = $model;
                 }
             ],
             'value',
+            [
+                'attribute' => 'type',
+                'format'    => 'raw',
+                'value'     => function ($model) {
+                    return Html::encode( \app\components\Constant::getTransactionType($model->type));
+                }
+            ],
             'reference_date:date',
             'code',
             'is_verified:boolean',

@@ -24,4 +24,25 @@ class Constant
      * session param name used to store current Bank Account info
      */    
     const SESS_BANK_ACCOUNT = 'bank_account';
+
+    static public function getTransactionTypes() {
+        return [
+            'VIR' => 'VIR - Virement',
+            'CHQ' => 'CHQ - Chèque',
+            'NUM' => 'NUM - Espèce',
+            'CRD' => 'NUM - Carte de Paiement',
+        ];
+    }
+    static public function getTransactionType($type) {
+        if (empty($type)) {
+            return null;
+        }
+        
+        $l = self::getTransactionTypes();
+        if (array_key_exists($type, $l)) {
+            return $l[$type];
+        } else {
+            return 'error';
+        }
+    }
 }

@@ -22,7 +22,7 @@ class TransactionSearch extends Transaction
             [['id', 'from_account_id', 'to_account_id', 'created_at', 'updated_at', 'transaction_pack_id'], 'integer'],
             [['is_verified'], 'boolean'],
             [['value'], 'number'],
-            [['description', 'code'], 'safe'],
+            [['description', 'code', 'type'], 'safe'],
         ];
     }
 
@@ -73,6 +73,7 @@ class TransactionSearch extends Transaction
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'transaction_pack_id' => $this->transaction_pack_id,
+            'type' => $this->type
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);

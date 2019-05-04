@@ -17,6 +17,7 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property date $reference_date
  * @property string $description
  * @property string $code a free value describing the transaction
+ * @property string $type
  * @property int $transaction_pack_id Id of the pack that inlcudes this transaction or NULL
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
@@ -81,7 +82,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['value'], 'number', 'min' => 0],
 
             [['description'], 'string', 'max' => 128],
-            [['code'], 'string', 'max' => 10],
+            [['code', 'type'], 'string', 'max' => 10],
             /*
             // from and to account must not be the same, expect when transaction value is 0. This is a 
             // particular case used to cancel a bank check for example
@@ -121,6 +122,7 @@ class Transaction extends \yii\db\ActiveRecord
             'reference_date' => 'Reference Date',
             'code' => 'Code',
             'transaction_pack_id' => 'Pack ID',
+            'type' => 'Type',
         ];
     }
     /**

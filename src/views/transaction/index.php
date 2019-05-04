@@ -36,6 +36,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'     => 'N°'
             ],
             [
+                'attribute' => 'type',
+                'filter'    => \app\components\Constant::getTransactionTypes(),
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) {
+                    return Html::encode( \app\components\Constant::getTransactionType($model->type));
+                    
+                }
+            ],
+            [
                 'attribute' => 'from_account_id',
                 'filter'    => $bankAccounts,
                 'format'    => 'raw',

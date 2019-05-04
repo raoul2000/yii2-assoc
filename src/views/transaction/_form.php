@@ -47,6 +47,8 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'reference_date')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 
+        <?= $form->field($model, 'type')->listBox( \app\components\Constant::getTransactionTypes(), ['size'=>1])?>
+
         <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
