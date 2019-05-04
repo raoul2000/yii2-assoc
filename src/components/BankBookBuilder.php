@@ -13,10 +13,6 @@ use yii\helpers\VarDumper;
 
 class BankBookBuilder extends yii\base\BaseObject
 {
-    public function createQuery()
-    {
-    }
-
     /**
      * Creates and returns the bank book for the given bank account
      * **WARNING** : in its current implementation, this method only works if 
@@ -32,7 +28,7 @@ class BankBookBuilder extends yii\base\BaseObject
             throw new NotFoundHttpException('The requested page does not exist.');
         }
 
-        // build the query to find all transactions for this bank account with their
+        // build the query to find all transactions (debit/credit) for this bank account with their
         // related pack
         $transactionQuery = Transaction::find()
             ->where(
@@ -50,15 +46,23 @@ class BankBookBuilder extends yii\base\BaseObject
         $packLines = [];
         foreach ($transactionQuery->each(10) as $transaction) {
             Yii::info('transaction : ' . VarDumper::dumpAsString($transaction));
+
+            // ignore 0 value transactions
+            if ($transaction['value'] == 0) {
+                continue;
+            }
+            $isDebit = ($transaction['from_account_id'] == $bankAccountId ? true : false);
             $packId = $transaction['transaction_pack_id'];
 
             if ($packId === null) {
                 // this transaction is not included in a pack : add it to the book
                 $transactionLines[] = [
                     'date' => $transaction['reference_date'],
+                    'type' => $transaction['type'],
                     'code' => $transaction['code'],
                     'description' => $transaction['description'],
-                    'value' => $transaction['value'],
+                    'debit' => ( $isDebit ? $transaction['value'] : 0),
+                    'credit' => ( $isDebit ? 0 : $transaction['value']),
                 ];
             } else {
                 // include the pack
@@ -70,11 +74,12 @@ class BankBookBuilder extends yii\base\BaseObject
                         'date' => $pack['reference_date'],
                         'code' => $transaction['code'], // TODO: how to handle pack code/transaction code ?
                         'description' => $pack['name'],
-                        'value' => $transaction['value']
+                        'debit' => 0,
+                        'credit' => 0
                     ];
-                } else {
-                    $packLines[$packId]['value'] += $transaction['value'];
                 }
+                $packLines[$packId]['debit'] += ( $isDebit ? $transaction['value'] : 0);
+                $packLines[$packId]['credit'] += ( $isDebit ? 0 : $transaction['value']);
             } // else ignore this transaction as it has been processed with its related pack
         }
 

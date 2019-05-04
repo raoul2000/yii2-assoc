@@ -7,6 +7,7 @@ use app\models\Transaction;
 use app\models\TransactionPack;
 use app\models\BankAccount;
 use yii\helpers\VarDumper;
+use app\components\SessionContact;
 
 class BankBookController extends \yii\web\Controller
 {
@@ -79,7 +80,7 @@ class BankBookController extends \yii\web\Controller
         $builder = new \app\components\BankBookBuilder();
 
         return $this->render('index', [
-            'bankBook' => $builder->build()
+            'bankBook' => $builder->build(SessionContact::getBankAccountId())
         ]);
 
     }
