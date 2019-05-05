@@ -131,7 +131,11 @@ class Contact extends \yii\db\ActiveRecord
         foreach ($this->bankAccounts as $account) {
             $account->delete();
         }
-        foreach ($this->orders as $order) {
+        foreach ($this->toOrders as $order) {
+            $order->delete();
+        }
+
+        foreach ($this->fromOrders as $order) {
             $order->delete();
         }
         return true;
@@ -168,9 +172,16 @@ class Contact extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrders()
+    public function getToOrders()
     {
-        return $this->hasMany(Order::className(), ['contact_id' => 'id']);
+        return $this->hasMany(Order::className(), ['to_contact_id' => 'id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFromOrders()
+    {
+        return $this->hasMany(Order::className(), ['from_contact_id' => 'id']);
     }
 
     /**
