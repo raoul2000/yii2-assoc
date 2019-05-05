@@ -52,6 +52,22 @@ $orderModel = $model;
                 }
             ],
             [
+                'label' => 'Provider',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        Html::encode($model->fromContact->name),
+                        [
+                            'contact/view',
+                            'id' => $model->fromContact->id
+                        ],
+                        [
+                            'title' => 'view Contact'
+                        ]
+                    );
+                }
+            ],
+            [
                 'label' => 'Beneficiary',
                 'format' => 'raw',
                 'value' => function ($model) {
