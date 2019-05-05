@@ -28,6 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'name',
             'value',
+            'valid_date_start',
+            'valid_date_end',            
             /*
             [
                 'attribute' => 'updated_at',

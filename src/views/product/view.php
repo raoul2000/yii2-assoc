@@ -33,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'value',
+            'valid_date_start',
+            'valid_date_end',            
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']

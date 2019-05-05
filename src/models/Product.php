@@ -13,6 +13,8 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property int $id
  * @property string $name
  * @property string $value
+ * @property string $valid_date_start
+ * @property string $valid_date_end
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  */
@@ -51,6 +53,19 @@ class Product extends \yii\db\ActiveRecord
             [['value'], 'number', 'min' => 0],
             [['name'], 'string', 'max' => 45],
             [['name'], 'unique'],
+
+            // Validity Date Range ///////////////////////////////////////////////////
+            
+            [['valid_date_start', 'valid_date_end'], 'date', 'format' => 'php:Y-m-d'],
+            ['valid_date_start', 'compare',
+                'when' => function ($model) {
+                    return $model->valid_date_end != null;
+                },
+                'compareAttribute' => 'valid_date_end',
+                'operator' => '<=',
+                'enableClientValidation' => false
+            ],
+
         ];
     }
 
@@ -65,6 +80,8 @@ class Product extends \yii\db\ActiveRecord
             'value' => 'Value',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'valid_date_start' => 'Valid Date Start',
+            'valid_date_end' => 'Valid Date End',
         ];
     }
     /**
