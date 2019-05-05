@@ -21,6 +21,11 @@ A site user linked to a Contact is also linked to a default bank account.
 
 - use [League\Csv](https://csv.thephpleague.com/9.0/) - because [yii2-csv-importer](https://github.com/ruskid/yii2-csv-importer) may not be able to handle big CSV files (based on [this issue](https://github.com/ruskid/yii2-csv-importer/issues/10))
 
+## Charts
+
+- check [yii2-highcharts](https://github.com/miloschuman/yii2-highcharts)
+- or maybe [yii2-chartjs-widget](https://github.com/2amigos/yii2-chartjs-widget) by [2amigos](https://2amigos.us/)
+
 ## [DONE] Add attachment to Transaction pack records
 
 ## [DONE] integrate with Yii2tech/config
