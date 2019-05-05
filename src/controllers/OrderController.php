@@ -140,18 +140,23 @@ class OrderController extends Controller
             }
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $saveModel = null;
-
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $lazyUpdate = [];
             // if configured and if the current order has no value, try to use related product value
-            if ($model->value == 0 && Yii::$app->configManager->getItemValue('order.setProductValue') == true) {
-                $product = Product::findOne($model->product_id);
-                if (!empty($product->value)) {
-                    $model->value = $product->value;
-                }
+            if ($model->value == 0 && Yii::$app->configManager->getItemValue('order.setProductValue') == true && !empty($model->product->value)) {
+                $lazyUpdate['value'] = $model->product->value;
             }
 
-            $model->save(false);
+            // if order has no valid date and product has, use the ones from product
+            if (empty($model->valid_date_start) && empty($model->valid_date_end) 
+                && ( !empty($model->product->valid_date_start) || !empty($model->product->valid_date_end))) {
+                $lazyUpdate['valid_date_start'] = $model->product->valid_date_start;
+                $lazyUpdate['valid_date_end'] = $model->product->valid_date_end;
+            }
+
+            if (count($lazyUpdate) != 0) {
+                $model->updateAttributes($lazyUpdate);
+            }
 
             if ($transaction != null) {
                 $model->link('transactions', $transaction);
