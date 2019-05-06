@@ -61,12 +61,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         $linkedContacts = [];
                         foreach ($model->contacts as $contact) {
                             $linkedContacts[] = Html::a(
-                                Html::encode($contact->name),
+                                Html::encode($contact->longName),
                                 ['contact/view', 'id' => $contact->id],
                                 ['title' => 'view Contact']
                             );
                         }
-                        return implode(', ', $linkedContacts);
+                        return implode(' | ', $linkedContacts);
                     }
                 }
             ],

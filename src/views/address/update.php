@@ -18,7 +18,11 @@ $this->params['breadcrumbs'][] = 'Update';
         <?= Html::encode($this->title) ?>
         <?php if (isset($contact)): ?>
             <small>
-                for <b><?= Html::encode($contact->name) ?></b>.
+                for <?= Html::a(
+                    Html::encode($contact->longName),
+                    ['contact/view' , 'id' => $contact->id],
+                    ['title' => 'view contact']
+                )?>
             </small>
         <?php endif; ?>
     </h1>
@@ -41,9 +45,9 @@ $this->params['breadcrumbs'][] = 'Update';
                 <?php
                 $linkedContacts = [];
                 foreach ($otherContacts as $contact) {
-                    $linkedContacts[] = '<b>' . Html::a(Html::encode($contact->name) , ['contact/view', 'id' => $contact->id]) . '</b>';
+                    $linkedContacts[] = '<b>' . Html::a(Html::encode($contact->longName), ['contact/view', 'id' => $contact->id]) . '</b>';
                 }
-                echo implode(', ', $linkedContacts);
+                echo implode(' | ', $linkedContacts);
                 ?>
             </p>
         </div>

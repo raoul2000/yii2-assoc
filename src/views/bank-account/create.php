@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if ($contact): ?>
             <small>
                 for <?= Html::a(
-                    Html::encode($contact->name),
+                    Html::encode($contact->longName),
                     ['contact/view', 'id' => $contact->id],
                     ['title' => 'view contact']
                 )?>

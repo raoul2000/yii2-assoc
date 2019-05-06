@@ -77,13 +77,13 @@ $contactModel = $model;
                                 continue;
                             }
                             $linkedContacts[] = Html::a(
-                                Html::encode($contact->name),
+                                Html::encode($contact->longName),
                                 ['contact/view', 'id' => $contact->id],
                                 ['title' => 'view Contact', 'data-pjax' => 0]
                             );
                         }
                         
-                        return implode(', ', $linkedContacts);
+                        return implode(' | ', $linkedContacts);
                     }
                 }
             ],

@@ -123,7 +123,8 @@ class ContactController extends Controller
                     'model' => $model,
                     'tab' => $tab,
                     'tabContent' => $this->renderPartial('_tab-account', [
-                        'bankAccountDataProvider' => $bankAccountDataProvider
+                        'bankAccountDataProvider' => $bankAccountDataProvider,
+                        'model' => $model,
                     ])
                 ]);
                 break;

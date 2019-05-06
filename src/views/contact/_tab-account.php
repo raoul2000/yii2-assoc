@@ -2,8 +2,12 @@
 
 use yii\grid\GridView;
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 ?>
+<p>
+    <?= Html::a('Create Account', ['bank-account/create', 'contact_id' => $model->id], ['class' => 'btn btn-success']) ?>
+</p>
 <?= GridView::widget([
     'tableOptions' => ['class' => 'table table-hover table-condensed'],
     'dataProvider' => $bankAccountDataProvider,
