@@ -2,10 +2,11 @@
 
 namespace app\components;
 
-trait ValidInDateRangeTrait {
+trait ValidInDateRangeTrait
+{
 
     /**
-     * Add a search condition on the validity dateq columns
+     * Add a search condition on the valid_date_start and valid_date_end date columns
      *
      * @param string $startDate
      * @param string $endDate

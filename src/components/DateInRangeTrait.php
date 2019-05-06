@@ -2,8 +2,8 @@
 
 namespace app\components;
 
-
-trait DateInRangeTrait {
+trait DateInRangeTrait 
+{
     
     /**
      * Add a search condition on the `reference_date` attribute.

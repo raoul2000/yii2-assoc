@@ -53,7 +53,7 @@ class Transaction extends \yii\db\ActiveRecord
     public static function find()
     {
         return new TransactionQuery(get_called_class());
-    }    
+    }
     /**
      * {@inheritdoc}
      */
@@ -84,7 +84,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['description'], 'string', 'max' => 128],
             [['code', 'type'], 'string', 'max' => 10],
             /*
-            // from and to account must not be the same, expect when transaction value is 0. This is a 
+            // from and to account must not be the same, expect when transaction value is 0. This is a
             // particular case used to cancel a bank check for example
             // This rule is specific and should not be part of the base class
             ['from_account_id', 'compare', 'compareAttribute' => 'to_account_id', 'operator' => '!=', 'type' => 'number',
@@ -189,12 +189,12 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
-            ->viaTable('order_transaction', ['transaction_id' => 'id']);        
-/*            
+            ->viaTable('order_transaction', ['transaction_id' => 'id']);
+/*
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
             ->via('orderTransactions');
-*/            
+*/
     }
     /**
      * @return \yii\db\ActiveQuery

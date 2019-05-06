@@ -95,7 +95,7 @@ class TransactionPackController extends Controller
         $transactionDataProvider = $transactionSearchModel->search(
             Yii::$app->request->queryParams,
             Transaction::find()
-                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())            
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->andWhere(['transaction_pack_id' => null])
         );
         
@@ -127,7 +127,7 @@ class TransactionPackController extends Controller
     /**
      * Displays a single TransactionPack model with all its linked transactions and attachement
      * presented in tabs
-     * 
+     *
      * @param integer $id
      * @param string $tab
      * @return mixed
@@ -166,7 +166,7 @@ class TransactionPackController extends Controller
 
             default:
                 return $this->redirect(['view', 'id' => $model->id, 'tab' => 'transaction']);
-                break;                
+                break;
         }
     }
 

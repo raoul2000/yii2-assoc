@@ -15,7 +15,7 @@ class BankBookBuilder extends yii\base\BaseObject
 {
     /**
      * Creates and returns the bank book for the given bank account
-     * **WARNING** : in its current implementation, this method only works if 
+     * **WARNING** : in its current implementation, this method only works if
      * it processes ALL transactions for the bank account
      * @param int $bankAccountId
      * @return array

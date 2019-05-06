@@ -22,10 +22,11 @@ class Constant
     const SESS_CONTACT = 'contact';
     /**
      * session param name used to store current Bank Account info
-     */    
+     */
     const SESS_BANK_ACCOUNT = 'bank_account';
 
-    static public function getTransactionTypes() {
+    public static function getTransactionTypes()
+    {
         return [
             'VIR' => 'VIR - Virement',
             'CHQ' => 'CHQ - Chèque',
@@ -33,7 +34,8 @@ class Constant
             'CRD' => 'NUM - Carte de Paiement',
         ];
     }
-    static public function getTransactionType($type) {
+    public static function getTransactionType($type)
+    {
         if (empty($type)) {
             return null;
         }

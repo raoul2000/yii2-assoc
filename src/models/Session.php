@@ -78,5 +78,5 @@ class Session extends \yii\db\ActiveRecord
         return ArrayHelper::map($sessions, 'user_id', function ($item) {
             return $item['user']['username'];
         });
-    }    
+    }
 }

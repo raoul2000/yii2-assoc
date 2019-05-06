@@ -16,7 +16,7 @@ class ConfigController extends Controller
         /* @var $configManager \yii2tech\config\Manager */
         $configManager = Yii::$app->get('configManager');
 
-        $models = array_filter($configManager->getItems(), function($m) {
+        $models = array_filter($configManager->getItems(), function ($m) {
             return ! \in_array($m->id, ['contact_id', 'bank_account_id']);
         });
 

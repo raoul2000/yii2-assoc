@@ -7,7 +7,6 @@ use app\components\Constant;
 use app\models\Contact;
 use app\models\BankAccount;
 
-
 class SessionContact
 {
     public static function clear()
@@ -20,7 +19,7 @@ class SessionContact
     {
         $conf = Yii::$app->configManager;
         $contact_id = $conf->getItemValue('contact_id');
-        if( $contact_id !== null) {
+        if ($contact_id !== null) {
             $bank_account_id = $conf->getItemValue('bank_account_id');
             SessionContact::setContact($contact_id, $bank_account_id);
             return true;
@@ -40,7 +39,7 @@ class SessionContact
             if (count($bankAccounts) != 0) {
                 $bankAccount = $bankAccounts[0];
             } else {
-                throw new NotFoundHttpException('The requested contact has no bank account.');    
+                throw new NotFoundHttpException('The requested contact has no bank account.');
             }
         } elseif (($bankAccount = BankAccount::findOne($bank_account_id)) === null) {
             throw new NotFoundHttpException('The requested bank account does not exist.');

@@ -101,7 +101,7 @@ class TransactionController extends Controller
         $orderDataProvider = $orderSearchModel->search(
             Yii::$app->request->queryParams,
             Order::find()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd()) 
+                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
         );
         
         // search only order not already linked to this transaction

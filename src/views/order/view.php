@@ -72,7 +72,7 @@ $orderModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->toContact->name),
+                        Html::encode($model->toContact->longName),
                         [
                             'contact/view',
                             'id' => $model->toContact->id
@@ -115,7 +115,7 @@ $orderModel = $model;
     </p>
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
-            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $transactionDataProvider,
             'filterModel' => $transactionSearchModel,
             'columns' => [

@@ -64,9 +64,9 @@ class OrderController extends Controller
     {
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(
-            Yii::$app->request->queryParams, 
+            Yii::$app->request->queryParams,
             Order::find()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd()) 
+                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with('transactions')
         );
         //$dataProvider->pagination->pageSize = 3;
@@ -148,7 +148,7 @@ class OrderController extends Controller
             }
 
             // if order has no valid date and product has, use the ones from product
-            if (empty($model->valid_date_start) && empty($model->valid_date_end) 
+            if (empty($model->valid_date_start) && empty($model->valid_date_end)
                 && ( !empty($model->product->valid_date_start) || !empty($model->product->valid_date_end))) {
                 $lazyUpdate['valid_date_start'] = $model->product->valid_date_start;
                 $lazyUpdate['valid_date_end'] = $model->product->valid_date_end;
