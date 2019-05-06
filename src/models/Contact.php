@@ -197,4 +197,14 @@ class Contact extends \yii\db\ActiveRecord
             ->all();
         return ArrayHelper::map($contacts, 'id', 'name');
     }
+
+    public function getLongName()
+    {
+        if ($this->is_natural_person == true) {
+            return $this->name . ', ' . $this->firstname;
+        } else {
+            return $this->name;
+        }
+
+    }
 }

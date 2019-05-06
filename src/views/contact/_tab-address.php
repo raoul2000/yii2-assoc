@@ -7,42 +7,41 @@ use yii\helpers\Url;
 $contactModel = $model;
 
 ?>
-
-<?php if (!isset($model->address)): ?>
+<?php if (!isset($model->address)):?>
 
     <p>No Address registered for this contact :</p>
     <?= Html::a(
-        'Create Address', 
-        ['address/create', 'contact_id' => $model->id], 
+        'Create Address',
+        ['address/create', 'contact_id' => $model->id],
         ['class' => 'btn btn-primary', 'data-pjax' => 0]
     ) ?>
 
     <?= Html::a(
-        'Use an Existing Address', 
-        ['contact/link-address', 'id' => $model->id], 
+        'Use an Existing Address',
+        ['contact/link-address', 'id' => $model->id],
         ['class' => 'btn btn-primary', 'data-pjax' => 0]
     ) ?>
 
 <?php else: ?>
     <p>
         <?= Html::a(
-            'Create New Address For this Contact', 
+            'Create New Address For this Contact',
             ['address/create', 'contact_id' => $model->id, 'redirect_url' => Url::current()], 
             ['class' => 'btn btn-primary', 'data-pjax' => 0]
         ) ?>
         <?= Html::a(
-            'Update This Address', 
-            ['address/update', 'id' => $model->address->id, 'contact_id' => $model->id, 'redirect_url' => Url::current()], 
+            'Update This Address',
+            ['address/update', 'id' => $model->address->id, 'contact_id' => $model->id, 'redirect_url' => Url::current()],
             ['class' => 'btn btn-primary', 'data-pjax' => 0]
         ) ?>
         <?= Html::a(
-            'Use Another Existing Address', 
-            ['contact/link-address', 'id' => $model->id, 'redirect_url' => Url::current()], 
+            'Use Another Existing Address',
+            ['contact/link-address', 'id' => $model->id, 'redirect_url' => Url::current()],
             ['class' => 'btn btn-primary', 'data-pjax' => 0]
         ) ?>
         <?= Html::a(
-            'Leave This Address', 
-            ['contact/unlink-address', 'id' => $model->id], 
+            'Leave This Address',
+            ['contact/unlink-address', 'id' => $model->id],
             ['class' => 'btn btn-danger', 'data-pjax' => 0]
         ) ?>
     </p>

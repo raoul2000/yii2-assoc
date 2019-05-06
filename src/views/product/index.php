@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProductSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -22,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
-        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
+        'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             'name',
             'value',
             'valid_date_start',
-            'valid_date_end',            
+            'valid_date_end',
             /*
             [
                 'attribute' => 'updated_at',

@@ -9,7 +9,7 @@ use yii\helpers\Url;
     'dataProvider' => $bankAccountDataProvider,
     'columns' => [
         'name',
-        'initial_value',    
+        'initial_value',
         [
             'label' => 'total Deb.',
             'value'     => function ($model, $key, $index, $column) {
@@ -40,5 +40,3 @@ use yii\helpers\Url;
         ]
     ],
 ]); ?>
-
-

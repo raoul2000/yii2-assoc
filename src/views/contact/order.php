@@ -4,16 +4,16 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = $model->name;
+$this->title = $model->longName;
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->longName, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Orders';
 \yii\web\YiiAsset::register($this);
 
 ?>
     <h2>
         Orders 
-        <small>for <?= Html::a(Html::encode($model->name), ['view', 'id' => $model->id], ['title' => 'view contact']) ?></small>
+        <small>for <?= Html::a(Html::encode($model->longName), ['view', 'id' => $model->id], ['title' => 'view contact']) ?></small>
     </h2>
 
     <hr/>
