@@ -22,7 +22,21 @@ class OrderTransaction extends \yii\db\ActiveRecord
     {
         return 'order_transaction';
     }
+    // TODO: decide if we should store the sum of transaction values in order and
+    // the sum of order values in transaction ? 
+    /*
+    public function init()
+    {
+        $this->on(self::EVENT_AFTER_INSERT, [$this, 'onAfterInsert']);
+        $this->on(self::EVENT_AFTER_DELETE, [$this, 'onAfterDelete']);
+        parent::init();
+    }
 
+    public function onAfterInsert($event)
+    {
+        $this->order->trigger(Order::EVENT_REFRESH_COVER_VALUE_DIFF);
+        $this->transaction->trigger(Transaction::EVENT_REFRESH_COVER_VALUE_DIFF);
+    }*/
     /**
      * {@inheritdoc}
      */
