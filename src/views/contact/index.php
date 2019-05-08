@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'firstname',
             'gender:gender',
             'email:email',
+            /*
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y H:i']
-            ],
+            ],*/
             
             ['class' => 'yii\grid\ActionColumn'],
         ],

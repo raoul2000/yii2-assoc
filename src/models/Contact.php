@@ -155,6 +155,10 @@ class Contact extends \yii\db\ActiveRecord
             }
         }
     }
+    public function getHasAddress()
+    {
+        return $this->address_id !== null;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
