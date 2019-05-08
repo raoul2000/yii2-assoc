@@ -25,7 +25,8 @@
         "yii2tech/csv-grid": "^1.0",
         "beaten-sect0r/yii2-db-manager": "*",
         "2amigos/yii2-selectize-widget": "~1.0",
-        "yii2tech/config": "^1.0"
+        "yii2tech/config": "^1.0",
+        "vova07/yii2-imperavi-widget": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

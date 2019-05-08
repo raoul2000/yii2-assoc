@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use vova07\imperavi\Widget;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
@@ -16,7 +17,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 
-    <?= $form->field($model, 'description')->textarea() ?>
+    <?php
+        echo $form->field($model, 'description')->widget(Widget::className(), [
+            'settings' => [
+                'lang' => 'fr',
+                'minHeight' => 200,
+                'plugins' => [
+                    'fullscreen',
+                ]
+            ],
+        ]);    
+    ?>
 
     <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 
