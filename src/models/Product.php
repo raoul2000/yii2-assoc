@@ -15,6 +15,7 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property string $value
  * @property string $valid_date_start
  * @property string $valid_date_end
+ * @property string $description
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  */
@@ -52,6 +53,7 @@ class Product extends \yii\db\ActiveRecord
             [['name', 'value'], 'required'],
             [['value'], 'number', 'min' => 0],
             [['name'], 'string', 'max' => 45],
+            [['description'], 'safe'],
             [['name'], 'unique'],
 
             // Validity Date Range ///////////////////////////////////////////////////
@@ -78,6 +80,7 @@ class Product extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'value' => 'Value',
+            'description' => 'Description',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'valid_date_start' => 'Valid Date Start',

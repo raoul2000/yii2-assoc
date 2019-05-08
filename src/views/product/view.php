@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'value',
+            'description',
             'valid_date_start',
             'valid_date_end',            
             [
