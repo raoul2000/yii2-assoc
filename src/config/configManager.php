@@ -33,5 +33,14 @@ return [
                 ['boolean']
             ],
         ],
+        'product.create.setDefaultValidity' => [
+            'value' => false,
+            'label' => 'Apply current date range on product creation',
+            'description' => 'When you ceate a product, if a date range is active, it is used to populate validity fields',
+            'inputOptions' => ['type' => 'checkbox'],
+            'rules' => [
+                ['boolean']
+            ],
+        ],
     ],
 ];
