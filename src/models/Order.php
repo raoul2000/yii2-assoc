@@ -137,7 +137,7 @@ class Order extends \yii\db\ActiveRecord
             foreach ($this->transactions as $transaction) {
                 $sum += $transaction->value;
             }
-            return $sum - $this->value;
+            return round($sum - $this->value, 2);
         }
     }
 
