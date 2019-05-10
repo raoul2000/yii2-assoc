@@ -81,11 +81,17 @@ class ProductController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        if( Yii::$app->configManager->getItemValue('product.create.setDefaultValidity') && 
-            empty($model->valid_date_start) && empty($model->valid_date_end)) {
-                $model->valid_date_start = SessionDateRange::getStart();
-                $model->valid_date_end = SessionDateRange::getEnd();
+        // populate validity date range fields 
+        if( 
+            Yii::$app->configManager->getItemValue('product.create.setDefaultValidity') 
+            && empty($model->valid_date_start) 
+            && empty($model->valid_date_end)
+        ) {
+            $model->valid_date_start = SessionDateRange::getStart();
+            $model->valid_date_end = SessionDateRange::getEnd();
         }
+        
+        // render view
         return $this->render('create', [
             'model' => $model,
         ]);

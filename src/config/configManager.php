@@ -24,7 +24,7 @@ return [
                 ['integer']
             ],
         ],
-        'order.setProductValue' => [
+        'order.create.setProductValue' => [
             'value' => false,
             'label' => 'Assign product value to order',
             'description' => 'On order creation, if no value is set by the user, assign the value of the product',
@@ -33,9 +33,18 @@ return [
                 ['boolean']
             ],
         ],
+        'order.create.setDefaultValidity' => [
+            'value' => false,
+            'label' => 'Apply current date range on Order creation',
+            'description' => 'When you ceate an order, if a date range is active, it is used to populate validity fields',
+            'inputOptions' => ['type' => 'checkbox'],
+            'rules' => [
+                ['boolean']
+            ],
+        ],
         'product.create.setDefaultValidity' => [
             'value' => false,
-            'label' => 'Apply current date range on product creation',
+            'label' => 'Apply current date range on Product creation',
             'description' => 'When you ceate a product, if a date range is active, it is used to populate validity fields',
             'inputOptions' => ['type' => 'checkbox'],
             'rules' => [
