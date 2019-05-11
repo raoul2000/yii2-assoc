@@ -115,6 +115,16 @@ class Order extends \yii\db\ActiveRecord
         return true;
     }
 
+    public function afterSave( $insert, $changedAttributes)
+    {
+        if (!$insert) { // update
+            if (array_key_exists('value', $changedAttributes)) {
+                foreach ($this->transactions as $transaction) {
+                    $transaction->updateOrdersValue();
+                }                
+            }
+        }
+    }
     /**
      * Getter for the transactionValueDiff virtual attribute.
      * This attribute represent the difference between the complete values provided by all related transactions, and the value of this order.

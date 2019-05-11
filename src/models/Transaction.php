@@ -135,6 +135,35 @@ class Transaction extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    public function updateOrdersValue()
+    {
+        if (!$this->isNewRecord) {
+            $this->updateAttributes([
+                'orders_value' => $this->sumOrdersValue()
+            ]);
+        }
+    }
+
+    public function sumOrdersValue()
+    {
+        if ($this->isNewRecord || empty($this->orders)) {
+            return null;
+        } else {
+            $sum = 0;
+            foreach ($this->orders as $order) {
+                $sum += $order->value;
+            }
+            return round($sum, 2);
+            /**
+             * Alternative : 
+             * $total = array_reduce($this->orders, function($acc, $order) {
+             *     return $acc + $order->value;
+             * },0);
+             * return round($total , 2);
+             */
+        }        
+    }
     /**
      * Getter for the orderValueDiff virtual attribute.
      * This attribute represents the difference between the transaction's value and the sum of all its
@@ -148,18 +177,7 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getOrderValuesDiff()
     {
-        if ($this->isNewRecord) {
-            return null;
-        }
-        if (empty($this->orders)) {
-            return null;
-        } else {
-            $sum = 0;
-            foreach ($this->orders as $order) {
-                $sum += $order->value;
-            }
-            return round($this->value - $sum , 2);
-        }
+        return ($this->orders_value === null ? null : round($this->value - $this->orders_value));
     }
     /**
      * @return \yii\db\ActiveQuery
