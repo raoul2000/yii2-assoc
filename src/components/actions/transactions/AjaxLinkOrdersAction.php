@@ -32,7 +32,7 @@ class AjaxLinkOrdersAction extends Action
                 if (!isset($order)) {
                     throw new NotFoundHttpException('The requested order does not exist : id = '+ $orderId)  ;
                 }
-                $transaction->link('orders', $order);
+                $transaction->linkToOrder($order);
             }
         }
 

@@ -162,7 +162,8 @@ class OrderController extends Controller
             }
 
             if ($transaction != null) {
-                $model->link('transactions', $transaction);
+                $model->linkToTransaction($transaction);
+
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -232,7 +233,7 @@ class OrderController extends Controller
             if (!isset($transaction)) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
-            $order->link('transactions', $transaction);
+            $order->linkToTransaction($transaction);
             return $this->redirect(['view', 'id' => $order->id]);
         }
 
@@ -281,7 +282,7 @@ class OrderController extends Controller
         if (!isset($transaction)) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        $order->unlink('transactions', $transaction, true);
+        $order->unlinkFromTransaction($transaction);
         return $this->redirect($redirect_url);
     }
 

@@ -13,7 +13,8 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property int $from_account_id
  * @property int $to_account_id
  * @property int $is_verified (boolean) is this transaction verified ?
- * @property string $value
+ * @property float $value
+ * @property float $orders_value_total computed value representing the sum of related transactions values
  * @property date $reference_date
  * @property string $description
  * @property string $code a free value describing the transaction
@@ -72,6 +73,27 @@ class Transaction extends \yii\db\ActiveRecord
         ];
     }
     /**
+     * Link this transaction with an Order Model and updates the orders value total
+     *
+     * @param [Order] $orderModel
+     * @return void
+     */
+    public function linkToOrder($orderModel)
+    {
+        $this->link('orders', $orderModel);
+        $this->updateOrdersValueTotal();
+        $orderModel->updateTransactionsValueTotal();
+    }
+    /**
+     * Unlink this transaction from an ORder instance and updates the order value total column
+     */
+    public function unlinkFromOrder($orderModel)
+    {
+        $this->unlink('orders', $orderModel, true);
+        $this->updateOrdersValueTotal();
+        $orderModel->updateTransactionsValueTotal();
+    }
+    /**
      * {@inheritdoc}
      */
     public function rules()
@@ -125,22 +147,42 @@ class Transaction extends \yii\db\ActiveRecord
             'type' => 'Type',
         ];
     }
+
+    public function afterSave( $insert, $changedAttributes)
+    {
+        if (!$insert) { // update
+            // if value has changed, update the 'transactions_value_total' column for
+            // all related orders
+            if (array_key_exists('value', $changedAttributes)) {
+                foreach ($this->orders as $order) {
+                    $order->updateTransactionsValueTotal();
+                }                
+            }
+        }
+    }    
     /**
      * {@inheritdoc}
      */
     public function beforeDelete()
     {
         foreach ($this->orders as $order) {
-            $this->unlink('orders', $order, true);
+            $this->unlinkFromOrder($order);
         }
         return true;
     }
 
-    public function updateOrdersValue()
+    /**
+     * Update the total orders values paid by this transaction.
+     * This method modifies the transaction row by updating the 'orders_value_total' column
+     * with a new value
+     *
+     * @return void
+     */
+    public function updateOrdersValueTotal()
     {
         if (!$this->isNewRecord) {
             $this->updateAttributes([
-                'orders_value' => $this->sumOrdersValue()
+                'orders_value_total' => $this->sumOrdersValue()
             ]);
         }
     }
@@ -177,7 +219,7 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getOrderValuesDiff()
     {
-        return ($this->orders_value === null ? null : round($this->value - $this->orders_value));
+        return ($this->orders_value_total === null ? null : round($this->value - $this->orders_value_total));
     }
     /**
      * @return \yii\db\ActiveQuery
@@ -205,14 +247,14 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function getOrders()
     {
+        /*
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
             ->viaTable('order_transaction', ['transaction_id' => 'id']);
-/*
+        */
         return $this
             ->hasMany(Order::className(), ['id' => 'order_id'])
             ->via('orderTransactions');
-*/
     }
     /**
      * @return \yii\db\ActiveQuery

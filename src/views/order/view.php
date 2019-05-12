@@ -84,6 +84,7 @@ $orderModel = $model;
                 }
             ],
             'transactionValuesDiff:transactionValuesDiff',
+            'transactions_value_total',
             'valid_date_start',
             'valid_date_end',
             'value',

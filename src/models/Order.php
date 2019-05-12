@@ -13,7 +13,8 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property int $product_id
  * @property int $to_contact_id
  * @property int $from_contact_id
- * @property int $value
+ * @property float $value
+ * @property float $transactions_value_total computed value representing the sum of all related order's value
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property string $valid_date_start
@@ -110,20 +111,64 @@ class Order extends \yii\db\ActiveRecord
     public function beforeDelete()
     {
         foreach ($this->transactions as $transaction) {
-            $this->unlink('transactions', $transaction, true);
+            $this->unlinkFromTransaction($transaction);
         }
         return true;
+    }
+
+    /**
+     * Link this transaction with an Order Model and updates the orders value total
+     *
+     * @param [Order] $orderModel
+     * @return void
+     */
+    public function linkToTransaction($transactionModel)
+    {
+        $this->link('transactions', $transactionModel);
+        $this->updateTransactionsValueTotal();
+        $transactionModel->updateOrdersValueTotal();
+    }
+    /**
+     * Unlink this transaction from an ORder instance and updates the order value total column
+     */
+    public function unlinkFromTransaction($transactionModel)
+    {
+        $this->unlink('transactions', $transactionModel, true);
+        $this->updateTransactionsValueTotal();
+        $transactionModel->updateOrdersValueTotal();
     }
 
     public function afterSave( $insert, $changedAttributes)
     {
         if (!$insert) { // update
+            // if value has changed, update 'orders_value_total' column on 
+            // all the related transactions
             if (array_key_exists('value', $changedAttributes)) {
                 foreach ($this->transactions as $transaction) {
-                    $transaction->updateOrdersValue();
+                    $transaction->updateOrdersValueTotal();
                 }                
             }
         }
+    }
+    public function updateTransactionsValueTotal()
+    {
+        if (!$this->isNewRecord) {
+            $this->updateAttributes([
+                'transactions_value_total' => $this->sumTransactionsValue()
+            ]);
+        }
+    }
+    public function sumTransactionsValue()
+    {
+        if ($this->isNewRecord || empty($this->transactions)) {
+            return null;
+        } else {
+            $sum = 0;
+            foreach ($this->transactions as $transaction) {
+                $sum += $transaction->value;
+            }
+            return round($sum, 2);
+        }        
     }
     /**
      * Getter for the transactionValueDiff virtual attribute.
@@ -137,18 +182,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getTransactionValuesDiff()
     {
-        if ($this->isNewRecord) {
-            return null;
-        }
-        if (empty($this->transactions)) {
-            return null;
-        } else {
-            $sum = 0;
-            foreach ($this->transactions as $transaction) {
-                $sum += $transaction->value;
-            }
-            return round($sum - $this->value, 2);
-        }
+        return ($this->transactions_value_total === null ? null : round($this->value - $this->transactions_value_total));
     }
 
     /**

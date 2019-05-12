@@ -72,6 +72,7 @@ $transactionModel = $model;
             'code',
             'is_verified:boolean',
             'description',
+            'orders_value_total',
             'orderValuesDiff:orderValuesDiff',
             [
                 'label' => 'pack',

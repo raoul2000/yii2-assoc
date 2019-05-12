@@ -134,7 +134,7 @@ class TransactionController extends Controller
         if (!isset($order)) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        $transaction->unlink('orders', $order, true);
+        $transaction->unlinkFromOrder($order);
         return $this->redirect($redirect_url);
     }
     /**
@@ -203,7 +203,7 @@ class TransactionController extends Controller
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($order !== null) {
-                $model->link('orders', $order);
+                $model->linkToOrder($order);
             }
             return $this->redirect(['view', 'id' => $model->id]);
         }
