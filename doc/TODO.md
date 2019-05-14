@@ -21,6 +21,10 @@ A site user linked to a Contact is also linked to a default bank account.
 
 - use [League\Csv](https://csv.thephpleague.com/9.0/) - because [yii2-csv-importer](https://github.com/ruskid/yii2-csv-importer) may not be able to handle big CSV files (based on [this issue](https://github.com/ruskid/yii2-csv-importer/issues/10))
 
+## Tasks
+
+implement a task system where a user can create a task linked to a record. It contains a description and a status (todo, done). In a first stage, the task is assigned to the user who created it. Later, we may extends this task system and manage assignments etc ..
+
 ## Charts
 
 - check [yii2-highcharts](https://github.com/miloschuman/yii2-highcharts)
