@@ -161,25 +161,53 @@ class TransactionController extends Controller
     }
     /**
      * Displays a single Transaction model.
-     * The view also displays a grid of all related orders
+     * The view also displays a grid of all related orders and attachements.
      *
      * @param integer $id
+     * @param string $tab active tab name
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 'orders')
     {
         $transaction = $this->findModel($id);
-        $orderSearchModel = new OrderSearch();
-        $orderDataProvider = $orderSearchModel->search(Yii::$app->request->queryParams, $transaction->getOrders());
+        
+        switch ($tab) {
+            case 'orders' :
+                $orderSearchModel = new OrderSearch();
+                $orderDataProvider = $orderSearchModel->search(
+                    Yii::$app->request->queryParams, 
+                    $transaction->getOrders()
+                );
+        
+                return $this->render('view', [
+                    'model' => $transaction,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-orders', [
+                        'model' => $transaction,
+                        'orderSearchModel' => $orderSearchModel,
+                        'orderDataProvider' => $orderDataProvider,
+                        'products' => Product::getNameIndex(),
+                        'contacts' => Contact::getNameIndex()    
+                    ]),
+                ]);
+                break;
 
-        return $this->render('view', [
-            'model' => $transaction,
-            'orderSearchModel' => $orderSearchModel,
-            'orderDataProvider' => $orderDataProvider,
-            'products' => Product::getNameIndex(),
-            'contacts' => Contact::getNameIndex()
-        ]);
+            case 'attachment' :
+                return $this->render('view', [
+                    'model' => $transaction,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('/common/_tab-attachment', [
+                        'model' => $transaction,
+                    ])
+                ]);
+                break;
+
+            default:
+                return $this->redirect(['view', 'id' => $transaction->id, 'tab' => 'orders']);
+                break;
+
+        }
     }
 
     /**
