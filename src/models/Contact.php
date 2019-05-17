@@ -26,6 +26,8 @@ use yii\helpers\ArrayHelper;
  * @property int $gender 1 = Male 2 = female
  * @property string $email
  * @property string $note
+ * @property string $phone_1
+ * @property string $phone_2
  */
 class Contact extends \yii\db\ActiveRecord
 {
@@ -97,6 +99,7 @@ class Contact extends \yii\db\ActiveRecord
             [['is_deleted', 'gender'], 'integer'],
             ['gender','in', 'range' => [0,1,2] ],
             [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
+            [['phone_1', 'phone_2'], 'string', 'max' => 15],
             ['email', 'email'],
             [['birthday'], 'date', 'format' => 'php:Y-m-d'],
         ];
@@ -120,6 +123,8 @@ class Contact extends \yii\db\ActiveRecord
             'gender' => 'Gender',
             'email' => 'Email',
             'note' => 'Note',
+            'phone_1' => 'Phone 1',
+            'phone_2' => 'Phone 2',
         ];
     }
     /**

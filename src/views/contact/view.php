@@ -49,6 +49,8 @@ $allAttachments = $model->attachments;
             'birthday:date',
             'is_natural_person:boolean',
             'email:email',
+            'phone_1',
+            'phone_2',
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
