@@ -36,7 +36,7 @@ use yii\helpers\ArrayHelper;
                         'value' => $model->to_account_id,
                         'items' => $bankAccounts,
                         'clientOptions' => [
-                            // ...
+                            
                         ],
                     ]); ?>
                 </div>
@@ -51,7 +51,20 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
-        <?= $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'select a category ...']) ?>
+        <?php 
+            //echo $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'select a category ...']) 
+        ?>
+
+        <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+            'name' => Html::getInputName($model, 'category_id'),
+            'id' => 'category-selectized',
+            'value' => $model->category_id,
+            'items' => $categories,
+            'clientOptions' => [
+                'create' => true
+            ],
+        ]); ?>
+
 
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
         

@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use app\models\Attachment;
 use app\components\SessionDateRange;
+use app\components\SessionContact;
 use app\models\Category;
 
 /**
@@ -229,12 +230,29 @@ class TransactionController extends Controller
                 throw new NotFoundHttpException('The requested order does not exist.');
             }
         }
-        
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($order !== null) {
-                $model->linkToOrder($order);
+
+        if ($model->load(Yii::$app->request->post()) ) {
+            // a new category has been entered by user : we must create a new Category entry
+            if ( isset($model->category_id) && !is_numeric($model->category_id)) {
+                $category = new Category();
+                $category->setAttributes([
+                    'contact_id' => SessionContact::getContactId(),
+                    'type' => Category::TRANSACTION,
+                    'name' => $model->category_id
+                ]);
+                if($category->save()) {
+                    $model->category_id = $category->id;
+                } else {
+                    throw new \yii\web\ServerErrorHttpException('Failed to save new category');
+                }
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            if ($model->save()) {
+                if ($order !== null) {
+                    $model->linkToOrder($order);
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
      
         if ($from_account_id != null) {
@@ -267,7 +285,7 @@ class TransactionController extends Controller
             'order' => $order,
             'categories' => Category::getCategories(
                 Category::TRANSACTION, 
-                \app\components\SessionContact::getContactId()
+                SessionContact::getContactId()
             )
         ]);
     }
@@ -283,9 +301,26 @@ class TransactionController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        if ($model->load(Yii::$app->request->post()) ) {
+            // a new category has been entered by user : we must create a new Category entry
+            if ( isset($model->category_id) && !is_numeric($model->category_id)) {
+                $category = new Category();
+                $category->setAttributes([
+                    'contact_id' => SessionContact::getContactId(),
+                    'type' => Category::TRANSACTION,
+                    'name' => $model->category_id
+                ]);
+                if($category->save()) {
+                    $model->category_id = $category->id;
+                } else {
+                    throw new \yii\web\ServerErrorHttpException('Failed to save new category');
+                }
+            }
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }        
 
         return $this->render('update', [
             'model' => $model,
