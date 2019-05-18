@@ -12,7 +12,7 @@ class Formatter extends \yii\i18n\Formatter
             case 2 :
                 return \Yii::t('app', 'female');
             case 0 :
-                return \Yii::t('app', 'undefined');
+                return $this->asRaw(null);
         }
     }
 
