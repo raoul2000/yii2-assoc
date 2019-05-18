@@ -31,7 +31,7 @@ class Constant
             'VIR' => 'VIR - Virement',
             'CHQ' => 'CHQ - Chèque',
             'NUM' => 'NUM - Espèce',
-            'CRD' => 'NUM - Carte de Paiement',
+            'CRD' => 'CRD - Carte de Paiement',
         ];
     }
     public static function getTransactionType($type)
