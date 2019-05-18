@@ -23,6 +23,7 @@ $allAttachments = $model->attachments;
     <h1>
         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
         <?= Html::encode($this->title) ?>
+        <small><?= ($model->is_natural_person == true ? 'Person' : 'Organization') ?></small>
     </h1>
 
     <hr/>
@@ -39,35 +40,61 @@ $allAttachments = $model->attachments;
         <?= Html::a('Create Another Contact', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('View Orders', ['order', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'name',
-            'firstname',
-            'gender:gender',
-            'birthday:date',
-            'is_natural_person:boolean',
-            'email:email',
-            'phone_1',
-            'phone_2',
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
+    <?php if($model->is_natural_person):?>
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'name',
+                'firstname',
+                'gender:gender',
+                'birthday:date',
+                'email:email',
+                'phone_1',
+                'phone_2',
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'label' => 'History',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
+                    }
+                ],
             ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
+        ]) ?>
+    <?php else: ?>
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'name',
+                'firstname',
+                'email:email',
+                'phone_1',
+                'phone_2',
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'label' => 'History',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
+                    }
+                ],
             ],
-            [
-                'label' => 'History',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
-                }
-            ],
-        ],
-    ]) ?>
+        ]) ?>
+    <?php endif; ?>
 
     <?php Pjax::begin(); ?>
         <?= yii\bootstrap\Nav::widget([

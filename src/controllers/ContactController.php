@@ -183,9 +183,13 @@ class ContactController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($person = null)
     {
         $model = Contact::create();
+        
+        if (isset($person) && !isset($model->is_natural_person)) {
+            $model->is_natural_person = ($person == true);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             // by default, create an account for new contact
@@ -197,8 +201,10 @@ class ContactController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+
         return $this->render('create', [
             'model' => $model,
+            'person' => $person
         ]);
     }
 
