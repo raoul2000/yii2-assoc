@@ -120,6 +120,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
             [['transaction_pack_id'], 'exist', 'skipOnError' => true, 'targetClass' => TransactionPack::className(), 'targetAttribute' => ['transaction_pack_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']], 
 
             [['is_verified'], 'boolean'],
 
@@ -145,6 +146,7 @@ class Transaction extends \yii\db\ActiveRecord
             'code' => 'Code',
             'transaction_pack_id' => 'Pack ID',
             'type' => 'Type',
+            'category_id' => 'Category ID',             
         ];
     }
 
@@ -263,4 +265,11 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TransactionPack::className(), ['id' => 'transaction_pack_id']);
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }    
 }

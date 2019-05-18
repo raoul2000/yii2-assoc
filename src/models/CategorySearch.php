@@ -17,8 +17,8 @@ class CategorySearch extends Category
     public function rules()
     {
         return [
-            [['id', 'contact_id', 'type'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'contact_id'], 'integer'],
+            [['name', 'type'], 'safe'],
         ];
     }
 
@@ -60,10 +60,10 @@ class CategorySearch extends Category
         $query->andFilterWhere([
             'id' => $this->id,
             'contact_id' => $this->contact_id,
-            'type' => $this->type,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'type', $this->type]);
 
         return $dataProvider;
     }

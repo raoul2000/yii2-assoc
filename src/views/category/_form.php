@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\Category;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Category */
@@ -14,7 +15,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'contact_id')->textInput() ?>
 
-    <?= $form->field($model, 'type')->textInput() ?>
+    <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => 'select a type ...']) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

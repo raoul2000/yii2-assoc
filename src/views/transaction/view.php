@@ -69,6 +69,18 @@ $transactionModel = $model;
             'reference_date:date',
             'code',
             'is_verified:boolean',
+            'category_id',
+            [
+                'label' => 'Category',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->category_id) {
+                        return Html::encode($model->category->name);
+                    } else {
+                        return null;
+                    }
+                }
+            ],
             'description',
             'orders_value_total',
             'orderValuesDiff:orderValuesDiff',

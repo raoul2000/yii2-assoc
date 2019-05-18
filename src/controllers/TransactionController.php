@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
 use yii\data\ActiveDataProvider;
 use app\models\Attachment;
 use app\components\SessionDateRange;
+use app\models\Category;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -263,7 +264,11 @@ class TransactionController extends Controller
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
             'products' => isset($order) ? null : Product::getNameIndex(),
-            'order' => $order
+            'order' => $order,
+            'categories' => Category::getCategories(
+                Category::TRANSACTION, 
+                \app\components\SessionContact::getContactId()
+            )
         ]);
     }
 
@@ -286,6 +291,10 @@ class TransactionController extends Controller
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
             'products' => isset($order) ? null : Product::getNameIndex(),
+            'categories' => Category::getCategories(
+                Category::TRANSACTION, 
+                \app\components\SessionContact::getContactId()
+            )
         ]);
     }
 

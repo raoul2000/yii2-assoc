@@ -51,6 +51,8 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
+        <?= $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'select a category ...']) ?>
+
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
         
         <?php if (!$model->isNewRecord):?>

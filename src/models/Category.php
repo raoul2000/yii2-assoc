@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "category".
@@ -16,6 +17,8 @@ use Yii;
  */
 class Category extends \yii\db\ActiveRecord
 {
+    const TRANSACTION = 'TR';
+
     /**
      * {@inheritdoc}
      */
@@ -31,8 +34,14 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['contact_id', 'type', 'name'], 'required'],
-            [['contact_id', 'type'], 'integer'],
+            [['contact_id'], 'integer'],
             [['name'], 'string', 'max' => 140],
+            [['type'], 'string', 'max' => 7],
+            ['type', function($attribute, $params, $validator) {
+                if (!array_key_exists( $this->$attribute, Category::getTypes())) {
+                    $this->addError($attribute, 'Invalid type');
+                }
+            }],
             [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
         ];
     }
@@ -57,7 +66,20 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Contact::className(), ['id' => 'contact_id']);
     }
-
+    /**
+     * Returns list of all category types
+     *
+     * @return array associative array where type id is the key and type name is the value
+     */
+    static public function getTypes() {
+        return [
+            self::TRANSACTION => 'transaction'
+        ];
+    }
+    static public function getTypeName($typeId) {
+        $types = self::getTypes();
+        return $types[$typeId];
+    }
     /**
      * {@inheritdoc}
      * @return CategoryQuery the active query used by this AR class.
@@ -66,4 +88,16 @@ class Category extends \yii\db\ActiveRecord
     {
         return new CategoryQuery(get_called_class());
     }
+    public static function getCategories($type, $contact_id = null)
+    {
+        $categories = parent::find()
+            ->select(['id','name'])
+            ->andFilterWhere([
+                'type' => $type,
+                'contact_id' => $contact_id
+            ])
+            ->asArray()
+            ->all();
+        return ArrayHelper::map($categories, 'id', 'name');
+    }    
 }

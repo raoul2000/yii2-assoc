@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Category;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Category */
@@ -36,7 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'contact_id',
-            'type',
+            [
+                'label' => 'Type',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Category::getTypeName($model->type) . " ($model->type)" ;
+                }
+            ],
+
             'name',
         ],
     ]) ?>
