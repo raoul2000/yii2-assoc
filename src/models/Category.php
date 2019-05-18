@@ -58,7 +58,25 @@ class Category extends \yii\db\ActiveRecord
             'name' => 'Name',
         ];
     }
-
+    /**
+     * Reset all records refering to this category
+     *
+     * @return void
+     */
+    public function beforeDelete()
+    {
+        switch($this->type) {
+            case self::TRANSACTION:
+                Transaction::updateAll(
+                    ['category_id' => null],
+                    ['category_id' => $this->id]
+                );
+            break;
+            default:
+                throw new Exception('invalid category type : ' . $this->type);
+        }
+        return true;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
