@@ -143,6 +143,10 @@ class Contact extends \yii\db\ActiveRecord
         foreach ($this->fromOrders as $order) {
             $order->delete();
         }
+
+        foreach ($this->categories as $category) {
+            $category->delete();
+        }
         return true;
     }
 
@@ -191,6 +195,13 @@ class Contact extends \yii\db\ActiveRecord
     public function getFromOrders()
     {
         return $this->hasMany(Order::className(), ['from_contact_id' => 'id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategories()
+    {
+        return $this->hasMany(Category::className(), ['contact_id' => 'id']);
     }
 
     /**
