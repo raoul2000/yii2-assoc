@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="form-group">
                     <label class="control-label" for="from_account-selectized">Source Account</label>
                     <?= \dosamigos\selectize\SelectizeDropDownList::widget([
@@ -27,7 +27,7 @@ use yii\helpers\ArrayHelper;
                     ]); ?>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <div class="form-group">
                     <label class="control-label" for="to_account-selectized">Target Account</label>
                     <?= \dosamigos\selectize\SelectizeDropDownList::widget([
@@ -36,34 +36,48 @@ use yii\helpers\ArrayHelper;
                         'value' => $model->to_account_id,
                         'items' => $bankAccounts,
                         'clientOptions' => [
-                            
+                            // ...
+                        ],
+                    ]); ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <?= $form->field($model, 'reference_date')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+            </div>
+            <div class="col-md-2">
+                <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+            </div>
+            <div class="col-md-3">
+                <?= $form->field($model, 'type')->listBox( \app\components\Constant::getTransactionTypes(), ['size'=>1])?>
+            </div>
+            <div class="col-md-5">
+                <?php 
+                    //echo $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'select a category ...']) 
+                ?>
+                <div class="form-group">
+                    <label class="control-label" for="category-selectized">Category</label>
+                    <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                        'name' => Html::getInputName($model, 'category_id'),
+                        'id' => 'category-selectized',
+                        'value' => $model->category_id,
+                        'items' => $categories,
+                        'clientOptions' => [
+                            'create' => true
                         ],
                     ]); ?>
                 </div>
             </div>
         </div>
 
-        <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
-        <?= $form->field($model, 'reference_date')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+        
 
-        <?= $form->field($model, 'type')->listBox( \app\components\Constant::getTransactionTypes(), ['size'=>1])?>
-
-        <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
-
-        <?php 
-            //echo $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'select a category ...']) 
-        ?>
-
-        <?= \dosamigos\selectize\SelectizeDropDownList::widget([
-            'name' => Html::getInputName($model, 'category_id'),
-            'id' => 'category-selectized',
-            'value' => $model->category_id,
-            'items' => $categories,
-            'clientOptions' => [
-                'create' => true
-            ],
-        ]); ?>
 
 
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>

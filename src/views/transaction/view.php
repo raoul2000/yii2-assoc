@@ -69,7 +69,6 @@ $transactionModel = $model;
             'reference_date:date',
             'code',
             'is_verified:boolean',
-            'category_id',
             [
                 'label' => 'Category',
                 'format' => 'raw',
