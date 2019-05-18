@@ -321,15 +321,22 @@ class TransactionController extends Controller
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }        
-
+        $categories = Category::getCategories(
+            Category::TRANSACTION, 
+            \app\components\SessionContact::getContactId()
+        );
+        
+        // the category Id could have been set using another session contact and then, the category
+        // does not exist for the current user :  inject the foreign category in the category list
+        // in order to correctly populate the dropdown list
+        if( isset($model->category_id) && !array_key_exists($model->category_id, $categories)) {
+            $categories[$model->category_id] =  $model->category->name;
+        }
         return $this->render('update', [
             'model' => $model,
             'bankAccounts' => BankAccount::getNameIndex(),
             'products' => isset($order) ? null : Product::getNameIndex(),
-            'categories' => Category::getCategories(
-                Category::TRANSACTION, 
-                \app\components\SessionContact::getContactId()
-            )
+            'categories' => $categories
         ]);
     }
 

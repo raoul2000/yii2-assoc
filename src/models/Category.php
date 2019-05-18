@@ -33,7 +33,7 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['contact_id', 'type', 'name'], 'required'],
+            [['type', 'name'], 'required'],
             [['contact_id'], 'integer'],
             [['name'], 'string', 'max' => 140],
             [['type'], 'string', 'max' => 7],
@@ -42,7 +42,11 @@ class Category extends \yii\db\ActiveRecord
                     $this->addError($attribute, 'Invalid type');
                 }
             }],
-            [['contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['contact_id' => 'id']],
+            [['contact_id'], 'exist', 
+                'skipOnError' => true, 
+                'targetClass' => Contact::className(), 
+                'targetAttribute' => ['contact_id' => 'id']
+            ],
         ];
     }
 
@@ -110,7 +114,7 @@ class Category extends \yii\db\ActiveRecord
     {
         $categories = parent::find()
             ->select(['id','name'])
-            ->andFilterWhere([
+            ->where([
                 'type' => $type,
                 'contact_id' => $contact_id
             ])
