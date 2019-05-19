@@ -157,9 +157,12 @@ class Contact extends \yii\db\ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
         // contact.name to all related account contact_name column
-        if (!$insert && isset($changedAttributes['name'])) {
+        if (
+            !$insert 
+            && (isset($changedAttributes['name']) || isset($changedAttributes['firstname']))
+        ) {
             foreach ($this->bankAccounts as $bankAccount) {
-                $bankAccount->contact_name = $this->name;
+                $bankAccount->contact_name = $this->getLongName();
                 $bankAccount->save(false);
             }
         }
@@ -221,7 +224,7 @@ class Contact extends \yii\db\ActiveRecord
     public function getLongName()
     {
         if ($this->is_natural_person == true) {
-            return $this->name . ', ' . $this->firstname;
+            return $this->name . ( !empty($this->firstname) ? ', ' . $this->firstname : '');
         } else {
             return $this->name;
         }

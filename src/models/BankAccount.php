@@ -108,7 +108,7 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
         if ($insert || (!$insert && isset($changedAttributes['contact_id']))) {
-            $this->contact_name = $this->contact->name;
+            $this->contact_name = $this->contact->getLongName();
             $this->save(false);
         }
     }
