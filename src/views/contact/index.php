@@ -19,35 +19,72 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
 
     <hr/>
-
-    <?php Pjax::begin(); ?>
-
+    
     <p>
-        <?= Html::a('Create Contact', ['create'], ['class' => 'btn btn-success']) ?>
+        <div class="btn-group">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Create <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><?= Html::a('Person', ['create', 'person' => true]) ?></li>
+                <li><?= Html::a('Organization', ['create', 'person' => false]) ?></li>
+            </ul>
+        </div>    
         <?= Html::a('Export CSV', ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
     </p>
 
-    <?= GridView::widget([
-        'tableOptions' => ['class' => 'table table-hover table-condensed'],
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            'name',
-            'firstname',
-            'gender:gender',
-            'email:email',
-            /*
+    <?= yii\bootstrap\Nav::widget([
+        'options' => ['class' =>'nav-tabs'],
+        'items' => [
             [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
+                'label' => 'Person',
+                'encode' => false,
+                'url' => ['index', 'tab'=>'person'],
+                'active' => $tab == 'person'
             ],
             [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],*/
-            
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-    <?php Pjax::end(); ?>
+                'label' => 'Organization',
+                'url' => ['index', 'tab'=>'organization'],
+                'active' => $tab == 'organization'
+            ],
+        ]
+    ]) ?>
+
+    <div style="margin-top:1em;">
+        <?php Pjax::begin(); ?>
+            <?php if ($tab == 'person') :?>
+                <?= GridView::widget([
+                    'tableOptions' => ['class' => 'table table-hover table-condensed'],
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'columns' => [
+                        'name',
+                        'firstname',
+                        'gender:gender',
+                        'email:email',
+
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]); ?>
+
+            <?php elseif ($tab == 'organization'): ?>
+                <?= GridView::widget([
+                    'tableOptions' => ['class' => 'table table-hover table-condensed'],
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'columns' => [
+                        [
+                            'attribute' => 'name',
+                            'label' => 'Raison Sociale'
+                        ],
+                        [
+                            'attribute' => 'firstname',
+                            'label' => 'Sigle'
+                        ],
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]); ?>
+            <?php endif; ?>
+        <?php Pjax::end(); ?>
+    </div>
 </div>

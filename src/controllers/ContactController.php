@@ -61,16 +61,23 @@ class ContactController extends Controller
     }
     /**
      * Lists all Contact models.
+     * Displays a Tab view with "person" and "organization" Tabs
+     * 
+     * @param string $tab the active tab name
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($tab = 'person')
     {
         $searchModel = new ContactSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams
+        );
+        $dataProvider->query->andWhere(['is_natural_person' => ($tab == 'person')]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'tab' => $tab
         ]);
     }
 

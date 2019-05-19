@@ -113,8 +113,8 @@ class Contact extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'uuid' => 'UUID',
-            'name' => 'name',
-            'firstname' => 'Firstname',
+            'name' => ($this->is_natural_person === 0 ? 'Raison Sociale' : 'Name'),
+            'firstname' => ($this->is_natural_person === 0 ? 'Sigle' : 'Firstname'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'is_deleted' => 'Is Deleted',
