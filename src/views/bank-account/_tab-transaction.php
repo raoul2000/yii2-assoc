@@ -53,21 +53,21 @@ $bankAccountModel = $model;
                     }
                 ],
                 [
-                    'attribute' => 'Débit',
-                    'format'    => 'html',
-                    'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
-                        return $transactionModel->from_account_id == $bankAccountModel->id
-                            ? $transactionModel->value
-                            : '';
-                    }
-                ],
-                [
                     'attribute' => 'Crédit',
                     'format'    => 'html',
                     'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
                         return $transactionModel->from_account_id == $bankAccountModel->id
                         ? ''
                         : $transactionModel->value;
+                    }
+                ],
+                [
+                    'attribute' => 'Débit',
+                    'format'    => 'html',
+                    'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
+                        return $transactionModel->from_account_id == $bankAccountModel->id
+                            ? $transactionModel->value
+                            : '';
                     }
                 ],
                 [

@@ -58,8 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-                        'name',
-                        'firstname',
+                        [
+                            'attribute' => 'name',
+                            'label' => 'Name'
+                        ],
+                        [
+                            'attribute' => 'firstname',
+                            'label' => 'Firstname'
+                        ],
                         'gender:gender',
                         'email:email',
 
@@ -81,6 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'firstname',
                             'label' => 'Sigle'
                         ],
+                        'email:email',
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>
