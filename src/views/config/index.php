@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
                 <?php
                 $field = $form->field($model, "[{$key}]value");
                 $inputType = ArrayHelper::remove($model->inputOptions, 'type');
-                switch($inputType) {
+                switch ($inputType) {
                     case 'checkbox':
                         $field->checkbox();
                         break;

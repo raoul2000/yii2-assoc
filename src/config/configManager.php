@@ -9,17 +9,17 @@ return [
     ],
     'items' => [
         'contact_id' => [
-            'value' => null,
+            'value' => 0,
             'label' => 'Contact',
-            'description' => 'Contact that is used as default for all connected users',
+            'description' => 'ID of the Contact that is used as default for all connected users',
             'rules' => [
                 ['integer']
             ],
         ],
         'bank_account_id' => [
-            'value' => null,
+            'value' => 0,
             'label' => 'Bank Account ',
-            'description' => 'The default bank account',
+            'description' => 'ID of the Bank Account owned by the Default Contact, and that is used for all connected users',
             'rules' => [
                 ['integer']
             ],

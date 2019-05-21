@@ -8,10 +8,9 @@ use app\models\Contact;
 use app\models\BankAccount;
 use yii\base\Application;
 
+Event::on(Application::class, Application::EVENT_BEFORE_ACTION, function ($event) {
 
-Event::on(Application::class, Application::EVENT_BEFORE_ACTION, function( $event) {
-
-    if ( Yii::$app->user->isGuest ) {
+    if (Yii::$app->user->isGuest) {
         return;
     }
 

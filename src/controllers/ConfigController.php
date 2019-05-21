@@ -16,10 +16,13 @@ class ConfigController extends Controller
         /* @var $configManager \yii2tech\config\Manager */
         $configManager = Yii::$app->get('configManager');
 
+        /*
         $models = array_filter($configManager->getItems(), function ($m) {
             return ! \in_array($m->id, ['contact_id', 'bank_account_id']);
         });
-
+        */
+        $models = $configManager->getItems();
+        
         if ( count($models) != 0 && Model::loadMultiple($models, Yii::$app->request->post()) && Model::validateMultiple($models)) {
             $configManager->saveValues();
             Yii::$app->session->setFlash('success', 'Configuration updated.');

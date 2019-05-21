@@ -21,8 +21,7 @@ class SessionContact
         $contact_id = $conf->getItemValue('contact_id');
         if ($contact_id !== null) {
             $bank_account_id = $conf->getItemValue('bank_account_id');
-            SessionContact::setContact($contact_id, $bank_account_id);
-            return true;
+            return SessionContact::setContact($contact_id, $bank_account_id);
         }
         return false;
     }
@@ -30,7 +29,7 @@ class SessionContact
     public static function setContact($id, $bank_account_id = null)
     {
         if (($contact = Contact::findOne($id)) === null) {
-            throw new NotFoundHttpException('The requested contact does not exist.');
+            return false;
         }
 
         $bankAccount = null;
@@ -39,10 +38,10 @@ class SessionContact
             if (count($bankAccounts) != 0) {
                 $bankAccount = $bankAccounts[0];
             } else {
-                throw new NotFoundHttpException('The requested contact has no bank account.');
+                return false;
             }
         } elseif (($bankAccount = BankAccount::findOne($bank_account_id)) === null) {
-            throw new NotFoundHttpException('The requested bank account does not exist.');
+            return false;
         }
 
         $session = Yii::$app->session;
@@ -54,6 +53,7 @@ class SessionContact
             'id' => $bankAccount->id,
             'name' => $bankAccount->name
         ];
+        return true;
     }
     
     public static function getContactId()
