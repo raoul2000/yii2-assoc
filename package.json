@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/raoul2000/yii2-assoc#readme",
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-notify": "^3.2.0",
+    "gulp-util": "^3.0.8",
+    "vinyl-ftp": "^0.6.1"
   },
   "dependencies": {
     "del": "^4.1.1"
