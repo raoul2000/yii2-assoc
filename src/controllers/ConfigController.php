@@ -23,7 +23,7 @@ class ConfigController extends Controller
         */
         $models = $configManager->getItems();
         
-        if ( count($models) != 0 && Model::loadMultiple($models, Yii::$app->request->post()) && Model::validateMultiple($models)) {
+        if (count($models) != 0 && Model::loadMultiple($models, Yii::$app->request->post()) && Model::validateMultiple($models)) {
             $configManager->saveValues();
             Yii::$app->session->setFlash('success', 'Configuration updated.');
             return $this->refresh();

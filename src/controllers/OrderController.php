@@ -143,9 +143,9 @@ class OrderController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $lazyUpdate = [];
             // if configured and if the current order has no value, try to use related product value
-            if (!empty($model->product->value) 
-                && $model->value == 0 
-                && Yii::$app->configManager->getItemValue('order.create.setProductValue') == true ) 
+            if (!empty($model->product->value)
+                && $model->value == 0
+                && Yii::$app->configManager->getItemValue('order.create.setProductValue') == true )
             {
                 $lazyUpdate['value'] = $model->product->value;
             }
@@ -163,7 +163,6 @@ class OrderController extends Controller
 
             if ($transaction != null) {
                 $model->linkToTransaction($transaction);
-
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -173,10 +172,10 @@ class OrderController extends Controller
             $model->to_contact_id = $transaction->fromAccount->contact_id;
         }
 
-        // populate validity date range fields 
+        // populate validity date range fields
         if (
-                Yii::$app->configManager->getItemValue('order.create.setDefaultValidity') 
-                && empty($model->valid_date_start) 
+                Yii::$app->configManager->getItemValue('order.create.setDefaultValidity')
+                && empty($model->valid_date_start)
                 && empty($model->valid_date_end)
         ) {
             $model->valid_date_start = SessionDateRange::getStart();

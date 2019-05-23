@@ -10,7 +10,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
 
-
 /**
  * ProductController implements the CRUD actions for Product model.
  */
@@ -81,10 +80,10 @@ class ProductController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        // populate validity date range fields 
-        if( 
+        // populate validity date range fields
+        if (
             Yii::$app->configManager->getItemValue('product.create.setDefaultValidity') 
-            && empty($model->valid_date_start) 
+            && empty($model->valid_date_start)
             && empty($model->valid_date_end)
         ) {
             $model->valid_date_start = SessionDateRange::getStart();

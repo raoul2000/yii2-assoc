@@ -62,7 +62,7 @@ class ContactController extends Controller
     /**
      * Lists all Contact models.
      * Displays a Tab view with "person" and "organization" Tabs
-     * 
+     *
      * @param string $tab the active tab name
      * @return mixed
      */

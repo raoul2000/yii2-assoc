@@ -123,7 +123,7 @@ class BankAccountController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate ($contact_id = null)
+    public function actionCreate($contact_id = null)
     {
         $model = new BankAccount();
 

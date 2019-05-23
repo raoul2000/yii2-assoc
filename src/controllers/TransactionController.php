@@ -178,7 +178,7 @@ class TransactionController extends Controller
             case 'orders' :
                 $orderSearchModel = new OrderSearch();
                 $orderDataProvider = $orderSearchModel->search(
-                    Yii::$app->request->queryParams, 
+                    Yii::$app->request->queryParams,
                     $transaction->getOrders()
                 );
         
@@ -190,7 +190,7 @@ class TransactionController extends Controller
                         'orderSearchModel' => $orderSearchModel,
                         'orderDataProvider' => $orderDataProvider,
                         'products' => Product::getNameIndex(),
-                        'contacts' => Contact::getNameIndex()    
+                        'contacts' => Contact::getNameIndex()
                     ]),
                 ]);
                 break;
@@ -208,7 +208,6 @@ class TransactionController extends Controller
             default:
                 return $this->redirect(['view', 'id' => $transaction->id, 'tab' => 'orders']);
                 break;
-
         }
     }
 
@@ -231,16 +230,16 @@ class TransactionController extends Controller
             }
         }
 
-        if ($model->load(Yii::$app->request->post()) ) {
+        if ($model->load(Yii::$app->request->post())) {
             // a new category has been entered by user : we must create a new Category entry
-            if ( isset($model->category_id) && !is_numeric($model->category_id)) {
+            if (isset($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
                 $category->setAttributes([
                     'contact_id' => SessionContact::getContactId(),
                     'type' => Category::TRANSACTION,
                     'name' => $model->category_id
                 ]);
-                if($category->save()) {
+                if ($category->save()) {
                     $model->category_id = $category->id;
                 } else {
                     throw new \yii\web\ServerErrorHttpException('Failed to save new category');
@@ -265,7 +264,7 @@ class TransactionController extends Controller
 
         if ($order !== null) {
             // try to guess the source bank account if not provided
-            // RULE : Use the first bank account belonging to the contact referenced 
+            // RULE : Use the first bank account belonging to the contact referenced
             // as beneficiary in the order instance
             if ($model->from_account_id == null && count($order->toContact->bankAccounts) > 0) {
                 $model->from_account_id = $order->toContact->bankAccounts[0]->id;
@@ -284,7 +283,7 @@ class TransactionController extends Controller
             'products' => isset($order) ? null : Product::getNameIndex(),
             'order' => $order,
             'categories' => Category::getCategories(
-                Category::TRANSACTION, 
+                Category::TRANSACTION,
                 SessionContact::getContactId()
             )
         ]);
@@ -301,16 +300,16 @@ class TransactionController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) ) {
+        if ($model->load(Yii::$app->request->post())) {
             // a new category has been entered by user : we must create a new Category entry
-            if ( isset($model->category_id) && !is_numeric($model->category_id)) {
+            if (isset($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
                 $category->setAttributes([
                     'contact_id' => SessionContact::getContactId(),
                     'type' => Category::TRANSACTION,
                     'name' => $model->category_id
                 ]);
-                if($category->save()) {
+                if ($category->save()) {
                     $model->category_id = $category->id;
                 } else {
                     throw new \yii\web\ServerErrorHttpException('Failed to save new category');
@@ -320,16 +319,16 @@ class TransactionController extends Controller
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        }        
+        }
         $categories = Category::getCategories(
-            Category::TRANSACTION, 
+            Category::TRANSACTION,
             \app\components\SessionContact::getContactId()
         );
         
         // the category Id could have been set using another session contact and then, the category
         // does not exist for the current user :  inject the foreign category in the category list
         // in order to correctly populate the dropdown list
-        if( isset($model->category_id) && !array_key_exists($model->category_id, $categories)) {
+        if (isset($model->category_id) && !array_key_exists($model->category_id, $categories)) {
             $categories[$model->category_id] =  $model->category->name;
         }
         return $this->render('update', [

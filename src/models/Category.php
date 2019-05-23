@@ -37,14 +37,14 @@ class Category extends \yii\db\ActiveRecord
             [['contact_id'], 'integer'],
             [['name'], 'string', 'max' => 140],
             [['type'], 'string', 'max' => 7],
-            ['type', function($attribute, $params, $validator) {
-                if (!array_key_exists( $this->$attribute, Category::getTypes())) {
+            ['type', function ($attribute, $params, $validator) {
+                if (!array_key_exists($this->$attribute, Category::getTypes())) {
                     $this->addError($attribute, 'Invalid type');
                 }
             }],
-            [['contact_id'], 'exist', 
-                'skipOnError' => true, 
-                'targetClass' => Contact::className(), 
+            [['contact_id'], 'exist',
+                'skipOnError' => true,
+                'targetClass' => Contact::className(),
                 'targetAttribute' => ['contact_id' => 'id']
             ],
         ];
@@ -69,7 +69,7 @@ class Category extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
-        switch($this->type) {
+        switch ($this->type) {
             case self::TRANSACTION:
                 Transaction::updateAll(
                     ['category_id' => null],
@@ -93,13 +93,24 @@ class Category extends \yii\db\ActiveRecord
      *
      * @return array associative array where type id is the key and type name is the value
      */
-    static public function getTypes() {
+    public static function getTypes()
+    {
         return [
             self::TRANSACTION => 'transaction'
         ];
     }
-    static public function getTypeName($typeId) {
+    /**
+     * Returns the type name given the type Id
+     *
+     * @param string $typeId
+     * @return string
+     */
+    public static function getTypeName($typeId)
+    {
         $types = self::getTypes();
+        if (!array_key_exists($typeId, $types)) {
+            throw new Exception('type name not found for id ' . $typeId);
+        }
         return $types[$typeId];
     }
     /**
@@ -121,5 +132,5 @@ class Category extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
         return ArrayHelper::map($categories, 'id', 'name');
-    }    
+    }
 }
