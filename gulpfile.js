@@ -1,9 +1,11 @@
-const { series,  src, dest } = require('gulp');
+const { series, src, dest } = require('gulp');
 const { task1 } = require('./gulp-task/task1');
 const del = require('del');
+const notify = require('gulp-notify');
+const rename = require("gulp-rename");
 
 function clean() {
-    return del('./build/**' , {force:true});
+    return del('./build/**', { force: true });
 }
 
 
@@ -12,9 +14,27 @@ function copy() {
         './src/assets/**',
         './src/commands/**',
         './src/components/**',
-    ]).pipe(dest('./build/src'));
+    ], { base: './src/' })
+        .pipe(dest('./build'));
+}
+
+function copyConfig() {
+    return src(
+        [
+            './src/config/**',
+            '!./src/config/db.php', // ignore DB params
+        ],
+        { base: './src/' }
+    )
+        .pipe(rename((path) => {
+            if (path.basename.endsWith('.prod')) {
+                console.log(`   renaming PROD file : ${path.basename}${path.extname}`);
+                path.basename = path.basename.replace(/\.prod$/,'');
+            }
+        }))
+        .pipe(dest('./build'));
 }
 
 exports.copy = copy;
 exports.clean = clean;
-exports.default = task1
+exports.default = series(clean, copyConfig);
