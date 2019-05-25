@@ -4,3 +4,4 @@ doc/db-schema.mwb.bak
 backups/
 dev.ftp
 node_modules/
+data/
