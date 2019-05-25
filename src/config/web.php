@@ -12,6 +12,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@data' => '@app/../data',
     ],
     'components' => [
         'configManager' => $configManager,
@@ -64,8 +65,8 @@ $config = [
         ],
         'attachmentStorageManager' => [
             'class' => 'app\components\AttachmentStorageManager',
-            'storePath' => '@app/uploads/store',
-            'tempPath' => '@app/uploads/temp'
+            'storePath' => '@data/uploads/store',
+            'tempPath' => '@data/uploads/temp'
         ]
     ],
     'params' => $params,
@@ -86,7 +87,7 @@ $config = [
         'db-manager' => [
             'class' => 'bs\dbManager\Module',
             // path to directory for the dumps
-            'path' => '@app/backups',
+            'path' => '@data/backups',
             // list of registerd db-components
             'dbList' => ['db'],
             /*
