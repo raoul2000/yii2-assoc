@@ -1,5 +1,5 @@
 const { series, src, dest } = require('gulp');
-const { task1 } = require('./gulp-task/task1');
+const { copyComposer, composerInstall } = require('./gulp-task/build-vendor');
 const del = require('del');
 const notify = require('gulp-notify');
 const rename = require("gulp-rename");
@@ -17,14 +17,14 @@ function copy() {
         '!./src/vendor/**',
         '!./src/web/assets/*/**'
     ], { base: './src/' })
-        .pipe(dest('./build'));
+        .pipe(dest('./build/src'));
 }
 
 function createFolders() {
     return src('*.*', {read : false})
-    .pipe( dest('./build/runtime'))
-    .pipe( dest('./build/runtime/cache'))
-    .pipe( dest('./build/runtime/logs'));
+    .pipe( dest('./build/src/runtime'))
+    .pipe( dest('./build/src/runtime/cache'))
+    .pipe( dest('./build/src/runtime/logs'));
 
 }
 function copyConfig() {
@@ -41,7 +41,7 @@ function copyConfig() {
                 path.basename = path.basename.replace(/\.prod$/,'');
             }
         }))
-        .pipe(dest('./build'));
+        .pipe(dest('./build/src'));
 }
 
 function ping() {
@@ -61,5 +61,7 @@ function ping() {
 exports.copy = copy;
 exports.clean = clean;
 exports.ping = ping;
+exports.copyComposer = copyComposer;
+exports.composerInstall = composerInstall;
 //exports.default = series(clean, copyConfig, createFolders);
 exports.default = series(clean, copy);
