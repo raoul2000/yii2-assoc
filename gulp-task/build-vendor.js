@@ -1,21 +1,25 @@
 const { series, src, dest } = require('gulp');
 const exec = require('child_process').exec;
-const spawn = require('child_process').spawn;
+const del = require('del');
+const zip = require('gulp-zip');
 
+function cleanComposer() {
+    return del('./build/composer/**', { force: true });
+}
 
 function copyComposer() {
     return src([
         './src/composer.lock',
-        './src/composer.json'
+        './src/composer.json'   
     ], { base: './src/' })
-        .pipe(dest('./build/vendor'));
+        .pipe(dest('./build/composer'));
 }
 
 function composerInstall() {
     return new Promise((resolve, reject) => {
         const composer = exec('composer install --no-dev',
             {
-                "cwd": './build/vendor'
+                "cwd": './build/composer'
             });
         composer.stdout.on('data', (data) => {
             console.log(data.toString().replace(/(\n|\r)+$/, ''));
@@ -36,5 +40,17 @@ function composerInstall() {
     });
 }
 
+function zipVendor() {
+    return src([
+        './build/composer/vendor/**'
+    ])
+    .pipe(zip('vendor.zip'))
+    .pipe(dest('./build/zip'));
+}
+
+
 exports.copyComposer = copyComposer;
 exports.composerInstall = composerInstall;
+exports.cleanComposer = cleanComposer;
+exports.zipVendor = zipVendor;
+exports.buildVendor = series(cleanComposer, copyComposer, composerInstall);

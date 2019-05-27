@@ -1,47 +1,13 @@
-const { series, src, dest } = require('gulp');
-const { copyComposer, composerInstall } = require('./gulp-task/build-vendor');
+const { series, parallel} = require('gulp');
+const {zipVendor, buildVendor, copyComposer, composerInstall } = require('./gulp-task/build-vendor');
+const {buildSource, updateIndex, zipSource, copySource, copyConfig} = require('./gulp-task/build-source');
+const {cleanSourceVendor, mergeSourceVendor} = require('./gulp-task/merge-source-vendor');
+
 const del = require('del');
-const notify = require('gulp-notify');
-const rename = require("gulp-rename");
 const exec = require('child_process').exec;
 
 function clean() {
     return del('./build/**', { force: true });
-}
-
-
-function copy() {
-    return src([
-        './src/**',
-        '!./src/runtime/*/**',
-        '!./src/vendor/**',
-        '!./src/web/assets/*/**'
-    ], { base: './src/' })
-        .pipe(dest('./build/src'));
-}
-
-function createFolders() {
-    return src('*.*', {read : false})
-    .pipe( dest('./build/src/runtime'))
-    .pipe( dest('./build/src/runtime/cache'))
-    .pipe( dest('./build/src/runtime/logs'));
-
-}
-function copyConfig() {
-    return src(
-        [
-            './src/config/**',
-            '!./src/config/db.php', // ignore DB params
-        ],
-        { base: './src/' }
-    )
-        .pipe(rename((path) => {
-            if (path.basename.endsWith('.prod')) {
-                console.log(`   renaming PROD file : ${path.basename}${path.extname}`);
-                path.basename = path.basename.replace(/\.prod$/,'');
-            }
-        }))
-        .pipe(dest('./build/src'));
 }
 
 function ping() {
@@ -58,10 +24,20 @@ function ping() {
     });
 }
 
-exports.copy = copy;
+const option1 = series(clean, 
+    parallel(buildSource, buildVendor),
+    mergeSourceVendor);
+
+exports.cleanSourceVendor = cleanSourceVendor;
+exports.mergeSourceVendor = mergeSourceVendor;
+exports.updateIndex = updateIndex;
+
 exports.clean = clean;
 exports.ping = ping;
 exports.copyComposer = copyComposer;
 exports.composerInstall = composerInstall;
-//exports.default = series(clean, copyConfig, createFolders);
-exports.default = series(clean, copy);
+exports.buildVendor = buildVendor;
+exports.zipSource = zipSource;
+exports.zipVendor = zipVendor;
+exports.copySource = copySource;
+exports.default = option1;
