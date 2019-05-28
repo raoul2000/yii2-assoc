@@ -5,3 +5,4 @@ backups/
 dev.ftp
 node_modules/
 data/
+gulp-task/sftp-prod.json

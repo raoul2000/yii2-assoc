@@ -2,6 +2,8 @@ const { series, parallel} = require('gulp');
 const {zipVendor, buildVendor, copyComposer, composerInstall } = require('./gulp-task/build-vendor');
 const {buildSource, updateIndex, zipSource, copySource, copyConfig} = require('./gulp-task/build-source');
 const {cleanSourceVendor, mergeSourceVendor} = require('./gulp-task/merge-source-vendor');
+const {deploySFtp} = require('./gulp-task/deploy-sftp');
+const {deployFtp} = require('./gulp-task/deploy-ftp');
 
 const del = require('del');
 const exec = require('child_process').exec;
@@ -27,6 +29,9 @@ function ping() {
 const option1 = series(clean, 
     parallel(buildSource, buildVendor),
     mergeSourceVendor);
+
+//exports.deploySFtp = deploySFtp; // not working
+exports.deployFtp = deployFtp;
 
 exports.cleanSourceVendor = cleanSourceVendor;
 exports.mergeSourceVendor = mergeSourceVendor;
