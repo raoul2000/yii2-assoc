@@ -17,7 +17,7 @@ function copyComposer() {
 
 function composerInstall() {
     return new Promise((resolve, reject) => {
-        const composer = exec('composer install --no-dev',
+        const composer = exec('composer install --no-dev --prefer-dist',
             {
                 "cwd": './build/composer'
             });

@@ -26,9 +26,7 @@ function ping() {
     });
 }
 
-const option1 = series(clean, 
-    parallel(buildSource, buildVendor),
-    mergeSourceVendor);
+
 
 //exports.deploySFtp = deploySFtp; // not working
 exports.deployFtp = deployFtp;
@@ -45,4 +43,12 @@ exports.buildVendor = buildVendor;
 exports.zipSource = zipSource;
 exports.zipVendor = zipVendor;
 exports.copySource = copySource;
-exports.default = option1;
+
+exports.buildSource = buildSource;
+
+// default task : build source and vendor and produce a folder ready to deploy
+exports.default = series(
+    clean, 
+    parallel(buildSource, buildVendor),
+    mergeSourceVendor
+);

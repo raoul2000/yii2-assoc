@@ -1,5 +1,31 @@
-
 # Build and deploy
+
+the project tools is based on **gulp tasks**.
+
+## Tasks for building
+
+The main task for building the project (the default task) builds source and vendor and produce a folder ready to deploy :
+```
+gulp
+```
+
+## Task for deploying 
+
+### FTP
+
+Currently only FTP deployment is supported.
+
+Before dploying you must configure the target server information into the file `./gulp-task/sftp-prod.json`
+
+```
+gulp deployFtp
+```
+
+
+- `clean` : completelty removes the build folder
+- `buildSource` : copy sources files from `./src` to the build folder `./build/src`. During this task, not all files from the source folder are copied 
+  - 
+
 
 ## Configure FTP settings
 
