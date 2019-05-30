@@ -182,7 +182,7 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getTransactionValuesDiff()
     {
-        return ($this->transactions_value_total === null ? null : round($this->value - $this->transactions_value_total));
+        return ($this->transactions_value_total === null ? null : round($this->transactions_value_total - $this->value));
     }
 
     /**
