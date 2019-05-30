@@ -28,6 +28,7 @@ use yii\helpers\ArrayHelper;
  * @property string $note
  * @property string $phone_1
  * @property string $phone_2
+ * @property date $date_1 free to use date 
  */
 class Contact extends \yii\db\ActiveRecord
 {
@@ -101,7 +102,7 @@ class Contact extends \yii\db\ActiveRecord
             [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
             [['phone_1', 'phone_2'], 'string', 'max' => 15],
             ['email', 'email'],
-            [['birthday'], 'date', 'format' => 'php:Y-m-d'],
+            [['birthday', 'date_1'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
 
@@ -125,6 +126,7 @@ class Contact extends \yii\db\ActiveRecord
             'note' => 'Note',
             'phone_1' => 'Phone 1',
             'phone_2' => 'Phone 2',
+            'date_1' => 'Date 1',
         ];
     }
     /**
