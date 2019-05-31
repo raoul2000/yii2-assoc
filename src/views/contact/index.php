@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </ul>
         </div>    
         <?= Html::a('Export CSV', ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a('Stat', ['stat'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
     </p>
 
     <?= yii\bootstrap\Nav::widget([

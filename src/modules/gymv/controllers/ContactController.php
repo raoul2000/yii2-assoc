@@ -17,7 +17,7 @@ class ContactController extends \app\controllers\ContactController
      * Renders the index view for the module
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($tab = 'person')
     {
         return $this->render('index');
     }
@@ -28,7 +28,9 @@ class ContactController extends \app\controllers\ContactController
         $records = [];
         try {
             //$csv = Reader::createFromPath('d:\\tmp\\licencies.csv', 'r');
-            $csv = Reader::createFromStream(fopen('d:\\tmp\\licencies.csv', 'r'));
+            //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies-small.csv', 'r'));
+            $csv = Reader::createFromStream(fopen('d:\\tmp\\licencies-100.csv', 'r'));
+            //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies.csv', 'r'));
             $csv->setDelimiter(',');
             $csv->setEnclosure('\'');
             $csv->setHeaderOffset(0);
