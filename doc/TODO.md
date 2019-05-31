@@ -28,7 +28,7 @@ implement a task system where a user can create a task linked to a record. It co
 
 ## Charts
 
-- check [yii2-highcharts](https://github.com/miloschuman/yii2-highcharts)
+- check [yii2-highcharts](https://github.com/miloschuman/yii2-highcharts) : If you are a non-profit company, or use our products for personal use, you may enjoy our software for free under a Creative Commons (CC) Attribution-NonCommercial licence
 - or maybe [yii2-chartjs-widget](https://github.com/2amigos/yii2-chartjs-widget) by [2amigos](https://2amigos.us/)
 
 ## [DONE] Add attachment to Transaction pack records

@@ -27,7 +27,8 @@
         "2amigos/yii2-selectize-widget": "~1.0",
         "yii2tech/config": "^1.0",
         "vova07/yii2-imperavi-widget": "*",
-        "league/csv": "~9.0"
+        "league/csv": "~9.0",
+        "miloschuman/yii2-highcharts-widget": "^7.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
