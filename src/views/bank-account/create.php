@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="bank-account-create">
 
     <h1>
+        <span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
         <?= Html::encode($this->title) ?>
         <?php if ($contact): ?>
             <small>

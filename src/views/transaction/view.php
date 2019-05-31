@@ -41,7 +41,7 @@ $transactionModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->fromAccount->longName),
+                        '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->fromAccount->longName),
                         ['bank-account/view','id' => $model->fromAccount->id],
                         ['title' => 'view Account', 'data-pjax' => 0]
                     );
@@ -52,7 +52,7 @@ $transactionModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->toAccount->longName),
+                        '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->toAccount->longName),
                         ['bank-account/view','id' => $model->toAccount->id],
                         ['title' => 'view Account', 'data-pjax' => 0]
                     );

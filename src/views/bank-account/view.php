@@ -18,7 +18,10 @@ $bankAccountModel = $model;
 ?>
 <div class="bank-account-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
+        <?= Html::encode($this->title) ?>
+    </h1>
     <hr/>
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -40,7 +43,7 @@ $bankAccountModel = $model;
                 'format' => 'raw',
                 'value' => function ($model) {
                     return Html::a(
-                        Html::encode($model->contact_name),
+                        '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .  Html::encode($model->contact_name),
                         ['contact/view', 'id' => $model->contact_id],
                         ['title' => 'view Contact']
                     );
