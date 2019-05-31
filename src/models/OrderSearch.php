@@ -17,7 +17,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'product_id', 'to_contact_id', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'product_id', 'from_contact_id','to_contact_id', 'created_at', 'updated_at'], 'integer'],
             [['value'], 'number', 'min' => 0],
         ];
     }
@@ -63,6 +63,7 @@ class OrderSearch extends Order
             'id' => $this->id,
             'value' => $this->value,
             'product_id' => $this->product_id,
+            'from_contact_id' => $this->from_contact_id,
             'to_contact_id' => $this->to_contact_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

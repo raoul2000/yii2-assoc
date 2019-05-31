@@ -55,3 +55,88 @@ valid_start_date <= endRange or valid_start_date IS NULL
 AND
 valid_end_date >= startRange or valid_end_date IS NULL
 ```
+## Function
+
+### Overlap
+
+```
+range 1 : -------|******|----------------------
+range 2 : ------------|******|-----------------
+```
+
+
+## Algebra
+
+### Addition
+
+Adding 2 date ranges can produce :
+- a new date range : when range overlap
+- a date range set : when date don't overlap
+
+The example below illustrate the sum of 2 simple date ranges
+Date Range Overlap :
+```
+range 1 : -------|******|----------------------
+range 2 : ------------|******|-----------------
+SUM     : -------|***********|-----------------
+```
+
+Date Range With no overlap :
+```
+range 1 : -----|******|----------------------
+range 2 : -------------------|******|--------
+SUM     : -----|******|------|******|--------
+```
+
+In the second case, the addition of 2 date Ranges produces a set of 2 date Ranges : this is called a **composite** date range.
+Composite Date range can also be subject to addition.
+
+```
+range 1 : -------|******|-----------|*****|------
+range 1 : --|**|-----------|*****|-----|******|--
+SUM     : --|**|-|******|--|*****|--|*********|--
+```
+The result is a composite date range made of 4 simple date ranges. In the example below, the result is a simple date range.
+```
+range 1 : -------|******|--------|*****|------
+range 1 : ----|*****|--|*****************|----
+SUM     : ----|**************************|----
+```
+
+
+
+### Soustraction
+
+No overlap :
+```
+range 1 : -----------------|******|--------
+range 2 : ----|*****|----------------------
+R2 - R1 : ----|*****|----------------------
+```
+overlap left:
+```
+range 1 : ----|******|---------------------
+range 2 : --------|*********|--------------
+R2 - R1 : -----------|******|----------------------
+```
+overlap right:
+```
+range 1 : ---------------|******|----------
+range 2 : --------|*********|--------------
+R2 - R1 : --------|******|-----------------
+```
+included:
+```
+range 1 : -----------|***|----------
+range 2 : ------|****************|--
+R2 - R1 : ------|****|---|*******|--
+```
+contains:
+```
+range 1 : ----|*******************|----
+range 2 : ------|****************|-----
+R2 - R1 : -----------------------------
+```
+
+
+

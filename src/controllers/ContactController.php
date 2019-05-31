@@ -14,6 +14,7 @@ use app\models\ContactSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\components\SessionDateRange;
 
 /**
  * ContactController implements the CRUD actions for Contact model.
@@ -174,16 +175,52 @@ class ContactController extends Controller
         $orderSearchModel = new \app\models\OrderSearch();
         $orderDataProvider = $orderSearchModel->search(
             Yii::$app->request->queryParams,
-            \app\models\Order::find()->with('transactions')
+            \app\models\Order::find()
+                ->with('transactions')
         );
-        $orderDataProvider->query->andWhere(['to_contact_id' => $id]);
+        //$orderDataProvider->query->andWhere(['to_contact_id' => $id]);
+        $orderDataProvider->query->andWhere([
+            'or', ['to_contact_id' => $id], ['from_contact_id' => $id] 
+        ]);
 
         return $this->render('order', [
             'model' => $model,
             'orderSearchModel' => $orderSearchModel,
             'orderDataProvider' => $orderDataProvider,
             'products' => \app\models\Product::getNameIndex(),
+            'contacts' => \app\models\Contact::getNameIndex()
         ]);
+    }
+    public function actionOrderSummary($id)
+    {
+        $model = $this->findModel($id);
+        $queryOrders = \app\models\Order::find()
+            ->where([
+                'or', ['to_contact_id' => $id], ['from_contact_id' => $id] 
+            ])
+            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->asArray();
+
+        $byProduct = [];
+        foreach ($queryOrders->each() as $order) {
+            // data is being fetched from the server in batches of 100,
+            // but $order represents one row of data from the order table
+            // @see https://www.yiiframework.com/doc/guide/2.0/en/db-query-builder#batch-query
+
+            $productKey = "p" . $order['product_id'];
+            if (!array_key_exists($productKey, $byProduct)) {
+                $byProduct[$productKey] = [];
+            }
+            $byProduct[$productKey][] = $order;
+        }        
+
+        return $this->render('order-summary', [
+            'model' => $model,
+            'byProduct' => $byProduct,
+            'products' => \app\models\Product::getNameIndex(),
+            'contacts' => \app\models\Contact::getNameIndex()
+        ]);
+                
     }
     /**
      * Creates a new Contact model.

@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = 'Orders';
 
     <p>
         <?= Html::a('Create Order', ['order/create', 'to_contact_id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('View Order Summary', ['contact/order-summary', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
     
     <?= GridView::widget([
@@ -36,6 +37,30 @@ $this->params['breadcrumbs'][] = 'Orders';
                     return Html::a(
                         Html::encode($products[$model->product_id]),
                         ['product/view','id'=>$model->product_id],
+                        [ 'data-pjax' => 0 ]
+                    );
+                }
+            ],
+            [
+                'attribute' => 'from_contact_id',
+                'filter'    => $contacts,
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) use ($contacts) {
+                    return Html::a(
+                        Html::encode($contacts[$model->from_contact_id]),
+                        ['contact/view','id'=>$model->from_contact_id],
+                        [ 'data-pjax' => 0 ]
+                    );
+                }
+            ],
+            [
+                'attribute' => 'to_contact_id',
+                'filter'    => $contacts,
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) use ($contacts) {
+                    return Html::a(
+                        Html::encode($contacts[$model->to_contact_id]),
+                        ['contact/view','id'=>$model->to_contact_id],
                         [ 'data-pjax' => 0 ]
                     );
                 }

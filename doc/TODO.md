@@ -16,6 +16,7 @@ A site user linked to a Contact is also linked to a default bank account.
 ## Refactor Time Period
 
 - evaluate [league\Period](https://period.thephpleague.com/) to handle time periods
+This library required PHP 7.3
 
 ## Export as CSV file
 
