@@ -18,6 +18,14 @@ class Formatter extends \yii\i18n\Formatter
         }
     }
 
+    public function asClickToCall($value)
+    {
+        if(!empty($value)) {
+            return "<a title=\"call this number\" href=\"tel:${value}\">${value}</a>";
+        } else {
+            return $this->asRaw(null);
+        }
+    }
     /**
      * Format a date in format YYYY-MM-DD as an age related to the current date
      *

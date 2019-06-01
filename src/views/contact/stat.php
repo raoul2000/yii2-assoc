@@ -7,7 +7,7 @@ use miloschuman\highcharts\Highcharts;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
 
-$this->title = 'Stat';
+$this->title = 'Statistics';
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="contact-stat">
 
     <h1>
-        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
         <?= Html::encode($this->title) ?>
     </h1>
 

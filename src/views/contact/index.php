@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </ul>
         </div>    
         <?= Html::a('Export CSV', ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
-        <?= Html::a('Stat', ['stat'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics', ['stat'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
     </p>
 
     <?= yii\bootstrap\Nav::widget([
@@ -78,7 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'format'    => 'gender'
                         ],
-                        'birthday:age',
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>

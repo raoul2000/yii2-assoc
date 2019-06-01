@@ -41,65 +41,92 @@ $allAttachments = $model->attachments;
         <?= Html::a('View Orders', ['order', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     </p>
     <?php if($model->is_natural_person):?>
-        <?= DetailView::widget([
-            'model' => $model,
-            'attributes' => [
-                'name',
-                'firstname',
-                'gender:gender',
-                [
-                    'attribute' => 'birthday',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        return $model->birthday . ' ( '.Yii::$app->formatter->asAge($model->birthday).' ans )';
-                    }
-                ],
-                'email:email',
-                'phone_1',
-                'phone_2',
-                [
-                    'attribute' => 'updated_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
-                    'attribute' => 'created_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
-                    'label' => 'History',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
-                    }
-                ],
-            ],
-        ]) ?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'name',
+                        'firstname',
+                        'email:email',
+                        'gender:gender',
+                        [
+                            'attribute' => 'birthday',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                if( !empty($model->birthday)) {
+                                    return Yii::$app->formatter->asDate($model->birthday) . ' ('.Yii::$app->formatter->asAge($model->birthday).' ans)';
+                                } else {
+                                    return null;
+                                }
+                            }
+                        ],
+                    ],
+                ]) ?>
+            </div>
+            <div class="col-lg-6">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'phone_1:clickToCall',
+                        'phone_2:clickToCall',
+                        [
+                            'attribute' => 'updated_at',
+                            'format' => ['date', 'php:d/m/Y H:i']
+                        ],
+                        [
+                            'attribute' => 'created_at',
+                            'format' => ['date', 'php:d/m/Y H:i']
+                        ],
+                        [
+                            'label' => 'History',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
+                            }
+                        ],
+                    ],
+                ]) ?>            
+            </div>
+        </div>
     <?php else: ?>
-        <?= DetailView::widget([
-            'model' => $model,
-            'attributes' => [
-                'name',
-                'firstname',
-                'email:email',
-                'phone_1',
-                'phone_2',
-                [
-                    'attribute' => 'updated_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
-                    'attribute' => 'created_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
-                    'label' => 'History',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
-                    }
-                ],
-            ],
-        ]) ?>
+        <div class="row">
+            <div class="col-lg-6">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'name',
+                        'firstname',
+                        'email:email',
+                    ],
+                ]) ?>
+            </div>
+            <div class="col-lg-6">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'phone_1:clickToCall',
+                        'phone_2:clickToCall',
+                        [
+                            'attribute' => 'updated_at',
+                            'format' => ['date', 'php:d/m/Y H:i']
+                        ],
+                        [
+                            'attribute' => 'created_at',
+                            'format' => ['date', 'php:d/m/Y H:i']
+                        ],
+                        [
+                            'label' => 'History',
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
+                            }
+                        ],
+                    ],
+                ]) ?>
+
+            </div>
+        </div>                    
     <?php endif; ?>
 
     <?php Pjax::begin(); ?>
