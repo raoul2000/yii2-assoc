@@ -58,6 +58,9 @@ class ContactController extends Controller
             'update-attachment' => [
                 'class' => 'app\components\actions\attachments\UpdateAction',
             ],
+            'stat-data' => [
+                'class' => 'app\components\actions\contacts\stat\AjaxStatAction'
+            ]
         ];
     }
     /**
@@ -327,6 +330,12 @@ class ContactController extends Controller
         return $this->redirect(['view', 'id' => $model->id, 'tab' => 'address']);
     }
 
+    public function actionStat2() 
+    {
+        return $this->render('stat2', [
+            'datasourceUrl' => \yii\helpers\Url::to(['stat-data']),
+        ]);
+    }
     public function actionStat()
     {
         $countPerson = Contact::find([
@@ -356,7 +365,7 @@ class ContactController extends Controller
             } else {
                 $serieWom[$age] = $total;    
             }
-            
+
             if( $result['age'] > $maxAge) {
                 $maxAge = $age;
             }
