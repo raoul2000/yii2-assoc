@@ -223,7 +223,6 @@ class ContactController extends Controller
             'products' => \app\models\Product::getNameIndex(),
             'contacts' => \app\models\Contact::getNameIndex()
         ]);
-                
     }
     /**
      * Creates a new Contact model.
@@ -254,7 +253,6 @@ class ContactController extends Controller
             'person' => $person
         ]);
     }
-
     /**
      * Updates an existing Contact model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -274,7 +272,6 @@ class ContactController extends Controller
             'model' => $model,
         ]);
     }
-
     /**
      * Link a contact to an address
      * If link is successful, the browser will be redirected to the 'contact/view' page.
@@ -311,7 +308,6 @@ class ContactController extends Controller
             'addressDataProvider' => $addressDataProvider,
         ]);
     }
-
     /**
      * Unlink a contact from its current linked address.
      * If the contact is not link to any address, this method has no effect.
@@ -329,57 +325,6 @@ class ContactController extends Controller
         ]);
         return $this->redirect(['view', 'id' => $model->id, 'tab' => 'address']);
     }
-
-    public function actionStat2() 
-    {
-        return $this->render('stat2', [
-            'datasourceUrl' => \yii\helpers\Url::to(['stat-data']),
-        ]);
-    }
-    public function actionStat()
-    {
-        $countPerson = Contact::find([
-            'is_natural_person' => true
-        ])->count();
-
-        $results = Yii::$app->db->createCommand(
-            'SELECT count(id) as total, gender, YEAR(CURDATE()) - YEAR(birthday) AS age  
-             FROM contact 
-             where 
-                is_natural_person is TRUE 
-                and (gender = 2 or gender = 1) 
-                and birthday is not null 
-            group by age 
-            order by age;')
-            ->queryAll();
-        $serieMan = array_fill(0, 200, 0);
-        $serieWom = array_fill(0, 200, 0);
-        $serie = null;
-        $maxAge = 0;
-        foreach($results as $result) {
-            $age = intVal($result['age']);
-            $total = intval($result['total']);
-
-            if ($result['gender'] == 1) {
-                $serieMan[$age] = $total;    
-            } else {
-                $serieWom[$age] = $total;    
-            }
-
-            if( $result['age'] > $maxAge) {
-                $maxAge = $age;
-            }
-        }
-        $serieMan = array_slice($serieMan,0, $maxAge);
-        $serieWom = array_slice($serieWom,0, $maxAge);
-
-        return $this->render('stat', [
-            'countPerson' => $countPerson,
-            'serieMan' => $serieMan,
-            'serieWom' => $serieWom
-        ]);
-        
-    }
     /**
      * Deletes an existing Contact model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -394,7 +339,6 @@ class ContactController extends Controller
 
         return $this->redirect(['index']);
     }
-
     /**
      * Finds the Contact model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

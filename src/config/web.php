@@ -74,6 +74,12 @@ $config = [
         'gymv' => [
             'class' => 'app\modules\gymv\Module',
         ],
+        'stat' => [
+            'class' => 'app\modules\stat\Module',
+        ],
+        'quality' => [
+            'class' => 'app\modules\quality\Module',
+        ],                
         'user' => [
             'class' => Da\User\Module::class,
             'enableRegistration' => true,
