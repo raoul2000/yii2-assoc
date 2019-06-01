@@ -2,16 +2,18 @@
 
 namespace app\components;
 
+use app\models\Contact;
+
 class Formatter extends \yii\i18n\Formatter
 {
     public function asGender($value)
     {
         switch ($value) {
-            case 1 :
+            case Contact::GENDER_MALE :
                 return \Yii::t('app', 'male');
-            case 2 :
+            case Contact::GENDER_FEMALE :
                 return \Yii::t('app', 'female');
-            case 0 :
+            default :
                 return $this->asRaw(null);
         }
     }

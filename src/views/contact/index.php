@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\Contact;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ContactSearch */
@@ -67,9 +68,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'firstname',
                             'label' => 'Firstname'
                         ],
-                        'gender:gender',
                         'email:email',
-
+                        [
+                            'attribute' => 'gender',
+                            'label' => 'Gender',
+                            'filter' => [
+                                Contact::GENDER_MALE => 'man',
+                                Contact::GENDER_FEMALE => 'woman'
+                            ],
+                            'format'    => 'gender'
+                        ],
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>
@@ -86,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'firstname',
-                            'label' => 'Sigle'
+                            'label' => 'Complément'
                         ],
                         'email:email',
                         ['class' => 'yii\grid\ActionColumn'],

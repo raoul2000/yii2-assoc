@@ -32,6 +32,9 @@ use yii\helpers\ArrayHelper;
  */
 class Contact extends \yii\db\ActiveRecord
 {
+    const GENDER_MALE = 1;
+    const GENDER_FEMALE = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -115,7 +118,7 @@ class Contact extends \yii\db\ActiveRecord
             'id' => 'ID',
             'uuid' => 'UUID',
             'name' => ($this->is_natural_person == 0 ? 'Raison Sociale' : 'Name'),
-            'firstname' => ($this->is_natural_person == 0 ? 'Sigle' : 'Firstname'),
+            'firstname' => ($this->is_natural_person == 0 ? 'Complément' : 'Firstname'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'is_deleted' => 'Is Deleted',
