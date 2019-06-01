@@ -19,6 +19,20 @@ class Formatter extends \yii\i18n\Formatter
     }
 
     /**
+     * Format a date in format YYYY-MM-DD as an age related to the current date
+     *
+     * @param string $birthday 
+     * @return void
+     */
+    public function asAge($birthday)
+    {
+        if(!empty($birthday)) {
+            return \app\components\helpers\DateHelper::computeAge($birthday);
+        } else {
+            return $this->asRaw(null);
+        }
+    }
+    /**
      * Format a value interpreted as the difference between an order value and the sum
      * of all its related transactions.
      *

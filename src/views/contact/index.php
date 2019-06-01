@@ -78,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'format'    => 'gender'
                         ],
+                        'birthday:age',
                         ['class' => 'yii\grid\ActionColumn'],
                     ],
                 ]); ?>

@@ -47,7 +47,13 @@ $allAttachments = $model->attachments;
                 'name',
                 'firstname',
                 'gender:gender',
-                'birthday:date',
+                [
+                    'attribute' => 'birthday',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return $model->birthday . ' ( '.Yii::$app->formatter->asAge($model->birthday).' ans )';
+                    }
+                ],
                 'email:email',
                 'phone_1',
                 'phone_2',
