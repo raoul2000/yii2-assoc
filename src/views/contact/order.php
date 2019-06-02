@@ -11,10 +11,11 @@ $this->params['breadcrumbs'][] = 'Orders';
 \yii\web\YiiAsset::register($this);
 
 ?>
-    <h2>
+    <h1>
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
         Orders 
         <small>for <?= Html::a(Html::encode($model->longName), ['view', 'id' => $model->id], ['title' => 'view contact']) ?></small>
-    </h2>
+    </h1>
 
     <hr/>
 

@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Order */
 
-$this->title = $model->id;
+$this->title = $model->product->name;
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -18,7 +18,10 @@ $orderModel = $model;
 ?>
 <div class="order-view">
 
-    <h1><?= Html::encode($model->product->name) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+        <?= Html::encode($model->product->name) ?>
+    </h1>
     <hr/>
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

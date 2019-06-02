@@ -114,7 +114,7 @@ $transactionModel = $model;
             'options' => ['class' =>'nav-tabs'],
             'items' => [
                 [
-                    'label' => 'Orders',
+                    'label' => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders',
                     'encode' => false,
                     'url' => ['view', 'id' => $model->id,'tab'=>'orders'],
                     'active' => $tab == 'orders'

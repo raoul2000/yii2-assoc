@@ -8,10 +8,10 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
 
-$this->title = $order->id;
+$this->title = $order->product->name;
 $this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $order->id]];
-$this->params['breadcrumbs'][] = 'link Order';
+$this->params['breadcrumbs'][] = 'link to transaction';
 \yii\web\YiiAsset::register($this);
 ?>
 <div>

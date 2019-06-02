@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     <?php endif; ?>
     <h1>
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>                
         <?= Html::encode($this->title) ?>
         <?php if ($toContact != null): ?>
             <small>
