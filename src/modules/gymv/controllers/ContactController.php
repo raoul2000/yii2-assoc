@@ -6,6 +6,7 @@ use yii\web\Controller;
 use League\Csv\Exception;
 use League\Csv\Reader;
 use app\models\Contact;
+use app\models\BankAccount;
 use app\models\Address;
 
 /**
@@ -65,8 +66,12 @@ class ContactController extends \app\controllers\ContactController
                         $action .= '-error';
                         $contact = null;
                     } else {
-                        // TODO: create related bank account
                         $action .= '-success';
+                        // create related bank account
+                        $bankAccount = new BankAccount();
+                        $bankAccount->contact_id = $contact->id;
+                        $bankAccount->name = '';
+                        $bankAccount->save(false);
                     }
                 }
 
