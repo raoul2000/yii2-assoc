@@ -194,6 +194,9 @@ class ContactController extends Controller
             'contacts' => \app\models\Contact::getNameIndex()
         ]);
     }
+    /**
+     * 
+     */
     public function actionOrderSummary($id)
     {
         $model = $this->findModel($id);

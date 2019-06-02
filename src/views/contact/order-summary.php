@@ -48,7 +48,7 @@ function included($intervalA, $intervalB) {
  *
  * @param [type] $intervalA
  * @param [type] $intervalB
- * @return void
+ * @return boolean
  */
 function contains($intervalA, $intervalB) {
     //return $intervalA[0] < $intervalB[0] && $intervalA[1] > $intervalB[1];
@@ -61,7 +61,7 @@ function contains($intervalA, $intervalB) {
  * included(A,B) = true ==> overlap(A,B)
  * @param [int, int] $intervalA
  * @param [int, int] $intervalB
- * @return bool
+ * @return boolean
  */
 function overlap($intervalA, $intervalB) {
     return overlapLeft($intervalA, $intervalB) || overlapRight($intervalA, $intervalB);
@@ -73,7 +73,7 @@ function overlap($intervalA, $intervalB) {
 
  * @param [type] $intervalA
  * @param [type] $intervalB
- * @return void
+ * @return boolean
  */
 function overlapLeft($intervalA, $intervalB) {
     return inInterval($intervalA[1], $intervalB);
@@ -84,7 +84,7 @@ function overlapLeft($intervalA, $intervalB) {
  *
  * @param [type] $intervalA
  * @param [type] $intervalB
- * @return void
+ * @return boolean
  */
 function overlapRight($intervalA, $intervalB) {
     return inInterval($intervalA[0], $intervalB);
@@ -92,6 +92,12 @@ function overlapRight($intervalA, $intervalB) {
 
 /**
  * Create an interval by joining 2 intervals and even if they have no value in common
+ * For example : 
+ * 
+ * intervalA : -------------|******|----
+ * intervalB : -----|****|--------------
+ * result    : -----|**************|----
+ 
  * @param [int, int] $intervalA
  * @param [int, int] $intervalB
  * @return [int, int]
@@ -105,7 +111,7 @@ function joinInterval($intervalA, $intervalB) {
 
 function add($intervalA, $intervalB) {
     if (overlap($intervalA, $intervalB) || overlap($intervalB, $intervalA)) {
-        return joinInterval($intervalA, $intervalB);
+        return [joinInterval($intervalA, $intervalB)];
     } else {
         return [
             $intervalA,
@@ -136,20 +142,98 @@ function substract($intervalA, $intervalB) {
     } elseif (!overlap($intervalB, $intervalA)) {
         // A : ------|*****|--------------
         // B : ----------------|****|-----
-        return $intervalA;
+        return [$intervalA];
     } elseif ( overlapLeft($intervalB, $intervalA )) {
         // A : ------|******|-----
         // B : --|******|---------
-        return [$intervalB[1], $intervalA[1]];
+        return [
+            [$intervalB[1], $intervalA[1]]
+        ];
     } elseif ( overlapRight($intervalB, $intervalA )) {
         // A : ------|******|----------
         // B : ----------|******|------
-        return [$intervalA[0], $intervalB[0]];
+        return [
+            [$intervalA[0], $intervalB[0]]
+        ];
     } else {
         throw new Exception('bam');
     }
 }
+
+function convertDateToInt($date) {
+    if(preg_match('/(\d\d\d\d)-(\d\d)-(\d\d)/', $date, $match)) {
+        return intval($match[1] . $match[2] . $match[3]);
+    } else {
+        throw new Exception('invalid format');
+    }
+}
+
+function addToInervals($intervals, $interval) {
+    return array_reduce($intervals, function($result, $item) use($interval) {
+        return array_merge( $result, 
+            add($item, $interval)
+        );
+    },[]);
+}
+
+function substractFromInervals($intervals, $interval) {
+    return array_reduce($intervals, function($result, $item) use($interval) {
+        return array_merge( $result, 
+            substract($item, $interval)
+        );
+    },[]);
+}
+
+function summarize() {
+    foreach( $byProduct as $key => $orders) {
+        echo "product id : $key<br/>";
+    
+        if (count( $orders) == 1) {
+            echo "single order<br/>";
+        } else {
+            echo "multiple order<br/>";
+            // building 
+            $intervals = array_reduce($orders, function($result, $item ) {
+                if($item['to_contact_id'] == $model->id) {
+                    // beneficaire
+
+    
+                } elseif ($item['from_contact_id'] == $model->id) {
+                    // vendeur
+                }
+    
+                return array_merge($result, [[
+                    convertDateToInt($item['valid_date_start']),
+                    convertDateToInt($item['valid_date_end'])
+                ]]);
+            }, []);
+            echo VarDumper::dumpAsString($intervals);
+        }
+    }
+}
+
 ?>
+<pre>
+    <?php 
+        echo VarDumper::dumpAsString(
+            substractFromInervals([[1,4], [6,9], [13, 20]], [10,20])
+        );
+
+        echo VarDumper::dumpAsString(
+            addToInervals([[1,4], [6,9]], [0,10])
+        );
+        echo VarDumper::dumpAsString(
+            substractFromInervals([[1,4], [6,9]], [0,10])
+        );
+        echo VarDumper::dumpAsString(
+            addToInervals([[1,4], [6,9]], [3,5])
+        );
+        echo VarDumper::dumpAsString(
+            substractFromInervals([[1,4], [6,9]], [3,7])
+        );
+    ?>
+</pre>
+
 <pre>
 <?php
 // tests
