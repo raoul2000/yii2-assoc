@@ -57,8 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'value',
-            'valid_date_start',
-            'valid_date_end',            
+            'valid_date_start:date',
+            'valid_date_end:date',            
             'transactionValuesDiff:transactionValuesDiff',
             ['class' => 'yii\grid\ActionColumn'],
         ],

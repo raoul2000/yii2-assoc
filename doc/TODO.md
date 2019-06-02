@@ -30,6 +30,10 @@ This library required PHP 7.3
 
 implement a task system where a user can create a task linked to a record. It contains a description and a status (todo, done). In a first stage, the task is assigned to the user who created it. Later, we may extends this task system and manage assignments etc ..
 
+## Off Canvas Menu
+
+- [Off canvas menu on W3School](https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push)
+
 ## Charts
 
 - check [yii2-highcharts](https://github.com/miloschuman/yii2-highcharts) : If you are a non-profit company, or use our products for personal use, you may enjoy our software for free under a Creative Commons (CC) Attribution-NonCommercial licence
