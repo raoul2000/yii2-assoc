@@ -19,10 +19,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1>
         <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 
         Quality Check
-        <small><?= Html::encode($label) ?></small>
+        <small>Dataset</small>
     </h1>
     <hr/>
-
+    <div class="alert alert-info" role="alert">
+        <?= $label ?>
+    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [

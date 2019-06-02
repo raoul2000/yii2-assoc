@@ -8,7 +8,7 @@ use miloschuman\highcharts\Highcharts;
 /* @var $model app\models\Contact */
 
 $this->title = 'Statistics';
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['/contact/index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
