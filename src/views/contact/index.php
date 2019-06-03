@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div style="margin-top:1em;">
         <?php Pjax::begin(); ?>
-            <?php if ($tab == 'person') :?>
+            <?php if ($tab == 'person'):?>
                 <?= GridView::widget([
                     'tableOptions' => ['class' => 'table table-hover table-condensed'],
                     'dataProvider' => $dataProvider,

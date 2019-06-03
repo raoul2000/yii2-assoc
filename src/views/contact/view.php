@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $contactModel = $model;
 $allAttachments = $model->attachments;
-
 ?>
 <div class="contact-view">
 
@@ -28,7 +27,7 @@ $allAttachments = $model->attachments;
 
     <hr/>
     
-    <p>
+    <div style="margin-bottom:1em">
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -37,10 +36,21 @@ $allAttachments = $model->attachments;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Create Another Contact', ['create'], ['class' => 'btn btn-success']) ?>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Create Another Contact <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><?= Html::a('Person', ['create', 'person' => true]) ?></li>
+                <li><?= Html::a('Organization', ['create', 'person' => false]) ?></li>
+            </ul>
+        </div> 
+
         <?= Html::a('View Orders', ['order', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
-    </p>
-    <?php if($model->is_natural_person):?>
+    </div>
+
+    <?php if ($model->is_natural_person):?>
         <div class="row">
             <div class="col-lg-6">
                 <?= DetailView::widget([
@@ -54,8 +64,8 @@ $allAttachments = $model->attachments;
                             'attribute' => 'birthday',
                             'format' => 'raw',
                             'value' => function ($model) {
-                                if( !empty($model->birthday)) {
-                                    return Yii::$app->formatter->asDate($model->birthday) . ' ('.Yii::$app->formatter->asAge($model->birthday).' ans)';
+                                if (!empty($model->birthday)) {
+                                    return Yii::$app->formatter->asDate($model->birthday) . ' (' . Yii::$app->formatter->asAge($model->birthday) . ' ans)';
                                 } else {
                                     return null;
                                 }
