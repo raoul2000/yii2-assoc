@@ -13,8 +13,15 @@ class AttachmentGridView extends GridView
         $this->tableOptions = ['class' => 'table table-hover table-condensed'];
         $this->layout = '{items}';
         $this->columns = [
-            'name',
             'note',
+            [
+                'attribute' => 'name',
+                'label' => 'Filename'
+            ],
+            [
+                'attribute' => 'created_at',
+                'format' => ['date', 'php:d/m/Y H:i']
+            ],
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
