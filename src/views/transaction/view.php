@@ -33,81 +33,94 @@ $transactionModel = $model;
         <?= Html::a('Create Another Transaction', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            [
-                'label' => 'From',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->fromAccount->longName),
-                        ['bank-account/view','id' => $model->fromAccount->id],
-                        ['title' => 'view Account', 'data-pjax' => 0]
-                    );
-                }
-            ],
-            [
-                'label' => 'To',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->toAccount->longName),
-                        ['bank-account/view','id' => $model->toAccount->id],
-                        ['title' => 'view Account', 'data-pjax' => 0]
-                    );
-                }
-            ],
-            'value',
-            [
-                'attribute' => 'type',
-                'format'    => 'raw',
-                'value'     => function ($model) {
-                    return Html::encode( \app\components\Constant::getTransactionType($model->type));
-                }
-            ],
-            'reference_date:date',
-            'code',
-            'is_verified:boolean',
-            [
-                'label' => 'Category',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    if ($model->category_id) {
-                        return Html::encode($model->category->name);
-                    } else {
-                        return null;
-                    }
-                }
-            ],
-            'description',
-            'orders_value_total',
-            'orderValuesDiff:orderValuesDiff',
-            [
-                'label' => 'pack',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    if ($model->transaction_pack_id) {
-                        return Html::a(
-                            Html::encode('pack N°' . $model->transaction_pack_id . ' - ' . $model->pack->name),
-                            ['transaction-pack/view', 'id' => $model->transaction_pack_id],
-                            ['title' => 'view pack', 'data-pjax' => 0]
-                        );
-                    } else {
-                        return null;
-                    }
-                }
-            ],
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-        ],
-    ]) ?>
+    <div class="row">
+        <div class="col-lg-6">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    [
+                        'label' => 'From',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->fromAccount->longName),
+                                ['bank-account/view','id' => $model->fromAccount->id],
+                                ['title' => 'view Account', 'data-pjax' => 0]
+                            );
+                        }
+                    ],
+                    [
+                        'label' => 'To',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->toAccount->longName),
+                                ['bank-account/view','id' => $model->toAccount->id],
+                                ['title' => 'view Account', 'data-pjax' => 0]
+                            );
+                        }
+                    ],
+                    'value',
+                    [
+                        'attribute' => 'type',
+                        'format'    => 'raw',
+                        'value'     => function ($model) {
+                            return Html::encode(\app\components\Constant::getTransactionType($model->type));
+                        }
+                    ],
+                    'reference_date:date',
+                    'code',
+                    'is_verified:boolean'
+                ],
+            ]) ?>        
+        </div>
+        <div class="col-lg-6">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    [
+                        'label' => 'Category',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            if ($model->category_id) {
+                                return Html::encode($model->category->name);
+                            } else {
+                                return null;
+                            }
+                        }
+                    ],
+                    'description',
+                    'orders_value_total',
+                    'orderValuesDiff:orderValuesDiff',
+                    [
+                        'label' => 'pack',
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            if ($model->transaction_pack_id) {
+                                return Html::a(
+                                    Html::encode('pack N°' . $model->transaction_pack_id . ' - ' . $model->pack->name),
+                                    ['transaction-pack/view', 'id' => $model->transaction_pack_id],
+                                    ['title' => 'view pack', 'data-pjax' => 0]
+                                );
+                            } else {
+                                return null;
+                            }
+                        }
+                    ],
+                    [
+                        'attribute' => 'updated_at',
+                        'format' => ['date', 'php:d/m/Y H:i']
+                    ],
+                    [
+                        'attribute' => 'created_at',
+                        'format' => ['date', 'php:d/m/Y H:i']
+                    ],
+                ],
+            ]) ?>        
+        </div>
+            
+    </div>
+
 
     <div class="tab-view">
         <?= yii\bootstrap\Nav::widget([
