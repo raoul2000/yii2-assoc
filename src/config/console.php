@@ -13,6 +13,11 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
+    'controllerMap' => [
+        'fixture' => [
+            'class' => 'yii\faker\FixtureController',
+        ],
+    ],    
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
