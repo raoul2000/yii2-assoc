@@ -129,13 +129,14 @@ class RecordHistory extends \yii\db\ActiveRecord
      */
     public static function getUsernameIndex()
     {
-        $sessions = parent::find()
-            ->asArray()
+        $userIds = parent::find()
+            ->select('created_by')
+            ->distinct()
             ->with(['user'])
-            ->groupBy('created_by')
+            ->asArray()
             ->all();
-        
-        return ArrayHelper::map($sessions, 'created_by', function ($item) {
+
+        return ArrayHelper::map($userIds, 'created_by', function ($item) {
             return $item['user']['username'];
         });
     }

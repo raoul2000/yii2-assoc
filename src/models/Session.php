@@ -69,12 +69,13 @@ class Session extends \yii\db\ActiveRecord
     public static function getUsernameIndex()
     {
         $sessions = parent::find()
-            ->asArray()
+            ->select('user_id')
+            ->distinct()
             ->with(['user'])
-            ->groupBy('user_id')
+            ->asArray()
             ->andWhere(['NOT', 'user_id IS NULL'])
             ->all();
-        
+
         return ArrayHelper::map($sessions, 'user_id', function ($item) {
             return $item['user']['username'];
         });
