@@ -24,17 +24,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             [
+                'label' => 'Data Model',
                 'attribute' => 'table_name',
-                'filter'    => RecordHistory::getTableName(),
+                'filter'    => $tableNames,
                 'format'    => 'html',
                 'value'     => function ($model, $key, $index, $column) {
                     return RecordHistory::getTableName($model->table_name);
                 }
             ],
-            'row_id',
+            [
+                'attribute' => 'row_id',
+                'label' => 'Identifier'
+            ],
             [
                 'attribute' => 'event',
-                'filter'    => RecordHistory::getEventName(),
+                'filter'    => $eventNames,
                 'format'    => 'html',
                 'value'     => function ($model, $key, $index, $column) {
                     return RecordHistory::getEventName($model->event);

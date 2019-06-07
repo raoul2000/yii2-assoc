@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\RecordHistory */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Record Histories', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Record History', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

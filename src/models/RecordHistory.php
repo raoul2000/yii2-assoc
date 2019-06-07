@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use \app\components\ModelRegistry;
 
 /**
  * This is the model class for table "arhistory".
@@ -26,56 +27,7 @@ class RecordHistory extends \yii\db\ActiveRecord
         '2' => 'update',
         '3' => 'delete'
     ];
-    /**
-     * Match between table name (key) and table display name (value)
-     */
-    const TABLE_NAMES = [
-        'contact' => 'contact',
-        'transaction' => 'transaction',
-        'order' => 'order',
-        'address' => 'address',
-        'attachment' => 'attachment',
-        'bank_account' => 'bank account',
-        'product' => 'product',
-        'transaction_pack' => 'transaction pack',
-    ];
-    const ROUTES = [ // not used
-        'contact' => 'contact/view'
-    ];
-    const TABLE_MAP = [ // no used
-        'contact' => [
-            'label' => 'Contact',
-            'viewRoute' => 'contact/view'
-        ],
-        'transaction' => [
-            'label' => 'transaction',
-            'viewRoute' => 'transaction/view'
-        ],
-        'order' => [
-            'label' => 'order',
-            'viewRoute' => 'order/view'
-        ],
-        'address' => [
-            'label' => 'address',
-            'viewRoute' => 'address/view'
-        ],
-        'attachment' => [
-            'label' => 'attachment',
-            'viewRoute' => 'attachment/view'
-        ],
-        'bank_account' => [
-            'label' => 'bank account',
-            'viewRoute' => 'bank_account/view'
-        ],
-        'product' => [
-            'label' => 'product',
-            'viewRoute' => 'product/view'
-        ],
-        'transaction_pack' => [
-            'label' => 'transaction_pack',
-            'viewRoute' => 'transaction_pack/view'
-        ],
-    ];
+    
     /**
      * {@inheritdoc}
      */
@@ -90,11 +42,18 @@ class RecordHistory extends \yii\db\ActiveRecord
             ? RecordHistory::EVENT_LABELS[$idx]
             : RecordHistory::EVENT_LABELS;
     }
-    public static function getTableName($idx = null)
+    public static function getTableNameIndex()
     {
-        return $idx != null
-            ? (array_key_exists($idx, RecordHistory::TABLE_NAMES) ? RecordHistory::TABLE_NAMES[$idx] : $idx)
-            : RecordHistory::TABLE_NAMES;
+        return ModelRegistry::getTableNameIndex();
+    }
+    public static function getTableName($value)
+    {
+        $model = ModelRegistry::getByTableName($value);
+        if ($model != null) {
+            return $model->label;
+        } else {
+            return null;
+        }
     }
     /**
      * {@inheritdoc}
@@ -147,7 +106,15 @@ class RecordHistory extends \yii\db\ActiveRecord
      */
     public function getRecordViewUrl()
     {
-        return Url::toRoute([$this->table_name . '/view', 'id' => $this->row_id]);
+        $model = ModelRegistry::getByTableName($this->table_name);
+        if ($model != null) {
+            return Url::toRoute([
+                ( isset($model->viewRoute) ? $model->viewRoute : $model->id . '/view'),
+                'id' => $this->row_id
+            ]);
+        } else {
+            return null;
+        }
     }
 
     /**
