@@ -1,7 +1,8 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/test_db.php';
+//$db = require __DIR__ . '/test_db.php';
+$db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic-console',
@@ -17,6 +18,16 @@ $config = [
         'fixture' => [
             'class' => 'yii\faker\FixtureController',
         ],
+        'migrate' => [
+            'class' => \yii\console\controllers\MigrateController::class,
+            'migrationPath' => [
+                '@app/migrations',
+                '@yii/rbac/migrations', // Just in case you forgot to run it on console (see next note)
+            ],
+            'migrationNamespaces' => [
+                'Da\User\Migration',
+            ],
+        ],        
     ],    
     'components' => [
         'cache' => [

@@ -71,6 +71,10 @@ $config = [
     ],
     'params' => $params,
     'modules' => [
+        'webshell' => [
+            'class' => 'samdark\webshell\Module',
+            // 'yiiScript' => Yii::getAlias('@root'). '/yii', // adjust path to point to your ./yii script
+        ],        
         'gymv' => [
             'class' => 'app\modules\gymv\Module',
         ],
