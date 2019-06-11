@@ -16,7 +16,13 @@ mysql -h <hostname> -u <username> --password=<password> -D <database> -e 'source
 # create admin user
 yii user/create admin@email.com admin 123456  admin
 
-# Generate Fake Contact and load them
+# Generate Fake Contact + Address and load them
 yii fixture/generate contact --count=5 --interactive=0
+yii fixture/generate address --count=5 --interactive=0
 yii fixture/load Contact --interactive=0
+```
+
+```bash
+yii fixture/generate "*" --count=10 --interactive=0
+yii fixture/load
 ```
