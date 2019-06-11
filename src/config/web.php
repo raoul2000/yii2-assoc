@@ -73,8 +73,9 @@ $config = [
     'modules' => [
         'webshell' => [
             'class' => 'samdark\webshell\Module',
+            'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.2'],
             // 'yiiScript' => Yii::getAlias('@root'). '/yii', // adjust path to point to your ./yii script
-        ],        
+        ],
         'gymv' => [
             'class' => 'app\modules\gymv\Module',
         ],

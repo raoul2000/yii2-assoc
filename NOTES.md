@@ -76,3 +76,13 @@ composer require --prefer-dist bupy7/yii2-activerecord-history "*"
 
 - using the great https://github.com/Beaten-Sect0r/yii2-db-manager
 
+## Fixture generator
+
+- using [Yii2-faker](https://github.com/yiisoft/yii2-faker)
+
+Example : 
+```
+yii fixture/generate contact --count=5 --interactive=0
+yii fixture/load Contact --interactive=0
+```
+

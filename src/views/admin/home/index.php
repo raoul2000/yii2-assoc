@@ -55,4 +55,5 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::a('User Admin', ['/user/admin'], ['class' => 'btn btn-danger']) ?>
     <?= Html::a('Session Admin', ['/session'], ['class' => 'btn btn-danger']) ?>
     <?= Html::a('DB Backup/Restore', ['/db-manager'], ['class' => 'btn btn-danger']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-console" aria-hidden="true"></span> Web Shell', ['/webshell'], ['target' => 'webshell', 'class' => 'btn btn-danger']) ?>
 </p>

@@ -4,7 +4,7 @@ the project tools is based on **gulp tasks**.
 
 ## Tasks for building
 
-The main task for building the project (the default task) builds source and vendor and produce a folder ready to deploy :
+The main task for building the project (the default task) builds *source*, *vendor*, and produces a folder ready to deploy :
 ```
 gulp
 ```
@@ -13,7 +13,7 @@ gulp
 
 ### FTP
 
-Currently only FTP deployment is supported.
+**Currently only FTP deployment is supported**
 
 Before dploying you must configure the target server information into the file `./gulp-task/sftp-prod.json`
 
