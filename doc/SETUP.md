@@ -19,10 +19,14 @@ yii user/create admin@email.com admin 123456  admin
 # Generate Fake Contact + Address and load them
 yii fixture/generate contact --count=5 --interactive=0
 yii fixture/generate address --count=5 --interactive=0
+yii fixture/generate bank_account --count=5 --interactive=0
+
+# load fixture for Contact and its dependent models
 yii fixture/load Contact --interactive=0
 ```
 
 ```bash
+# Generate and load all
 yii fixture/generate "*" --count=10 --interactive=0
-yii fixture/load
+yii fixture/load "*"
 ```
