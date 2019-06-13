@@ -103,7 +103,7 @@ class Contact extends \yii\db\ActiveRecord
             [['is_deleted', 'gender'], 'integer'],
             ['gender','in', 'range' => [0,1,2] ],
             [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
-            [['phone_1', 'phone_2'], 'string', 'max' => 15],
+            [['phone_1', 'phone_2'], 'string', 'max' => 50],
             ['email', 'email'],
             [['birthday', 'date_1'], 'date', 'format' => 'php:Y-m-d'],
         ];
