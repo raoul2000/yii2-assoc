@@ -54,6 +54,7 @@ function copySource() {
         '!./src/*.xml',
         '!./src/yii',
         '!./src/yii.bat',
+        '!./src/install-dev.bat',
     ], { base: './src/' })
         .pipe(dest('./build/src'));
 }
