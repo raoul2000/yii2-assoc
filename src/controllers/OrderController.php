@@ -112,9 +112,10 @@ class OrderController extends Controller
      *
      * @param $transaction_id ID of the transaction to link to the newly created order
      * @param $to_contact_id ID of the contact beneficiary fo this order
+     * @param $redirect_url the url to redirect the browser to on success
      * @return mixed
      */
-    public function actionCreate($transaction_id = null, $to_contact_id = null)
+    public function actionCreate($transaction_id = null, $to_contact_id = null, $redirect_url = null)
     {
         $model = new Order();
         $transaction = null;
@@ -164,8 +165,7 @@ class OrderController extends Controller
             if ($transaction != null) {
                 $model->linkToTransaction($transaction);
             }
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(($redirect_url ? $redirect_url : ['view', 'id' => $model->id]));
         }
 
         if ($model->to_contact_id == null && $transaction !== null) {
