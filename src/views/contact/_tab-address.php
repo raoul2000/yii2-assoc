@@ -13,7 +13,7 @@ $contactModel = $model;
     <?= Html::a(
         'Create Address',
         ['address/create', 'contact_id' => $model->id],
-        ['class' => 'btn btn-primary', 'data-pjax' => 0]
+        ['class' => 'btn btn-success', 'data-pjax' => 0]
     ) ?>
 
     <?= Html::a(
@@ -27,7 +27,7 @@ $contactModel = $model;
         <?= Html::a(
             'Create New Address For this Contact',
             ['address/create', 'contact_id' => $model->id, 'redirect_url' => Url::current()], 
-            ['class' => 'btn btn-primary', 'data-pjax' => 0]
+            ['class' => 'btn btn-success', 'data-pjax' => 0]
         ) ?>
         <?= Html::a(
             'Update This Address',

@@ -46,8 +46,6 @@ $allAttachments = $model->attachments;
                 <li><?= Html::a('Organization', ['create', 'person' => false]) ?></li>
             </ul>
         </div> 
-
-        <?= Html::a('View Orders', ['order', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php if ($model->is_natural_person):?>
@@ -139,7 +137,7 @@ $allAttachments = $model->attachments;
         </div>                    
     <?php endif; ?>
 
-    <?php Pjax::begin(); ?>
+
         <?= yii\bootstrap\Nav::widget([
             'options' => ['class' =>'nav-tabs'],
             'items' => [
@@ -161,11 +159,17 @@ $allAttachments = $model->attachments;
                     'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
                     'active' => $tab == 'attachment'
                 ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'order'],
+                    'active' => $tab == 'order'
+                ],
             ]
         ]) ?>
 
         <div style="margin-top:1em;">
             <?= $tabContent ?>
         </div>
-    <?php Pjax::end(); ?>
+ 
 </div>

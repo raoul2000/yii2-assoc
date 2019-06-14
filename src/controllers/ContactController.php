@@ -159,6 +159,30 @@ class ContactController extends Controller
                     ])
                 ]);
                 break;
+
+            case 'order':
+                $orderSearchModel = new \app\models\OrderSearch();
+                $orderDataProvider = $orderSearchModel->search(
+                    Yii::$app->request->queryParams,
+                    \app\models\Order::find()
+                        ->with('transactions')
+                );
+                $orderDataProvider->query->andWhere([
+                    'or', ['to_contact_id' => $id], ['from_contact_id' => $id]
+                ]);
+
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-order', [
+                        'model' => $model,
+                        'orderSearchModel' => $orderSearchModel,
+                        'orderDataProvider' => $orderDataProvider,
+                        'products' => \app\models\Product::getNameIndex(),
+                        'contacts' => \app\models\Contact::getNameIndex()
+                    ])
+                ]);
+                break;
             
             default:
                 return $this->redirect(['view', 'id' => $model->id, 'tab' => 'account']);
@@ -166,34 +190,6 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Display orders for a contact, given the contact id.
-     *
-     * @param int $id the contact model id
-     * @return mixed
-     */
-    public function actionOrder($id)
-    {
-        $model = $this->findModel($id);
-        $orderSearchModel = new \app\models\OrderSearch();
-        $orderDataProvider = $orderSearchModel->search(
-            Yii::$app->request->queryParams,
-            \app\models\Order::find()
-                ->with('transactions')
-        );
-        //$orderDataProvider->query->andWhere(['to_contact_id' => $id]);
-        $orderDataProvider->query->andWhere([
-            'or', ['to_contact_id' => $id], ['from_contact_id' => $id] 
-        ]);
-
-        return $this->render('order', [
-            'model' => $model,
-            'orderSearchModel' => $orderSearchModel,
-            'orderDataProvider' => $orderDataProvider,
-            'products' => \app\models\Product::getNameIndex(),
-            'contacts' => \app\models\Contact::getNameIndex()
-        ]);
-    }
     /**
      * 
      */
