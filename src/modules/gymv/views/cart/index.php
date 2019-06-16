@@ -33,6 +33,9 @@ $jsScript=<<<EOS
              });            
         }
     });
+    $('#btn-checkout').on('click', (ev) => {
+        document.getElementById('form-check-out').submit();
+    });
 EOS;
 
 $this->registerJs($jsScript, View::POS_READY, 'remove-product-from-cart');
@@ -52,9 +55,11 @@ $this->registerJs($jsScript, View::POS_READY, 'remove-product-from-cart');
         <p>
             <?= Html::a('Select Product To Add', ['add-product'], ['class' => 'btn btn-default']) ?>
             <?= Html::button('Remove Selected Product From Cart', ['id' => 'btn-remove-product', 'class' => 'btn btn-danger']) ?>
+            <?= Html::button('Check Out', ['id' => 'btn-checkout', 'class' => 'btn btn-primary']) ?>
         </p>
 
         <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
+            <?= Html::beginForm(['check-out'], 'POST', ['id' => 'form-check-out']) ?>
             <?= GridView::widget([
                 'tableOptions' => ['class' => 'table table-hover table-condensed'],
                 'id' => $gridViewElementId,
@@ -72,6 +77,7 @@ $this->registerJs($jsScript, View::POS_READY, 'remove-product-from-cart');
                     'valid_date_end:date',
                 ],
             ]); ?>
+            <?= Html::endForm() ?>
         <?php Pjax::end(); ?>
     <?php endif; ?>
 </div>

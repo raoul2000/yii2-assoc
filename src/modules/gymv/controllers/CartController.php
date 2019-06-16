@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
 use yii\web\Response;
 use app\modules\gymv\models\Cart;
+use app\models\Product;
 
 
 class CartController extends \yii\web\Controller
@@ -86,8 +87,31 @@ class CartController extends \yii\web\Controller
         return $this->render('update');
     }
 
-    public function actionView()
+    public function actionCheckOut()
     {
-    }
+        $selectedProductId = Yii::$app->request->post('selection'); // array
+        if (count($selectedProductId) == 0) {
+            Yii::$app->session->setFlash('error', 'no item selected');
+            return $this->actionIndex();
+        }
 
+        // validate selected products ids
+        $selectedProduct = Product::findAll($selectedProductId);
+        if (count($selectedProduct) != count($selectedProductId)) {
+            throw new NotFoundHttpException('One or more product are not found.');
+        }
+
+        $orders = [];
+        foreach( $selectedProduct as $product) {
+            $order = new Order();
+            $order->product_id = $product->id;
+            $order->value = $product->value;
+            $orders[] = $order;
+        }
+
+        return $this->render('check-out', [
+            'orders' => $orders,
+            'contacts' => \app\models\Contact::getNameIndex()
+        ]);
+    }
 }
