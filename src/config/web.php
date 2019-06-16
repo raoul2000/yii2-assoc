@@ -78,6 +78,7 @@ $config = [
         ],
         'gymv' => [
             'class' => 'app\modules\gymv\Module',
+            'defaultRoute' => 'home/index'
         ],
         'stat' => [
             'class' => 'app\modules\stat\Module',
