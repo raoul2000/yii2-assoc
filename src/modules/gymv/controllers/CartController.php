@@ -11,8 +11,6 @@ use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
 use yii\web\Response;
 use app\modules\gymv\models\Cart;
-use app\models\Product;
-
 
 class CartController extends \yii\web\Controller
 {
@@ -30,7 +28,7 @@ class CartController extends \yii\web\Controller
         
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-        ]);        
+        ]);
     }
 
     public function actionAddProduct()
@@ -43,7 +41,7 @@ class CartController extends \yii\web\Controller
         return $this->render('add-product', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-        ]);        
+        ]);
     }
 
 
@@ -102,7 +100,7 @@ class CartController extends \yii\web\Controller
         }
 
         $orders = [];
-        foreach( $selectedProduct as $product) {
+        foreach ($selectedProduct as $product) {
             $order = new Order();
             $order->product_id = $product->id;
             $order->value = $product->value;
