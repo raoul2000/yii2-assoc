@@ -5,6 +5,7 @@ namespace app\modules\gymv\controllers;
 use Yii;
 use app\models\Product;
 use app\models\ProductSearch;
+use app\models\Order;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -85,9 +86,12 @@ class CartController extends \yii\web\Controller
         return $this->render('update');
     }
 
-    public function actionCheckOut()
+    public function actionCheckOut($action = '')
     {
-        $selectedProductId = Yii::$app->request->post('selection'); // array
+
+        $cart = new Cart();
+        $selectedProductId = $cart->getProductIds();
+
         if (count($selectedProductId) == 0) {
             Yii::$app->session->setFlash('error', 'no item selected');
             return $this->actionIndex();
@@ -107,8 +111,14 @@ class CartController extends \yii\web\Controller
             $orders[] = $order;
         }
 
+        if (Yii::$app->request->isGet && isset($action)) {
+            if ($action == 'add-order') {
+                $orders[] = new Order();
+            }
+        }
         return $this->render('check-out', [
             'orders' => $orders,
+            'products' => \app\models\Product::getNameIndex(),
             'contacts' => \app\models\Contact::getNameIndex()
         ]);
     }
