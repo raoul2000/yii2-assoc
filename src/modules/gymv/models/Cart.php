@@ -31,6 +31,11 @@ class Cart extends Model
         $this->_product_ids = array_diff($this->_product_ids, $ids);
     }
 
+    public function clearProducts()
+    {
+        $this->_product_ids = [];
+    }
+
     public function getProductIds()
     {
         return $this->_product_ids;

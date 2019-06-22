@@ -2,16 +2,38 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use yii\web\View;
 
 /* @var $this yii\web\View */
+
+$formName = "cart-manager-form";
+$jsScript=<<<EOS
+    $('#cart-manager-container').on('click', (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+        if(ev.target.dataset.action) {
+            document.getElementById('cart-action').value = ev.target.dataset.action;
+            document.forms['{$formName}'].submit();
+        }
+    });
+EOS;
+
+$this->registerJs($jsScript, View::POS_READY, 'cart-manager');
+
 ?>
-<div class="cart-check-out">
-    <h1>cart/check-out</h1>
+<div id="cart-manager-container" class="cart-check-out">
+    <h1>cart Manager</h1>
     <hr/>
+    <p>
+        
+    </p>
 
+    <?php $form = ActiveForm::begin(['options' => [ "name" => $formName]]); ?>
+        <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
 
-    <?php $form = ActiveForm::begin(); ?>
-
+        <?= Html::hiddenInput('action','', ["id" => "cart-action"]) ?>
+        
         <table class="table table-condensed table-hover">
             <tbody>
                 <?php  foreach ($orders as $index => $order): ?>
@@ -29,7 +51,7 @@ use yii\widgets\ActiveForm;
                             <?= $form->field($order, "[$index]to_contact_id")->listBox($contacts, ['size'=>1])?>
                         </td>
                         <td>
-                            <?= Html::a('remove', ['check-out', 'action' => 'remove-order', 'id' => $index], ['class' => 'btn btn-default']) ?>
+                            <?= Html::button('remove', ['class' => 'btn btn-default', 'data-action' => "remove-order@$index"]) ?>
                         </td>
                     </tr>        
                 <?php endforeach; ?>
