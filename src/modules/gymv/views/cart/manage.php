@@ -20,6 +20,34 @@ $jsScript=<<<EOS
             document.forms['{$formName}'].submit();
         }
     });
+
+    const synchProductValues = () => {
+        document.querySelectorAll('.orders select[data-product');
+        document.querySelectorAll('.orders select[data-product').forEach( copySelectedProductValue );
+    };
+
+    const copySelectedProductValue = (sel, overwriteTargetValue) => {
+        const targetElement = document.getElementById(sel.dataset.targetId);
+        const orderValue = sel.selectedOptions[0].dataset.value;
+        if( overwriteTargetValue || targetElement.value.trim().length != 0) {
+            targetElement.value = orderValue;
+        }
+    };
+
+    $('.orders select[data-product]').change( (ev) => {
+        //debugger;
+        copySelectedProductValue(ev.target, true);
+        return;
+        const inputValue = document.getElementById(ev.target.dataset.targetId);
+        const orderValue = ev.target.selectedOptions[0].dataset.value;
+        inputValue.value = orderValue;
+        //alert(orderValue);
+    });
+
+    $(document).ready( () => {
+        // disabled : deserve more work
+        //synchProductValues();
+    });
 EOS;
 
 $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
@@ -36,24 +64,54 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
         <hr>
         <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
         
-        <table class="table table-condensed table-hover">
+        <table class="table table-condensed table-hover orders">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Value</th>
+                    <th>Fournisseur</th>
+                    <th>Beneficiaire</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tbody>
                 <?php  foreach ($orders as $index => $order): ?>
                     <tr>
                         <td>
-                            <?= $form->field($order, "[$index]product_id")->listBox($products, ['size'=>1])?>
+                            <?= $form->field($order, "[$index]product_id")
+                                ->listBox($products, [
+                                    'size'=>1, 
+                                    'data-product' => true,  
+                                    'data-target-id' => Html::getInputId($order, "[$index]value"),
+                                    'options' => $productOptions
+                                ])
+                                ->label(false)
+                            ?>
                         </td>
                         <td>
-                            <?= $form->field($order, "[$index]value")->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off']) ?>
+                            <?= $form->field($order, "[$index]value")
+                                ->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->label(false) 
+                            ?>
                         </td>
                         <td>
-                            <?= $form->field($order, "[$index]from_contact_id")->listBox($contacts, ['size'=>1])?>
+                            <?= $form->field($order, "[$index]from_contact_id")
+                            ->listBox($contacts, ['size'=>1])
+                            ->label(false)
+                        ?>
                         </td>
                         <td>
-                            <?= $form->field($order, "[$index]to_contact_id")->listBox($contacts, ['size'=>1])?>
+                            <?= $form->field($order, "[$index]to_contact_id")
+                                ->listBox($contacts, ['size'=>1])
+                                ->label(false)
+                            ?>
                         </td>
                         <td>
-                            <?= Html::button('remove', ['class' => 'btn btn-default', 'data-action' => "remove-order", 'data-index' => $index]) ?>
+                            <?= Html::button(
+                                '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>', 
+                                ['class' => 'btn btn-danger btn-sm', 'data-action' => "remove-order", 'data-index' => $index,
+                                'title' => 'remove']
+                            ) ?>
                         </td>
                     </tr>        
                 <?php endforeach; ?>

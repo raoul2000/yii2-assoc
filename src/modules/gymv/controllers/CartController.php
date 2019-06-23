@@ -7,9 +7,9 @@ use yii\base\Model;
 use app\models\Product;
 use app\models\ProductSearch;
 use app\models\Order;
-use app\models\BankAccount;
 use app\models\Transaction;
 use yii\web\Controller;
+use app\models\BankAccount;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
@@ -262,11 +262,21 @@ class CartController extends \yii\web\Controller
             },$transactions)
         ];
         
+        // select products from DB and create additional data attributes array
+        $allProducts = Product::find()->all();
+        $productValues = [];
+        $productOptions = [];
+        foreach($allProducts as $product) {
+            $productValues[$product->id] = $product->name;
+            $productOptions[$product->id] = ['data-value' => $product->value];
+        }
+
         return $this->render('manage', [
             'orders' => $orders,
             'transactions' => $transactions,
             'bankAccounts' => BankAccount::getNameIndex(),
-            'products' => \app\models\Product::getNameIndex(),
+            'products' => $productValues,
+            'productOptions' => $productOptions,
             'contacts' => \app\models\Contact::getNameIndex()
         ]);
     }
