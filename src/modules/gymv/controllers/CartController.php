@@ -159,18 +159,19 @@ class CartController extends \yii\web\Controller
         // prepare order session storage
         $session = Yii::$app->session;
         if (!$session->has('cart')) {
+            // initialize empty session storage
             $session['cart'] = [
                 'orders' => [],
                 'transactions' => []
             ];
+        } else {
+            // load order models from session storage
+            $orders = array_map(function($orderAttr){
+                $order = new Order();
+                $order->setAttributes($orderAttr);
+                return $order;
+            }, array_merge($session['cart']['orders'], $orders));
         }
-
-        // load order models from session storage
-        $orders = array_map(function($orderAttr){
-            $order = new Order();
-            $order->setAttributes($orderAttr);
-            return $order;
-        }, array_merge($session['cart']['orders'], $orders));
 
         Order::loadMultiple($orders,  Yii::$app->request->post());
 
@@ -181,7 +182,22 @@ class CartController extends \yii\web\Controller
                 case 'add-order':
                     $newOrder = new Order();
                     $orders[] = $newOrder;
-                break;
+                    break;
+                case 'remove-order':
+                    $indexToRemove = Yii::$app->request->post('index', null);
+                    if($indexToRemove === null) {
+                        throw new NotFoundHttpException('invalid request : missing order index');
+                    }
+                    // remove the order based on the index argument
+                    $updatedOrders = [];
+                    foreach($orders as $idx => $value) {
+                        if($idx == $indexToRemove) {
+                            continue;
+                        }
+                        $updatedOrders[] = $value;
+                    }
+                    $orders = $updatedOrders;
+                    break;
                 default:
                     throw new NotFoundHttpException('invalid request');
             }
