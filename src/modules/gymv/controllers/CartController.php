@@ -86,7 +86,7 @@ class CartController extends \yii\web\Controller
         return $this->render('update');
     }
 
-    public function actionCheckOut($action = '', $id = null)
+    public function actionCheckOut_old($action = '', $id = null)
     {
         $cart = new Cart();
         $selectedProductId = $cart->getProductIds();
@@ -133,7 +133,7 @@ class CartController extends \yii\web\Controller
         ]);
     }
 
-    public function actionManage()
+    public function actionCheckOut()
     {
         $orders = [];
         if (Yii::$app->request->isGet) {
@@ -145,7 +145,6 @@ class CartController extends \yii\web\Controller
                 if (count($selectedProduct) != count($selectedProductId)) {
                     throw new NotFoundHttpException('One or more product are not found.');
                 }
-        
                 foreach ($selectedProduct as $product) {
                     $order = new Order();
                     $order->product_id = $product->id;
@@ -177,14 +176,15 @@ class CartController extends \yii\web\Controller
 
         // process actions
         $action = Yii::$app->request->post('action');
-        
-        switch($action) {
-            case 'add-order':
-                $newOrder = new Order();
-                $orders[] = $newOrder;
-            break;
-            default:
-                throw new NotFoundHttpException('invalid request');
+        if (!empty($action)) {
+            switch($action) {
+                case 'add-order':
+                    $newOrder = new Order();
+                    $orders[] = $newOrder;
+                break;
+                default:
+                    throw new NotFoundHttpException('invalid request');
+            }
         }
 
         // save models back to session storage

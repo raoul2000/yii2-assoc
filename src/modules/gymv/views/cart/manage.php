@@ -14,6 +14,9 @@ $jsScript=<<<EOS
         ev.preventDefault();
         if(ev.target.dataset.action) {
             document.getElementById('cart-action').value = ev.target.dataset.action;
+            if( ev.target.dataset.index) {
+                document.getElementById('cart-index').value = ev.target.dataset.index;
+            }
             document.forms['{$formName}'].submit();
         }
     });
@@ -33,6 +36,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
         <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
 
         <?= Html::hiddenInput('action','', ["id" => "cart-action"]) ?>
+        <?= Html::hiddenInput('index','', ["id" => "cart-index"]) ?>
         
         <table class="table table-condensed table-hover">
             <tbody>
@@ -51,7 +55,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                             <?= $form->field($order, "[$index]to_contact_id")->listBox($contacts, ['size'=>1])?>
                         </td>
                         <td>
-                            <?= Html::button('remove', ['class' => 'btn btn-default', 'data-action' => "remove-order@$index"]) ?>
+                            <?= Html::button('remove', ['class' => 'btn btn-default', 'data-action' => "remove-order", 'data-index' => $index]) ?>
                         </td>
                     </tr>        
                 <?php endforeach; ?>
