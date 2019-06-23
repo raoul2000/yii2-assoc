@@ -27,16 +27,14 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
 ?>
 <div id="cart-manager-container" class="cart-check-out">
     <h1>cart Manager</h1>
-    <hr/>
-    <p>
-        
-    </p>
 
     <?php $form = ActiveForm::begin(['options' => [ "name" => $formName]]); ?>
-        <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
-
         <?= Html::hiddenInput('action','', ["id" => "cart-action"]) ?>
         <?= Html::hiddenInput('index','', ["id" => "cart-index"]) ?>
+
+        <h2>Orders</h2>
+        <hr>
+        <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
         
         <table class="table table-condensed table-hover">
             <tbody>
@@ -62,6 +60,40 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
             </tbody>
         </table>
 
+        <h2>Transactions</h2>
+        <hr>
+        <?= Html::button('add transaction', ['class' => 'btn btn-default', 'data-action' => 'add-transaction']) ?>
+
+        <table class="table table-condensed table-hover">
+            <tbody>
+                <?php  foreach ($transactions as $index => $transaction): ?>
+                    <tr>
+                        <td>
+                            <?= $form->field($transaction, "[$index]from_account_id")->listBox($bankAccounts, ['size'=>1])?>
+                        </td>
+                        <td>
+                            <?= $form->field($transaction, "[$index]to_account_id")->listBox($bankAccounts, ['size'=>1])?>
+                        </td>
+                        <td>
+                            <?= $form->field($transaction, "[$index]value")->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+                        </td>
+                        <td>
+                            <?= $form->field($transaction, "[$index]reference_date")->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+                        </td>
+                        <td>
+                            <?= $form->field($transaction, "[$index]type")->listBox( \app\components\Constant::getTransactionTypes(), ['size'=>1])?>
+                        </td>
+                        <td>
+                            <?= $form->field($transaction, "[$index]code")->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+                        </td>
+                        <td>
+                            <?= Html::button('remove', ['class' => 'btn btn-default', 'data-action' => "remove-transaction", 'data-index' => $index]) ?>
+                        </td>
+                    </tr>        
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?= Html::button('Submit Cart', ['class' => 'btn btn-primary', 'data-action' => "submit"]) ?>
     <?php ActiveForm::end(); ?>
 
 </div>

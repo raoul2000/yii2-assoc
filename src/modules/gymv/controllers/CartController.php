@@ -3,9 +3,12 @@
 namespace app\modules\gymv\controllers;
 
 use Yii;
+use yii\base\Model;
 use app\models\Product;
 use app\models\ProductSearch;
 use app\models\Order;
+use app\models\BankAccount;
+use app\models\Transaction;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -136,6 +139,8 @@ class CartController extends \yii\web\Controller
     public function actionCheckOut()
     {
         $orders = [];
+        $transactions = [];
+
         if (Yii::$app->request->isGet) {
             // convert selected products into orders and clear cart
             $cart = new Cart();
@@ -165,28 +170,71 @@ class CartController extends \yii\web\Controller
                 'transactions' => []
             ];
         } else {
-            // load order models from session storage
+            // load ORDER models from session storage
             $orders = array_map(function($orderAttr){
                 $order = new Order();
                 $order->setAttributes($orderAttr);
                 return $order;
             }, array_merge($session['cart']['orders'], $orders));
+
+            // load TRANSACTION models from session storage
+            $transactions = array_map(function($transactionAttr){
+                $transaction = new Transaction();
+                $transaction->setAttributes($transactionAttr);
+                return $transaction;
+            }, $session['cart']['transactions']); // no merge needed as transaction are never stored in the cart session
         }
 
-        Order::loadMultiple($orders,  Yii::$app->request->post());
+        Model::loadMultiple($orders,  Yii::$app->request->post());
+        Model::loadMultiple($transactions,  Yii::$app->request->post());
 
         // process actions
         $action = Yii::$app->request->post('action');
         if (!empty($action)) {
             switch($action) {
-                case 'add-order':
+                case 'submit' :
+                    if(count($orders) === 0) {
+                        Yii::$app->session->setFlash('error', "No order");
+                    } elseif( count($transactions) == 0) {
+                        Yii::$app->session->setFlash('error', "No transactions");
+                    } else {
+                        $ordersAreValid = Model::validateMultiple($orders);
+                        $transactionsAreValid = Model::validateMultiple($transactions);
+                        if ( $ordersAreValid && $transactionsAreValid) {
+                            // save all here
+                        }
+                    }
+                    break;
+                case 'add-transaction': ////////////////////////////////////////////////////////////
+                    $newTransaction = new Transaction();
+                    $transactions[] = $newTransaction;
+                    break;
+
+                case 'remove-transaction': ////////////////////////////////////////////////////////
+                    $indexToRemove = Yii::$app->request->post('index', null);
+                    if($indexToRemove === null) {
+                        throw new NotFoundHttpException('invalid request : missing index');
+                    }
+                    // remove the transaction based on the index argument
+                    $updatedTransactions = [];
+                    foreach($transactions as $idx => $value) {
+                        if($idx == $indexToRemove) {
+                            continue;
+                        }
+                        $updatedTransactions[] = $value;
+                    }
+                    $transactions = $updatedTransactions;
+                    break;
+
+                case 'add-order': /////////////////////////////////////////////////////////////////
                     $newOrder = new Order();
                     $orders[] = $newOrder;
                     break;
-                case 'remove-order':
+
+                case 'remove-order': //////////////////////////////////////////////////////////////
                     $indexToRemove = Yii::$app->request->post('index', null);
                     if($indexToRemove === null) {
-                        throw new NotFoundHttpException('invalid request : missing order index');
+                        throw new NotFoundHttpException('invalid request : missing index');
                     }
                     // remove the order based on the index argument
                     $updatedOrders = [];
@@ -198,7 +246,8 @@ class CartController extends \yii\web\Controller
                     }
                     $orders = $updatedOrders;
                     break;
-                default:
+
+                default: /////////////////////////////////////////////////////////////////////////
                     throw new NotFoundHttpException('invalid request');
             }
         }
@@ -208,11 +257,15 @@ class CartController extends \yii\web\Controller
             'orders' => array_map(function($order) {
                 return $order->getAttributes();
             },$orders),
-            'transactions' => []
+            'transactions' => array_map(function($transaction) {
+                return $transaction->getAttributes();
+            },$transactions)
         ];
-
+        
         return $this->render('manage', [
             'orders' => $orders,
+            'transactions' => $transactions,
+            'bankAccounts' => BankAccount::getNameIndex(),
             'products' => \app\models\Product::getNameIndex(),
             'contacts' => \app\models\Contact::getNameIndex()
         ]);
