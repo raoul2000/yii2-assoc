@@ -10,43 +10,64 @@ use yii\web\View;
 $formName = "cart-manager-form";
 $jsScript=<<<EOS
     $('#cart-manager-container').on('click', (ev) => {
-        ev.stopPropagation();
-        ev.preventDefault();
-        if(ev.target.dataset.action) {
-            document.getElementById('cart-action').value = ev.target.dataset.action;
-            if( ev.target.dataset.index) {
-                document.getElementById('cart-index').value = ev.target.dataset.index;
+        const actionEl = ev.target.closest("[data-action]");
+        if(actionEl) {
+            ev.stopPropagation();
+            ev.preventDefault();
+            const actionName = actionEl.dataset.action;
+            console.log(`calling action : \${actionName}`);            
+
+            switch(actionName) {
+                case "copy-product-value":
+                    actionCopyProductValue(actionEl);
+                    break;
+                default:
+                    document.getElementById('cart-action').value = actionEl.dataset.action;
+                    if( actionEl.dataset.index) {
+                        document.getElementById('cart-index').value = actionEl.dataset.index;
+                        console.log(`index : \${actionEl.dataset.index}`);
+                    }
+                    document.forms['{$formName}'].submit();
+
             }
-            document.forms['{$formName}'].submit();
         }
     });
 
-    const synchProductValues = () => {
-        document.querySelectorAll('.orders select[data-product');
-        document.querySelectorAll('.orders select[data-product').forEach( copySelectedProductValue );
+    const actionCopyProductValue = (buttonEl) => {
+
+        const sourceId = buttonEl.dataset.sourceId;
+        const targetId = buttonEl.dataset.targetId;
+
+        const value = document.getElementById(sourceId).selectedOptions[0].dataset.value;
+        document.getElementById(targetId).value = value;
     };
 
-    const copySelectedProductValue = (sel, overwriteTargetValue) => {
+    /**
+     * Copy the selected option data-value to the text content of another element
+     * 
+     * Each option of the select element must include a "data-value" attribute whose value
+     * is copied to the target element
+     * 
+     * @param sel the select element. It must include a "data-target-id" attribute with the value
+     * of the element to update
+     */
+    const copySelectedProductValue = (sel) => {
         const targetElement = document.getElementById(sel.dataset.targetId);
-        const orderValue = sel.selectedOptions[0].dataset.value;
-        if( overwriteTargetValue || targetElement.value.trim().length != 0) {
-            targetElement.value = orderValue;
-        }
+        const productValue = sel.selectedOptions[0].dataset.value;
+        targetElement.textContent = productValue;
     };
 
     $('.orders select[data-product]').change( (ev) => {
-        //debugger;
-        copySelectedProductValue(ev.target, true);
-        return;
-        const inputValue = document.getElementById(ev.target.dataset.targetId);
-        const orderValue = ev.target.selectedOptions[0].dataset.value;
-        inputValue.value = orderValue;
-        //alert(orderValue);
+        // update product value display
+        copySelectedProductValue(ev.target);
+
+        // clear order value
+        document.getElementById(ev.target.dataset.orderValueId).value = '';
     });
 
     $(document).ready( () => {
-        // disabled : deserve more work
-        //synchProductValues();
+
+        document.querySelectorAll('.orders select[data-product').forEach( copySelectedProductValue );
     });
 EOS;
 
@@ -68,6 +89,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
             <thead>
                 <tr>
                     <th>Product</th>
+                    <th></th>
                     <th>Value</th>
                     <th>Fournisseur</th>
                     <th>Beneficiaire</th>
@@ -82,11 +104,23 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                                 ->listBox($products, [
                                     'size'=>1, 
                                     'data-product' => true,  
-                                    'data-target-id' => Html::getInputId($order, "[$index]value"),
+                                    'data-order-value-id' => Html::getInputId($order, "[$index]value"),
+                                    'data-target-id' => "product-value-$index",
                                     'options' => $productOptions
                                 ])
                                 ->label(false)
                             ?>
+                            valeur unitaire : <span id="product-value-<?=$index?>"></span>
+                        </td>
+                        <td>
+                            <?= Html::button(
+                                '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', 
+                                ['class' => 'btn btn-default btn-sm', 
+                                    'data-action' => "copy-product-value", 
+                                    'data-source-id' => Html::getInputId($order, "[$index]product_id"),
+                                    'data-target-id' => Html::getInputId($order, "[$index]value"),
+                                'title' => 'copy']
+                            ) ?>
                         </td>
                         <td>
                             <?= $form->field($order, "[$index]value")

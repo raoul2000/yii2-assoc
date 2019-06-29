@@ -13,6 +13,7 @@ use yii\helpers\Url;
 $this->title = 'Cart';
 $this->params['breadcrumbs'][] = $this->title;
 
+// handle remove product from cart : Ajax post with selected product ids as parameter
 $submitUrl = Url::toRoute(['cart/ajax-remove-product']);
 $gridViewElementId = 'cart-products';
 $jsScript=<<<EOS
@@ -33,9 +34,6 @@ $jsScript=<<<EOS
              });            
         }
     });
-    $('#btn-checkout').on('click', (ev) => {
-        document.getElementById('form-check-out').submit();
-    });
 EOS;
 
 $this->registerJs($jsScript, View::POS_READY, 'remove-product-from-cart');
@@ -55,7 +53,7 @@ $this->registerJs($jsScript, View::POS_READY, 'remove-product-from-cart');
         <p>
             <?= Html::a('Select Product To Add', ['add-product'], ['class' => 'btn btn-default']) ?>
             <?= Html::button('Remove Selected Product From Cart', ['id' => 'btn-remove-product', 'class' => 'btn btn-danger']) ?>
-            <?= Html::button('Check Out', ['id' => 'btn-checkout', 'class' => 'btn btn-primary']) ?>
+            <?= Html::a('Check Out', ['check-out'], ['id' => 'btn-checkout', 'class' => 'btn btn-primary']) ?>
         </p>
 
         <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
