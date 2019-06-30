@@ -9,6 +9,11 @@ use yii\web\View;
 
 $formName = "cart-manager-form";
 $jsScript=<<<EOS
+    /**
+     * page action manager
+     * Handle all actions emitted by click on element having "data-action" as own attribute
+     * or ancestors
+     */
     $('#cart-manager-container').on('click', (ev) => {
         const actionEl = ev.target.closest("[data-action]");
         if(actionEl) {
