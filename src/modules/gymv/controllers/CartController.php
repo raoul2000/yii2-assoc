@@ -89,53 +89,11 @@ class CartController extends \yii\web\Controller
         return $this->render('update');
     }
 
-    public function actionCheckOut_old($action = '', $id = null)
-    {
-        $cart = new Cart();
-        $selectedProductId = $cart->getProductIds();
-
-        if (count($selectedProductId) == 0) {
-            Yii::$app->session->setFlash('error', 'no item selected');
-            return $this->actionIndex();
-        }
-
-        // validate selected products ids
-        $selectedProduct = Product::findAll($selectedProductId);
-        if (count($selectedProduct) != count($selectedProductId)) {
-            throw new NotFoundHttpException('One or more product are not found.');
-        }
-
-        $orders = [];
-        foreach ($selectedProduct as $product) {
-            $order = new Order();
-            $order->product_id = $product->id;
-            $order->value = $product->value;
-            $orders[] = $order;
-        }
-
-        if (Yii::$app->request->isGet && !empty($action)) {
-            switch($action) {
-                case 'remove-order':
-                    if (!isset($id)) {
-                        throw new NotFoundHttpException('invalid action request');
-                    }
-                    $cart->removeProductIds([$id]);
-                    $orders = array_filter($orders, function($order) use ($id) {
-                        return $order->id != $id;
-                    });
-                break;
-                default:
-                    throw new NotFoundHttpException('invalid request');
-            }
-        }
-
-        return $this->render('check-out', [
-            'orders' => $orders,
-            'products' => \app\models\Product::getNameIndex(),
-            'contacts' => \app\models\Contact::getNameIndex()
-        ]);
-    }
-
+    /**
+     * Shopping Cart Management
+     *
+     * @return void
+     */
     public function actionCheckOut()
     {
         $orders = [];
@@ -145,7 +103,7 @@ class CartController extends \yii\web\Controller
             // convert selected products into orders and clear cart
             $cart = new Cart();
             $selectedProductId = $cart->getProductIds();
-            if( count($selectedProductId) != 0) {
+            if (count($selectedProductId) != 0) {
                 $selectedProduct = Product::findAll($selectedProductId);
                 if (count($selectedProduct) != count($selectedProductId)) {
                     throw new NotFoundHttpException('One or more product are not found.');
@@ -155,13 +113,13 @@ class CartController extends \yii\web\Controller
                     $order->product_id = $product->id;
                     $order->value = $product->value;
                     $orders[] = $order;
-                }    
+                }
                 $cart->clearProducts();
                 $cart->save();
             }
         }
 
-        // prepare order session storage
+        // prepare order and transaction session storage
         $session = Yii::$app->session;
         if (!$session->has('cart')) {
             // initialize empty session storage
@@ -171,37 +129,53 @@ class CartController extends \yii\web\Controller
             ];
         } else {
             // load ORDER models from session storage
-            $orders = array_map(function($orderAttr){
+            $orders = array_map(function ($orderAttr){
                 $order = new Order();
                 $order->setAttributes($orderAttr);
                 return $order;
             }, array_merge($session['cart']['orders'], $orders));
 
             // load TRANSACTION models from session storage
-            $transactions = array_map(function($transactionAttr){
+            $transactions = array_map(function ($transactionAttr){
                 $transaction = new Transaction();
                 $transaction->setAttributes($transactionAttr);
                 return $transaction;
             }, $session['cart']['transactions']); // no merge needed as transaction are never stored in the cart session
         }
 
-        Model::loadMultiple($orders,  Yii::$app->request->post());
-        Model::loadMultiple($transactions,  Yii::$app->request->post());
+        // load models
+        Model::loadMultiple($orders, Yii::$app->request->post());
+        Model::loadMultiple($transactions, Yii::$app->request->post());
 
         // process actions
         $action = Yii::$app->request->post('action');
         if (!empty($action)) {
-            switch($action) {
+            switch ($action) {
                 case 'submit' :
-                    if(count($orders) === 0) {
-                        Yii::$app->session->setFlash('error', "No order");
-                    } elseif( count($transactions) == 0) {
-                        Yii::$app->session->setFlash('error', "No transactions");
+                    if (count($orders) === 0) {
+                        Yii::$app->session->setFlash('error', 'No order');
+                    } elseif (count($transactions) == 0) {
+                        Yii::$app->session->setFlash('error', 'No transactions');
                     } else {
                         $ordersAreValid = Model::validateMultiple($orders);
                         $transactionsAreValid = Model::validateMultiple($transactions);
-                        if ( $ordersAreValid && $transactionsAreValid) {
+                        if ($ordersAreValid && $transactionsAreValid) {
                             // save all here
+                            foreach ($transactions as $transaction) {
+                                $transaction->save(false);
+                            }
+
+                            foreach ($orders as $order) {
+                                $order->save(false);
+
+                                foreach ($transactions as $transaction) {
+                                    $order->linkToTransaction($transaction);
+                                }
+                            }
+                            Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions). ' transaction(s) created');
+                            // clear cart
+                            $orders = [];
+                            $transactions = [];
                         }
                     }
                     break;
@@ -212,13 +186,13 @@ class CartController extends \yii\web\Controller
 
                 case 'remove-transaction': ////////////////////////////////////////////////////////
                     $indexToRemove = Yii::$app->request->post('index', null);
-                    if($indexToRemove === null) {
+                    if ($indexToRemove === null) {
                         throw new NotFoundHttpException('invalid request : missing index');
                     }
                     // remove the transaction based on the index argument
                     $updatedTransactions = [];
-                    foreach($transactions as $idx => $value) {
-                        if($idx == $indexToRemove) {
+                    foreach ($transactions as $idx => $value) {
+                        if ($idx == $indexToRemove) {
                             continue;
                         }
                         $updatedTransactions[] = $value;
@@ -233,13 +207,13 @@ class CartController extends \yii\web\Controller
 
                 case 'remove-order': //////////////////////////////////////////////////////////////
                     $indexToRemove = Yii::$app->request->post('index', null);
-                    if($indexToRemove === null) {
+                    if ($indexToRemove === null) {
                         throw new NotFoundHttpException('invalid request : missing index');
                     }
                     // remove the order based on the index argument
                     $updatedOrders = [];
-                    foreach($orders as $idx => $value) {
-                        if($idx == $indexToRemove) {
+                    foreach ($orders as $idx => $value) {
+                        if ($idx == $indexToRemove) {
                             continue;
                         }
                         $updatedOrders[] = $value;
@@ -254,10 +228,10 @@ class CartController extends \yii\web\Controller
 
         // save models back to session storage
         $session['cart'] = [
-            'orders' => array_map(function($order) {
+            'orders' => array_map(function ($order) {
                 return $order->getAttributes();
             },$orders),
-            'transactions' => array_map(function($transaction) {
+            'transactions' => array_map(function ($transaction) {
                 return $transaction->getAttributes();
             },$transactions)
         ];
@@ -266,7 +240,7 @@ class CartController extends \yii\web\Controller
         $allProducts = Product::find()->all();
         $productValues = [];
         $productOptions = [];
-        foreach($allProducts as $product) {
+        foreach ($allProducts as $product) {
             $productValues[$product->id] = $product->name;
             $productOptions[$product->id] = ['data-value' => $product->value];
         }
