@@ -53,13 +53,38 @@ $jsScript=<<<EOS
 
     const renderOrderValueSum = () => {
         const sum = computeOrderValueSum();
-        document.getElementById('order-value-sum').textContent = sum == -1 ? '????' : sum;
+        document.getElementById('order-value-sum').textContent = sum == -1 ? '????' : sum.toFixed(2);
     };
 
-    $('.order-value').on('change input', renderOrderValueSum);
+    const computeOrderDiscountPercent = (productValue, orderValue) => {
+        const discount = orderValue - productValue;
+        return (( 100 * discount ) / productValue).toFixed(0);
+    };
+
+    const renderOrderDiscount = (inputValue) => {
+        const orderValue = inputValue.value;
+
+        if( orderValue.trim().length === 0 || isNaN(orderValue) ) {
+        } else {
+            const index = inputValue.id.split('-')[1];
+            const productValue = document.getElementById(`order-\${index}-product_id`).selectedOptions[0].dataset.value;
+    
+            const pcDiscount = computeOrderDiscountPercent(productValue,orderValue );
+            
+            document.getElementById(`order-discount-\${index}`).textContent = pcDiscount+ " %";
+        } 
+    };
+
+    $('.order-value').on('change input', (ev) => {
+        renderOrderValueSum();
+        
+        // render discount
+        renderOrderDiscount(ev.target);
+    });
 
     /**
-     * Copy the value of the selected product into the order value input field
+     * Copy the value of the selected product into the order value input field when the "Copy"
+     * button is pressed.
      */
     const actionCopyProductValue = (buttonEl) => {
 
@@ -73,10 +98,10 @@ $jsScript=<<<EOS
     /**
      * Copy the selected option data-value to the text content of another element
      * 
-     * Each option of the select element must include a "data-value" attribute whose value
+     * Each option of the select element must own a "data-value" attribute whose value
      * is copied to the target element
      * 
-     * @param sel the select element. It must include a "data-target-id" attribute with the value
+     * @param sel the select element. It must own a "data-target-id" attribute with the value
      * of the element to update
      */
     const copySelectedProductValue = (sel) => {
@@ -84,6 +109,8 @@ $jsScript=<<<EOS
         const productValue = sel.selectedOptions[0].dataset.value;
         targetElement.textContent = productValue;
     };
+
+
 
     /**
      * Each time user selects a product :
@@ -97,13 +124,14 @@ $jsScript=<<<EOS
         // clear order value
         document.getElementById(ev.target.dataset.orderValueId).value = '';
 
-        computeOrderValueSum();
+        renderOrderValueSum();
     });
 
 
 
     $(document).ready( () => {
         document.querySelectorAll('.orders select[data-product').forEach( copySelectedProductValue );
+        
         renderOrderValueSum();
     });
 EOS;
@@ -148,13 +176,15 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                                     ])
                                     ->label(false)
                                 ?>
-                                valeur unitaire : <span id="product-value-<?=$index?>"></span>
+                                <div>
+                                    valeur unitaire : <span id="product-value-<?=$index?>"></span>
+                                <div>
                             </td>
                             <td>
                                 <?= Html::button(
                                     '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', 
-                                    ['class' => 'btn btn-default btn-sm',
-                                        'data-action' => 'copy-product-value', 
+                                    ['class' => 'btn btn-success btn-sm',
+                                        'data-action' => 'copy-product-value',
                                         'data-source-id' => Html::getInputId($order, "[$index]product_id"),
                                         'data-target-id' => Html::getInputId($order, "[$index]value"),
                                     'title' => 'copy']
@@ -165,6 +195,10 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                                     ->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
                                     ->label(false)
                                 ?>
+                                <div>
+                                    discount : <span id="order-discount-<?=$index?>">-10%</span>
+                                <div>
+
                             </td>
                             <td>
                                 <?= $form->field($order, "[$index]from_contact_id")
