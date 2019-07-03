@@ -53,7 +53,10 @@ $jsScript=<<<EOS
 
     const renderOrderValueSum = () => {
         const sum = computeOrderValueSum();
-        document.getElementById('order-value-sum').textContent = sum == -1 ? '????' : sum.toFixed(2);
+        const orderValueEl = document.getElementById('order-value-sum');
+        if(orderValueEl) {
+            orderValueEl.textContent = sum == -1 ? '????' : sum.toFixed(2);
+        }
     };
 
     const computeOrderDiscountPercent = (productValue, orderValue) => {
@@ -131,7 +134,8 @@ $jsScript=<<<EOS
 
     $(document).ready( () => {
         document.querySelectorAll('.orders select[data-product').forEach( copySelectedProductValue );
-        
+        document.querySelectorAll('input.order-value').forEach( renderOrderDiscount );
+
         renderOrderValueSum();
     });
 EOS;
@@ -168,7 +172,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                             <td>
                                 <?= $form->field($order, "[$index]product_id")
                                     ->listBox($products, [
-                                        'size'=>1, 
+                                        'size'=>1,
                                         'data-product' => true,
                                         'data-order-value-id' => Html::getInputId($order, "[$index]value"),
                                         'data-target-id' => "product-value-$index",
