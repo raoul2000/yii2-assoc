@@ -23,10 +23,6 @@ $jsScript=<<<EOS
             console.log(`calling action : \${actionName}`);            
 
             switch(actionName) {
-                case "copy-product-value":
-                    actionCopyProductValue(actionEl);
-                    renderOrderValueSum();
-                    break;
                 default:
                     document.getElementById('cart-action').value = actionEl.dataset.action;
                     if( actionEl.dataset.index) {
@@ -34,7 +30,6 @@ $jsScript=<<<EOS
                         console.log(`index : \${actionEl.dataset.index}`);
                     }
                     document.forms['{$formName}'].submit();
-
             }
         }
     });
@@ -55,7 +50,7 @@ $jsScript=<<<EOS
         const sum = computeOrderValueSum();
         const orderValueEl = document.getElementById('order-value-sum');
         if(orderValueEl) {
-            orderValueEl.textContent = sum == -1 ? '????' : sum.toFixed(2);
+            orderValueEl.textContent = sum == -1 ? '????' : sum.toFixed(2);            
         }
     };
 
@@ -66,15 +61,19 @@ $jsScript=<<<EOS
 
     const renderOrderDiscount = (inputValue) => {
         const orderValue = inputValue.value;
+        const index = inputValue.id.split('-')[1];
 
         if( orderValue.trim().length === 0 || isNaN(orderValue) ) {
+            // hide discount item
+            document.getElementById(`order-discount-\${index}`).textContent = "";
         } else {
-            const index = inputValue.id.split('-')[1];
             const productValue = document.getElementById(`order-\${index}-product_id`).selectedOptions[0].dataset.value;
-    
             const pcDiscount = computeOrderDiscountPercent(productValue,orderValue );
-            
-            document.getElementById(`order-discount-\${index}`).textContent = pcDiscount+ " %";
+            if(pcDiscount == 0) {
+                document.getElementById(`order-discount-\${index}`).textContent = "";
+            } else {
+                document.getElementById(`order-discount-\${index}`).textContent = pcDiscount+ " %";
+            }
         } 
     };
 
@@ -84,19 +83,6 @@ $jsScript=<<<EOS
         // render discount
         renderOrderDiscount(ev.target);
     });
-
-    /**
-     * Copy the value of the selected product into the order value input field when the "Copy"
-     * button is pressed.
-     */
-    const actionCopyProductValue = (buttonEl) => {
-
-        const sourceId = buttonEl.dataset.sourceId;
-        const targetId = buttonEl.dataset.targetId;
-
-        const value = document.getElementById(sourceId).selectedOptions[0].dataset.value;
-        document.getElementById(targetId).value = value;
-    };
 
     /**
      * Copy the selected option data-value to the text content of another element
@@ -113,7 +99,11 @@ $jsScript=<<<EOS
         targetElement.textContent = productValue;
     };
 
-
+    const copyProductValueToOrderValue = (index) => {
+        const productValue = document.getElementById(`order-\${index}-product_id`).selectedOptions[0].dataset.value;
+        const orderValueInput = document.getElementById(`order-\${index}-value`);
+        orderValueInput.value = isNaN(productValue) ? '' : productValue;
+    };
 
     /**
      * Each time user selects a product :
@@ -121,15 +111,19 @@ $jsScript=<<<EOS
      * - clear order value
      */
     $('.orders select[data-product]').change( (ev) => {
-        // update product value display
+        // get line index
+        const index = ev.target.id.split('-')[1];
+
+        // copy product value to order value
+        copyProductValueToOrderValue(index);
         copySelectedProductValue(ev.target);
 
-        // clear order value
-        document.getElementById(ev.target.dataset.orderValueId).value = '';
-
+        // update order value sum
         renderOrderValueSum();
-    });
 
+        // clear order value discount
+        renderOrderDiscount(document.getElementById(`order-\${index}-value`));        
+    });
 
 
     $(document).ready( () => {
@@ -158,52 +152,18 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
             <table class="table table-condensed table-hover orders">
                 <thead>
                     <tr>
-                        <th>Product</th>
-                        <th></th>
-                        <th>Value</th>
                         <th>Fournisseur</th>
                         <th>Beneficiaire</th>
+                        <th>Product</th>
+                        <th>Prix unitaire</th>
+                        <th>discount</th>
+                        <th>Value</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php  foreach ($orders as $index => $order): ?>
                         <tr>
-                            <td>
-                                <?= $form->field($order, "[$index]product_id")
-                                    ->listBox($products, [
-                                        'size'=>1,
-                                        'data-product' => true,
-                                        'data-order-value-id' => Html::getInputId($order, "[$index]value"),
-                                        'data-target-id' => "product-value-$index",
-                                        'options' => $productOptions
-                                    ])
-                                    ->label(false)
-                                ?>
-                                <div>
-                                    valeur unitaire : <span id="product-value-<?=$index?>"></span>
-                                <div>
-                            </td>
-                            <td>
-                                <?= Html::button(
-                                    '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>', 
-                                    ['class' => 'btn btn-success btn-sm',
-                                        'data-action' => 'copy-product-value',
-                                        'data-source-id' => Html::getInputId($order, "[$index]product_id"),
-                                        'data-target-id' => Html::getInputId($order, "[$index]value"),
-                                    'title' => 'copy']
-                                ) ?>
-                            </td>
-                            <td>
-                                <?= $form->field($order, "[$index]value")
-                                    ->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
-                                    ->label(false)
-                                ?>
-                                <div>
-                                    discount : <span id="order-discount-<?=$index?>">-10%</span>
-                                <div>
-
-                            </td>
                             <td>
                                 <?= $form->field($order, "[$index]from_contact_id")
                                     ->listBox($contacts, ['size'=>1])
@@ -213,6 +173,31 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                             <td>
                                 <?= $form->field($order, "[$index]to_contact_id")
                                     ->listBox($contacts, ['size'=>1])
+                                    ->label(false)
+                                ?>
+                            </td>                        
+                            <td>
+                                <?= $form->field($order, "[$index]product_id")
+                                    ->listBox($products, [
+                                        'size'=>1,
+                                        'options' =>  $productOptions,
+                                        'prompt' => 'select ...',
+                                        'data-product' => true,
+                                        'data-order-value-id' => Html::getInputId($order, "[$index]value"),
+                                        'data-target-id' => "product-value-$index"
+                                    ])
+                                    ->label(false)
+                                ?>
+                            </td>
+                            <td>
+                                <span id="product-value-<?=$index?>"></span>
+                            </td>
+                            <td>
+                                <span id="order-discount-<?=$index?>"></span>
+                            </td>
+                            <td>
+                                <?= $form->field($order, "[$index]value")
+                                    ->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
                                     ->label(false)
                                 ?>
                             </td>
@@ -228,11 +213,12 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                         <tr>
                             <td></td>
                             <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
-                                <h3>Total :<span id="order-value-sum"></span></h3>
+                                <h3><span id="order-value-sum"></span></h3>
                             </td>
-                            <td></td>
-                            <td></td>
                             <td></td>
                         </tr>                    
                 </tbody>
