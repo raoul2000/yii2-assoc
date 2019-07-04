@@ -188,7 +188,13 @@ class Transaction extends \yii\db\ActiveRecord
             ]);
         }
     }
-
+    /**
+     * Sum the value of all orders related to this transaction. The returned value
+     * is rounded to 2 decimals. If this transaction has no order or is not yet saved in the DB,
+     * this method returns NULL.
+     * 
+     * @return null|number
+     */
     public function sumOrdersValue()
     {
         if ($this->isNewRecord || empty($this->orders)) {
@@ -200,13 +206,13 @@ class Transaction extends \yii\db\ActiveRecord
             }
             return round($sum, 2);
             /**
-             * Alternative : 
+             * Alternative :
              * $total = array_reduce($this->orders, function($acc, $order) {
              *     return $acc + $order->value;
              * },0);
              * return round($total , 2);
              */
-        }        
+        }
     }
     /**
      * Getter for the orderValueDiff virtual attribute.

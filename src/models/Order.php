@@ -138,7 +138,7 @@ class Order extends \yii\db\ActiveRecord
         $transactionModel->updateOrdersValueTotal();
     }
 
-    public function afterSave( $insert, $changedAttributes)
+    public function afterSave($insert, $changedAttributes)
     {
         if (!$insert) { // update
             // if value has changed, update 'orders_value_total' column on 
@@ -146,7 +146,7 @@ class Order extends \yii\db\ActiveRecord
             if (array_key_exists('value', $changedAttributes)) {
                 foreach ($this->transactions as $transaction) {
                     $transaction->updateOrdersValueTotal();
-                }                
+                }
             }
         }
     }
@@ -158,6 +158,13 @@ class Order extends \yii\db\ActiveRecord
             ]);
         }
     }
+    /**
+     * Sum the value of all transactions related to this order. The returned value
+     * is rounded to 2 decimals. If this order has no transaction or is not yet saved in the DB,
+     * this method returns NULL.
+     *
+     * @return null|number
+     */
     public function sumTransactionsValue()
     {
         if ($this->isNewRecord || empty($this->transactions)) {
@@ -168,7 +175,7 @@ class Order extends \yii\db\ActiveRecord
                 $sum += $transaction->value;
             }
             return round($sum, 2);
-        }        
+        }
     }
     /**
      * Getter for the transactionValueDiff virtual attribute.
