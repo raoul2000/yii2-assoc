@@ -18,6 +18,14 @@ use app\modules\gymv\models\Cart;
 
 class CartController extends \yii\web\Controller
 {
+    public function beforeAction($action)
+    {
+        if ($action->id == 'check-out') {
+            Yii::$app->request->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
         $cart = new Cart();
