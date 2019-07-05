@@ -180,10 +180,12 @@ class CartController extends \yii\web\Controller
                                     $order->linkToTransaction($transaction);
                                 }
                             }
-                            Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions). ' transaction(s) created');
+                            Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions) . ' transaction(s) created');
                             // clear cart
-                            $orders = [];
-                            $transactions = [];
+                            $session->remove('cart');
+                            
+                            // go to index
+                            return $this->redirect(['index']);
                         }
                     }
                     break;
