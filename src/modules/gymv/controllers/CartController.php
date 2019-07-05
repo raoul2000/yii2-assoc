@@ -176,14 +176,27 @@ class CartController extends \yii\web\Controller
                             foreach ($orders as $order) {
                                 $order->save(false);
 
+                                // arbirarly choose to link order to transaction (we could have linked transaction to order)
                                 foreach ($transactions as $transaction) {
-                                    $order->linkToTransaction($transaction);
+                                    $order->link('transactions', $transaction);
                                 }
                             }
-                            Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions) . ' transaction(s) created');
+
+                            // update attribute 'orders_value_total' for each transaction 
+                            foreach ($transactions as $transaction) {
+                                $transaction->updateOrdersValueTotal();
+                            }
+                            // update attribute 'transactions_value_total' for each order
+                            foreach ($orders as $order) {
+                                $order->updateTransactionsValueTotal();
+                            }
+
                             // clear cart
                             $session->remove('cart');
-                            
+
+                            // and we have a success !! 
+                            Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions) . ' transaction(s) created');
+
                             // go to index
                             return $this->redirect(['index']);
                         }

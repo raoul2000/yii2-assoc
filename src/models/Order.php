@@ -117,7 +117,7 @@ class Order extends \yii\db\ActiveRecord
     }
 
     /**
-     * Link this transaction with an Order Model and updates the orders value total
+     * Link this Order with atransaction Model and updates the orders value total
      *
      * @param [Order] $orderModel
      * @return void
