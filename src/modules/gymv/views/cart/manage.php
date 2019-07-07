@@ -63,16 +63,17 @@ $jsScript=<<<EOS
         const orderValue = inputValue.value;
         const index = inputValue.id.split('-')[1];
 
+        const orderDiscountEl =document.getElementById(`order-discount-\${index}`);
         if( orderValue.trim().length === 0 || isNaN(orderValue) ) {
             // hide discount item
-            document.getElementById(`order-discount-\${index}`).textContent = "";
+            orderDiscountEl.value = "";
         } else {
             const productValue = document.getElementById(`order-\${index}-product_id`).selectedOptions[0].dataset.value;
             const pcDiscount = computeOrderDiscountPercent(productValue,orderValue );
             if(pcDiscount == 0) {
-                document.getElementById(`order-discount-\${index}`).textContent = "";
+                orderDiscountEl.value = "";
             } else {
-                document.getElementById(`order-discount-\${index}`).textContent = pcDiscount+ " %";
+                orderDiscountEl.value = pcDiscount;
             }
         } 
     };
@@ -96,7 +97,7 @@ $jsScript=<<<EOS
     const copySelectedProductValue = (sel) => {
         const targetElement = document.getElementById(sel.dataset.targetId);
         const productValue = sel.selectedOptions[0].dataset.value;
-        targetElement.textContent = productValue;
+        targetElement.value = isNaN(productValue) ? '' : productValue;
     };
 
     const copyProductValueToOrderValue = (index) => {
@@ -156,7 +157,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                         <th>Beneficiaire</th>
                         <th>Product</th>
                         <th>Prix unitaire</th>
-                        <th>discount</th>
+                        <th>discount (%)</th>
                         <th>Value</th>
                         <th></th>
                     </tr>
@@ -190,10 +191,20 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                                 ?>
                             </td>
                             <td>
-                                <span id="product-value-<?=$index?>"></span>
+                                <div class="form-group" style="width:6em">
+                                    <input type="text" 
+                                        id="product-value-<?=$index?>" 
+                                        class="form-control" 
+                                        disabled="disabled">
+                                </div>                            
                             </td>
                             <td>
-                                <span id="order-discount-<?=$index?>"></span>
+                            <div class="form-group" style="width:6em;">
+                                    <input type="text" 
+                                        id="order-discount-<?=$index?>" 
+                                        class="form-control" 
+                                        disabled="disabled">
+                                </div>                            
                             </td>
                             <td>
                                 <?= $form->field($order, "[$index]value")
