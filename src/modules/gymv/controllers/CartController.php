@@ -204,6 +204,18 @@ class CartController extends \yii\web\Controller
                     break;
                 case 'add-transaction': ////////////////////////////////////////////////////////////
                     $newTransaction = new Transaction();
+
+                    // smart model initialization
+                    $transactionsCount = count($transactions);
+                    if ($transactionsCount != 0) {
+                        // use the latest order to populate some attributes of the new order
+                        $last = $transactions[$transactionsCount - 1];
+                        $newTransaction->from_account_id = $last->from_account_id;
+                        $newTransaction->to_account_id = $last->to_account_id;
+                        $newTransaction->type = $last->type;
+                    } 
+                    // TODO : initialize attribute from last order (if exist)
+
                     $transactions[] = $newTransaction;
                     break;
 
@@ -225,6 +237,15 @@ class CartController extends \yii\web\Controller
 
                 case 'add-order': /////////////////////////////////////////////////////////////////
                     $newOrder = new Order();
+                    // smart initialization
+                    $ordersCount = count($orders);
+                    if ($ordersCount != 0) {
+                        // use the latest order to populate some attributes of the new order
+                        $last = $orders[$ordersCount - 1];
+                        $newOrder->from_contact_id = $last->from_contact_id;
+                        $newOrder->to_contact_id = $last->to_contact_id;
+                    }
+                    // TODO : initialize attribute from last transaction (if exist)
                     $orders[] = $newOrder;
                     break;
 
