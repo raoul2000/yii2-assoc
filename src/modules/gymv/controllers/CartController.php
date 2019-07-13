@@ -167,38 +167,51 @@ class CartController extends \yii\web\Controller
                     } else {
                         $ordersAreValid = Model::validateMultiple($orders);
                         $transactionsAreValid = Model::validateMultiple($transactions);
+
                         if ($ordersAreValid && $transactionsAreValid) {
-                            // save all here
+                            // orders value sum must be equal to transactions values sum
+                            $transactionSum = $orderSum = 0;
                             foreach ($transactions as $transaction) {
-                                $transaction->save(false);
+                                $transactionSum += $transaction->value;
                             }
-
                             foreach ($orders as $order) {
-                                $order->save(false);
-
-                                // arbirarly choose to link order to transaction (we could have linked transaction to order)
+                                $orderSum += $order->value;
+                            }
+                            if ($orderSum !== $transactionSum) {
+                                Yii::$app->session->setFlash('error', "Order Sum ($orderSum) and Transaction Sum ($transactionSum) don't match");
+                            } else {
+                                // save all here
                                 foreach ($transactions as $transaction) {
-                                    $order->link('transactions', $transaction);
+                                    $transaction->save(false);
                                 }
-                            }
-
-                            // update attribute 'orders_value_total' for each transaction 
-                            foreach ($transactions as $transaction) {
-                                $transaction->updateOrdersValueTotal();
-                            }
-                            // update attribute 'transactions_value_total' for each order
-                            foreach ($orders as $order) {
-                                $order->updateTransactionsValueTotal();
-                            }
-
-                            // clear cart
-                            $session->remove('cart');
-
-                            // and we have a success !! 
-                            Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions) . ' transaction(s) created');
-
-                            // go to index
-                            return $this->redirect(['index']);
+    
+                                foreach ($orders as $order) {
+                                    $order->save(false);
+    
+                                    // arbirarly choose to link order to transaction (we could have linked transaction to order)
+                                    foreach ($transactions as $transaction) {
+                                        $order->link('transactions', $transaction);
+                                    }
+                                }
+    
+                                // update attribute 'orders_value_total' for each transaction 
+                                foreach ($transactions as $transaction) {
+                                    $transaction->updateOrdersValueTotal();
+                                }
+                                // update attribute 'transactions_value_total' for each order
+                                foreach ($orders as $order) {
+                                    $order->updateTransactionsValueTotal();
+                                }
+    
+                                // clear cart
+                                $session->remove('cart');
+    
+                                // and we have a success !! 
+                                Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions) . ' transaction(s) created');
+    
+                                // go to index
+                                return $this->redirect(['index']);
+                            }                            
                         }
                     }
                     break;
