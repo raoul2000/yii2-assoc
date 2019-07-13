@@ -33,10 +33,16 @@ $jsScript=<<<EOS
             }
         }
     });
+
+
+    // order handlers /////////////////////////////////////////////////////
+
+
     /**
      * Compoute and return the sum of all order values or -1 if one 
      */
-    const computeOrderValueSum = () => Array.from(document.querySelectorAll('.order-value'))
+
+    const computeInputValueSum = (selector) => Array.from(document.querySelectorAll(selector))
         .reduce( (acc,cur) => {
             const num = Number(cur.value);
             if( cur.value.trim().length === 0 || isNaN(num) || acc == -1) {
@@ -46,13 +52,18 @@ $jsScript=<<<EOS
             }
         }, 0);
 
-    const renderOrderValueSum = () => {
-        const sum = computeOrderValueSum();
-        const orderValueEl = document.getElementById('order-value-sum');
+    const computeOrderValueSum = () => computeInputValueSum('.order-value');
+    const computeTransactionValueSum = () => computeInputValueSum('.transaction-value');
+    
+    const renderValueSum = (selector, sumValue) => {
+        const orderValueEl = document.getElementById(selector);
         if(orderValueEl) {
-            orderValueEl.textContent = sum == -1 ? '????' : sum.toFixed(2);            
+            orderValueEl.textContent = sumValue == -1 ? '????' : sumValue.toFixed(2);       
+            orderValueEl.dataset.sumValue = sumValue;         
         }
     };
+    const renderOrderValueSum = () => renderValueSum('order-value-sum', computeOrderValueSum());
+    const renderTransactionValueSum = () => renderValueSum('transaction-value-sum', computeTransactionValueSum());
 
     const computeOrderDiscountPercent = (productValue, orderValue) => {
         const discount = orderValue - productValue;
@@ -79,10 +90,8 @@ $jsScript=<<<EOS
     };
 
     $('.order-value').on('change input', (ev) => {
-        renderOrderValueSum();
-        
-        // render discount
         renderOrderDiscount(ev.target);
+        renderOrderValueSum();
     });
 
     /**
@@ -127,6 +136,33 @@ $jsScript=<<<EOS
     });
 
 
+    // transaction handlers /////////////////////////////////////////////////////
+
+    $('#btn-report-sum-order').on('click', (ev) => {
+        const transactionInputs = document.querySelectorAll('#transactions input.transaction-value');
+        if(transactionInputs.length == 0) {
+            return; // no transaction to report to
+        }
+
+        /*
+        const totalTransactionValue = Array.from(document.querySelectorAll('#transactions input.transaction-value'))
+            .reduce((acc, curr) => acc+ Number(curr.value), 0 );
+        */
+        const sumValue = document.getElementById('order-value-sum').dataset.sumValue;
+        if(sumValue != -1) {
+            const valueToReport = ( Number(sumValue) / transactionInputs.length).toFixed(2);
+            transactionInputs.forEach( (el) => {
+                el.value = valueToReport;
+            });
+            renderTransactionValueSum();
+        }
+    });
+
+    $('.transaction-value').on('change input', (ev) => {
+        renderTransactionValueSum();
+    });
+
+    /////////////////////////////////////////////////////////////////////////////
     $(document).ready( () => {
         document.querySelectorAll('.orders select[data-product').forEach( copySelectedProductValue );
         document.querySelectorAll('input.order-value').forEach( renderOrderDiscount );
@@ -150,7 +186,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
         <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
 
         <?php if (count($orders)): ?>
-            <table class="table table-condensed table-hover orders">
+            <table id="orders" class="table table-condensed table-hover orders">
                 <thead>
                     <tr>
                         <th>Fournisseur</th>
@@ -221,17 +257,17 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                             </td>
                         </tr>        
                     <?php endforeach; ?>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <h3><span id="order-value-sum"></span></h3>
-                            </td>
-                            <td></td>
-                        </tr>                    
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <h3><span id="order-value-sum"></span></h3>
+                        </td>
+                        <td></td>
+                    </tr>                    
                 </tbody>
             </table>
         <?php endif; ?>
@@ -239,17 +275,18 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
         <h2>Transactions</h2>
         <hr>
         <?= Html::button('add transaction', ['class' => 'btn btn-default', 'data-action' => 'add-transaction']) ?>
+        <?= Html::button('report total order value', ['id' => 'btn-report-sum-order','class' => 'btn btn-default']) ?>
 
         <?php if (count($transactions)): ?>
-            <table class="table table-condensed table-hover">
+            <table id="transactions" class="table table-condensed table-hover">
                 <thead>
                     <tr>
                         <th>From</th>
                         <th>To</th>
-                        <th>Value</th>
                         <th>Date</th>
                         <th>Type</th>
                         <th>Code</th>
+                        <th>Value</th>
                         <th></th>
                     </tr>
                 </thead>        
@@ -265,12 +302,6 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                             <td>
                                 <?= $form->field($transaction, "[$index]to_account_id")
                                     ->listBox($bankAccounts, ['size'=>1])
-                                    ->label(false)
-                                ?>
-                            </td>
-                            <td>
-                                <?= $form->field($transaction, "[$index]value")
-                                    ->textInput(['maxlength' => true, 'autocomplete'=>'off'])
                                     ->label(false)
                                 ?>
                             </td>
@@ -293,6 +324,12 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                                 ?>
                             </td>
                             <td>
+                                <?= $form->field($transaction, "[$index]value")
+                                    ->textInput(['class' => 'transaction-value form-control', 'maxlength' => true, 'autocomplete'=>'off'])
+                                    ->label(false)
+                                ?>
+                            </td>
+                            <td>
                                 <?= Html::button(
                                     '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>',
                                     ['class' => 'btn btn-danger btn-sm', 'data-action' => 'remove-transaction', 'data-index' => $index,
@@ -301,6 +338,17 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
                             </td>
                         </tr>        
                     <?php endforeach; ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <h3><span id="transaction-value-sum"></span></h3>
+                        </td>
+                        <td></td>
+                    </tr>                     
                 </tbody>
             </table>
         <?php endif; ?>
