@@ -1,8 +1,8 @@
 /build
 ftp.*.porperties
 doc/db-schema.mwb.bak
+data/uploads
 backups/
 dev.ftp
 node_modules/
-data/
 gulp-task/sftp-prod.json
