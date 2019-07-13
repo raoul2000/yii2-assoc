@@ -168,6 +168,7 @@ $jsScript=<<<EOS
         document.querySelectorAll('input.order-value').forEach( renderOrderDiscount );
 
         renderOrderValueSum();
+        renderTransactionValueSum();
     });
 EOS;
 
@@ -183,7 +184,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
 
         <h2>Orders</h2>
         <hr>
-        <?= Html::button('add order', ['class' => 'btn btn-default', 'data-action' => 'add-order']) ?>
+        <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add order', ['class' => 'btn btn-success', 'data-action' => 'add-order']) ?>
 
         <?php if (count($orders)): ?>
             <table id="orders" class="table table-condensed table-hover orders">
@@ -274,7 +275,7 @@ $this->registerJs($jsScript, View::POS_READY, 'cart-manager');
 
         <h2>Transactions</h2>
         <hr>
-        <?= Html::button('add transaction', ['class' => 'btn btn-default', 'data-action' => 'add-transaction']) ?>
+        <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  add transaction', ['class' => 'btn btn-success', 'data-action' => 'add-transaction']) ?>
         <?= Html::button('report total order value', ['id' => 'btn-report-sum-order','class' => 'btn btn-default']) ?>
 
         <?php if (count($transactions)): ?>
