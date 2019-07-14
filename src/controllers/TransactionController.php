@@ -340,6 +340,75 @@ class TransactionController extends Controller
     }
 
     /**
+     * Display all transactions and orders reltaed with each other.
+     *
+     * @param string $id transaction id
+     * @return void
+     */
+    public function actionViewComplete($id)
+    {
+        /**
+         * Insert transactions ofr this order into the transaction array
+         * if not already present
+         */
+        $addTransactions = function($order, $transactions) {
+            $transactionAdded = false;
+            foreach($order->transactions as $transaction) {
+                $key = 'id:'+$transaction->id;
+                if ( ! array_key_exists($key, $transactions)) {
+                    $transactionAdded = true;
+                    $transactions[$key] = $transaction;
+                }
+            }
+            return [$transactionAdded, $transactions];
+        };
+        /**
+         * insert orders for this transaction into an array (avoiding duplicate)
+         */
+        $addOrders = function($transaction, $orders) {
+            $orderAdded = false;
+            foreach($transaction->orders as $order) {
+                $key = 'id:'+$order->id;
+                if ( ! array_key_exists($key, $orders)) {
+                    $orderAdded = true;
+                    $orders[$key] = $order;
+                }
+            }
+            return [$orderAdded, $orders];
+        };
+
+        /* ----------------------------------------*/
+        $transactionModel = $this->findModel($id);
+
+        $orders = [];
+        $transactions = [];
+        $transactions['id:'+$transactionModel->id] = $transactionModel;
+
+        $transactionAdded = true;
+        while($transactionAdded) {
+            foreach($transactions as $transaction) {
+                list($added, $orders) = $addOrders($transaction, $orders);
+            }
+            $transactionAdded = false;
+            foreach($orders as $order) {
+                list($added, $transactions) = $addTransactions($order, $transactions);
+                if( $added ) {
+                    $transactionAdded = true;
+                }
+            }
+        }
+
+        return $this->render('view-complete', [
+            'transactions' => $transactions,
+            'orders' => $orders,
+            'bankAccounts' => \app\models\BankAccount::getNameIndex(),
+            'products' => \app\models\Product::getNameIndex(),
+            'contacts' => \app\models\Contact::getNameIndex(),
+            'transactionType' => \app\components\Constant::getTransactionTypes(),
+        ]);        
+    }
+
+    /**
      * Deletes an existing Transaction model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id

@@ -31,6 +31,7 @@ $transactionModel = $model;
             ],
         ]) ?>
         <?= Html::a('Create Another Transaction', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('View Complete', ['view-complete', 'id'=> $model->id], ['class' => 'btn btn-default']) ?>
     </p>
 
     <div class="row">
