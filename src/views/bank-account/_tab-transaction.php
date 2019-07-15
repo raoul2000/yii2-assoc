@@ -9,8 +9,8 @@ $bankAccountModel = $model;
 ?>
 <div class="tab-transaction">
     <p>
-        <?= Html::a('Create Debit', ['transaction/create', 'from_account_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Create Credit', ['transaction/create', 'to_account_id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Create Debit', ['transaction/create', 'from_account_id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Credit', ['transaction/create', 'to_account_id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
