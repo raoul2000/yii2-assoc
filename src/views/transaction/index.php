@@ -40,8 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => \app\components\Constant::getTransactionTypes(),
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) {
-                    return Html::encode( \app\components\Constant::getTransactionType($model->type));
-                    
+                    return Html::encode(\app\components\Constant::getTransactionType($model->type));
                 }
             ],
             [

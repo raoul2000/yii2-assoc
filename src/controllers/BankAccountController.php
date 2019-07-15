@@ -8,6 +8,7 @@ use app\models\BankAccount;
 use app\models\BankAccountSearch;
 use app\models\TransactionPackSearch;
 use app\models\TransactionSearch;
+use app\models\TransactionPerAccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -73,14 +74,19 @@ class BankAccountController extends Controller
 
         switch ($tab) {
             case 'transaction': // --------------------------------------------
-                $transactionSearchModel = new TransactionSearch();
+                $transactionSearchModel = new TransactionPerAccountSearch();
                 $transactionDataProvider = $transactionSearchModel->search(
                     Yii::$app->request->queryParams,
-                    $bankAccount->getTransactions()
+                    $bankAccount
                 );
         
                 $transactionDataProvider->query
                     ->with(['fromAccount', 'toAccount']);
+
+                // for filter : remove this bank account
+                $bankAccounts = array_filter(BankAccount::getNameIndex(), function ($accountId) use ($bankAccount) {
+                    return $accountId != $bankAccount->id;
+                }, ARRAY_FILTER_USE_KEY);
 
                 return $this->render('view', [
                     'model' => $bankAccount,
@@ -89,6 +95,8 @@ class BankAccountController extends Controller
                     'tabContent' => $this->renderPartial('_tab-transaction', [
                         'model' => $bankAccount,
                         'transactionDataProvider' => $transactionDataProvider,
+                        'transactionSearchModel' => $transactionSearchModel,
+                        'bankAccounts' => $bankAccounts
                     ])
                 ]);
             break;

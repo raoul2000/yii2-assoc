@@ -16,7 +16,16 @@ $bankAccountModel = $model;
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $transactionDataProvider,
+            'filterModel' => $transactionSearchModel,
             'columns' => [
+                [
+                    'attribute' => 'id',
+                    'label'     => 'N°',
+                    'filterInputOptions' => [
+                        'class' => 'form-control',
+                        'style' => 'width:3em'
+                    ],
+                ],
                 'reference_date:date',
                 [
                     'attribute' => 'pack',
@@ -33,16 +42,28 @@ $bankAccountModel = $model;
                         }
                     }
                 ],
+                [
+                    'attribute' => 'description',
+                    'filterInputOptions' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'enter description ...',
+                        'autocomplete' => 'off'
+                    ],
+                ],
                 'code',
                 [
-                    'attribute' => 'label',
-                    'format'    => 'html',
-                    'value'     => function ($transactionModel, $key, $index, $column) {
-                        return Html::encode($transactionModel->description);
+                    'attribute' => 'type',
+                    'filter'    => \app\components\Constant::getTransactionTypes(),
+                    'format'    => 'raw',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return Html::encode(\app\components\Constant::getTransactionType($model->type));
                     }
                 ],
                 [
                     'attribute' => 'account',
+                    'attribute' => 'account_id',
+                    'label'     => 'Account',
+                    'filter'    => $bankAccounts,
                     'format'    => 'html',
                     'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
                         if ($bankAccountModel->id == $transactionModel->from_account_id) {
@@ -54,6 +75,7 @@ $bankAccountModel = $model;
                 ],
                 [
                     'attribute' => 'Crédit',
+                    'attribute' => 'credit',
                     'format'    => 'html',
                     'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
                         return $transactionModel->from_account_id == $bankAccountModel->id
@@ -63,6 +85,7 @@ $bankAccountModel = $model;
                 ],
                 [
                     'attribute' => 'Débit',
+                    'attribute' => 'debit',
                     'format'    => 'html',
                     'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
                         return $transactionModel->from_account_id == $bankAccountModel->id
