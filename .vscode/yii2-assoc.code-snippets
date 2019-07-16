@@ -20,5 +20,11 @@
 		"prefix": "dumm",
 		"body": "dummy snipper here !",
 		"description": "a dummy snippet"
-	}
+	},
+	"Yii::t" : {
+		"scope": "php",
+		"prefix": "y2tr",
+		"body": "\\Yii::t('app', '$TM_SELECTED_TEXT')",
+		"description": "transation"
+	}	
 }
