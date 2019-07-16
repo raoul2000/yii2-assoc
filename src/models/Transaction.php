@@ -120,7 +120,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['from_account_id' => 'id']],
             [['to_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['to_account_id' => 'id']],
             [['transaction_pack_id'], 'exist', 'skipOnError' => true, 'targetClass' => TransactionPack::className(), 'targetAttribute' => ['transaction_pack_id' => 'id']],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']], 
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
 
             [['is_verified'], 'boolean'],
 
@@ -146,11 +146,11 @@ class Transaction extends \yii\db\ActiveRecord
             'code' => 'Code',
             'transaction_pack_id' => 'Pack ID',
             'type' => 'Type',
-            'category_id' => 'Category ID',             
+            'category_id' => 'Category ID',
         ];
     }
 
-    public function afterSave( $insert, $changedAttributes)
+    public function afterSave($insert, $changedAttributes)
     {
         if (!$insert) { // update
             // if value has changed, update the 'transactions_value_total' column for
@@ -158,10 +158,10 @@ class Transaction extends \yii\db\ActiveRecord
             if (array_key_exists('value', $changedAttributes)) {
                 foreach ($this->orders as $order) {
                     $order->updateTransactionsValueTotal();
-                }                
+                }
             }
         }
-    }    
+    }
     /**
      * {@inheritdoc}
      */
@@ -192,7 +192,7 @@ class Transaction extends \yii\db\ActiveRecord
      * Sum the value of all orders related to this transaction. The returned value
      * is rounded to 2 decimals. If this transaction has no order or is not yet saved in the DB,
      * this method returns NULL.
-     * 
+     *
      * @return null|number
      */
     public function sumOrdersValue()
@@ -277,5 +277,5 @@ class Transaction extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
-    }    
+    }
 }

@@ -211,7 +211,7 @@ class CartController extends \yii\web\Controller
     
                                 // go to index
                                 return $this->redirect(['index']);
-                            }                            
+                            }
                         }
                     }
                     break;
