@@ -72,8 +72,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'description',
             'is_verified:boolean',
             'reference_date:date',
-            'orderValuesDiff:orderValuesDiff',
-            ['class' => 'yii\grid\ActionColumn'],
+            //'orderValuesDiff:orderValuesDiff',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['nowrap' => 'nowrap']
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
