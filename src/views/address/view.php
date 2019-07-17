@@ -6,7 +6,9 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Address */
 
-$this->title = $model->id;
+$title = $model->line_1 . ' ' . $model->line_2 . ' ' . $model->line_3;
+$title = substr($title, 0, 30) . '...';
+$this->title = $title;
 $this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
