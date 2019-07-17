@@ -12,61 +12,24 @@ use yii\web\NotFoundHttpException;
 /**
  * Default controller for the `quality` module
  */
-class ContactController extends Controller
+class ContactController extends BaseController
 {
+    protected $pageSubHeader = 'Contact';
+    protected $viewModelRoute = '/contact/view';
+    protected $dataColumnNames = ['id', 'name', 'firstname'];
+
     /**
      * Renders the index view for the module
      * @return string
      */
     public function actionIndex()
     {
-        $allModels = [];
-        foreach ($this->getMetrics() as $id => $metric) {
-            $allModels[] = [
-                'id'  => $id,
-                'label' => $metric['label'],
-                'value' => $metric['query']->count()
-            ];
-        }
-        
-        // prepare response
-        $accept = Yii::$app->request->headers->get('Accept');
-
-        if (Yii::$app->request->isGet == true && $accept == 'application/json') {
-            // Request must accept only "application/json" in order to get the JSON result as response
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            Yii::$app->response->statusCode = 200;
-            return $allModels;
-        } else {
-            return $this->render('index', [
-                'provider' => new ArrayDataProvider([
-                    'allModels' => $allModels,
-                    'pagination' => [
-                        'pageSize' => 10,
-                    ],
-                ])
-            ]);
-        }
+        return $this->implActionIndex($this->getMetrics());
     }
 
     public function actionViewData($id)
     {
-        $metrics = $this->getMetrics();
-        if (!array_key_exists($id, $metrics)) {
-            throw new NotFoundHttpException('Data set id not found');
-        }
-        $metric = $metrics[$id];
-
-        return $this->render('view-data', [
-            'id' => $id,
-            'dataProvider' => new ActiveDataProvider([
-                'query' => $metric['query'],
-                'pagination' => [
-                    'pageSize' => 50,
-                ],
-            ]),
-            'label' => $metric['label']
-        ]);
+        return $this->implActionViewData($this->getMetrics(), $id);
     }
 
     private function getMetrics()
@@ -76,38 +39,38 @@ class ContactController extends Controller
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
                     'email' => null]),
-                'label' => "Personnes dont <b>l'adresse Email</b> est manquante"
+                'label' => 'Personnes dont <b>l\'adresse Email</b> est manquante'
                 ],
            'firstname-null' => [
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
                     'firstname' => null]),
-                'label' => "Personnes dont le <b>prénom</b> est manquant"
+                'label' => 'Personnes dont le <b>prénom</b> est manquant'
                 ],
            'birthday-null' => [
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
                     'birthday' => null]),
-                'label' => "Personnes dont la <b>date de naissance</b> est manquante"
+                'label' => 'Personnes dont la <b>date de naissance</b> est manquante'
                 ],
             'centenary' => [
                 'query' => Contact::find()
                     ->where(['is_natural_person' => true])
                     ->andWhere([ 'is not', 'birthday' , null])
                     ->andWhere([ '>', 'YEAR(CURDATE()) - YEAR(birthday)' , 110]),
-                'label' => "Personnes dont la <b>date de naissance</b> est à vérifier"
-                ],    
+                'label' => 'Personnes dont la <b>date de naissance</b> est à vérifier'
+                ],
            'gender-null' => [
                 'query' => Contact::find()
                     ->where(['is_natural_person' => true])
                     ->andwhere(['in', 'gender', [null, 0]]),
-                'label' => "Personnes dont le <b>genre</b> n'est pas déterminé"
+                'label' => 'Personnes dont le <b>genre</b> n\'est pas déterminé'
                 ],
            'address-null' => [
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
                     'address_id' => null]),
-                'label' => "Personnes qui ne sont pas réliées à une <b>adresse</b>"
+                'label' => 'Personnes qui ne sont pas réliées à une <b>adresse</b>'
             ]
         ];
     }

@@ -6,18 +6,14 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
-
-$this->title = 'Quality Check';
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['/contact/index']];
-$this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+$this->title = 'Quality Check : ' . $pageSubHeader;
 ?>
 <div class="quality-contact-view">
 
     <h1>
         <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 
-        <?= Html::encode($this->title) ?>
-        <small>Contact</small>
+        Quality Check
+        <small> <?= Html::encode($pageSubHeader) ?></small>
     </h1>
     <hr/>
 
@@ -27,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => ['class' => 'table table-striped table-hover'],
         'summary' => '',
         'rowOptions' => function ($model) {
-            if ($model['value'] != 0){
+            if ($model['value'] != 0) {
                 return ['class' => 'danger'];
             }
         },
@@ -42,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action == 'view') {
-                        return Url::to([ 'contact/view-data', 'id' => $model['id']]);
+                        return Url::to([ 'view-data', 'id' => $model['id']]);
                     }
                 },
                 'buttons'   => [
