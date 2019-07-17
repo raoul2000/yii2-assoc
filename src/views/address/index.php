@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Address', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Quality', ['quality/address'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
     </p>
 
     <?= GridView::widget([
