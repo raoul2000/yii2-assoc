@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="quality-contact-data-view">
-
     <h1>
         <span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> 
         Quality Check
@@ -42,8 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]);
                     }
                 }
-            ]            
+            ]
         ],
-    ]);
-    ?>    
+    ]);?>    
 </div>
