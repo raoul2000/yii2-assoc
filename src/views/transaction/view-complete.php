@@ -30,7 +30,7 @@ if (count($orders) && count($transactions)) {
 
     <h2>
         <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>  
-        Transactions
+        Transactions <small>complete</small>
     </h2>
     <hr/>
     <table class="table table-condensed table-hover">
@@ -52,14 +52,16 @@ if (count($orders) && count($transactions)) {
                     <td><?= $transaction->id ?></td>
                     <td>
                         <?= Html::a(
-                            Html::encode($bankAccounts[$transaction->from_account_id]),
+                            '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' .
+                                Html::encode($bankAccounts[$transaction->from_account_id]),
                             ['bank-account/view', 'id' => $transaction->from_account_id ],
                             ['title' => 'view Account']
                         )?>                                         
                     </td>
                     <td>
                         <?= Html::a(
-                            Html::encode($bankAccounts[$transaction->to_account_id]),
+                            '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' .
+                                Html::encode($bankAccounts[$transaction->to_account_id]),
                             ['bank-account/view', 'id' => $transaction->to_account_id ],
                             ['title' => 'view Account']
                         )?>                                         
@@ -81,7 +83,7 @@ if (count($orders) && count($transactions)) {
                 <td colspan="6" style="text-align:right">
                     Montant Total des transactions :
                 </td>
-                <td style="border-top-width: 3px;border-top-color: #b1b1b1;">
+                <td style="border-top-width: 3px;border-top-color: #b1b1b1;text-align:right">
                     <b><?= $transactionValueSum ?></b>
                 </td>
                 <td></td>
@@ -114,14 +116,16 @@ if (count($orders) && count($transactions)) {
                     <tr>
                         <td>
                             <?= Html::a(
-                                Html::encode($contacts[$order->from_contact_id]),
+                                '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
+                                    Html::encode($contacts[$order->from_contact_id]),
                                 ['contact/view', 'id' => $order->from_contact_id ],
                                 ['title' => 'view Contact']
                             )?>
                         </td>
                         <td>
                             <?= Html::a(
-                                Html::encode($contacts[$order->to_contact_id]),
+                                '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
+                                    Html::encode($contacts[$order->to_contact_id]),
                                 ['contact/view', 'id' => $order->to_contact_id ],
                                 ['title' => 'view Contact']
                             )?>
@@ -147,7 +151,7 @@ if (count($orders) && count($transactions)) {
                     <td colspan="3" style="text-align:right">
                         Montant Total Des Produits : 
                     </td>
-                    <td style="border-top-width: 3px;border-top-color: #b1b1b1;">
+                    <td style="border-top-width: 3px;border-top-color: #b1b1b1;text-align:right">
                         <b><?= $orderValueSum ?></b>
                     </td>
                     <td></td>
