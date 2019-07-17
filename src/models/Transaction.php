@@ -152,6 +152,7 @@ class Transaction extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
+        parent::afterSave($insert, $changedAttributes);
         if (!$insert) { // update
             // if value has changed, update the 'transactions_value_total' column for
             // all related orders
