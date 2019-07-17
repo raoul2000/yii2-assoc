@@ -2,6 +2,7 @@
 
 namespace app\modules\quality\controllers;
 
+use Yii;
 use yii\web\Controller;
 use app\models\Contact;
 use yii\data\ArrayDataProvider;
@@ -20,22 +21,32 @@ class ContactController extends Controller
     public function actionIndex()
     {
         $allModels = [];
-        foreach($this->getMetrics() as $id => $metric) {
+        foreach ($this->getMetrics() as $id => $metric) {
             $allModels[] = [
                 'id'  => $id,
                 'label' => $metric['label'],
                 'value' => $metric['query']->count()
             ];
         }
+        
+        // prepare response
+        $accept = Yii::$app->request->headers->get('Accept');
 
-        return $this->render('index', [
-            'provider' => new ArrayDataProvider([
-                'allModels' => $allModels,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ])
-        ]);
+        if (Yii::$app->request->isGet == true && $accept == 'application/json') {
+            // Request must accept only "application/json" in order to get the JSON result as response
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            Yii::$app->response->statusCode = 200;
+            return $allModels;
+        } else {
+            return $this->render('index', [
+                'provider' => new ArrayDataProvider([
+                    'allModels' => $allModels,
+                    'pagination' => [
+                        'pageSize' => 10,
+                    ],
+                ])
+            ]);
+        }
     }
 
     public function actionViewData($id)
