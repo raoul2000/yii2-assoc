@@ -1,6 +1,6 @@
  /**
   * Page action manager
-  * Handle all actions emitted by click on element having "data-action" as own attribute
+  * Handle all actions emitted by click on element having "data-action" as attribute
   * or ancestors
   * 
   * @param {Event} ev 
@@ -29,11 +29,10 @@ $('#cart-manager-container').on('click', cartManagerActionHandler);
 
 // order handlers /////////////////////////////////////////////////////
 
-
 /**
- * Compute and return the sum of all order values or -1 if one 
+ * Compute and return the sum of all order values or -1 if at last one order value
+ * is not a number.
  */
-
 const computeInputValueSum = (selector) => Array.from(document.querySelectorAll(selector))
     .reduce((acc, cur) => {
         const num = Number(cur.value);
@@ -80,11 +79,17 @@ const renderOrderDiscount = (inputValue) => {
         }
     }
 };
-
-$('.order-value').on('change input', (ev) => {
+/**
+ * Handle the event triggered when the order value change.
+ * If the order value is a number, update the discount value and the order value sum fields
+ * 
+ * @param {Event} ev the event to process
+ */
+const orderValueChange = (ev) => {
     renderOrderDiscount(ev.target);
     renderOrderValueSum();
-});
+};
+$('.order-value').on('change input', orderValueChange);
 
 /**
  * Copy the selected option data-value to the text content of another element
@@ -106,13 +111,14 @@ const copyProductValueToOrderValue = (index) => {
     const orderValueInput = document.getElementById(`order-${index}-value`);
     orderValueInput.value = isNaN(productValue) ? '' : productValue;
 };
-
 /**
  * Each time user selects a product :
  * - update product value display
  * - clear order value
+ * 
+ * @param {*} ev Event
  */
-const onSelectedProductChange = (ev) => {
+ const onSelectedProductChange = (ev) => {
     // get line index
     const index = ev.target.id.split('-')[1];
 
@@ -128,7 +134,13 @@ const onSelectedProductChange = (ev) => {
 };
 $('.orders select[data-product]').change(onSelectedProductChange);
 
-$('.order-discount').on('change input', (ev) => {
+/**
+ * Handle change of the discount value.
+ * When user change discount value, and if it is a valid number, compute and update the order value field
+ * 
+ * @param {*} ev Event
+ */
+const applyDiscount = (ev) => {
     const discount = ev.target.value;
     const index = ev.target.id.split('-')[2]; // element id example : order-discount-2
 
@@ -145,7 +157,9 @@ $('.order-discount').on('change input', (ev) => {
         console.log(discountValue);
         document.getElementById(`order-${index}-value`).value = Number(Number(productValue) + discountValue).toFixed(2);
     }
-});
+};
+$('.order-discount').on('change input', applyDiscount);
+
 // transaction handlers /////////////////////////////////////////////////////
 const ventileOrderSumToTransactions = (ev) => {
     const transactionInputs = document.querySelectorAll('#transactions input.transaction-value');
