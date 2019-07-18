@@ -289,10 +289,10 @@ class CartController extends \yii\web\Controller
         $session['cart'] = [
             'orders' => array_map(function ($order) {
                 return $order->getAttributes();
-            },$orders),
+            }, $orders),
             'transactions' => array_map(function ($transaction) {
                 return $transaction->getAttributes();
-            },$transactions)
+            }, $transactions)
         ];
         
         // select products from DB and create additional data attributes array

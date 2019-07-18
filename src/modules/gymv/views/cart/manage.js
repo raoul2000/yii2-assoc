@@ -1,3 +1,11 @@
+$('#save-template-modal').on('shown.bs.modal', function (e) {
+   
+});
+
+$('#save-template-modal').on('show.bs.modal', function (e) {
+    
+ });
+ 
  /**
   * Page action manager
   * Handle all actions emitted by click on element having "data-action" as attribute

@@ -28,6 +28,35 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
     }
 </style>
 <div id="cart-manager-container">
+
+    <?php 
+        // define the modal to "save template As ..."
+        yii\bootstrap\Modal::begin([
+            'id' => 'save-template-modal',
+            'header' => '<h3>Save Template As ...</h3>',
+            'footer' => '<button class="btn btn-primary">Save</button>&nbsp;<button class="btn btn-default" data-dismiss="modal">Cancel</button>',
+            'closeButton' => false, // no close button
+            'clientOptions' => [
+                'keyboard' => false // no close on ESC
+            ]
+        ]); ?>
+
+        <div class="alert alert-danger" role="alert">
+            An error occured that prevent the template for being saved.
+        </div>
+        <div class="alert alert-success" role="alert">
+            Template saved correctly.
+        </div>
+        <div class="alert alert-info" role="alert">
+            Saving Template ...
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="template-name" placeholder="enter template name ....">
+        </div>
+
+    <?php
+        yii\bootstrap\Modal::end();
+    ?>
     <h1>cart Manager</h1>
 
     <?php $form = ActiveForm::begin(['options' => [ 'name' => $formName]]); ?>
@@ -62,7 +91,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'prompt' => 'select ...',
                                         'data-product' => true,
                                         'data-order-value-id' => Html::getInputId($order, "[$index]value"),
-                                        'data-target-id' => "product-value-$index"
+                                        'data-target-id' => "product-value-$index",
+                                        'style' => 'font-weight:bold;'
                                     ])
                                     ->label(false)
                                 ?>
@@ -210,9 +240,15 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
         <?php if ($countOrders != 0 && $countTransactions != 0): ?>
             <?= Html::button('Submit Cart', ['class' => 'btn btn-primary', 'data-action' => 'submit']) ?>
-            <?= Html::button('Save As Template ....', ['class' => 'btn btn-default', 'data-action' => 'save-as-template']) ?>
+            <?= Html::button(
+                'Save As Template ....',
+                [
+                    'class' => 'btn btn-default',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#save-template-modal'
+                ]
+            ) ?>
         <?php endif;?>
     <?php ActiveForm::end(); ?>
-
 </div>
 
