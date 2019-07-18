@@ -277,7 +277,9 @@ class CartController extends \yii\web\Controller
                     }
                     $orders = $updatedOrders;
                     break;
-
+                case 'save-as-template':
+                    //return $this->actionSaveAsTemplate()
+                    break;
                 default: /////////////////////////////////////////////////////////////////////////
                     throw new NotFoundHttpException('invalid request');
             }
