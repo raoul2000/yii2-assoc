@@ -8,10 +8,26 @@ use yii\web\View;
 /* @var $this yii\web\View */
 
 $formName = 'cart-manager-form'; // WARNING : JS code below refers to formName value
+$countTransactions = count($transactions);
+$countOrders = count($orders);
+
 $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'cart-manager');
 
 ?>
-<div id="cart-manager-container" class="cart-check-out">
+<style>
+    #cart-manager-container .table > thead > tr > th, 
+    #cart-manager-container .table > tbody > tr > th, 
+    #cart-manager-container .table > thead > tr > td, 
+    #cart-manager-container .table > tbody > tr > td {
+        border-top-width: 0px;
+    }
+
+    #cart-manager-container .table > tbody > tr > td.valueSum {
+        border-top: 2px solid #ddd;
+        text-align:right;
+    }
+</style>
+<div id="cart-manager-container">
     <h1>cart Manager</h1>
 
     <?php $form = ActiveForm::begin(['options' => [ 'name' => $formName]]); ?>
@@ -22,7 +38,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <hr>
         <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add order', ['class' => 'btn btn-success', 'data-action' => 'add-order']) ?>
 
-        <?php if (count($orders)): ?>
+        <?php if ($countOrders): ?>
             <table id="orders" class="table table-condensed table-hover orders">
                 <thead>
                     <tr>
@@ -100,7 +116,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
+                        <td class="valueSum">
                             <h3><span id="order-value-sum"></span></h3>
                         </td>
                         <td></td>
@@ -112,9 +128,11 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <h2>Transactions</h2>
         <hr>
         <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  add transaction', ['class' => 'btn btn-success', 'data-action' => 'add-transaction']) ?>
-        <?= Html::button('report total order value', ['id' => 'btn-report-sum-order','class' => 'btn btn-default']) ?>
+        <?php if ($countOrders != 0 && $countTransactions != 0): ?>
+            <?= Html::button('report total order value', ['id' => 'btn-report-sum-order','class' => 'btn btn-default']) ?>
+        <?php endif; ?>
 
-        <?php if (count($transactions)): ?>
+        <?php if ($countTransactions): ?>
             <table id="transactions" class="table table-condensed table-hover">
                 <thead>
                     <tr>
@@ -181,7 +199,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
+                        <td class="valueSum">
                             <h3><span id="transaction-value-sum"></span></h3>
                         </td>
                         <td></td>
@@ -190,7 +208,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             </table>
         <?php endif; ?>
 
-        <?php if (count($orders) != 0 && count($transactions) != 0): ?>
+        <?php if ($countOrders != 0 && $countTransactions != 0): ?>
             <?= Html::button('Submit Cart', ['class' => 'btn btn-primary', 'data-action' => 'submit']) ?>
             <?= Html::button('Save As Template ....', ['class' => 'btn btn-default', 'data-action' => 'save-as-template']) ?>
         <?php endif;?>
