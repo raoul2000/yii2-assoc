@@ -1,9 +1,11 @@
-/**
- * page action manager
- * Handle all actions emitted by click on element having "data-action" as own attribute
- * or ancestors
- */
-$('#cart-manager-container').on('click', (ev) => {
+ /**
+  * Page action manager
+  * Handle all actions emitted by click on element having "data-action" as own attribute
+  * or ancestors
+  * 
+  * @param {Event} ev 
+  */
+ const cartManagerActionHandler = (ev) => {
     const actionEl = ev.target.closest("[data-action]");
     if (actionEl) {
         ev.stopPropagation();
@@ -21,14 +23,15 @@ $('#cart-manager-container').on('click', (ev) => {
                 document.forms['cart-manager-form'].submit();
         }
     }
-});
+ };
 
+$('#cart-manager-container').on('click', cartManagerActionHandler);
 
 // order handlers /////////////////////////////////////////////////////
 
 
 /**
- * Compoute and return the sum of all order values or -1 if one 
+ * Compute and return the sum of all order values or -1 if one 
  */
 
 const computeInputValueSum = (selector) => Array.from(document.querySelectorAll(selector))
@@ -109,7 +112,7 @@ const copyProductValueToOrderValue = (index) => {
  * - update product value display
  * - clear order value
  */
-$('.orders select[data-product]').change((ev) => {
+const onSelectedProductChange = (ev) => {
     // get line index
     const index = ev.target.id.split('-')[1];
 
@@ -122,12 +125,29 @@ $('.orders select[data-product]').change((ev) => {
 
     // clear order value discount
     renderOrderDiscount(document.getElementById(`order-${index}-value`));
+};
+$('.orders select[data-product]').change(onSelectedProductChange);
+
+$('.order-discount').on('change input', (ev) => {
+    const discount = ev.target.value;
+    const index = ev.target.id.split('-')[2]; // element id example : order-discount-2
+
+    if(!discount || discount.trim().length == 0) {
+         document.getElementById(`order-${index}-value`).value =  document.getElementById(`product-value-${index}`).value;
+    } else if(isNaN(discount)) {
+        return;
+    } else {
+        const productValue = document.getElementById(`product-value-${index}`).value;
+        if(isNaN(productValue)) {
+            return;
+        }
+        const discountValue = Number(productValue) * Number(discount) / 100;
+        console.log(discountValue);
+        document.getElementById(`order-${index}-value`).value = Number(Number(productValue) + discountValue).toFixed(2);
+    }
 });
-
-
 // transaction handlers /////////////////////////////////////////////////////
-
-$('#btn-report-sum-order').on('click', (ev) => {
+const ventileOrderSumToTransactions = (ev) => {
     const transactionInputs = document.querySelectorAll('#transactions input.transaction-value');
     if (transactionInputs.length == 0) {
         return; // no transaction to report to
@@ -145,11 +165,9 @@ $('#btn-report-sum-order').on('click', (ev) => {
         });
         renderTransactionValueSum();
     }
-});
-
-$('.transaction-value').on('change input', (ev) => {
-    renderTransactionValueSum();
-});
+};
+$('#btn-report-sum-order').on('click', ventileOrderSumToTransactions);
+$('.transaction-value').on('change input', renderTransactionValueSum);
 
 /////////////////////////////////////////////////////////////////////////////
 $(document).ready(() => {

@@ -26,9 +26,9 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             <table id="orders" class="table table-condensed table-hover orders">
                 <thead>
                     <tr>
+                        <th>Product</th>
                         <th>Fournisseur</th>
                         <th>Beneficiaire</th>
-                        <th>Product</th>
                         <th>Prix unitaire</th>
                         <th>discount (%)</th>
                         <th>Value</th>
@@ -38,6 +38,19 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                 <tbody>
                     <?php  foreach ($orders as $index => $order): ?>
                         <tr>
+                            <td>
+                                <?= $form->field($order, "[$index]product_id")
+                                    ->listBox($products, [
+                                        'size'=>1,
+                                        'options' =>  $productOptions,
+                                        'prompt' => 'select ...',
+                                        'data-product' => true,
+                                        'data-order-value-id' => Html::getInputId($order, "[$index]value"),
+                                        'data-target-id' => "product-value-$index"
+                                    ])
+                                    ->label(false)
+                                ?>
+                            </td>                        
                             <td>
                                 <?= $form->field($order, "[$index]from_contact_id")
                                     ->listBox($contacts, ['size'=>1])
@@ -51,19 +64,6 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                 ?>
                             </td>                        
                             <td>
-                                <?= $form->field($order, "[$index]product_id")
-                                    ->listBox($products, [
-                                        'size'=>1,
-                                        'options' =>  $productOptions,
-                                        'prompt' => 'select ...',
-                                        'data-product' => true,
-                                        'data-order-value-id' => Html::getInputId($order, "[$index]value"),
-                                        'data-target-id' => "product-value-$index"
-                                    ])
-                                    ->label(false)
-                                ?>
-                            </td>
-                            <td>
                                 <div class="form-group" style="width:6em">
                                     <input type="text" 
                                         id="product-value-<?=$index?>" 
@@ -75,8 +75,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                             <div class="form-group" style="width:6em;">
                                     <input type="text" 
                                         id="order-discount-<?=$index?>" 
-                                        class="form-control" 
-                                        disabled="disabled">
+                                        class="form-control order-discount" 
+                                        autocomplete="off">
                                 </div>                            
                             </td>
                             <td>
@@ -192,6 +192,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
         <?php if (count($orders) != 0 && count($transactions) != 0): ?>
             <?= Html::button('Submit Cart', ['class' => 'btn btn-primary', 'data-action' => 'submit']) ?>
+            <?= Html::button('Save As Template ....', ['class' => 'btn btn-default', 'data-action' => 'save-as-template']) ?>
         <?php endif;?>
     <?php ActiveForm::end(); ?>
 
