@@ -97,6 +97,37 @@ class CartController extends \yii\web\Controller
         return $this->render('update');
     }
 
+    public function actionInitManage()
+    {
+        $order = new Order();
+        $fromBankAccountId = null;
+
+        $transaction = new Transaction();
+        $fromBankAccounts = [];
+
+        if ($order->load(Yii::$app->request->post())) {
+            // beneficiary contact is the owner of the source bank account
+            $fromBankAccounts = $order->toContact->getBankAccounts()->count();
+            $toBankAccounts = $order->fromContact->getBankAccounts()->count();
+
+            $queryParams = [];
+            if ($fromBankAccounts > 1) {
+                $queryParams['to_contact_id'] = $order->toContact->id;
+            }
+            if ($toBankAccounts > 1) {
+                $queryParams['from_contact_id'] = $order->fromContact->id;
+            }
+            if (count($queryParams) != 0 ) {
+                Yii::$app->session->setFlash('warning', 'select account');
+                $this->redirect(array_merge(['select-account'], $queryParams));
+            }
+        }
+
+        return $this->render('init-manage', [
+            'order' => $order,
+            'contacts' => \app\models\Contact::getNameIndex()
+        ]);
+    }
     /**
      * Shopping Cart Management
      *
@@ -159,7 +190,7 @@ class CartController extends \yii\web\Controller
         $action = Yii::$app->request->post('action');
         if (!empty($action)) {
             switch ($action) {
-                case 'submit' :
+                case 'submit' : ////////////////////////////////////////////////////////////
                     if (count($orders) === 0) {
                         Yii::$app->session->setFlash('error', 'No order');
                     } elseif (count($transactions) == 0) {
