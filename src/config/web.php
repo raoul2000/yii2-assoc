@@ -13,6 +13,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@data' => '@app/../data',
+        '@template' => '@app/../data/templates'
     ],
     'components' => [
         'configManager' => $configManager,

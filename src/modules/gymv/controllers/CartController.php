@@ -277,8 +277,33 @@ class CartController extends \yii\web\Controller
                     }
                     $orders = $updatedOrders;
                     break;
-                case 'save-as-template':
-                    //return $this->actionSaveAsTemplate()
+                case 'save-as-template': ///////////////////////////////////////////////////////////
+                    if (!Yii::$app->request->isAjax) {
+                        throw new \yii\web\ForbiddenHttpException();
+                    }
+                    $templateName = Yii::$app->request->post('template-name');
+                    if (empty($templateName)) {
+                        throw new \yii\web\BadRequestHttpException('template name is missing');
+                    }
+                    // filename has random unique name - it is stored in @template folder : alias MUST be defined
+                    // and target folder MUST exist
+                    $uuid = \thamtech\uuid\helpers\UuidHelper::uuid();
+                    $filepath = Yii::getAlias('@template/' . $uuid . '.json');
+                    $data = [
+                        'name' => $templateName,
+                        'orders' => array_map(function ($item) {
+                            return $item->getAttributes();
+                        }, $orders),
+                        'transactions' => array_map(function ($item) {
+                            return $item->getAttributes();
+                        }, $transactions),
+                    ];
+                    file_put_contents($filepath, json_encode($data, true));
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    return [
+                        'success' => true,
+                        'filepath' => $filepath
+                    ];
                     break;
                 default: /////////////////////////////////////////////////////////////////////////
                     throw new NotFoundHttpException('invalid request');

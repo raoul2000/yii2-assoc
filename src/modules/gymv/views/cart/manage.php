@@ -34,7 +34,14 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         yii\bootstrap\Modal::begin([
             'id' => 'save-template-modal',
             'header' => '<h3>Save Template As ...</h3>',
-            'footer' => '<button class="btn btn-primary">Save</button>&nbsp;<button class="btn btn-default" data-dismiss="modal">Cancel</button>',
+            'footer' => '
+            <div id="btnbar-start">
+                <button id="btn-save-as-template" class="btn btn-primary">Save</button>&nbsp;<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+            <div id="btnbar-end">
+                <button class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+                ',
             'closeButton' => false, // no close button
             'clientOptions' => [
                 'keyboard' => false // no close on ESC
@@ -59,9 +66,10 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
     ?>
     <h1>cart Manager</h1>
 
-    <?php $form = ActiveForm::begin(['options' => [ 'name' => $formName]]); ?>
+    <?php $form = ActiveForm::begin(['options' => [ 'id' => 'cart-manager-form', 'name' => $formName]]); ?>
         <?= Html::hiddenInput('action', '', [ 'id' => 'cart-action']) ?>
         <?= Html::hiddenInput('index', '', ['id' => 'cart-index']) ?>
+        <?= Html::hiddenInput('template-name', '', ['id' => 'cart-template-name']) ?>
 
         <h2>Orders</h2>
         <hr>

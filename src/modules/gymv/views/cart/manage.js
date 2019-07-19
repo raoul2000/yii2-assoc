@@ -1,11 +1,64 @@
-$('#save-template-modal').on('shown.bs.modal', function (e) {
-   
-});
+const showContent = (selector) => {
+    document.querySelectorAll('.modal-dialog .alert, .modal-dialog .form-group').forEach( (el) => el.style.display = 'none');
+    document.querySelector(`.modal-dialog ${selector}`).style.display = 'block';
+}
+const showTemplateNameInput = () => showContent('.form-group');
+const showSavingTemplate = () => showContent('.alert-info');
+const showSaveSuccess = () => showContent('.alert-success');
+const showSaveError = () => showContent('.alert-danger');
+const showStartButtons = () => {
+    document.getElementById('btnbar-end').style.display = 'none';
+    document.getElementById('btnbar-start').style.display = 'block';
+};
+const showEndButtons = () => {
+    document.getElementById('btnbar-start').style.display = 'none';
+    document.getElementById('btnbar-end').style.display = 'block';
+};
+const disableStartButtons = () => {
+    document.querySelectorAll('#btnbar-start > button').forEach( (el) => el.disabled = true);
+}
+const enableStartButtons = () => {
+    document.querySelectorAll('#btnbar-start > button').forEach( (el) => el.disabled = false);
+}
+const clearTemplateName = () => {
+    document.getElementById('template-name').value = "";
+};
+const saveAsTemplate = (ev) => {
+    const templateName = document.getElementById('template-name').value.trim();
+    if( templateName == '') {
+        alert('please enter a template name');
+        return;
+    }
+    disableStartButtons();
+    showSavingTemplate();
+    document.getElementById('cart-template-name').value = templateName;
+    document.getElementById('cart-action').value = 'save-as-template';
+
+    const postURL = document.forms['cart-manager-form'].getAttribute('action');
+    $.post(postURL, $('#cart-manager-form').serialize())
+        .done( (data) => {
+            console.log(data);
+            showSaveSuccess();
+        })
+        .fail( (err) => {
+            console.error(err);
+            showSaveError();
+        })
+        .always( () => {
+            showEndButtons();
+        });
+};
+$('#btn-save-as-template').on('click',saveAsTemplate );
 
 $('#save-template-modal').on('show.bs.modal', function (e) {
-    
+    enableStartButtons();
+    showStartButtons();
+    clearTemplateName();
+    showTemplateNameInput();
  });
  
+
+
  /**
   * Page action manager
   * Handle all actions emitted by click on element having "data-action" as attribute
