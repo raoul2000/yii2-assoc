@@ -11,16 +11,44 @@ use yii\widgets\ActiveForm;
 <div class="contact-relation-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="row">
 
-    <?= $form->field($model, 'source_contact_id')->textInput() ?>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label" for="source_contact_id-selectized">Source Contact</label>
+                <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                    'name' => Html::getInputName($model, 'source_contact_id'),
+                    'value' => $model->source_contact_id,
+                    'id' => 'source_contact_id-selectized',
+                    'items' => $contacts,
+                    'clientOptions' => [
+                        // ...
+                    ],
+                ]); ?>
+            </div>
+        </div>
 
-    <?= $form->field($model, 'target_contact_id')->textInput() ?>
 
-    <?= $form->field($model, 'type')->textInput() ?>
+        <div class="col-sm-4">
+            <?= $form->field($model, 'type')->textInput() ?>
+        </div>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label" for="target_contact_id-selectized">Target Contact</label>
+                <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                    'name' => Html::getInputName($model, 'target_contact_id'),
+                    'value' => $model->target_contact_id,
+                    'id' => 'target_contact_id-selectized',
+                    'items' => $contacts,
+                    'clientOptions' => [
+                        // ...
+                    ],
+                ]); ?>
+            </div>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

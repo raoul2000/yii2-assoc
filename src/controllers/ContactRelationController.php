@@ -75,6 +75,7 @@ class ContactRelationController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 
@@ -95,6 +96,7 @@ class ContactRelationController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'contacts' => Contact::getNameIndex()
         ]);
     }
 

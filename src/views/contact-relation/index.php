@@ -32,9 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) {
                     return Html::a(
-                        Html::encode($model->sourceContact->longName),
+                        '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($model->sourceContact->longName),
                         ['contact/view','id'=>$model->source_contact_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'title' => 'view contact', 'data-pjax' => 0 ]
                     );
                 }
             ],
@@ -46,15 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) {
                     return Html::a(
-                        Html::encode($model->targetContact->longName),
+                        '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($model->targetContact->longName),
                         ['contact/view','id'=>$model->target_contact_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'title' => 'view contact', 'data-pjax' => 0 ]
                     );
                 }
             ],
-            'created_at',
-            'updated_at',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

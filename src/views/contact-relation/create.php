@@ -12,9 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="contact-relation-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <hr/>
 
     <?= $this->render('_form', [
         'model' => $model,
+        'contacts' => $contacts
     ]) ?>
 
 </div>
