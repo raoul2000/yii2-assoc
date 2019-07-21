@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $contactModel = $model;
-$allAttachments = $model->attachments;
 ?>
 <div class="contact-view">
 
@@ -164,6 +163,12 @@ $allAttachments = $model->attachments;
                     'encode' => false,
                     'url' => ['view', 'id' => $model->id,'tab'=>'order'],
                     'active' => $tab == 'order'
+                ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Relations',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'relation'],
+                    'active' => $tab == 'relation'
                 ],
             ]
         ]) ?>

@@ -172,11 +172,17 @@ class Contact extends \yii\db\ActiveRecord
             }
         }
     }
+    /**
+     * Returns TRUE if this contact is related to an address, FALSE otherwise
+     *
+     * @return boolean
+     */
     public function getHasAddress()
     {
         return $this->address_id !== null;
     }
     /**
+     * Returns the address belonging to this contact
      * @return \yii\db\ActiveQuery
      */
     public function getAddress()
@@ -184,6 +190,7 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasOne(Address::className(), ['id' => 'address_id']);
     }
     /**
+     * Returns all bank account belonging to this contact
      * @return \yii\db\ActiveQuery
      */
     public function getBankAccounts()
@@ -191,6 +198,7 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(BankAccount::className(), ['contact_id' => 'id']);
     }
     /**
+     * Returns all orders received by this this contact.
      * @return \yii\db\ActiveQuery
      */
     public function getToOrders()
@@ -198,6 +206,7 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(Order::className(), ['to_contact_id' => 'id']);
     }
     /**
+     * Returns all orders provided by this contact
      * @return \yii\db\ActiveQuery
      */
     public function getFromOrders()
@@ -205,13 +214,31 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(Order::className(), ['from_contact_id' => 'id']);
     }
     /**
+     * Returns all categories belonging to this contact
      * @return \yii\db\ActiveQuery
      */
     public function getCategories()
     {
         return $this->hasMany(Category::className(), ['contact_id' => 'id']);
     }
-
+    /**
+     * Returns Conatcts related to this contact where this contact is the source
+     * of the relation.
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelatedToContacts()
+    {
+        return $this->hasMany(ContactRelation::className(), ['source_contact_id' => 'id']);
+    }
+    /**
+     * Returns Conatcts related to this contact where this contact is the target
+     * of the relation.
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelatedFromContacts()
+    {
+        return $this->hasMany(ContactRelation::className(), ['target_contact_id' => 'id']);
+    }
     /**
      * Returns an array containing all contact names indexed by contact Id.
      *
@@ -226,6 +253,11 @@ class Contact extends \yii\db\ActiveRecord
         return ArrayHelper::map($contacts, 'id', 'name');
     }
 
+    /**
+     * Returns the read-only attribute 'longName'
+     *
+     * @return string
+     */
     public function getLongName()
     {
         if ($this->is_natural_person == true) {
