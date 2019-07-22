@@ -2,6 +2,8 @@
 
 namespace app\components;
 
+use Yii;
+
 class Constant
 {
     /**
@@ -47,4 +49,42 @@ class Constant
             return 'error';
         }
     }
+
+    public static function getContactRelationTypes()
+    {
+        if (array_key_exists('contact-relations', Yii::$app->params) ) {
+            return Yii::$app->params['contact-relations'];
+        } else {
+            return [
+                [
+                    'id' => 1,
+                    'name' => 'relation1'
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'relation2'
+                ],
+            ];
+        }
+    }
+
+    public static function getContactRelationType($typeId)
+    {
+        if (empty($typeId)) {
+            return null;
+        }
+        
+        $types = self::getContactRelationTypes();
+        foreach($types as $type) {
+            if ($type['id'] == $typeId) {
+                return $type;
+            }
+        }
+        return null;
+    }
+    public static function getContactRelationName($typeId) {
+        $type = self::getContactRelationType($typeId);
+        return ( empty($type) ? null : $type['name']);
+    }
+
 }

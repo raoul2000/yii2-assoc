@@ -30,7 +30,19 @@ use yii\widgets\ActiveForm;
 
 
         <div class="col-sm-4">
-            <?= $form->field($model, 'type')->textInput() ?>
+            <div class="form-group">
+                <label class="control-label" for="type-selectized">Relation Type</label>
+                <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                    'name' => Html::getInputName($model, 'type'),
+                    'value' => $model->type,
+                    'id' => 'type-selectized',
+                    'items' => $contactRelationTypes,
+                    'clientOptions' => [
+                        // ...
+                    ],
+                ]); ?>
+            </div>
+
         </div>
 
 

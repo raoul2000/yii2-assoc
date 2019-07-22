@@ -138,20 +138,33 @@ class Contact extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        // delete owned bank account(s)
         foreach ($this->bankAccounts as $account) {
             $account->delete();
         }
+
+        // Deletes to and from orders
         foreach ($this->toOrders as $order) {
             $order->delete();
         }
-
         foreach ($this->fromOrders as $order) {
             $order->delete();
         }
 
+        // deletes owned categorie(s)
         foreach ($this->categories as $category) {
             $category->delete();
         }
+
+        // delete relation(s) with other contact(s) no matter
+        // if they are to or from relations
+        foreach ($this->relatedToContacts as $contact) {
+            $this->unlink('relatedToContacts', $contact, true);
+        }
+        foreach ($this->relatedFromContacts as $contact) {
+            $this->unlink('relatedFromContacts', $contact, true);
+        }
+
         return true;
     }
 
@@ -240,17 +253,18 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(ContactRelation::className(), ['target_contact_id' => 'id']);
     }
     /**
-     * Returns an array containing all contact names indexed by contact Id.
+     * Returns an array containing all contact long names indexed by contact Id.
      *
-     * @returns array list of [id, name] items
+     * @returns array list of [id, longname] items
      */
     public static function getNameIndex()
     {
         $contacts = parent::find()
-            ->select(['id','name'])
+            ->select(['id', "CONCAT(name, ' ', firstname) as longName"])
             ->asArray()
             ->all();
-        return ArrayHelper::map($contacts, 'id', 'name');
+
+        return ArrayHelper::map($contacts, 'id', 'longName');
     }
 
     /**

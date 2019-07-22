@@ -4,21 +4,34 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ContactRelation */
+$title = $model->sourceContact->longName 
+    . ' - '
+    . $model->targetContact->longName;
 
-$this->title = Yii::t('app', 'Update Contact Relation: {name}', [
-    'name' => $model->id,
-]);
+$titlePage = Html::encode($model->sourceContact->longName) 
+    . ' <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> ' 
+    . Html::encode($model->targetContact->longName);
+
+
+$this->title = $title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contact Relations'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="contact-relation-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        Update Contact Relation
+        <small>
+            <?= $titlePage ?>
+        </small>
+    </h1>
+    <hr/>
 
     <?= $this->render('_form', [
         'model' => $model,
-        'contacts' => $contacts
+        'contacts' => $contacts,
+        'contactRelationTypes' => $contactRelationTypes
     ]) ?>
 
 </div>

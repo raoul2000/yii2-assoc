@@ -136,7 +136,6 @@ $contactModel = $model;
         </div>                    
     <?php endif; ?>
 
-
         <?= yii\bootstrap\Nav::widget([
             'options' => ['class' =>'nav-tabs'],
             'items' => [

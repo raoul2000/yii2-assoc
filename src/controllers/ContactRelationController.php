@@ -3,12 +3,14 @@
 namespace app\controllers;
 
 use Yii;
+use app\components\Constant;
 use app\models\Contact;
 use app\models\ContactRelation;
 use app\models\ContactRelationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * ContactRelationController implements the CRUD actions for ContactRelation model.
@@ -43,7 +45,8 @@ class ContactRelationController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'contacts' => Contact::getNameIndex()
+            'contacts' => Contact::getNameIndex(),
+            'contactRelationTypes' => ArrayHelper::map(Constant::getContactRelationTypes(),'id', 'name')
         ]);
     }
 
@@ -65,17 +68,24 @@ class ContactRelationController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($source_contact_id = null, $redirect_url = null)
     {
         $model = new ContactRelation();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            if (!empty($redirect_url)) {
+                return $this->redirect($redirect_url);
+            } else {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
-
+        if (isset($source_contact_id)) {
+            $model->source_contact_id = $source_contact_id;
+        }
         return $this->render('create', [
             'model' => $model,
-            'contacts' => Contact::getNameIndex()
+            'contacts' => Contact::getNameIndex(),
+            'contactRelationTypes' => ArrayHelper::map(Constant::getContactRelationTypes(),'id', 'name')
         ]);
     }
 
@@ -96,7 +106,8 @@ class ContactRelationController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'contacts' => Contact::getNameIndex()
+            'contacts' => Contact::getNameIndex(),
+            'contactRelationTypes' => ArrayHelper::map(Constant::getContactRelationTypes(),'id', 'name')
         ]);
     }
 

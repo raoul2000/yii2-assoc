@@ -39,7 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 }
             ],
-            'type',
+            [
+                'attribute' => 'type',
+                'filter'    => $contactRelationTypes,
+                'value'     => function($model, $key, $index,$column) {
+                    return app\components\Constant::getContactRelationName($model->type);
+                }
+            ],
             [
                 'attribute' => 'target_contact_id',
                 'label'     => 'Target Contact',

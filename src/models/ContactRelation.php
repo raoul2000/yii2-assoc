@@ -89,4 +89,5 @@ class ContactRelation extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Contact::className(), ['id' => 'target_contact_id']);
     }
+
 }

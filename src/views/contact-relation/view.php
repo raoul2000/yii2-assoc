@@ -52,7 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 }
             ],
-            'type',
+            [
+                'attribute' => 'type',
+                'value'     => function($model) {
+                    return app\components\Constant::getContactRelationName($model->type);
+                }
+            ],
             [
                 'attribute' => 'target_contact_id',
                 'label'     => 'Source Contact',
