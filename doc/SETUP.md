@@ -1,3 +1,5 @@
+> All commands must be launched from the `./src` folder
+
 
 # Prepare DB
 
@@ -10,7 +12,7 @@ yii migrate --migrationPath=@bupy7/activerecord/history/migrations --interactive
 
 mysql -h <hostname> -u <username> --password=<password> -D <database> -e 'source <path-to-sql-file>'
 
-# Inject Fake Data (dev)
+# Test Data
 
 > Before generating new fixture data, REMOVE ALL FILES FROM @tests/unit/fixtures/data.
 
@@ -31,4 +33,14 @@ yii fixture/load Contact --interactive=0
 # Generate and load all (10 items)
 yii fixture/generate "*" --count=10 --interactive=0 
 yii fixture/load "*" 
+```
+
+# Prepare FS
+
+A Data folder is required by several features of the system so check that aliases configured are refering to existing folders :
+
+in `./config/web.php` 
+```
+'@data' => '@app/../data',
+'@template' => '@app/../data/templates'
 ```
