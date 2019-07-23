@@ -77,7 +77,8 @@ $contactModel = $model;
                                 continue;
                             }
                             $linkedContacts[] = Html::a(
-                                Html::encode($contact->longName),
+                                '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                    . Html::encode($contact->longName),
                                 ['contact/view', 'id' => $contact->id],
                                 ['title' => 'view Contact', 'data-pjax' => 0]
                             );

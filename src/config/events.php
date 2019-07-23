@@ -8,6 +8,10 @@ use app\models\Contact;
 use app\models\BankAccount;
 use yii\base\Application;
 
+/**
+ * Install global event handlers
+ * (Loaded by bootstrap script web/index.php)
+ */
 Event::on(Application::class, Application::EVENT_BEFORE_ACTION, function ($event) {
 
     if (Yii::$app->user->isGuest) {

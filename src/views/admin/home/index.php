@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         echo Html::a('Manage Users', ['user/admin'], ['class' => 'btn btn-primary']);
     }?>
     <?= Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . \Yii::t('app', 'Manage Contacts'), ['contact/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(\Yii::t('app', 'Manage Contact Relations'), ['contact-relation/index'], ['class' => 'btn btn-default']) ?>
     <?= Html::a('<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Manage Address', ['address/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Manage Products', ['product/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('<span class="glyphicon glyphicon-th" aria-hidden="true"></span> Manage Categories', ['category/index'], ['class' => 'btn btn-primary']) ?>

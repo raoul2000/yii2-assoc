@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $contactModel = $model;
-$allAttachments = $model->attachments;
 ?>
 <div class="contact-view">
 
@@ -137,41 +136,41 @@ $allAttachments = $model->attachments;
         </div>                    
     <?php endif; ?>
 
-    <?php if (!empty($model->note)) :?>
-        <div class="alert alert-info" role="alert">
-            <b><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> note</b> : <?= Html::encode($model->note) ?>
-        </div>
-    <?php endif; ?>
-
-    <?= yii\bootstrap\Nav::widget([
-        'options' => ['class' =>'nav-tabs'],
-        'items' => [
-            [
-                'label' => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Address',
-                'encode' => false,
-                'url' => ['view', 'id' => $model->id,'tab'=>'address'],
-                'active' => $tab == 'address'
-            ],
-            [
-                'label' => '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Account',
-                'encode' => false,
-                'url' => ['view', 'id' => $model->id,'tab'=>'account'],
-                'active' => $tab == 'account'
-            ],
-            [
-                'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
-                'encode' => false,
-                'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
-                'active' => $tab == 'attachment'
-            ],
-            [
-                'label' => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders',
-                'encode' => false,
-                'url' => ['view', 'id' => $model->id,'tab'=>'order'],
-                'active' => $tab == 'order'
-            ],
-        ]
-    ]) ?>
+        <?= yii\bootstrap\Nav::widget([
+            'options' => ['class' =>'nav-tabs'],
+            'items' => [
+                [
+                    'label' => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Address',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'address'],
+                    'active' => $tab == 'address'
+                ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Account',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'account'],
+                    'active' => $tab == 'account'
+                ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
+                    'active' => $tab == 'attachment'
+                ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'order'],
+                    'active' => $tab == 'order'
+                ],
+                [
+                    'label' => '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> Relations',
+                    'encode' => false,
+                    'url' => ['view', 'id' => $model->id,'tab'=>'relation'],
+                    'active' => $tab == 'relation'
+                ],
+            ]
+        ]) ?>
 
     <div style="margin-top:1em;">
         <?= $tabContent ?>

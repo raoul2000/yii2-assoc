@@ -9,6 +9,7 @@ use app\models\Attachment;
 use app\models\Address;
 use app\models\AddressSearch;
 use app\models\BankAccount;
+use app\models\ContactRelation;
 use app\models\Contact;
 use app\models\ContactSearch;
 use yii\web\Controller;
@@ -146,6 +147,23 @@ class ContactController extends Controller
                     'tab' => $tab,
                     'tabContent' => $this->renderPartial('/common/_tab-attachment', [
                         'model' => $model,
+                    ])
+                ]);
+                break;
+
+            case 'relation':
+                    
+                $relations = ContactRelation::find()
+                    ->where(['source_contact_id' => $model->id])
+                    ->orWhere(['target_contact_id' => $model->id])
+                    ->with(['sourceContact', 'targetContact'])
+                    ->all();
+                return $this->render('view', [
+                    'model' => $model,
+                    'tab' => $tab,
+                    'tabContent' => $this->renderPartial('_tab-relation', [
+                        'model' => $model,
+                        'relations' => $relations,
                     ])
                 ]);
                 break;

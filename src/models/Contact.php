@@ -138,20 +138,33 @@ class Contact extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        // delete owned bank account(s)
         foreach ($this->bankAccounts as $account) {
             $account->delete();
         }
+
+        // Deletes to and from orders
         foreach ($this->toOrders as $order) {
             $order->delete();
         }
-
         foreach ($this->fromOrders as $order) {
             $order->delete();
         }
 
+        // deletes owned categorie(s)
         foreach ($this->categories as $category) {
             $category->delete();
         }
+
+        // delete relation(s) with other contact(s) no matter
+        // if they are to or from relations
+        foreach ($this->relatedToContacts as $contact) {
+            $this->unlink('relatedToContacts', $contact, true);
+        }
+        foreach ($this->relatedFromContacts as $contact) {
+            $this->unlink('relatedFromContacts', $contact, true);
+        }
+
         return true;
     }
 
@@ -172,11 +185,17 @@ class Contact extends \yii\db\ActiveRecord
             }
         }
     }
+    /**
+     * Returns TRUE if this contact is related to an address, FALSE otherwise
+     *
+     * @return boolean
+     */
     public function getHasAddress()
     {
         return $this->address_id !== null;
     }
     /**
+     * Returns the address belonging to this contact
      * @return \yii\db\ActiveQuery
      */
     public function getAddress()
@@ -184,6 +203,7 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasOne(Address::className(), ['id' => 'address_id']);
     }
     /**
+     * Returns all bank account belonging to this contact
      * @return \yii\db\ActiveQuery
      */
     public function getBankAccounts()
@@ -191,6 +211,7 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(BankAccount::className(), ['contact_id' => 'id']);
     }
     /**
+     * Returns all orders received by this this contact.
      * @return \yii\db\ActiveQuery
      */
     public function getToOrders()
@@ -198,6 +219,7 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(Order::className(), ['to_contact_id' => 'id']);
     }
     /**
+     * Returns all orders provided by this contact
      * @return \yii\db\ActiveQuery
      */
     public function getFromOrders()
@@ -205,27 +227,51 @@ class Contact extends \yii\db\ActiveRecord
         return $this->hasMany(Order::className(), ['from_contact_id' => 'id']);
     }
     /**
+     * Returns all categories belonging to this contact
      * @return \yii\db\ActiveQuery
      */
     public function getCategories()
     {
         return $this->hasMany(Category::className(), ['contact_id' => 'id']);
     }
-
     /**
-     * Returns an array containing all contact names indexed by contact Id.
+     * Returns Conatcts related to this contact where this contact is the source
+     * of the relation.
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelatedToContacts()
+    {
+        return $this->hasMany(ContactRelation::className(), ['source_contact_id' => 'id']);
+    }
+    /**
+     * Returns Conatcts related to this contact where this contact is the target
+     * of the relation.
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRelatedFromContacts()
+    {
+        return $this->hasMany(ContactRelation::className(), ['target_contact_id' => 'id']);
+    }
+    /**
+     * Returns an array containing all contact long names indexed by contact Id.
      *
-     * @returns array list of [id, name] items
+     * @returns array list of [id, longname] items
      */
     public static function getNameIndex()
     {
         $contacts = parent::find()
-            ->select(['id','name'])
+            ->select(['id', "CONCAT(name, ' ', firstname) as longName"])
             ->asArray()
             ->all();
-        return ArrayHelper::map($contacts, 'id', 'name');
+
+        return ArrayHelper::map($contacts, 'id', 'longName');
     }
 
+    /**
+     * Returns the read-only attribute 'longName'
+     *
+     * @return string
+     */
     public function getLongName()
     {
         if ($this->is_natural_person == true) {
