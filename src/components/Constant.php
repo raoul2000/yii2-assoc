@@ -36,6 +36,7 @@ class Constant
             'CRD' => 'CRD - Carte de Paiement',
         ];
     }
+
     public static function getTransactionType($type)
     {
         if (empty($type)) {
@@ -50,9 +51,22 @@ class Constant
         }
     }
 
+    /**
+     * Returns all contact relation types configured.
+     * Contact relations can be configured in the file `./config/contact-relations.php`. If not available
+     * some default basic types hardcoded in the method, are returned.
+     * The expected contact relation structure is :
+     *
+     * [
+     *   'id' => 0,
+     *   'name' => 'undefined'
+     * ]
+     *
+     * @return array
+     */
     public static function getContactRelationTypes()
     {
-        if (array_key_exists('contact-relations', Yii::$app->params) ) {
+        if (array_key_exists('contact-relations', Yii::$app->params)) {
             return Yii::$app->params['contact-relations'];
         } else {
             return [
@@ -68,6 +82,13 @@ class Constant
         }
     }
 
+    /**
+     * Returns a single contact-relation type object given its Id.
+     * If no item is found, returns NULL.
+     *
+     * @param int $typeId
+     * @return array
+     */
     public static function getContactRelationType($typeId)
     {
         if (empty($typeId)) {
@@ -75,16 +96,23 @@ class Constant
         }
         
         $types = self::getContactRelationTypes();
-        foreach($types as $type) {
+        foreach ($types as $type) {
             if ($type['id'] == $typeId) {
                 return $type;
             }
         }
         return null;
     }
-    public static function getContactRelationName($typeId) {
+
+    /**
+     * Returns the name of a contact-relation-type given its ID, or NULL if not found
+     *
+     * @param int $typeId
+     * @return string
+     */
+    public static function getContactRelationName($typeId) 
+    {
         $type = self::getContactRelationType($typeId);
         return ( empty($type) ? null : $type['name']);
     }
-
 }
