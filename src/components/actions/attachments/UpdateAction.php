@@ -9,8 +9,11 @@ use app\components\Constant;
 
 class UpdateAction extends Action
 {
-    public function run($id, $redirect_url)
+    public function run($id, $redirect_url = null)
     {
+        if ($redirect_url == null) {
+            $redirect_url = ['view', 'id' => $id];
+        }
 
         if (($attachment = Attachment::findOne($id)) !== null) {
             if ($attachment->load(Yii::$app->request->post()) && $attachment->save()) {

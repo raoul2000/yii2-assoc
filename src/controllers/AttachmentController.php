@@ -44,6 +44,12 @@ class AttachmentController extends Controller
             'preview' => [
                 'class' => 'app\components\actions\attachments\PreviewAction',
             ],
+            'update' => [
+                'class' => 'app\components\actions\attachments\UpdateAction',
+            ],
+            'preview-attachment' => [
+                'class' => 'app\components\actions\attachments\PreviewAction',
+            ],
         ];
     }
     /**
@@ -83,7 +89,7 @@ class AttachmentController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdateold($id)
     {
         $model = $this->findModel($id);
 
@@ -91,8 +97,9 @@ class AttachmentController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('/common/update-attachment', [
             'model' => $model,
+            
         ]);
     }
 

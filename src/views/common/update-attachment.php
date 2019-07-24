@@ -20,6 +20,8 @@ use yii\helpers\Url;
 
             <?php $form = ActiveForm::begin(); ?>
 
+                <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
+
                 <?= $form->field($model, 'category_id')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 
                 <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>

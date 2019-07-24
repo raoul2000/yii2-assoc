@@ -37,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['date', 'php:d/m/Y H:i']
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['nowrap' => 'nowrap']
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

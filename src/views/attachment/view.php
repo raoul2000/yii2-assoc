@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <hr/>
     <p>
-        <?= Html::a('Preview', ['preview', 'id' => $model->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Preview', ['preview', 'id' => $model->id], ['class' => 'btn btn-default', 'title' => 'open in a new window', 'target' => '_blank']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
