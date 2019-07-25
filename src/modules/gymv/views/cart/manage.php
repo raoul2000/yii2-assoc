@@ -30,6 +30,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 <div id="cart-manager-container">
 
     <?php 
+        // modal BEGIN -------------------------------------------------------------
         // define the modal to "save template As ..."
         yii\bootstrap\Modal::begin([
             'id' => 'save-template-modal',
@@ -63,15 +64,18 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
     <?php
         yii\bootstrap\Modal::end();
-    ?>
-    <h1>cart Manager</h1>
+         // modal END -------------------------------------------------------------
+    ?>    
 
     <?php $form = ActiveForm::begin(['options' => [ 'id' => 'cart-manager-form', 'name' => $formName]]); ?>
         <?= Html::hiddenInput('action', '', [ 'id' => 'cart-action']) ?>
         <?= Html::hiddenInput('index', '', ['id' => 'cart-index']) ?>
         <?= Html::hiddenInput('template-name', '', ['id' => 'cart-template-name']) ?>
 
-        <h2>Orders</h2>
+        <h2>
+            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+            Orders
+        </h2>
         <hr>
         <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add order', ['class' => 'btn btn-success', 'data-action' => 'add-order']) ?>
 
@@ -171,7 +175,10 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             </table>
         <?php endif; ?>
 
-        <h2>Transactions</h2>
+        <h2>
+            <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
+            Transactions
+        </h2>
         <hr>
         <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  add transaction', ['class' => 'btn btn-success', 'data-action' => 'add-transaction']) ?>
         <?php if ($countOrders != 0 && $countTransactions != 0): ?>

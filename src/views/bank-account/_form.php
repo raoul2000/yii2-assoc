@@ -14,7 +14,18 @@ use yii\helpers\ArrayHelper;
     <?php $form = ActiveForm::begin(); ?>
 
     <?php if ( ! isset($contact) ):?>
-        <?= $form->field($model, 'contact_id')->listBox($contacts, ['size'=>1])?>
+        <div class="form-group">
+            <label class="control-label" for="contact_id-selectized">Source Account</label>
+            <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                'name' => Html::getInputName($model, 'contact_id'),
+                'value' => $model->contact_id,
+                'id' => 'contact_id-selectized',
+                'items' => $contacts,
+                'clientOptions' => [
+                    // ...
+                ],
+            ]); ?>
+        </div>    
     <?php endif; ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>

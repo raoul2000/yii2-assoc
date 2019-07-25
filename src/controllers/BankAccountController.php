@@ -134,6 +134,7 @@ class BankAccountController extends Controller
     public function actionCreate($contact_id = null)
     {
         $model = new BankAccount();
+        $model->initial_value = 0;
 
         $contact = null;
         if ($contact_id !== null) {
