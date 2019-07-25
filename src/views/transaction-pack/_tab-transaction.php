@@ -55,7 +55,7 @@ $transactionPackModel = $model;
                 'filter'    => \app\components\Constant::getTransactionTypes(),
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) {
-                    return Html::encode( \app\components\Constant::getTransactionType($model->type));
+                    return Html::encode(\app\components\Constant::getTransactionType($model->type));
                     
                 }
             ],
@@ -65,6 +65,7 @@ $transactionPackModel = $model;
             'reference_date:date',
             [
                 'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['nowrap' => 'nowrap'],
                 'template'  => '{view} {unlink} ',
                 'urlCreator' => function ($action, $model, $key, $index) use ($transactionPackModel) {
                     if ($action == 'unlink') {

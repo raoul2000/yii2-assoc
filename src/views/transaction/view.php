@@ -99,7 +99,8 @@ $transactionModel = $model;
                         'value' => function ($model) {
                             if ($model->transaction_pack_id) {
                                 return Html::a(
-                                    Html::encode('pack N°' . $model->transaction_pack_id . ' - ' . $model->pack->name),
+                                    '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> '
+                                        . Html::encode('pack N°' . $model->transaction_pack_id . ' - ' . $model->pack->name),
                                     ['transaction-pack/view', 'id' => $model->transaction_pack_id],
                                     ['title' => 'view pack', 'data-pjax' => 0]
                                 );

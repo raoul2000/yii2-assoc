@@ -18,7 +18,9 @@ $transactionPackModel = $model;
 ?>
 <div class="transaction-pack-view">
 
-    <h1>Pack N°<?= $model->id ?> : <?= Html::encode($model->name) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>  Pack N°<?= $model->id ?> : <?= Html::encode($model->name) ?>
+    </h1>
     <hr/>
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -49,7 +51,8 @@ $transactionPackModel = $model;
                 'value' => function ($model) {
                     if ($model->bankAccount) {
                         return Html::a(
-                            Html::encode($model->bankAccount->longName),
+                            '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                . Html::encode($model->bankAccount->longName),
                             ['bank-account/view','id' => $model->bankAccount->id],
                             ['title' => 'view Account', 'data-pjax' => 0]
                         );
@@ -76,7 +79,7 @@ $transactionPackModel = $model;
         'options' => ['class' =>'nav-tabs'],
         'items' => [
             [
-                'label' => 'Transaction',
+                'label' => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>  Transaction',
                 'encode' => false,
                 'url' => ['view', 'id' => $model->id, 'tab'=>'transaction'],
                 'active' => $tab == 'transaction'

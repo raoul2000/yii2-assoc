@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
     <?= Html::a('<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Manage Bank Accounts', ['bank-account/index'], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Manage Transactions', ['transaction/index'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Manage Transaction Packs', ['transaction-pack/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Manage Transaction Packs', ['transaction-pack/index'], ['class' => 'btn btn-primary']) ?>
     
     <?= Html::a('<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Manage Orders', ['order/index'], ['class' => 'btn btn-primary']) ?>
 </p>
