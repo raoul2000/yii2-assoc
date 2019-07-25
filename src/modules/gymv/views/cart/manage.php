@@ -107,13 +107,21 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                             </td>                        
                             <td>
                                 <?= $form->field($order, "[$index]from_contact_id")
-                                    ->listBox($contacts, ['size'=>1])
+                                    ->listBox($contacts, [
+                                        'size'=>1,
+                                        'prompt' => 'select ...',
+                                        'data-from-contact-id' => true,
+                                    ])
                                     ->label(false)
                                 ?>
                             </td>
                             <td>
                                 <?= $form->field($order, "[$index]to_contact_id")
-                                    ->listBox($contacts, ['size'=>1])
+                                    ->listBox($contacts, [
+                                        'size'=>1,
+                                        'prompt' => 'select ...',
+                                        'data-to-contact-id' => true,
+                                    ])
                                     ->label(false)
                                 ?>
                             </td>                        
@@ -188,13 +196,21 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                         <tr>
                             <td>
                                 <?= $form->field($transaction, "[$index]from_account_id")
-                                    ->listBox($bankAccounts, ['size'=>1])
+                                    ->listBox($bankAccounts, [
+                                        'size'=>1,
+                                        'prompt' => 'select ...',
+                                        'data-from-account-id' => true,
+                                    ])
                                     ->label(false)
                                 ?>
                             </td>
                             <td>
                                 <?= $form->field($transaction, "[$index]to_account_id")
-                                    ->listBox($bankAccounts, ['size'=>1])
+                                    ->listBox($bankAccounts, [
+                                        'size'=>1,
+                                        'prompt' => 'select ...',
+                                        'data-to-account-id' => true,
+                                    ])
                                     ->label(false)
                                 ?>
                             </td>

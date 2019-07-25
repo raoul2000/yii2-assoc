@@ -1,5 +1,5 @@
 const showContent = (selector) => {
-    document.querySelectorAll('.modal-dialog .alert, .modal-dialog .form-group').forEach( (el) => el.style.display = 'none');
+    document.querySelectorAll('.modal-dialog .alert, .modal-dialog .form-group').forEach((el) => el.style.display = 'none');
     document.querySelector(`.modal-dialog ${selector}`).style.display = 'block';
 }
 const showTemplateNameInput = () => showContent('.form-group');
@@ -15,17 +15,17 @@ const showEndButtons = () => {
     document.getElementById('btnbar-end').style.display = 'block';
 };
 const disableStartButtons = () => {
-    document.querySelectorAll('#btnbar-start > button').forEach( (el) => el.disabled = true);
+    document.querySelectorAll('#btnbar-start > button').forEach((el) => el.disabled = true);
 }
 const enableStartButtons = () => {
-    document.querySelectorAll('#btnbar-start > button').forEach( (el) => el.disabled = false);
+    document.querySelectorAll('#btnbar-start > button').forEach((el) => el.disabled = false);
 }
 const clearTemplateName = () => {
     document.getElementById('template-name').value = "";
 };
 const saveAsTemplate = (ev) => {
     const templateName = document.getElementById('template-name').value.trim();
-    if( templateName == '') {
+    if (templateName == '') {
         alert('please enter a template name');
         return;
     }
@@ -36,37 +36,78 @@ const saveAsTemplate = (ev) => {
 
     const postURL = document.forms['cart-manager-form'].getAttribute('action');
     $.post(postURL, $('#cart-manager-form').serialize())
-        .done( (data) => {
+        .done((data) => {
             console.log(data);
             showSaveSuccess();
         })
-        .fail( (err) => {
+        .fail((err) => {
             console.error(err);
             showSaveError();
         })
-        .always( () => {
+        .always(() => {
             showEndButtons();
         });
 };
-$('#btn-save-as-template').on('click',saveAsTemplate );
+$('#btn-save-as-template').on('click', saveAsTemplate);
 
 $('#save-template-modal').on('show.bs.modal', function (e) {
     enableStartButtons();
     showStartButtons();
     clearTemplateName();
     showTemplateNameInput();
- });
- 
+});
 
+/**
+ * check that there is at least two identicals array items at the same index in arrays
+ * 
+ * @param {array} arr1 first array to compare
+ * @param {array} arr2 second array to compare
+ */
+const sameArrayItemFound = (arr1, arr2) => {
+    if(arr1.length !== arr1.length) {
+        throw new Exception('both array must have the same number of items');
+    }
+    for(let idx=0; idx < arr1.length; idx++) {
+        if (arr1[idx] != "" && arr1[idx] == arr2[idx]) {
+            return true;
+        }
+    }    
+    return false;
+};
 
- /**
-  * Page action manager
-  * Handle all actions emitted by click on element having "data-action" as attribute
-  * or ancestors
-  * 
-  * @param {Event} ev 
-  */
- const cartManagerActionHandler = (ev) => {
+/**
+ * Basic form validation
+ * - ask confirmation if same account is defined as both source and target of a transaction
+ * - ask confirmation if same contact is defined as both beneficiary and provide of an order
+ */
+const validateForm = () => {
+
+    const fromContactIds = Array.from(document.querySelectorAll('table#orders > tbody > tr select[data-from-contact-id]')).map( (sel) => sel.selectedOptions[0].value);
+    const toContactIds   = Array.from(document.querySelectorAll('table#orders > tbody > tr select[data-to-contact-id]')).map( (sel) => sel.selectedOptions[0].value);
+
+    if(sameArrayItemFound(fromContactIds, toContactIds)) {
+        if(!confirm('One or more orders have the same provider and consumer. Do you confirm it\'s ok ?' )) {
+            return false;
+        }
+    } 
+
+    const fromAccountIds = Array.from(document.querySelectorAll('table#transactions > tbody > tr select[data-from-account-id]')).map( (sel) => sel.selectedOptions[0].value);
+    const toAccountIds   = Array.from(document.querySelectorAll('table#transactions > tbody > tr select[data-to-account-id]')).map( (sel) => sel.selectedOptions[0].value);
+    if(sameArrayItemFound(fromAccountIds, toAccountIds)) {
+        if(!confirm('One or more transactions have the same source and target. Do you confirm it\'s ok ?' )) {
+            return false;
+        }
+    } 
+    return true;
+};
+/**
+ * Page action manager
+ * Handle all actions emitted by click on element having "data-action" as attribute
+ * or ancestors
+ * 
+ * @param {Event} ev 
+ */
+const cartManagerActionHandler = (ev) => {
     const actionEl = ev.target.closest("[data-action]");
     if (actionEl) {
         ev.stopPropagation();
@@ -76,15 +117,17 @@ $('#save-template-modal').on('show.bs.modal', function (e) {
 
         switch (actionName) {
             default:
-                document.getElementById('cart-action').value = actionEl.dataset.action;
-                if (actionEl.dataset.index) {
-                    document.getElementById('cart-index').value = actionEl.dataset.index;
-                    console.log(`index : ${actionEl.dataset.index}`);
+                if( actionName == 'submit' && validateForm() || actionName != 'submit') {
+                    document.getElementById('cart-action').value = actionEl.dataset.action;
+                    if (actionEl.dataset.index) {
+                        document.getElementById('cart-index').value = actionEl.dataset.index;
+                        console.log(`index : ${actionEl.dataset.index}`);
+                    }
+                    document.forms['cart-manager-form'].submit();
                 }
-                document.forms['cart-manager-form'].submit();
         }
     }
- };
+};
 
 $('#cart-manager-container').on('click', cartManagerActionHandler);
 
@@ -179,7 +222,7 @@ const copyProductValueToOrderValue = (index) => {
  * 
  * @param {*} ev Event
  */
- const onSelectedProductChange = (ev) => {
+const onSelectedProductChange = (ev) => {
     // get line index
     const index = ev.target.id.split('-')[1];
 
@@ -205,13 +248,13 @@ const applyDiscount = (ev) => {
     const discount = ev.target.value;
     const index = ev.target.id.split('-')[2]; // element id example : order-discount-2
 
-    if(!discount || discount.trim().length == 0) {
-         document.getElementById(`order-${index}-value`).value =  document.getElementById(`product-value-${index}`).value;
-    } else if(isNaN(discount)) {
+    if (!discount || discount.trim().length == 0) {
+        document.getElementById(`order-${index}-value`).value = document.getElementById(`product-value-${index}`).value;
+    } else if (isNaN(discount)) {
         return;
     } else {
         const productValue = document.getElementById(`product-value-${index}`).value;
-        if(isNaN(productValue)) {
+        if (isNaN(productValue)) {
             return;
         }
         const discountValue = Number(productValue) * Number(discount) / 100;
