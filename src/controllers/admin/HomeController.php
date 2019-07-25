@@ -28,7 +28,7 @@ class HomeController extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
                     ]
                 ],
             ],

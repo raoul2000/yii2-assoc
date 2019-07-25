@@ -41,8 +41,8 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'GymV', 'url' => ['/gymv']],
-
-            Yii::$app->user->isGuest === false ? (
+            
+            \Yii::$app->user->can('admin') ? (
                 [
                     'label' => 'Administration',
                     'items' => [

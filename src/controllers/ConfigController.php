@@ -9,6 +9,23 @@ use yii\web\Controller;
 class ConfigController extends Controller
 {
     /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ]
+                ],
+            ],
+        ];
+    }
+    /**
         * Performs batch updated of application configuration records.
         */
     public function actionIndex()

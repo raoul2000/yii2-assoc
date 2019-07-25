@@ -116,7 +116,7 @@ $config = [
             'path' => '@data/backups',
             // list of registerd db-components
             'dbList' => ['db'],
-            /*
+            
             'as access' => [
                 'class' => 'yii\filters\AccessControl',
                 'rules' => [
@@ -125,7 +125,7 @@ $config = [
                         'roles' => ['admin'],
                     ],
                 ],
-            ],*/
+            ],
         ],
     ]
 ];
