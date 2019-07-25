@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ContactRelationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -23,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
+        'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -43,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'type',
                 'filter'    => $contactRelationTypes,
-                'value'     => function($model, $key, $index,$column) {
+                'value'     => function ($model, $key, $index, $column) {
                     return app\components\Constant::getContactRelationName($model->type);
                 }
             ],
@@ -61,7 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 }
             ],
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['nowrap' => 'nowrap']
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
