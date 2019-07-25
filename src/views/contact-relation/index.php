@@ -7,7 +7,8 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\ContactRelationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Contact Relations');
+$this->title = Yii::t('app', 'Relations');
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['contact/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-relation-index">

@@ -6,22 +6,22 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\ContactRelation */
 
-$title = 'Relation: '
-    . $model->sourceContact->longName 
-    . ' / '
+$title = $model->sourceContact->longName 
+    . ' - '
     . $model->targetContact->longName;
 $titlePage = Html::encode($model->sourceContact->longName) 
     . ' <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> ' 
     . Html::encode($model->targetContact->longName);
 
 $this->title = $title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contact Relations'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['contact/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Relations'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="contact-relation-view">
 
-    <h1>Contact Relation <small><?= $titlePage ?></small></h1>
+    <h1>Relation <small><?= $titlePage ?></small></h1>
     <hr/>
 
     <p>

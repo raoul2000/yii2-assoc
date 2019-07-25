@@ -6,7 +6,8 @@ use yii\helpers\Html;
 /* @var $model app\models\ContactRelation */
 
 $this->title = Yii::t('app', 'Create Contact Relation');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contact Relations'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['contact/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Relations'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-relation-create">

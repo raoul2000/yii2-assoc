@@ -14,7 +14,8 @@ $titlePage = Html::encode($model->sourceContact->longName)
 
 
 $this->title = $title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Contact Relations'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['contact/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Relations'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>

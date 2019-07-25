@@ -34,6 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Export CSV', ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
         <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics', ['stat/contact'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
         <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Quality', ['quality/contact'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <div class="pull-right">
+            <?= Html::a('Manage Contact Relations', ['contact-relation/index'], ['class' => 'btn btn-info',  'data-pjax'=>0]) ?>
+        </div>
     </p>
 
     <?= yii\bootstrap\Nav::widget([
