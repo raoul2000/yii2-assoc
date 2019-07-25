@@ -42,6 +42,57 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'GymV', 'url' => ['/gymv']],
             
+            Yii::$app->user->isGuest === false ? (
+                [
+                    'label' => 'Manage',
+                    'items' => [
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . \Yii::t('app', 'Contacts'),
+                            'encode' => false,
+                            'url'    => ['/contact/index']
+                        ],
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> ' . \Yii::t('app', 'Address'),
+                            'encode' => false,
+                            'url'    => ['/address/index']
+                        ],
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . \Yii::t('app', 'Bank Account'),
+                            'encode' => false,
+                            'url'    => ['/bank-account/index']
+                        ],
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> ' . \Yii::t('app', 'Transactions'),
+                            'encode' => false,
+                            'url'    => ['/transaction/index']
+                        ],
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> ' . \Yii::t('app', 'Orders'),
+                            'encode' => false,
+                            'url'    => ['/order/index']
+                        ],
+                        '<li class="divider"></li>',
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> ' . \Yii::t('app', 'Products'),
+                            'encode' => false,
+                            'url'    => ['/product/index']
+                        ],
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-th" aria-hidden="true"></span> ' . \Yii::t('app', 'Categories'),
+                            'encode' => false,
+                            'url'    => ['/category/index']
+                        ],
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> ' . \Yii::t('app', 'Attachments'),
+                            'encode' => false,
+                            'url'    => ['/attachment/index']
+                        ],
+
+                    ]
+
+                ]
+            ) : (''),
+
             \Yii::$app->user->can('admin') ? (
                 [
                     'label' => 'Administration',
@@ -80,57 +131,6 @@ AppAsset::register($this);
                         ],
 
                     ],
-                ]
-            ) : (''),
-
-            Yii::$app->user->isGuest === false ? (
-                [
-                    'label' => 'Manage',
-                    'items' => [
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . \Yii::t('app', 'Contacts'),
-                            'encode' => false,
-                            'url'    => ['/contact/index']
-                        ],
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-home" aria-hidden="true"></span> ' . \Yii::t('app', 'Address'),
-                            'encode' => false,
-                            'url'    => ['/address/index']
-                        ],
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Bank Accounts',
-                            'encode' => false,
-                            'url'    => ['/bank-account/index']
-                        ],
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Transactions',
-                            'encode' => false,
-                            'url'    => ['/transaction/index']
-                        ],
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders',
-                            'encode' => false,
-                            'url'    => ['/order/index']
-                        ],
-                        '<li class="divider"></li>',
-                        [
-                            'label'  => 'Products',
-                            'encode' => false,
-                            'url'    => ['/product/index']
-                        ],
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-th" aria-hidden="true"></span> Manage Categories',
-                            'encode' => false,
-                            'url'    => ['/category/index']
-                        ],
-                        [
-                            'label'  => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
-                            'encode' => false,
-                            'url'    => ['/attachment/index']
-                        ],
-
-                    ]
-
                 ]
             ) : (''),
 

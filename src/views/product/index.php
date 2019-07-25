@@ -13,7 +13,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+        <?= Html::encode($this->title) ?>
+    </h1>
     <hr/>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

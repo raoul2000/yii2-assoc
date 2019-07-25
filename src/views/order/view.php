@@ -46,7 +46,8 @@ $orderModel = $model;
                         'format' => 'raw',
                         'value' => function ($model) {
                             return Html::a(
-                                Html::encode($model->product->name),
+                                '<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
+                                    . Html::encode($model->product->name),
                                 ['product/view', 'id' => $model->product->id],
                                 ['title' => 'view Product']
                             );
