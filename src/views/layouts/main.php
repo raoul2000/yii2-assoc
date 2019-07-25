@@ -43,7 +43,44 @@ AppAsset::register($this);
             ['label' => 'GymV', 'url' => ['/gymv']],
 
             Yii::$app->user->isGuest === false ? (
-                ['label' => 'Admin', 'url' => ['/admin/home']]
+                [
+                    'label' => 'Administration',
+                    'items' => [
+                        [
+                            'label'  => \Yii::t('app', 'Dashboard'),
+                            'encode' => false,
+                            'url'    => ['/admin/home']
+                        ],
+                        [
+                            'label'  => \Yii::t('app', 'Configuration'),
+                            'encode' => false,
+                            'url'    => ['/config/index']
+                        ],
+                        [
+                            'label'  => \Yii::t('app', 'Users'),
+                            'encode' => false,
+                            'url'    => ['/user/admin']
+                        ],
+                        [
+                            'label'  => \Yii::t('app', 'Sessions'),
+                            'encode' => false,
+                            'url'    => ['/session']
+                        ],
+                        [
+                            'label'  => \Yii::t('app', 'DB Backup/restore'),
+                            'encode' => false,
+                            'url'    => ['/db-manager']
+                        ],
+                        '<li class="divider"></li>',
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-console" aria-hidden="true"></span> ' . \Yii::t('app', 'Web Shell'),
+                            'encode' => false,
+                            'url'    => ['/webshell'],
+                            'linkOptions' => ['target' => 'webshell']
+                        ],
+
+                    ],
+                ]
             ) : (''),
 
             Yii::$app->user->isGuest === false ? (
