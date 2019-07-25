@@ -98,7 +98,7 @@ if (count($orders) && count($transactions)) {
         </div>
     <?php else: ?>
         <h2>
-            Orders
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders
         </h2>
         <hr/>    
         <table class="table table-condensed table-hover">
