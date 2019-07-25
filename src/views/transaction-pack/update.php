@@ -5,9 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TransactionPack */
 
-$this->title = 'Update Transaction Pack: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Transaction Packs', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+$longName = 'N°' . $model->id . ' - ' . $model->name;
+$this->title = 'Update Pack: ' . $longName;
+$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Packs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $longName , 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="transaction-pack-update">

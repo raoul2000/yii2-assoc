@@ -21,6 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
     <?php Pjax::begin(); ?>
 
+    <div class="pull-right">
+        <?= Html::a('Manage Transaction Packs', ['transaction-pack/index'], ['class' => 'btn btn-info',  'data-pjax'=>0]) ?>
+    </div>    
     <p>
         <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
         <?= \app\components\widgets\DateRangeWidget::widget() ?>

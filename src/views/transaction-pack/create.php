@@ -5,7 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TransactionPack */
 
-$this->title = 'Create Transaction Pack';
+$this->title = 'Create TRansaction Pack';
+$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Transaction Packs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

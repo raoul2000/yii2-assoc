@@ -8,7 +8,8 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\TransactionPackSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Transaction Packs';
+$this->title = 'Packs';
+$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-pack-index">
@@ -37,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => $bankAccounts,
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                    if( $model->bank_account_id ) {
+                    if ($model->bank_account_id ) {
                         return Html::a(
                             Html::encode($bankAccounts[$model->bank_account_id]),
                             ['bank-account/view','id'=>$model->bank_account_id],
@@ -59,7 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['date', 'php:d/m/Y H:i']
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['nowrap' => 'nowrap']
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

@@ -12,9 +12,11 @@ use yii\helpers\Url;
 /* @var $model app\models\Contact */
 
 
-$this->title = 'Link Transaction Pack: ' . $transactionPack->name;
+$longName = 'N°' . $transactionPack->id . ' - ' . $transactionPack->name;
+$this->title = 'Update Pack: ' . $longName;
+$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
 $this->params['breadcrumbs'][] = ['label' => 'Transaction Packs', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $transactionPack->name, 'url' => ['view', 'id' => $transactionPack->id]];
+$this->params['breadcrumbs'][] = ['label' => $longName, 'url' => ['view', 'id' => $transactionPack->id]];
 $this->params['breadcrumbs'][] = 'link Transaction';
 \yii\web\YiiAsset::register($this);
 

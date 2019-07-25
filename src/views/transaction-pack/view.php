@@ -10,7 +10,8 @@ use yii\helpers\Url;
 /* @var $model app\models\TransactionPack */
 
 $this->title = 'N°' . $model->id . ' - ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Transaction Packs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Packs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $transactionPackModel = $model;
@@ -28,6 +29,7 @@ $transactionPackModel = $model;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a('Create Another Transaction Pack', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
