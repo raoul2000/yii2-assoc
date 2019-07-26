@@ -133,6 +133,21 @@ $('#cart-manager-container').on('click', cartManagerActionHandler);
 
 // order handlers /////////////////////////////////////////////////////
 
+const toggleSyncMode = (enable) => {
+    const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
+    for (let index = 1; index < arrSelect.length; index++) {
+        arrSelect[index].disabled = true;        
+    }
+};
+const contactChange = (ev) => {
+    //toggleSyncMode(true);
+    const dataAttrSelector = ev.target.dataset.hasOwnProperty('fromContactId') ? 'data-from-contact-id' : 'data-to-contact-id';
+    document.querySelectorAll(`.orders select[${dataAttrSelector}]`).forEach( (sel) => {
+        sel.value = ev.target.value;
+    });
+};
+
+$('.orders select[data-from-contact-id], .orders select[data-to-contact-id]').change(contactChange);
 /**
  * Compute and return the sum of all order values or -1 if at last one order value
  * is not a number.

@@ -104,7 +104,23 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                     <tr>
                         <th>Product</th>
                         <th>Fournisseur</th>
-                        <th>Beneficiaire</th>
+                        <th>
+                            <div class="btn-group pull-right">
+                                <!-- button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                                </button -->
+                                
+                                <span class="glyphicon glyphicon-option-vertical text-muted" data-toggle="dropdown"  aria-hidden="true"></span>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>
+                            Beneficiaire
+                        </th>
                         <th>Prix unitaire</th>
                         <th>discount (%)</th>
                         <th>Value</th>
