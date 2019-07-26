@@ -67,6 +67,25 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
          // modal END -------------------------------------------------------------
     ?>    
 
+    <div class="toolbar">
+        <?= Html::a(
+            'Select Template',
+            ['select-template'],
+            [ 'class' => 'btn btn-default']
+        )?>    
+        <?php if ($countOrders != 0 || $countTransactions != 0): ?>
+            <?= Html::button(
+                'Save As Template ....',
+                [
+                    'class' => 'btn btn-default',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#save-template-modal'
+                ]
+            ) ?>
+            <?= Html::button('Reset', ['class' => 'btn btn-danger', 'data-action' => 'reset']) ?>
+        <?php endif;?>
+    </div>
+
     <?php $form = ActiveForm::begin(['options' => [ 'id' => 'cart-manager-form', 'name' => $formName]]); ?>
         <?= Html::hiddenInput('action', '', [ 'id' => 'cart-action']) ?>
         <?= Html::hiddenInput('index', '', ['id' => 'cart-index']) ?>
@@ -271,15 +290,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
         <?php if ($countOrders != 0 && $countTransactions != 0): ?>
             <?= Html::button('Submit Cart', ['class' => 'btn btn-primary', 'data-action' => 'submit']) ?>
-            <?= Html::button(
-                'Save As Template ....',
-                [
-                    'class' => 'btn btn-default',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#save-template-modal'
-                ]
-            ) ?>
-        <?php endif;?>
+        <?php endif; ?>
     <?php ActiveForm::end(); ?>
 </div>
 

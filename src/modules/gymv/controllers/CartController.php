@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
 use yii\web\Response;
 use app\modules\gymv\models\Cart;
+use yii\helpers\FileHelper;
 
 class CartController extends \yii\web\Controller
 {
@@ -119,13 +120,46 @@ class CartController extends \yii\web\Controller
             }
             if (count($queryParams) != 0 ) {
                 Yii::$app->session->setFlash('warning', 'select account');
-                $this->redirect(array_merge(['select-account'], $queryParams));
+                return $this->redirect(array_merge(['select-account'], $queryParams));
             }
         }
 
         return $this->render('init-manage', [
             'order' => $order,
             'contacts' => \app\models\Contact::getNameIndex()
+        ]);
+    }
+
+    public function actionSelectTemplate()
+    {
+
+        $templateFiles = FileHelper::findFiles(
+            Yii::getAlias('@template'),
+            [
+                'only' => ['*.json'],
+                'caseSensitive' => false
+            ]
+        );
+        $selectedTemplate = Yii::$app->request->post('template-name'); // file name ex : 1265-66589-99878.json
+        if (!empty($selectedTemplate)) {
+            $templateFilepath = Yii::getAlias('@template/' . $selectedTemplate);
+            $template = json_decode(file_get_contents($templateFilepath), true);
+            Yii::$app->session['cart'] = [
+                'orders' => $template['orders'],
+                'transactions' => $template['transactions']
+            ];
+            return $this->redirect(['check-out']);
+        }
+
+        $templateNames = [];
+        foreach ($templateFiles as $templateFilePath) {
+            $template = json_decode(file_get_contents($templateFilePath));
+            $templateNames[basename($templateFilePath)] = $template->name;
+        }
+
+        return $this->render('select-template', [
+            'templateNames' => $templateNames,
+            'notEmptyCartWarning' => Yii::$app->session->has('cart')
         ]);
     }
     /**
@@ -308,6 +342,24 @@ class CartController extends \yii\web\Controller
                     }
                     $orders = $updatedOrders;
                     break;
+                case 'reset': ///////////////////////////////////////////////////////////
+                    $transactions = $orders = [];
+                    break;
+                case 'remove-order': //////////////////////////////////////////////////////////////
+                    $indexToRemove = Yii::$app->request->post('index', null);
+                    if ($indexToRemove === null) {
+                        throw new NotFoundHttpException('invalid request : missing index');
+                    }
+                    // remove the order based on the index argument
+                    $updatedOrders = [];
+                    foreach ($orders as $idx => $value) {
+                        if ($idx == $indexToRemove) {
+                            continue;
+                        }
+                        $updatedOrders[] = $value;
+                    }
+                    $orders = $updatedOrders;
+                    break;
                 case 'save-as-template': ///////////////////////////////////////////////////////////
                     if (!Yii::$app->request->isAjax) {
                         throw new \yii\web\ForbiddenHttpException();
@@ -336,20 +388,26 @@ class CartController extends \yii\web\Controller
                         'filepath' => $filepath
                     ];
                     break;
+                
                 default: /////////////////////////////////////////////////////////////////////////
                     throw new NotFoundHttpException('invalid request');
             }
         }
 
-        // save models back to session storage
-        $session['cart'] = [
-            'orders' => array_map(function ($order) {
-                return $order->getAttributes();
-            }, $orders),
-            'transactions' => array_map(function ($transaction) {
-                return $transaction->getAttributes();
-            }, $transactions)
-        ];
+        if (count($orders) != 0 || count($transactions) != 0) {
+            // save models back to session storage
+            $session['cart'] = [
+                'orders' => array_map(function ($order) {
+                    return $order->getAttributes();
+                }, $orders),
+                'transactions' => array_map(function ($transaction) {
+                    return $transaction->getAttributes();
+                }, $transactions)
+            ];
+        } else {
+            // clean up session storage because we have nothing selected
+            $session->remove('cart');
+        }
         
         // select products from DB and create additional data attributes array
         $allProducts = Product::find()->all();
