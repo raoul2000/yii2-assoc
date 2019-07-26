@@ -102,6 +102,14 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
                         );
                     }
                 ],
+                [
+                    'attribute' => 'type',
+                    'filter'    => \app\components\Constant::getTransactionTypes(),
+                    'format'    => 'raw',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return Html::encode(\app\components\Constant::getTransactionType($model->type));
+                    }
+                ],
                 'code',
                 'value',
                 'description',
