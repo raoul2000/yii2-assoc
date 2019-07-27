@@ -21,7 +21,6 @@ Before dploying you must configure the target server information into the file `
 gulp deployFtp
 ```
 
-
 - `clean` : completelty removes the build folder
 - `buildSource` : copy sources files from `./src` to the build folder `./build/src`. During this task, not all files from the source folder are copied 
   - 

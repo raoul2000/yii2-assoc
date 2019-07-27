@@ -1,3 +1,7 @@
+## ERROR : equals floats
+
+it occured that the cart manager the sum of order is detected as different from the transaction sum even if the display is identical (round 2)
+
 ## Link User to Contact
 
 A site user (i.e. registered and able to login) should be related to a row in the *Contact* table. By doing so, a logged-in user would be considered as having Contact info which would provide direct access to all info related to this Contact :
