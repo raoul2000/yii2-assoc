@@ -10,6 +10,42 @@ let formSettings = {
     "orderLockBeneficiary" : false,
     "orderEnableReport" : true
 };
+
+/**
+ * Copy the value of the first selected item to the others.
+ * This is only effective if selected result set contains more than 1 item
+ * 
+ * @param {string} selector Css selector for all the select input elements
+ */
+const copyFirstSelectedFirstRow = (selector) => {
+    const arrSelect = Array.from(document.querySelectorAll(selector));
+    if( arrSelect.length > 1) {
+        const valueToCopy = arrSelect[0].value;   
+        for (let index = 1; index < arrSelect.length; index++) {
+            arrSelect[index].value = valueToCopy;        
+        }
+    }
+};
+
+/**
+ * Enable/Disable elements selected exept for the first one.
+ * 
+ * @param {boolean} enable when true, enable selected elements. Disabled thm when false
+ * @param {string} selector CSS selector for element to enable/disable
+ */
+const enableSelectedElements = (enable, selector) => {
+    //const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
+    const arrSelect = Array.from(document.querySelectorAll(selector));
+    for (let index = 1; index < arrSelect.length; index++) {
+        debugger;
+        arrSelect[index].disabled = !enable;        
+    }
+    if( ! enable ) {
+        copyFirstSelectedFirstRow(selector);
+    }
+};
+
+
 /**
  * Load for msettings from localStorage if available and assign them to 
  * the formSetting object
@@ -21,7 +57,10 @@ const readFormSettings = () => {
         formSettings = JSON.parse(settingsStr);
     }
 };
-
+const applySettings = () => {
+    enableSelectedElements(!formSettings.orderLockProvider, '.orders select[data-from-contact-id]');
+    enableSelectedElements(!formSettings.orderLockBeneficiary, '.orders select[data-to-contact-id]');
+};
 /**
  * Load form settings into the modal used to edit settings
  */
@@ -44,6 +83,7 @@ const saveSettings = () => {
     formSettings.orderLockBeneficiary = modal.querySelector('#order-lock-beneficiary').checked;
     formSettings.orderEnableReport = modal.querySelector('#order-enable-report').checked;
     localStorage.setItem('settings', JSON.stringify(formSettings));
+    applySettings();
 };
 
 $('#btn-save-form-settings').on('click', (ev) => {
@@ -197,21 +237,6 @@ $('#cart-manager-container').on('click', cartManagerActionHandler);
 
 
 
-/**
- * Enable/Disable elements selected exept for the first one.
- * 
- * @param {boolean} enable when true, enable selected elements. Disabled thm when false
- * @param {string} selector CSS selector for element to enable/disable
- */
-const enableSelectedElements = (enable, selector) => {
-    //const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
-    const arrSelect = Array.from(document.querySelectorAll(selector));
-    for (let index = 1; index < arrSelect.length; index++) {
-        arrSelect[index].disabled = !enable;        
-    }
-};
-
-
 const contactChange = (ev) => {    
     const dataAttrSelector = ev.target.dataset.hasOwnProperty('fromContactId') ? 'data-from-contact-id' : 'data-to-contact-id';
     if( (dataAttrSelector == 'data-from-contact-id' && formSettings.orderLockProvider)
@@ -282,6 +307,7 @@ const renderOrderDiscount = (inputValue) => {
 const orderValueChange = (ev) => {
     renderOrderDiscount(ev.target);
     renderOrderValueSum();
+    autoVentileOrderSumToTransactions();
 };
 $('.order-value').on('change input', orderValueChange);
 
@@ -323,6 +349,8 @@ const onSelectedProductChange = (ev) => {
     // update order value sum
     renderOrderValueSum();
 
+    autoVentileOrderSumToTransactions();
+
     // clear order value discount
     renderOrderDiscount(document.getElementById(`order-${index}-value`));
 };
@@ -351,6 +379,7 @@ const applyDiscount = (ev) => {
         console.log(discountValue);
         document.getElementById(`order-${index}-value`).value = Number(Number(productValue) + discountValue).toFixed(2);
         renderOrderValueSum();
+        autoVentileOrderSumToTransactions();
     }
 };
 $('.order-discount').on('change input', applyDiscount);
@@ -378,6 +407,11 @@ const ventileOrderSumToTransactions = (ev) => {
 $('#btn-report-sum-order').on('click', ventileOrderSumToTransactions);
 $('.transaction-value').on('change input', renderTransactionValueSum);
 
+const autoVentileOrderSumToTransactions = () => {
+    if(formSettings.orderEnableReport) {
+        ventileOrderSumToTransactions();
+    }
+}
 /////////////////////////////////////////////////////////////////////////////
 $(document).ready(() => {
     readFormSettings();
@@ -386,5 +420,7 @@ $(document).ready(() => {
 
 
     renderOrderValueSum();
+    autoVentileOrderSumToTransactions();
     renderTransactionValueSum();
+    applySettings();
 });
