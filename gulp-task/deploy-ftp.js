@@ -5,7 +5,8 @@ const ftp = require( 'vinyl-ftp' );
 // task for deploying files on the server (FTP or SFTP)
 
 function deployFtp() {
-    const config = require('./sftp-prod.json');
+    const config = require('./ftp.json');
+
 
     const conn = ftp.create( {
         host:     config.host,

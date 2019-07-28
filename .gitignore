@@ -6,4 +6,4 @@ data/templates
 backups/
 dev.ftp
 node_modules/
-gulp-task/sftp-prod.json
+gulp-task/ftp.json
