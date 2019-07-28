@@ -1,40 +1,53 @@
 ///////////////////////////////////////////////////////////////
 // Form settings modal
+
+/**
+ * The global state for form settings. It is initialized 
+ * with default values
+ */
+let formSettings = {
+    "orderLockProvider" : false,
+    "orderLockBeneficiary" : false,
+    "orderEnableReport" : true
+};
+/**
+ * Load for msettings from localStorage if available and assign them to 
+ * the formSetting object
+ */
 const readFormSettings = () => {
-    let settings = {};
-    
+    debugger;
     const settingsStr = localStorage.getItem('settings');
     if( settingsStr ) {
-        settings = JSON.parse(settingsStr);
-    } else {
-        settings  = {
-            "orderLockProvider" : false,
-            "orderLockBeneficiary" : false,
-            "orderEnableReport" : true
-        };
-        localStorage.setItem('settings', JSON.stringify(settings));
+        formSettings = JSON.parse(settingsStr);
     }
-    return settings;
 };
 
-$('#form-settings-modal').on('show.bs.modal', (ev) => {
-    const settings = readFormSettings();
-
+/**
+ * Load form settings into the modal used to edit settings
+ */
+const loadSettingsForm = () => {
     const modal = document.getElementById('form-settings-modal');
-    modal.querySelector('#order-lock-provider').checked = settings.orderLockProvider;
-    modal.querySelector('#order-lock-beneficiary').checked = settings.orderLockBeneficiary;
-    modal.querySelector('#order-enable-report').checked = settings.orderEnableReport;
-});
+    modal.querySelector('#order-lock-provider').checked = formSettings.orderLockProvider;
+    modal.querySelector('#order-lock-beneficiary').checked = formSettings.orderLockBeneficiary;
+    modal.querySelector('#order-enable-report').checked = formSettings.orderEnableReport;
+};
+
+$('#form-settings-modal').on('show.bs.modal', loadSettingsForm);
+
+/**
+ * Save settings edited in the modal, into the localStorage and the global 
+ * formSettings object
+ */
+const saveSettings = () => {
+    const modal = document.getElementById('form-settings-modal');
+    formSettings.orderLockProvider = modal.querySelector('#order-lock-provider').checked;
+    formSettings.orderLockBeneficiary = modal.querySelector('#order-lock-beneficiary').checked;
+    formSettings.orderEnableReport = modal.querySelector('#order-enable-report').checked;
+    localStorage.setItem('settings', JSON.stringify(formSettings));
+};
 
 $('#btn-save-form-settings').on('click', (ev) => {
-    const settings = readFormSettings();
-
-    const modal = document.getElementById('form-settings-modal');
-    settings.orderLockProvider = modal.querySelector('#order-lock-provider').checked;
-    settings.orderLockBeneficiary = modal.querySelector('#order-lock-beneficiary').checked;
-    settings.orderEnableReport = modal.querySelector('#order-enable-report').checked;
-    localStorage.setItem('settings', JSON.stringify(settings));
-
+    saveSettings();
     $('#form-settings-modal').modal('hide'); // close modal
 });
 
@@ -184,19 +197,29 @@ $('#cart-manager-container').on('click', cartManagerActionHandler);
 
 
 
-
-const toggleSyncMode = (enable) => {
-    const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
+/**
+ * Enable/Disable elements selected exept for the first one.
+ * 
+ * @param {boolean} enable when true, enable selected elements. Disabled thm when false
+ * @param {string} selector CSS selector for element to enable/disable
+ */
+const enableSelectedElements = (enable, selector) => {
+    //const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
+    const arrSelect = Array.from(document.querySelectorAll(selector));
     for (let index = 1; index < arrSelect.length; index++) {
-        arrSelect[index].disabled = true;        
+        arrSelect[index].disabled = !enable;        
     }
 };
-const contactChange = (ev) => {
-    //toggleSyncMode(true);
+
+
+const contactChange = (ev) => {    
     const dataAttrSelector = ev.target.dataset.hasOwnProperty('fromContactId') ? 'data-from-contact-id' : 'data-to-contact-id';
-    document.querySelectorAll(`.orders select[${dataAttrSelector}]`).forEach( (sel) => {
-        sel.value = ev.target.value;
-    });
+    if( (dataAttrSelector == 'data-from-contact-id' && formSettings.orderLockProvider)
+     || (dataAttrSelector == 'data-to-contact-id' && formSettings.orderLockBeneficiary)) {
+         document.querySelectorAll(`.orders select[${dataAttrSelector}]`).forEach( (sel) => {
+             sel.value = ev.target.value;
+         });
+     }
 };
 
 $('.orders select[data-from-contact-id], .orders select[data-to-contact-id]').change(contactChange);
@@ -357,8 +380,10 @@ $('.transaction-value').on('change input', renderTransactionValueSum);
 
 /////////////////////////////////////////////////////////////////////////////
 $(document).ready(() => {
+    readFormSettings();
     document.querySelectorAll('.orders select[data-product').forEach(copySelectedProductValue);
     document.querySelectorAll('input.order-value').forEach(renderOrderDiscount);
+
 
     renderOrderValueSum();
     renderTransactionValueSum();
