@@ -1,3 +1,50 @@
+///////////////////////////////////////////////////////////////
+// Form settings modal
+const readFormSettings = () => {
+    let settings = {};
+    
+    const settingsStr = localStorage.getItem('settings');
+    if( settingsStr ) {
+        settings = JSON.parse(settingsStr);
+    } else {
+        settings  = {
+            "orderLockProvider" : false,
+            "orderLockBeneficiary" : false,
+            "orderEnableReport" : true
+        };
+        localStorage.setItem('settings', JSON.stringify(settings));
+    }
+    return settings;
+};
+
+$('#form-settings-modal').on('show.bs.modal', (ev) => {
+    const settings = readFormSettings();
+
+    const modal = document.getElementById('form-settings-modal');
+    modal.querySelector('#order-lock-provider').checked = settings.orderLockProvider;
+    modal.querySelector('#order-lock-beneficiary').checked = settings.orderLockBeneficiary;
+    modal.querySelector('#order-enable-report').checked = settings.orderEnableReport;
+});
+
+$('#btn-save-form-settings').on('click', (ev) => {
+    const settings = readFormSettings();
+
+    const modal = document.getElementById('form-settings-modal');
+    settings.orderLockProvider = modal.querySelector('#order-lock-provider').checked;
+    settings.orderLockBeneficiary = modal.querySelector('#order-lock-beneficiary').checked;
+    settings.orderEnableReport = modal.querySelector('#order-enable-report').checked;
+    localStorage.setItem('settings', JSON.stringify(settings));
+
+    $('#form-settings-modal').modal('hide'); // close modal
+});
+
+
+
+
+///////////////////////////////////////////////////////////////
+
+
+
 const showContent = (selector) => {
     document.querySelectorAll('.modal-dialog .alert, .modal-dialog .form-group').forEach((el) => el.style.display = 'none');
     document.querySelector(`.modal-dialog ${selector}`).style.display = 'block';
@@ -131,7 +178,12 @@ const cartManagerActionHandler = (ev) => {
 
 $('#cart-manager-container').on('click', cartManagerActionHandler);
 
+
+
 // order handlers /////////////////////////////////////////////////////
+
+
+
 
 const toggleSyncMode = (enable) => {
     const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
@@ -275,6 +327,7 @@ const applyDiscount = (ev) => {
         const discountValue = Number(productValue) * Number(discount) / 100;
         console.log(discountValue);
         document.getElementById(`order-${index}-value`).value = Number(Number(productValue) + discountValue).toFixed(2);
+        renderOrderValueSum();
     }
 };
 $('.order-discount').on('change input', applyDiscount);

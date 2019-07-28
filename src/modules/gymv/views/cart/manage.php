@@ -31,6 +31,48 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
     <?php 
         // modal BEGIN -------------------------------------------------------------
+        // Form settings
+        yii\bootstrap\Modal::begin([
+            'id' => 'form-settings-modal',
+            'header' => '<h3>Settings</h3>',
+            'footer' => '
+                <div id="btnbar-start">
+                    <button id="btn-save-form-settings" class="btn btn-primary">
+                        Save
+                    </button>
+                    &nbsp;
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            '
+        ]); ?>
+
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input id="order-lock-provider" type="checkbox"> lock order Provider
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input id="order-lock-beneficiary" type="checkbox"> lock order Beneficiary
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input id="order-enable-report" type="checkbox"> Enable auto report order Sum to transaction
+                </label>
+            </div>
+        </div>
+    <?php
+        yii\bootstrap\Modal::end();
+         // modal END -------------------------------------------------------------
+    ?>    
+
+
+
+
+    <?php 
+        // modal BEGIN -------------------------------------------------------------
         // define the modal to "save template As ..."
         yii\bootstrap\Modal::begin([
             'id' => 'save-template-modal',
@@ -61,11 +103,13 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <div class="form-group">
             <input type="text" class="form-control" id="template-name" placeholder="enter template name ....">
         </div>
-
     <?php
         yii\bootstrap\Modal::end();
          // modal END -------------------------------------------------------------
     ?>    
+
+
+
 
     <div class="toolbar">
         <?= Html::a(
@@ -84,6 +128,15 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             ) ?>
             <?= Html::button('Reset', ['class' => 'btn btn-danger', 'data-action' => 'reset']) ?>
         <?php endif;?>
+        <?= Html::button(
+            'Settings', 
+            [
+                'id' => 'btn-open-settings-modal', 
+                'class' => 'btn btn-default',
+                'data-toggle' => 'modal',
+                'data-target' => '#form-settings-modal'
+            ]
+        )?>
     </div>
 
     <?php $form = ActiveForm::begin(['options' => [ 'id' => 'cart-manager-form', 'name' => $formName]]); ?>
@@ -92,6 +145,20 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <?= Html::hiddenInput('template-name', '', ['id' => 'cart-template-name']) ?>
 
         <h2>
+        <div class="btn-group pull-right">
+                                <!-- button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                                </button -->
+                                
+                                <span class="glyphicon glyphicon-option-vertical text-muted" data-toggle="dropdown"  aria-hidden="true"></span>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                </ul>
+                            </div>        
             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
             Orders
         </h2>
@@ -105,20 +172,6 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                         <th>Product</th>
                         <th>Fournisseur</th>
                         <th>
-                            <div class="btn-group pull-right">
-                                <!-- button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-                                </button -->
-                                
-                                <span class="glyphicon glyphicon-option-vertical text-muted" data-toggle="dropdown"  aria-hidden="true"></span>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
                             Beneficiaire
                         </th>
                         <th>Prix unitaire</th>
