@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Form settings modal
 
 /**
@@ -13,16 +13,17 @@ let formSettings = {
 
 /**
  * Copy the value of the first selected item to the others.
- * This is only effective if selected result set contains more than 1 item
+ * If the selected result set doesn't contain more than one item, this function has no effect.
+ * This function is used for example, to copy the first row contact provider to other order rows.
  * 
  * @param {string} selector Css selector for all the select input elements
  */
 const copyFirstSelectedFirstRow = (selector) => {
     const arrSelect = Array.from(document.querySelectorAll(selector));
     if( arrSelect.length > 1) {
-        const valueToCopy = arrSelect[0].value;   
+        const firstItemValue = arrSelect[0].value;   
         for (let index = 1; index < arrSelect.length; index++) {
-            arrSelect[index].value = valueToCopy;        
+            arrSelect[index].value = firstItemValue;        
         }
     }
 };
@@ -34,29 +35,29 @@ const copyFirstSelectedFirstRow = (selector) => {
  * @param {string} selector CSS selector for element to enable/disable
  */
 const enableSelectedElements = (enable, selector) => {
-    //const arrSelect = Array.from(document.querySelectorAll('.orders select[data-from-contact-id]'));
     const arrSelect = Array.from(document.querySelectorAll(selector));
-    for (let index = 1; index < arrSelect.length; index++) {
-        debugger;
-        arrSelect[index].disabled = !enable;        
-    }
-    if( ! enable ) {
-        copyFirstSelectedFirstRow(selector);
+    if(arrSelect.length > 1) {
+        for (let index = 1; index < arrSelect.length; index++) {
+            arrSelect[index].disabled = !enable;        
+        }
+        if( ! enable ) {
+            copyFirstSelectedFirstRow(selector);
+        }
     }
 };
 
 
 /**
- * Load for msettings from localStorage if available and assign them to 
- * the formSetting object
+ * Load form settings from *localStorage* if available and assign them to 
+ * the `formSetting` object.
  */
 const readFormSettings = () => {
-    debugger;
     const settingsStr = localStorage.getItem('settings');
     if( settingsStr ) {
         formSettings = JSON.parse(settingsStr);
     }
 };
+
 const applySettings = () => {
     enableSelectedElements(!formSettings.orderLockProvider, '.orders select[data-from-contact-id]');
     enableSelectedElements(!formSettings.orderLockBeneficiary, '.orders select[data-to-contact-id]');
@@ -70,7 +71,6 @@ const loadSettingsForm = () => {
     modal.querySelector('#order-lock-beneficiary').checked = formSettings.orderLockBeneficiary;
     modal.querySelector('#order-enable-report').checked = formSettings.orderEnableReport;
 };
-
 $('#form-settings-modal').on('show.bs.modal', loadSettingsForm);
 
 /**
@@ -82,20 +82,19 @@ const saveSettings = () => {
     formSettings.orderLockProvider = modal.querySelector('#order-lock-provider').checked;
     formSettings.orderLockBeneficiary = modal.querySelector('#order-lock-beneficiary').checked;
     formSettings.orderEnableReport = modal.querySelector('#order-enable-report').checked;
-    localStorage.setItem('settings', JSON.stringify(formSettings));
-    applySettings();
+    localStorage.setItem('settings', JSON.stringify(formSettings));    
 };
 
 $('#btn-save-form-settings').on('click', (ev) => {
     saveSettings();
+    applySettings();
     $('#form-settings-modal').modal('hide'); // close modal
 });
 
 
 
-
-///////////////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Save As Template .. modal
 
 
 const showContent = (selector) => {
@@ -200,6 +199,12 @@ const validateForm = () => {
     } 
     return true;
 };
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 /**
  * Page action manager
  * Handle all actions emitted by click on element having "data-action" as attribute
@@ -223,6 +228,8 @@ const cartManagerActionHandler = (ev) => {
                         document.getElementById('cart-index').value = actionEl.dataset.index;
                         console.log(`index : ${actionEl.dataset.index}`);
                     }
+                    //we must enable select element in order to be included in the form submit operation
+                    enableSelectedElements(true,'form select');
                     document.forms['cart-manager-form'].submit();
                 }
         }
@@ -232,9 +239,8 @@ const cartManagerActionHandler = (ev) => {
 $('#cart-manager-container').on('click', cartManagerActionHandler);
 
 
-
-// order handlers /////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// order handlers 
 
 
 const contactChange = (ev) => {    
@@ -384,25 +390,42 @@ const applyDiscount = (ev) => {
 };
 $('.order-discount').on('change input', applyDiscount);
 
-// transaction handlers /////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// transaction handlers 
+
+/**
+ * Compoute orders value sum and assign to transactions value.
+ * If more than one transaction are available, the order's value sum is equaly dispatched among them.
+ * 
+ * @param {Event} ev current event
+ */
 const ventileOrderSumToTransactions = (ev) => {
     const transactionInputs = document.querySelectorAll('#transactions input.transaction-value');
     if (transactionInputs.length == 0) {
-        return; // no transaction to report to
+        return; // no transaction to report to : nothing to do here
     }
 
-    /*
-    const totalTransactionValue = Array.from(document.querySelectorAll('#transactions input.transaction-value'))
-        .reduce((acc, curr) => acc+ Number(curr.value), 0 );
-    */
-    const sumValue = document.getElementById('order-value-sum').dataset.sumValue;
-    if (sumValue != -1) {
-        const valueToReport = (Number(sumValue) / transactionInputs.length).toFixed(2);
+    const orderValueSum = Number(document.getElementById('order-value-sum').dataset.sumValue);
+    if (orderValueSum != -1) {
+        // compute and dispatch equal parts
+        const valueToReport = ( orderValueSum / transactionInputs.length).toFixed(2);
+
         transactionInputs.forEach((el) => {
             el.value = valueToReport;
         });
-        renderTransactionValueSum();
-    }
+
+        // if there is a remains, add it to the first trnsaction row
+        const diff = orderValueSum - (valueToReport * transactionInputs.length);
+        if(diff != 0) {
+            transactionInputs.item(0).value =  Number(valueToReport) + Number(diff.toFixed(2));
+        }
+     } else {
+        transactionInputs.forEach((el) => {
+            el.value = "";
+        });         
+     }
+    renderTransactionValueSum();
 };
 $('#btn-report-sum-order').on('click', ventileOrderSumToTransactions);
 $('.transaction-value').on('change input', renderTransactionValueSum);
@@ -412,7 +435,12 @@ const autoVentileOrderSumToTransactions = () => {
         ventileOrderSumToTransactions();
     }
 }
-/////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// On Document Ready
+
+
 $(document).ready(() => {
     readFormSettings();
     document.querySelectorAll('.orders select[data-product').forEach(copySelectedProductValue);
