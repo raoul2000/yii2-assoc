@@ -3,6 +3,7 @@ ftp.*.porperties
 doc/db-schema.mwb.bak
 data/uploads
 data/templates
+data/imports
 backups/
 dev.ftp
 node_modules/

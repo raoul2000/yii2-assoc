@@ -251,7 +251,20 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     'title' => 'remove']
                                 ) ?>
                             </td>
-                        </tr>        
+                        </tr>   
+                        <tr style="display:default">
+                                <td colspan="6">
+                                    <div class="row form-inline">
+                                        <div class="col-sm-6">
+                                            <?= $form->field($order, "[$index]valid_date_start")->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                                        </div>
+                                        <div class="col-sm-6">
+                                    <?= $form->field($order, "[$index]valid_date_end")->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>                                
+                                        </div>
+                                    </div>
+                                </td>
+                                <td></td>
+                        </tr>     
                     <?php endforeach; ?>
                     <tr>
                         <td></td>

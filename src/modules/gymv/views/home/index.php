@@ -4,5 +4,5 @@ use yii\helpers\Html;
 ?>
 <p>
     <?= Html::a('Enregistrement', ['cart/check-out'], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('Shopping Cart', ['cart/index'], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Import I-Reseau', ['contact-import/index'], ['class' => 'btn btn-primary']) ?>
 </p>

@@ -15,7 +15,9 @@ use yii\helpers\ArrayHelper;
 
     <?php if ( ! isset($contact) ):?>
         <div class="form-group">
-            <label class="control-label" for="contact_id-selectized">Source Account</label>
+            <label class="control-label" for="contact_id-selectized">
+                <?= Html::encode($model->getAttributeLabel('contact_id')) ?>
+            </label>
             <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                 'name' => Html::getInputName($model, 'contact_id'),
                 'value' => $model->contact_id,

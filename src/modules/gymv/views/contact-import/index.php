@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ContactSearch */
@@ -12,5 +13,9 @@ $this->title = 'Contacts';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-index">
-    <?= Html::a('Import I-Réseau', ['import-csv'], ['class' => 'btn btn-primary']) ?>
+
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+        <?= $form->field($model, 'imageFile')->fileInput() ?>
+        <button>Import</button>
+    <?php ActiveForm::end() ?>
 </div>

@@ -232,7 +232,7 @@ class ContactController extends Controller
                 $byProduct[$productKey] = [];
             }
             $byProduct[$productKey][] = $order;
-        }        
+        }
 
         return $this->render('order-summary', [
             'model' => $model,

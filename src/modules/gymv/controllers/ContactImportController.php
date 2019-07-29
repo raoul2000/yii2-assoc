@@ -2,17 +2,20 @@
 
 namespace app\modules\gymv\controllers;
 
+use Yii;
 use yii\web\Controller;
 use League\Csv\Exception;
 use League\Csv\Reader;
 use app\models\Contact;
 use app\models\BankAccount;
 use app\models\Address;
+use app\modules\gymv\models\UploadForm;
+use yii\web\UploadedFile;
 
 /**
  * Default controller for the `gymv` module
  */
-class ContactController extends \app\controllers\ContactController
+class ContactImportController extends \app\controllers\ContactController
 {
     /**
      * Renders the index view for the module
@@ -20,8 +23,34 @@ class ContactController extends \app\controllers\ContactController
      */
     public function actionIndex($tab = 'person')
     {
-        return $this->render('index');
+
+        return $this->render('index', [
+            'model' => new UploadForm()
+        ]);
     }
+    
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+
+            $model->dataFile = UploadedFile::getInstance($model, 'dataFile');
+
+            // build temporary filepath to store uploaded file
+            $uuid = \thamtech\uuid\helpers\UuidHelper::uuid();
+            $uploadFilepath = Yii::getAlias('@imports/' . $uuid . '.json');
+
+            if ($model->upload($uploadFilepath)) {
+                Yii::$app->session['import'] = $uploadFilepath;
+                return;
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
+    }
+
+
     public function actionImportCsv()
     {
 

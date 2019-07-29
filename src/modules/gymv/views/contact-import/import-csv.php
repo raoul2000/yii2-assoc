@@ -22,13 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <hr/>
         <table class="table">
             <tbody>
-                <?php foreach( $records as $offset => $record): ?>
+                <?php foreach($records as $offset => $record): ?>
                     <tr>
                         <td><?= $offset ?></td>
                         <td><?= $record['action'] ?></td>
-                        <td><?= $record['data']['name'] ?></td>
-
-
+                        <td><?= Html::encode($record['data']['name']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

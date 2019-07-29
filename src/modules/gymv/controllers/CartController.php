@@ -216,7 +216,7 @@ class CartController extends \yii\web\Controller
             }, $session['cart']['transactions']); // no merge needed as transaction are never stored in the cart session
         }
 
-        // load models
+        // load models from user submitions
         Model::loadMultiple($orders, Yii::$app->request->post());
         Model::loadMultiple($transactions, Yii::$app->request->post());
 
