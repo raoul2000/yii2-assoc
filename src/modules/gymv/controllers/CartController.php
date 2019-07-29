@@ -242,7 +242,9 @@ class CartController extends \yii\web\Controller
                             foreach ($orders as $order) {
                                 $orderSum += $order->value;
                             }
-                            if ($orderSum !== $transactionSum) {
+                            // float comparaison
+                            // @see https://php.net/manual/en/language.types.float.php
+                            if (abs($orderSum-$transactionSum)>0.01) {
                                 Yii::$app->session->setFlash('error', "Order Sum ($orderSum) and Transaction Sum ($transactionSum) don't match");
                             } else {
                                 // save all here
@@ -253,7 +255,7 @@ class CartController extends \yii\web\Controller
                                 foreach ($orders as $order) {
                                     $order->save(false);
     
-                                    // arbirarly choose to link order to transaction (we could have linked transaction to order)
+                                    // arbitrarly choose to link order to transaction (we could have linked transaction to order)
                                     foreach ($transactions as $transaction) {
                                         $order->link('transactions', $transaction);
                                     }
