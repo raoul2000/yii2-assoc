@@ -98,8 +98,8 @@ $('#btn-save-form-settings').on('click', (ev) => {
 
 
 const showContent = (selector) => {
-    document.querySelectorAll('.modal-dialog .alert, .modal-dialog .form-group').forEach((el) => el.style.display = 'none');
-    document.querySelector(`.modal-dialog ${selector}`).style.display = 'block';
+    document.querySelectorAll('#save-template-modal .alert, #save-template-modal .form-group').forEach((el) => el.style.display = 'none');
+    document.querySelector(`#save-template-modal ${selector}`).style.display = 'block';
 }
 const showTemplateNameInput = () => showContent('.form-group');
 const showSavingTemplate = () => showContent('.alert-info');

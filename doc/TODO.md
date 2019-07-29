@@ -1,6 +1,8 @@
-## ERROR : equals floats
+## Refactor invoice template create/save
 
-it occured that the cart manager the sum of order is detected as different from the transaction sum even if the display is identical (round 2)
+currently stored in the file system ... CRUD not easy:
+- use DB storage ? 
+- keep FS storage and improve management ?
 
 ## Link User to Contact
 
@@ -44,6 +46,9 @@ implement a task system where a user can create a task linked to a record. It co
 - see [Yii2 Guide](https://www.yiiframework.com/doc/guide/2.0/en/db-migrations)
 - see [Yii2 forum](https://forum.yiiframework.com/t/execute-sql-file-in-migration/47901)
 
+## [DONE] ERROR : equals floats
+
+it occured that the cart manager the sum of order is detected as different from the transaction sum even if the display is identical (round 2)
 
 ## [DONE] Charts
 

@@ -112,22 +112,41 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
 
     <div class="toolbar">
-        <?= Html::a(
-            'Select Template',
-            ['select-template'],
-            [ 'class' => 'btn btn-default']
-        )?>    
-        <?php if ($countOrders != 0 || $countTransactions != 0): ?>
+        <div class="btn-group">     
             <?= Html::button(
-                'Save As Template ....',
+                'Template...',
                 [
                     'class' => 'btn btn-default',
-                    'data-toggle' => 'modal',
-                    'data-target' => '#save-template-modal'
+                    'data-toggle' => 'dropdown'
                 ]
-            ) ?>
+            )?>                                         
+
+            <ul class="dropdown-menu">
+                <li>
+                    <?= Html::a(
+                        'Select Template',
+                        ['select-template']
+                    )?>                 
+                </li>
+                <?php if ($countOrders != 0 || $countTransactions != 0): ?>
+                    <li>
+                    <?= Html::a(
+                        'Save As Template ....',
+                        '#',
+                        [
+                            'data-toggle' => 'modal',
+                            'data-target' => '#save-template-modal'
+                        ]
+                    ) ?>
+                    </li>
+                <?php endif;?>                
+            </ul>
+        </div>      
+
+        <?php if ($countOrders != 0 || $countTransactions != 0): ?>
             <?= Html::button('Reset', ['class' => 'btn btn-danger', 'data-action' => 'reset']) ?>
-        <?php endif;?>
+        <?php endif;?>      
+
         <?= Html::button(
             'Settings', 
             [
@@ -144,21 +163,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <?= Html::hiddenInput('index', '', ['id' => 'cart-index']) ?>
         <?= Html::hiddenInput('template-name', '', ['id' => 'cart-template-name']) ?>
 
-        <h2>
-        <div class="btn-group pull-right">
-                                <!-- button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-                                </button -->
-                                
-                                <span class="glyphicon glyphicon-option-vertical text-muted" data-toggle="dropdown"  aria-hidden="true"></span>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>        
+        <h2>      
             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
             Orders
         </h2>
