@@ -338,6 +338,22 @@ const copyProductValueToOrderValue = (index) => {
     orderValueInput.value = isNaN(productValue) ? '' : productValue;
 };
 /**
+ * Update the enable/disable state of the order value and discount, depending on the currently selected product
+ * If no product is selected, both order value and discount are disabled.
+ * 
+ * @param {HTMLElement} productSelectElement product selection element
+ */
+const updateFromSelectedProduct = (productSelectElement) => {
+    const index = productSelectElement.id.split('-')[1];
+    if(!productSelectElement.value) {
+        document.getElementById(`order-${index}-value`).disabled = true;
+        document.getElementById(`order-discount-${index}`).disabled = true;
+    } else {
+        document.getElementById(`order-${index}-value`).disabled = false;
+        document.getElementById(`order-discount-${index}`).disabled = false;
+    }
+};
+/**
  * Each time user selects a product :
  * - update product value display
  * - clear order value
@@ -347,7 +363,16 @@ const copyProductValueToOrderValue = (index) => {
 const onSelectedProductChange = (ev) => {
     // get line index
     const index = ev.target.id.split('-')[1];
-
+/*
+    if(!ev.target.value) {
+        document.getElementById(`order-${index}-value`).disabled = true;
+        document.getElementById(`order-discount-${index}`).disabled = true;
+    } else {
+        document.getElementById(`order-${index}-value`).disabled = false;
+        document.getElementById(`order-discount-${index}`).disabled = false;
+    }
+*/
+    updateFromSelectedProduct(ev.target);
     // copy product value to order value
     copyProductValueToOrderValue(index);
     copySelectedProductValue(ev.target);
@@ -443,7 +468,10 @@ const autoVentileOrderSumToTransactions = () => {
 
 $(document).ready(() => {
     readFormSettings();
-    document.querySelectorAll('.orders select[data-product').forEach(copySelectedProductValue);
+    document.querySelectorAll('.orders select[data-product').forEach( (productSelectElement) => {
+        copySelectedProductValue(productSelectElement);
+        updateFromSelectedProduct(productSelectElement);
+    });
     document.querySelectorAll('input.order-value').forEach(renderOrderDiscount);
 
 
