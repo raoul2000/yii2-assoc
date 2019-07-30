@@ -15,16 +15,17 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"dummy" : {
-		"scope" : "php",
-		"prefix": "dumm",
-		"body": "dummy snipper here !",
-		"description": "a dummy snippet"
-	},
 	"Yii::t" : {
 		"scope": "php",
-		"prefix": "y2tr",
+		"prefix": "yii2:t",
 		"body": "\\Yii::t('app', '$TM_SELECTED_TEXT')",
 		"description": "transation"
+	},
+	"Yii::success" : {
+		"prefix": "yii2:success",
+		"scope": "php",
+		"body": "Yii::\\$app->session->setFlash('success', '$1');",
+		"description": "setFlash - success"
 	}	
+
 }
