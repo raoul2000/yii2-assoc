@@ -83,7 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format'    => 'gender'
                         ],
                         //'birthday:date',
-                        ['class' => 'yii\grid\ActionColumn'],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['nowrap' => 'nowrap']
+                        ],
                     ],
                 ]); ?>
 
@@ -102,7 +105,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Complément'
                         ],
                         'email:email',
-                        ['class' => 'yii\grid\ActionColumn'],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['nowrap' => 'nowrap']
+                        ],
                     ],
                 ]); ?>
             <?php endif; ?>

@@ -32,8 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contact_id',
                 'type',
                 'name',
-
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['nowrap' => 'nowrap']
+                ],
             ],
         ]); ?>
     <?php Pjax::end(); ?>

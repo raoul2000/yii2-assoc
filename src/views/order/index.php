@@ -58,9 +58,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'value',
             'valid_date_start:date',
-            'valid_date_end:date',            
+            'valid_date_end:date',
             'transactionValuesDiff:transactionValuesDiff',
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['nowrap' => 'nowrap']
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

@@ -51,8 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'created_at',
                     'format' => ['date', 'php:d/m/Y H:i']
                 ],
-
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['nowrap' => 'nowrap']
+                ],
             ],
         ]); ?>
     <?php Pjax::end(); ?>
