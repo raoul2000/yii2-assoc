@@ -69,6 +69,11 @@ class AddressController extends BaseController
                     'country' => '']),
                 'label' => 'Adresses sans <b>pays</b>'
                 ],
+           'no-zip-code' => [
+                'query' => Address::find()->where([
+                    'zip_code' => '']),
+                'label' => 'Adresses sans <b>Code Postal</b>'
+                ],
            'not-assigned' => [
                 'query' => $queryNotAssignedToContact,
                 'label' => 'Adresses qui ne sont <b>pas assignées à un Contact</b>'
