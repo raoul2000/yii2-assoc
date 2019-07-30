@@ -13,9 +13,8 @@ $this->title = 'Contacts';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-index">
-
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-        <?= $form->field($model, 'imageFile')->fileInput() ?>
-        <button>Import</button>
+        <?= $form->field($model, 'dataFile')->fileInput() ?>
+        <?= Html::submitButton('Enregistrement', ['class' => 'btn btn-primary']) ?>
     <?php ActiveForm::end() ?>
 </div>

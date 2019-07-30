@@ -15,21 +15,9 @@ use yii\web\UploadedFile;
 /**
  * Default controller for the `gymv` module
  */
-class ContactImportController extends \app\controllers\ContactController
+class ContactImportController extends Controller
 {
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
-    public function actionIndex($tab = 'person')
-    {
-
-        return $this->render('index', [
-            'model' => new UploadForm()
-        ]);
-    }
-    
-    public function actionUpload()
+    public function actionIndex()
     {
         $model = new UploadForm();
 
@@ -43,23 +31,28 @@ class ContactImportController extends \app\controllers\ContactController
 
             if ($model->upload($uploadFilepath)) {
                 Yii::$app->session['import'] = $uploadFilepath;
-                return;
+                return $this->redirect(['import-csv']);
             }
         }
 
-        return $this->render('upload', ['model' => $model]);
+        return $this->render('index', ['model' => $model]);
     }
 
 
     public function actionImportCsv()
     {
-
+        if (!Yii::$app->session->has('import')) {
+            Yii::$app->session->setFlash('warning', 'No file uploaded');
+            return $this->redirect(['index']);
+        }
+        $importFile = Yii::$app->session['import'];
+        
         $errorMessage = null;
         $records = [];
         try {
             //$csv = Reader::createFromPath('d:\\tmp\\licencies.csv', 'r');
             //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies-small.csv', 'r'));
-            $csv = Reader::createFromStream(fopen('d:\\tmp\\licencies-100.csv', 'r'));
+            $csv = Reader::createFromStream(fopen($importFile, 'r'));
             //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies.csv', 'r'));
             $csv->setDelimiter(',');
             $csv->setEnclosure('\'');
