@@ -21,6 +21,9 @@ class AddressController extends \yii\web\Controller
         $countPerson = Contact::find([
             'is_natural_person' => true
         ])->count();
+        
+        // WARNING : get ALL adresses, no matter if they are assigned to a contact or not
+        // or not matter the contact type they are assigned to (i.e. includding company contact)
 
         $results = Yii::$app->db->createCommand(
             'SELECT count(*) as total, city

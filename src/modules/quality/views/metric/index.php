@@ -7,6 +7,12 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
 $this->title = 'Quality Check : ' . $pageSubHeader;
+
+$this->title = 'Statistics';
+$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['/contact/index']];
+$this->params['breadcrumbs'][] = 'Quality Check';
+\yii\web\YiiAsset::register($this);
+
 ?>
 <div class="quality-contact-view">
 

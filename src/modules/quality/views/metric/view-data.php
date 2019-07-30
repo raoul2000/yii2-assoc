@@ -38,7 +38,6 @@ $this->title = 'Quality Check (focus) : ' . $pageSubHeader;
                     }
                 ]
             ]
-            )
-
+        )
     ]);?>    
 </div>
