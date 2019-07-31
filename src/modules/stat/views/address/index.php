@@ -28,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'chart' => [
                     'type' => 'pie'
                 ],
-                'title' => ['text' => 'Répartition Géographique'],
+                'title' => ['text' => $title],
+                'subtitle' => [
+                    'text' => $subTitle
+                ],
+                'credits' => [
+                    'enabled' => false
+                ],
                 'plotOptions' => [
                     'pie'=> [
                         'allowPointSelect'=> true,

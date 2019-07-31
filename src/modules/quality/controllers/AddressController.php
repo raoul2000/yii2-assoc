@@ -43,7 +43,7 @@ class AddressController extends BaseController
             ->asArray()
             ->all();
 
-        $assignedAddressIds=array_map(function($item) {
+        $assignedAddressIds = array_map(function ($item) {
             return $item['address_id'];
         }, $queryResult);
 
