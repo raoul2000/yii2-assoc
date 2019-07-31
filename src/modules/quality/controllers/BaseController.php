@@ -18,6 +18,11 @@ class BaseController extends Controller
     protected $viewModelRoute = '';
     protected $dataColumnNames = [];
 
+    public function init()
+    {
+        parent::init();
+        //Yii::$app->params[\app\components\Constant::PARAM_FLUID_LAYOUT] = true;
+    }
     public function isAjaxCall()
     {
         $accept = Yii::$app->request->headers->get('Accept');
