@@ -8,7 +8,6 @@ use yii\helpers\Url;
 /* @var $model app\models\Product */
 $this->title = 'Quality Check : ' . $pageSubHeader;
 
-$this->title = 'Statistics';
 $this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['/contact/index']];
 $this->params['breadcrumbs'][] = 'Quality Check';
 \yii\web\YiiAsset::register($this);
