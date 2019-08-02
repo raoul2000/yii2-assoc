@@ -14,6 +14,8 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property int $type
  * @property string $created_at
  * @property string $updated_at
+ * @property string $valid_date_start
+ * @property string $valid_date_end
  *
  * @property Contact $sourceContact
  * @property Contact $targetContact
@@ -56,6 +58,19 @@ class ContactRelation extends \yii\db\ActiveRecord
             [['created_at', 'updated_at'], 'safe'],
             [['source_contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['source_contact_id' => 'id']],
             [['target_contact_id'], 'exist', 'skipOnError' => true, 'targetClass' => Contact::className(), 'targetAttribute' => ['target_contact_id' => 'id']],
+
+
+            // Validity Date Range ///////////////////////////////////////////////////
+            
+            [['valid_date_start', 'valid_date_end'], 'date', 'format' => 'php:Y-m-d'],
+            ['valid_date_start', 'compare',
+                'when' => function ($model) {
+                    return $model->valid_date_end != null;
+                },
+                'compareAttribute' => 'valid_date_end',
+                'operator' => '<=',
+                'enableClientValidation' => false
+            ],
         ];
     }
 
@@ -71,6 +86,8 @@ class ContactRelation extends \yii\db\ActiveRecord
             'type' => 'Type',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'valid_date_start' => 'Valid Date Start',
+            'valid_date_end' => 'Valid Date End',
         ];
     }
 

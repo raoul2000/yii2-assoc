@@ -61,7 +61,14 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-sm-6">
+            <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+        </div>
+        <div class="col-sm-6">
+            <?= $form->field($model, 'valid_date_end')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>    
+        </div>
+    </div>
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>

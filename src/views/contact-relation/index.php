@@ -63,6 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     }
                 ],
+                'valid_date_start:date',
+                'valid_date_end:date',
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'contentOptions' => ['nowrap' => 'nowrap']

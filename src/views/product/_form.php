@@ -26,7 +26,7 @@ use vova07\imperavi\Widget;
                     'fullscreen',
                 ]
             ],
-        ]);    
+        ]);
     ?>
 
     <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>

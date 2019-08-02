@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'type',
-                'value'     => function($model) {
+                'value'     => function ($model) {
                     return app\components\Constant::getContactRelationName($model->type);
                 }
             ],
@@ -71,7 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     );
                 }
             ],
-
+            'valid_date_start:date',
+            'valid_date_end:date',
             'created_at',
             'updated_at',
         ],
