@@ -59,6 +59,16 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             </div>
             <div class="checkbox">
                 <label>
+                    <input id="order-lock-start-date" type="checkbox"> lock order Valid Start Date
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input id="order-lock-end-date" type="checkbox"> lock order Valid End Date
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
                     <input id="order-enable-report" type="checkbox"> Enable auto report order Sum to transaction
                 </label>
             </div>
@@ -176,9 +186,9 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                     <tr>
                         <th>Product</th>
                         <th>Fournisseur</th>
-                        <th>
-                            Beneficiaire
-                        </th>
+                        <th>Beneficiaire</th>
+                        <th>From</th>
+                        <th>Until</th>
                         <th>Prix unitaire</th>
                         <th>discount (%)</th>
                         <th>Value</th>
@@ -196,7 +206,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'prompt' => 'select ...',
                                         'data-product' => true,
                                         'data-order-value-id' => Html::getInputId($order, "[$index]value"),
-                                        'data-target-id' => "product-value-$index",
+                                        'data-target-id' => 'product-value-' . $index,
                                         'style' => 'font-weight:bold;'
                                     ])
                                     ->label(false)
@@ -208,6 +218,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'size'=>1,
                                         'prompt' => 'select ...',
                                         'data-from-contact-id' => true,
+                                        'data-sync-setting'    => 'orderLockProvider',
+                                        'data-sync-selector'   => '.orders select[data-from-contact-id]'
                                     ])
                                     ->label(false)
                                 ?>
@@ -218,10 +230,39 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'size'=>1,
                                         'prompt' => 'select ...',
                                         'data-to-contact-id' => true,
+                                        'data-sync-setting'  => 'orderLockBeneficiary',
+                                        'data-sync-selector' => '.orders select[data-to-contact-id]'
+
                                     ])
                                     ->label(false)
                                 ?>
-                            </td>                        
+                            </td>    
+                            <td>
+                                <?= $form->field($order, "[$index]valid_date_start")
+                                    ->textInput([
+                                        'class' => 'form-control',
+                                        'maxlength' => true,
+                                        'autocomplete'=> 'off',
+                                        'data-date-start'    => true,
+                                        'data-sync-setting'  => 'orderLockStartDate',
+                                        'data-sync-selector' => '.orders input[data-date-start]'
+                                    ])
+                                    ->label(false)
+                                ?>
+                            </td>                                                
+                            <td>
+                                <?= $form->field($order, "[$index]valid_date_end")
+                                    ->textInput([
+                                        'class' => 'form-control',
+                                        'maxlength' => true,
+                                        'autocomplete'=> 'off',
+                                        'data-date-end'      => true,                           // used to select this input (see "data-sync-selector" )
+                                        'data-sync-setting'  => 'orderLockEndDate',             // name of the form settings property for lock end date
+                                        'data-sync-selector' => '.orders input[data-date-end]'  // selector for all end date inputs
+                                    ])
+                                    ->label(false)
+                                ?>
+                            </td>                                                
                             <td>
                                 <div class="form-group" style="width:6em">
                                     <input type="text" 
@@ -231,7 +272,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                 </div>                            
                             </td>
                             <td>
-                            <div class="form-group" style="width:6em;">
+                                <div class="form-group" style="width:6em;">
                                     <input type="text" 
                                         id="order-discount-<?=$index?>" 
                                         class="form-control order-discount" 
@@ -251,22 +292,11 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     'title' => 'remove']
                                 ) ?>
                             </td>
-                        </tr>   
-                        <tr style="display:default">
-                                <td colspan="6">
-                                    <div class="row form-inline">
-                                        <div class="col-sm-6">
-                                            <?= $form->field($order, "[$index]valid_date_start")->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
-                                        </div>
-                                        <div class="col-sm-6">
-                                    <?= $form->field($order, "[$index]valid_date_end")->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>                                
-                                        </div>
-                                    </div>
-                                </td>
-                                <td></td>
-                        </tr>     
+                        </tr>       
                     <?php endforeach; ?>
                     <tr>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

@@ -8,7 +8,9 @@
 let formSettings = {
     "orderLockProvider" : false,
     "orderLockBeneficiary" : false,
-    "orderEnableReport" : true
+    "orderEnableReport" : true,
+    "orderLockStartDate" : true,
+    "orderLockEndDate" : true
 };
 
 /**
@@ -59,16 +61,30 @@ const readFormSettings = () => {
 };
 
 const applySettings = () => {
+    // producer / consumer
     enableSelectedElements(!formSettings.orderLockProvider, '.orders select[data-from-contact-id]');
     enableSelectedElements(!formSettings.orderLockBeneficiary, '.orders select[data-to-contact-id]');
+
+    enableSelectedElements(!formSettings.orderLockStartDate, '.orders input[data-date-start]');
+    enableSelectedElements(!formSettings.orderLockEndDate, '.orders input[data-date-end]');
+
+    enableSelectedElements(!formSettings.orderLockBeneficiary, '#order-0-valid_date_start');
+    
 };
 /**
  * Load form settings into the modal used to edit settings
  */
 const loadSettingsForm = () => {
     const modal = document.getElementById('form-settings-modal');
+    // producer / consumer
     modal.querySelector('#order-lock-provider').checked = formSettings.orderLockProvider;
     modal.querySelector('#order-lock-beneficiary').checked = formSettings.orderLockBeneficiary;
+    
+    // valid start/end date
+    modal.querySelector('#order-lock-start-date').checked = formSettings.orderLockStartDate;
+    modal.querySelector('#order-lock-end-date').checked = formSettings.orderLockEndDate;
+
+    // auto report
     modal.querySelector('#order-enable-report').checked = formSettings.orderEnableReport;
 };
 $('#form-settings-modal').on('show.bs.modal', loadSettingsForm);
@@ -79,8 +95,15 @@ $('#form-settings-modal').on('show.bs.modal', loadSettingsForm);
  */
 const saveSettings = () => {
     const modal = document.getElementById('form-settings-modal');
+    // producer / consumer
     formSettings.orderLockProvider = modal.querySelector('#order-lock-provider').checked;
     formSettings.orderLockBeneficiary = modal.querySelector('#order-lock-beneficiary').checked;
+
+    // valid start/end date
+    formSettings.orderLockStartDate = modal.querySelector('#order-lock-start-date').checked;
+    formSettings.orderLockEndDate = modal.querySelector('#order-lock-end-date').checked;
+
+    // auto report
     formSettings.orderEnableReport = modal.querySelector('#order-enable-report').checked;
     localStorage.setItem('settings', JSON.stringify(formSettings));    
 };
@@ -229,7 +252,7 @@ const cartManagerActionHandler = (ev) => {
                         console.log(`index : ${actionEl.dataset.index}`);
                     }
                     //we must enable select element in order to be included in the form submit operation
-                    enableSelectedElements(true,'form select');
+                    enableSelectedElements(true,'form select, form input');
                     document.forms['cart-manager-form'].submit();
                 }
         }
@@ -242,18 +265,18 @@ $('#cart-manager-container').on('click', cartManagerActionHandler);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // order handlers 
 
-
-const contactChange = (ev) => {    
-    const dataAttrSelector = ev.target.dataset.hasOwnProperty('fromContactId') ? 'data-from-contact-id' : 'data-to-contact-id';
-    if( (dataAttrSelector == 'data-from-contact-id' && formSettings.orderLockProvider)
-     || (dataAttrSelector == 'data-to-contact-id' && formSettings.orderLockBeneficiary)) {
-         document.querySelectorAll(`.orders select[${dataAttrSelector}]`).forEach( (sel) => {
-             sel.value = ev.target.value;
-         });
-     }
-};
-
-$('.orders select[data-from-contact-id], .orders select[data-to-contact-id]').change(contactChange);
+/**
+ * Synchronize value chenge based on the first row value and the form settings.
+ * An input in the first row changes and if configured, its value is copied to all rows
+ * in the same column.
+ */
+$('.orders input[data-sync-setting], .orders select[data-sync-setting]').on('input', (ev) => {
+    if(formSettings[ev.target.dataset.syncSetting]) {
+        document.querySelectorAll(ev.target.dataset.syncSelector).forEach( (sel) => {
+            sel.value = ev.target.value;
+        });
+    }
+});
 /**
  * Compute and return the sum of all order values or -1 if at last one order value
  * is not a number.
