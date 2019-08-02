@@ -17,6 +17,8 @@ use yii\helpers\Html;
                 <th>Relation Type</th>
                 <th></th>
                 <th></th>
+                <th>From</th>
+                <th>Until</th>
                 <th></th>
             </tr>
         </thead>
@@ -59,12 +61,18 @@ use yii\helpers\Html;
                         )?>
                     </td>
                     <td>
+                        <?= Yii::$app->formatter->asDate($relation->valid_date_start) ?>
+                    </td>
+                    <td>
+                        <?= Yii::$app->formatter->asDate($relation->valid_date_end) ?>
+                    </td>
+                    <td>
                         <?= Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
                             ['contact-relation/view', 'id' => $relation->id],
                             ['title' => 'view relation']
                         )?>
-                    </td>
+                    </td>                    
                 </tr>
             <?php endforeach; ?>
         </tbody>
