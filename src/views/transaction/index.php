@@ -36,7 +36,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'attribute' => 'id',
-                'label'     => 'N°'
+                'label'     => 'N°',
+            ],
+            [
+                'attribute' => 'info',
+                'label'     => '',
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) {
+                    $html = '';
+                    if ( !empty($model->description)) {
+                        $html .= ' <span class="glyphicon glyphicon-info-sign" style="color: cadetblue;" aria-hidden="true" title="' . Html::encode($model->description) . '"></span>';
+                    }
+                    return $html;
+                }
             ],
             [
                 'attribute' => 'type',
@@ -71,9 +83,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'code',
-            'value',
-            'description',
-            'is_verified:boolean',
+            [
+                'attribute' => 'value',
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                    return '<b>' . $model->value . '</b>';
+                }
+            ],
+            //'value',
+            //'description',
+            //'is_verified:boolean',
+            [
+                'attribute' => 'is_verified',
+                'format'    => 'raw',
+                'filter'    =>  [
+                    '1' => 'oui',
+                    '0' => 'non'
+                ],
+                'value'     => function ($model, $key, $index, $column) {
+                    return $model->is_verified ? 'oui' : 'non';
+                }
+            ],
             'reference_date:date',
             //'orderValuesDiff:orderValuesDiff',
             [
