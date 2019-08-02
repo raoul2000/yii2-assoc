@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Address', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics', ['stat/address'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
-        <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Quality', ['quality/address'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Quality', ['quality/address', 'tab' => 'analysis'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
     </p>
 
     <?= GridView::widget([
@@ -36,7 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'line_1',
             'line_2',
-            'line_3',
             'zip_code',
             'city',
             'country',
