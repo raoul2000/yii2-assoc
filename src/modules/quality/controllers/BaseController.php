@@ -45,12 +45,16 @@ class BaseController extends Controller
         if (empty($qaView)) {
             $qaView = $this->renderPartial('_no-selection');
         }
-        return $this->render('index', [
-            'tab' => $tab,
-            'pageSubHeader' => $this->pageSubHeader,
-            'supportedViews' => $this->supportedViews,
-            'qaView' => $qaView
-        ]);
+        if (Yii::$app->request->get('ajax') != null) {
+            return $qaView;
+        } else {
+            return $this->render('index', [
+                'tab' => $tab,
+                'pageSubHeader' => $this->pageSubHeader,
+                'supportedViews' => $this->supportedViews,
+                'qaView' => $qaView
+            ]);
+        }
     }
 
     protected function renderPartialSimilarityView($values, $threshold = 70)
