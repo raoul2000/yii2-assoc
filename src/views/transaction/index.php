@@ -39,16 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label'     => 'N°',
             ],
             [
-                'attribute' => 'info',
+                'attribute' => 'description',
+                'filter'    => false,
                 'label'     => '',
-                'format'    => 'raw',
-                'value'     => function ($model, $key, $index, $column) {
-                    $html = '';
-                    if ( !empty($model->description)) {
-                        $html .= ' <span class="glyphicon glyphicon-info-sign" style="color: cadetblue;" aria-hidden="true" title="' . Html::encode($model->description) . '"></span>';
-                    }
-                    return $html;
-                }
+                'format'    => 'note'
             ],
             [
                 'attribute' => 'type',

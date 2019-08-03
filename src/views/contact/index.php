@@ -65,6 +65,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $searchModel,
                     'columns' => [
                         [
+                            'attribute' => 'note',
+                            'filter'    => false,
+                            'label'     => '',
+                            'format'    => 'note'
+                        ],
+                        [
                             'attribute' => 'name',
                             'label' => 'Name'
                         ],

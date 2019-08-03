@@ -34,6 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            [
+                'attribute' => 'note',
+                'filter'    => false,
+                'label'     => '',
+                'format'    => 'note'
+            ],
             'line_1',
             'line_2',
             'zip_code',

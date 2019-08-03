@@ -3,6 +3,7 @@
 namespace app\components;
 
 use app\models\Contact;
+use yii\helpers\Html;
 
 class Formatter extends \yii\i18n\Formatter
 {
@@ -38,6 +39,21 @@ class Formatter extends \yii\i18n\Formatter
             return \app\components\helpers\DateHelper::computeAge($birthday);
         } else {
             return $this->asRaw(null);
+        }
+    }
+
+    /**
+     * Format a note text as a small information icon where the note is set as the title
+     *
+     * @param string $note
+     * @return void
+     */
+    public function asNote($note)
+    {
+        if( empty(trim($note))) {
+            return '';
+        } else {
+            return ' <span class="glyphicon glyphicon-info-sign" style="color: cadetblue;" aria-hidden="true" title="' . Html::encode($note) . '"></span>';
         }
     }
     /**
