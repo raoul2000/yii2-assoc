@@ -43,4 +43,5 @@ in `./config/web.php`
 ```
 '@data' => '@app/../data',
 '@template' => '@app/../data/templates'
+'@imports' => '@app/../data/imports'
 ```

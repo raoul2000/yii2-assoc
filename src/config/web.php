@@ -106,7 +106,7 @@ $config = [
             'enableRegistration' => true,
             'enableEmailConfirmation' => false,
             'administratorPermissionName' => 'manageUser',
-            'administrators' => ['admin']
+            'administrators' => ['admin', 'admin2']
         ],
         'arhistory' => [
             'class' => 'bupy7\activerecord\history\Module',
