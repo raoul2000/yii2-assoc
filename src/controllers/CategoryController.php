@@ -41,6 +41,7 @@ class CategoryController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'contacts' => \app\models\Contact::getNameIndex()
         ]);
     }
 
