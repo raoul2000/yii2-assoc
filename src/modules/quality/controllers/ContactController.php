@@ -18,11 +18,20 @@ class ContactController extends BaseController
     protected $viewModelRoute = '/contact/view';
     protected $dataColumnNames = ['id', 'name', 'firstname'];
 
+    private $colNameOptions = [
+        'name' => 'Name'
+    ];
+
+    public function init()
+    {
+        parent::init();
+        $this->supportedViews = [self::VIEW_ANALYSIS];
+    }
     /**
      * Renders the index view for the module
      * @return string
      */
-    public function actionIndex($tab = '')
+    public function actionIndex($tab = '', $colName = '')
     {
         $this->view->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['/contact/index']];
         $this->view->params['breadcrumbs'][] = 'Quality Check';
@@ -32,7 +41,12 @@ class ContactController extends BaseController
                 $qaView = $this->renderPartialAnalysisView($this->getMetrics());
                 break;
             case self::VIEW_SIMILARITY :
-                $qaView = $this->renderPartialSimilarityView($this->getValues(), 80);
+                $qaView = $this->renderPartialSimilarityView(
+                    80, 
+                    $this->colNameOptions, 
+                    $colName, 
+                    Contact::find()
+                );                
                 break;
         }
         return $this->renderExplorer($tab, $qaView);
@@ -42,40 +56,31 @@ class ContactController extends BaseController
     {
         return $this->implActionViewData($this->getMetrics(), $id);
     }
-
-    private function getValues()
-    {
-        $queryResult = Contact::find()
-            ->select('name')
-            ->distinct()
-            ->asArray()
-            ->all();
-
-        // extract list of values
-        return array_map(function ($item) {
-            return $item['name'];
-        }, $queryResult);
-    }
     
+    /**
+     * Returns metrics for Contact
+     *
+     * @return array
+     */
     private function getMetrics()
     {
         return [
            'email-null' => [
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
-                    'email' => null]),
+                    'email' => '']),
                 'label' => 'Personnes dont <b>l\'adresse Email</b> est manquante'
                 ],
            'firstname-null' => [
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
-                    'firstname' => null]),
+                    'firstname' => '']),
                 'label' => 'Personnes dont le <b>prénom</b> est manquant'
                 ],
            'birthday-null' => [
                 'query' => Contact::find()->where([
                     'is_natural_person' => true,
-                    'birthday' => null]),
+                    'birthday' => '']),
                 'label' => 'Personnes dont la <b>date de naissance</b> est manquante'
                 ],
             'centenary' => [

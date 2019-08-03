@@ -19,11 +19,15 @@ class AddressController extends BaseController
     protected $viewModelRoute = '/address/view';
     protected $dataColumnNames = ['id', 'line_1', 'city', 'country'];
 
+    private $colNameOptions = [
+        'city' => 'City',
+        //'line_1' => 'Address line 1'
+    ];
     /**
      * Renders the index view for the module
      * @return string
      */
-    public function actionIndex($tab = '')
+    public function actionIndex($tab = '', $colName = '')
     {
         $this->view->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['/address/index']];
         $this->view->params['breadcrumbs'][] = 'Quality Check';
@@ -33,7 +37,12 @@ class AddressController extends BaseController
                 $qaView = $this->renderPartialAnalysisView($this->getMetrics());
                 break;
             case self::VIEW_SIMILARITY :
-                $qaView = $this->renderPartialSimilarityView($this->getValues(), 80);
+                $qaView = $this->renderPartialSimilarityView(
+                    80, 
+                    $this->colNameOptions, 
+                    $colName, 
+                    Address::find()
+                );
                 break;
         }
         return $this->renderExplorer($tab, $qaView);
@@ -44,6 +53,11 @@ class AddressController extends BaseController
         return $this->implActionViewData($this->getMetrics(), $id);
     }
 
+    /**
+     * Returns metrics for Address
+     *
+     * @return array
+     */
     private function getMetrics()
     {
         // address with no contact
@@ -90,24 +104,5 @@ class AddressController extends BaseController
                 'label' => 'Adresses qui ne sont <b>pas assignées à un Contact</b>'
                 ],
         ];
-    }
-
-    public function getValues()
-    {
-        $similarity = [];
-        // store index for each compared string pair
-        $index = [];
-
-        // query rows
-        $queryResult = Address::find()
-            ->select('city')
-            ->distinct()
-            ->asArray()
-            ->all();
-
-        // extract list of values
-        return array_map(function ($item) {
-            return $item['city'];
-        }, $queryResult);
     }
 }

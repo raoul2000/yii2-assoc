@@ -28,6 +28,12 @@ class BaseController extends Controller
      */
     protected $supportedViews = [];
 
+    /**
+     * Child class can overload this method in order to change the supportedViews list
+     * if required
+     *
+     * @return void
+     */
     public function init()
     {
         parent::init();
@@ -40,6 +46,15 @@ class BaseController extends Controller
         //Yii::$app->params[\app\components\Constant::PARAM_FLUID_LAYOUT] = true;
     }
 
+    /**
+     * Main render method
+     * Renders the QAA explorer page composed of a left vertical menu listing all supported
+     * views, and a QA view content area, that displays QA view
+     *
+     * @param string $tab name of the active QA view tab
+     * @param string $qaView content of the active QA view
+     * @return void
+     */
     protected function renderExplorer($tab, $qaView)
     {
         if (empty($qaView)) {
@@ -57,8 +72,26 @@ class BaseController extends Controller
         }
     }
 
-    protected function renderPartialSimilarityView($values, $threshold = 70)
+    /**
+     * Render partially the Similarity view
+     *
+     * @param integer $threshold
+     * @param array $colNameOptions
+     * @param string $selectedColName
+     * @param yii\db\ActiveQuery $query
+     * @return void
+     */
+    protected function renderPartialSimilarityView($threshold = 70, $colNameOptions, $selectedColName, $query)
     {
+        if (count($colNameOptions) == 1) {
+            reset($colNameOptions);
+            $selectedColName = key($colNameOptions);
+        }
+        $values= [];
+        if (array_key_exists($selectedColName, $colNameOptions)) {
+            $values = $this->getColumnValues($selectedColName, $query);
+        } 
+
         $index = [];
         $similarity = [];
         foreach ($values as $idx0 => $value0) {
@@ -100,11 +133,16 @@ class BaseController extends Controller
         });
 
         return $this->renderPartial('_similarity', [
-            'datasetItems' => $similarity
+            'datasetItems' => $similarity,
+            'colNameOptions' => $colNameOptions,
+            'selectedColName' => $selectedColName
         ]);
     }
     /**
-     * Renders the index view for the module
+     * Renders the analysis view for the module.
+     * The Analisys view contains a list of specific queries result that highlight some
+     * business rules that may be pertinent for the child class
+     * 
      * @return string
      */
     protected function renderPartialAnalysisView($metrics)
@@ -129,9 +167,15 @@ class BaseController extends Controller
         ]);
     }
 
+    /**
+     * Displays the detailed data view related to an Analisys item
+     *
+     * @param array $metrics
+     * @param string $id
+     * @return void
+     */
     protected function implActionViewData($metrics, $id)
     {
-        
         if (!array_key_exists($id, $metrics)) {
             throw new NotFoundHttpException('Data set id not found');
         }
@@ -151,4 +195,27 @@ class BaseController extends Controller
             'label' => $metric['label']
         ]);
     }
+
+    /**
+     * Queries all value for a given column namr and return the result in an array
+     * where each item is a value
+     *
+     * @param string $colName
+     * @param QueryObject $query
+     * @return Array
+     */
+    protected function getColumnValues($colName, $query)
+    {
+        $queryResult = $query
+            ->select($colName)
+            ->distinct()
+            ->asArray()
+            ->all();
+
+        // extract list of values
+        return array_map(function ($item) use ($colName) {
+            return $item[$colName];
+        }, $queryResult);
+    }
+
 }

@@ -11,19 +11,14 @@ use app\modules\quality\controllers\BaseController;
 
 
 $script = <<< JS
-    document.getElementById('qa-view-selector').addEventListener('click', (ev) => {
-        ev.preventDefault();
+
+    let currentQaViewUrl = null;
+    const loadQaViewContent = (url) => {
         const overlay = document.getElementById('qa-view-overlay');
         const content = document.getElementById('qa-view-content');
-        const anchor = ev.target.closest('a');
 
-        // update selection on left menu
-        this.querySelectorAll('a.list-group-item').forEach( item => item.classList.remove('active'));
-        anchor.classList.toggle('active');
-
-        // show overlay
         overlay.style.display = 'block';
-        $.get(`\${anchor.href}&ajax=1`)
+        $.get(url)
             .done( (resp) => {
                 content.innerHTML = resp;                
             })
@@ -33,8 +28,30 @@ $script = <<< JS
             .fail( () => {
                 console.error('error');
             });
+    };
+
+    document.getElementById('qa-view-selector').addEventListener('click', (ev) => {
+        ev.preventDefault();
+        const anchor = ev.target.closest('a');
+
+        // update selection on left menu
+        this.querySelectorAll('a.list-group-item').forEach( item => item.classList.remove('active'));
+        anchor.classList.toggle('active');
+        currentQaViewUrl = `\${anchor.href}&ajax=1`; 
+        loadQaViewContent(currentQaViewUrl);
+    });
+
+
+    document.getElementById('qa-view-content').addEventListener('click', (ev) => {
+        if( ev.target.id == 'btn-show-similarity') {
+            const colname = document.getElementById('colname').value;
+            if(colname) {
+                loadQaViewContent(currentQaViewUrl + '&colName=' + colname);
+            }
+        }
     });
 JS;
+
 $this->registerJs($script);
 
 ?>
