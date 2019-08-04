@@ -105,7 +105,8 @@ class Contact extends \yii\db\ActiveRecord
             [['name', 'firstname', 'email', 'note'], 'string', 'max' => 128],
             [['phone_1', 'phone_2'], 'string', 'max' => 50],
             ['email', 'email'],
-            [['birthday', 'date_1'], 'date', 'format' => 'php:Y-m-d'],
+            //[['birthday', 'date_1'], 'date', 'format' => 'php:Y-m-d'],
+            [['birthday', 'date_1'], 'date', 'format' => 'php:d-m-Y'],
         ];
     }
 
@@ -131,6 +132,29 @@ class Contact extends \yii\db\ActiveRecord
             'phone_2' => 'Phone 2',
             'date_1' => 'Date 1',
         ];
+    }
+    public function afterFind()
+    {
+        parent::afterFind();
+        if (isset($this->birthday)) {
+            // db date format : yyyy-mm-dd
+            //$arr = explode('-',$this->birthday);
+            $arr = preg_split( "/(-| |\/)/", $this->birthday );
+            $this->birthday = $arr[2] . '-' . $arr[1] . '-' . $arr[0];
+        }
+    }
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+        if (isset($this->birthday)) {
+            // input date format : dd-mm-yyyy
+            //$arr = explode('-',$this->birthday);
+            $arr = preg_split( "/(-| |\/)/", $this->birthday );
+            $this->birthday = $arr[2] . '-' . $arr[1] . '-' . $arr[0];
+        }
+        return true;
     }
     /**
      * (non-PHPdoc)
