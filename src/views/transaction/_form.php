@@ -48,7 +48,18 @@ use yii\helpers\ArrayHelper;
 
         <div class="row">
             <div class="col-md-2">
-                <?= $form->field($model, 'reference_date')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                <?= $form->field($model, 'reference_date')->widget(
+                    \dosamigos\datepicker\DatePicker::className(), [
+                        'language' => 'fr',
+                        'clientOptions' => [
+                            'autoclose' => true,
+                            'format' => 'dd/mm/yyyy',
+                            'todayHighlight' => true,
+                            'clearBtn' => false,
+                            'todayBtn' => true,
+                            'enableOnReadonly' => true,
+                        ]
+                ]);?>            
             </div>
             <div class="col-md-2">
                 <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>

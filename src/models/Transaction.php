@@ -36,7 +36,7 @@ class Transaction extends \yii\db\ActiveRecord
     public static function create()
     {
         return new Transaction([
-            'reference_date' => date('Y-m-d'),
+            'reference_date' => date('d/m/Y'),
             'value' => 0
         ]);
     }

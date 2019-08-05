@@ -22,7 +22,19 @@ $userChooseBankAccount = (isset($bankAccounts) && count($bankAccounts) !== 0 && 
 
         <?= $form->field($model, 'type')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
-        <?= $form->field($model, 'reference_date')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'reference_date')->widget(
+            \dosamigos\datepicker\DatePicker::className(), [
+                'language' => 'fr',
+                'clientOptions' => [
+                    'autoclose' => true,
+                    'format' => 'dd/mm/yyyy',
+                    'todayHighlight' => true,
+                    'clearBtn' => false,
+                    'todayBtn' => true,
+                    'enableOnReadonly' => true,
+                ]
+        ]);?>  
+
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

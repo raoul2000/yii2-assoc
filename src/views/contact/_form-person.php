@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use dosamigos\datepicker\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
@@ -25,25 +24,19 @@ $uploadForm = new \app\models\forms\UploadForm();
         <div class="row">
             <div class="col-lg-3">
                 <?php 
-                    echo $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]); 
+                    //echo $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]); 
                 ?>
-                <?php 
-                /*
-                echo $form->field($model, 'birthday')->widget(
-                    DatePicker::className(), [
-                        // inline too, not bad
-                        //'inline' => true, 
-                        // modify template for custom rendering
-                        //'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
+                <?= $form->field($model, 'birthday')->widget(
+                    \dosamigos\datepicker\DatePicker::className(), [
+                        'language' => 'fr',
                         'clientOptions' => [
                             'autoclose' => true,
-                            'format' => 'yyyy-mm-dd',
+                            'format' => 'dd/mm/yyyy',
                             'todayHighlight' => true,
-                            'language' => 'fr-FR'
+                            'clearBtn' => true,
+                            'enableOnReadonly' => true,
                         ]
-                ]);
-                */
-                ?>
+                ]);?>
 
             </div>
         </div>
