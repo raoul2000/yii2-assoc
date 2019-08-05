@@ -171,6 +171,7 @@ $orderModel = $model;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'template'  => '{view} {unlink} ',
+                            'contentOptions' => ['nowrap' => 'nowrap'],
                             'urlCreator' => function ($action, $model, $key, $index) use ($orderModel) {
                                 if ($action == 'unlink') {
                                     return Url::to(['unlink-transaction', 'id' =>  $orderModel->id, 'transaction_id' => $model->id, 'redirect_url' => Url::current()]);
