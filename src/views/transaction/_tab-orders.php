@@ -34,9 +34,10 @@ $transactionModel = $model;
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($products) {
                     return Html::a(
-                        Html::encode($products[$model->product_id]),
+                        '<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
+                         . Html::encode($products[$model->product_id]),
                         ['product/view','id'=>$model->product_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view product')]
                     );
                 }
             ],
@@ -47,9 +48,10 @@ $transactionModel = $model;
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($contacts) {
                     return Html::a(
-                        Html::encode($contacts[$model->to_contact_id]),
+                        '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($contacts[$model->to_contact_id]),
                         ['contact/view','id'=>$model->to_contact_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
                     );
                 }
             ],
@@ -65,6 +67,7 @@ $transactionModel = $model;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'  => '{view} {unlink} ',
+                'contentOptions' => ['nowrap' => 'nowrap'],
                 'urlCreator' => function ($action, $model, $key, $index) use ($transactionModel) {
                     if ($action == 'unlink') {
                         return Url::to(['unlink-order', 'id' =>  $transactionModel->id, 'order_id' => $model->id, 'redirect_url' => Url::current()]);
