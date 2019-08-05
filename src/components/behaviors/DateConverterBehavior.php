@@ -16,9 +16,12 @@ class DateConverterBehavior extends Behavior
     public function events()
     {
         return [
-            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
-            ActiveRecord::EVENT_BEFORE_INSERT => 'beforeSave',
-            ActiveRecord::EVENT_BEFORE_UPDATE => 'beforeSave',
+            ActiveRecord::EVENT_AFTER_FIND => 'convertDbToApp',
+            ActiveRecord::EVENT_BEFORE_INSERT => 'convertAppToDb',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'convertAppToDb',
+
+            ActiveRecord::EVENT_AFTER_INSERT => 'convertDbToApp',
+            ActiveRecord::EVENT_AFTER_UPDATE => 'convertDbToApp',
         ];
     }
 
@@ -27,7 +30,7 @@ class DateConverterBehavior extends Behavior
         parent::init();
     }
     
-    public function afterFind($event)
+    public function convertDbToApp($event)
     {
         foreach ($this->attributes as $attributeName) {
             if (!empty($this->owner->$attributeName)) {
@@ -37,7 +40,7 @@ class DateConverterBehavior extends Behavior
         }
     }
 
-    public function beforeSave($event)
+    public function convertAppToDb($event)
     {
         foreach ($this->attributes as $attributeName) {
             if (!empty($this->owner->$attributeName)) {
