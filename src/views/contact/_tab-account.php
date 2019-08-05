@@ -28,8 +28,9 @@ use yii\helpers\Html;
         ],
         [
             'label' => 'Value',
+            'format' => 'raw',
             'value'     => function ($model, $key, $index, $column) {
-                return $model->getBalanceInfo(false)['value'];
+                return '<b>' . $model->getBalanceInfo(false)['value'] . '</b>';
             }
         ],
         [
