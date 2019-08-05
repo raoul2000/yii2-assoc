@@ -62,7 +62,9 @@ $contactModel = $model;
                             'format' => 'raw',
                             'value' => function ($model) {
                                 if (!empty($model->birthday)) {
-                                    return Yii::$app->formatter->asDate($model->birthday) . ' (' . Yii::$app->formatter->asAge($model->birthday) . ' ans)';
+                                    // convert from App to DB format
+                                    $birthday = \app\components\helpers\DateHelper::toDateDbFormat($model->birthday);
+                                    return Yii::$app->formatter->asDate($birthday) . ' (' . Yii::$app->formatter->asAge($birthday) . ' ans)';
                                 } else {
                                     return null;
                                 }

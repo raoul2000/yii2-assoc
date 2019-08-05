@@ -4,6 +4,7 @@ namespace app\components;
 
 use app\models\Contact;
 use yii\helpers\Html;
+use \app\components\helpers\DateHelper;
 
 class Formatter extends \yii\i18n\Formatter
 {
@@ -21,7 +22,7 @@ class Formatter extends \yii\i18n\Formatter
 
     public function asClickToCall($value)
     {
-        if(!empty($value)) {
+        if (!empty($value)) {
             return "<a title=\"call this number\" href=\"tel:${value}\">${value}</a>";
         } else {
             return $this->asRaw(null);
@@ -30,12 +31,12 @@ class Formatter extends \yii\i18n\Formatter
     /**
      * Format a date in format YYYY-MM-DD as an age related to the current date
      *
-     * @param string $birthday 
+     * @param string $birthday YYYY-MM-DD 
      * @return void
      */
     public function asAge($birthday)
     {
-        if(!empty($birthday)) {
+        if (!empty($birthday)) {
             return \app\components\helpers\DateHelper::computeAge($birthday);
         } else {
             return $this->asRaw(null);
@@ -50,7 +51,7 @@ class Formatter extends \yii\i18n\Formatter
      */
     public function asNote($note)
     {
-        if( empty(trim($note))) {
+        if (empty(trim($note))) {
             return '';
         } else {
             return ' <span class="glyphicon glyphicon-info-sign" style="color: cadetblue;" aria-hidden="true" title="' . Html::encode($note) . '"></span>';
@@ -94,5 +95,19 @@ class Formatter extends \yii\i18n\Formatter
         } else {
             return '<span class="label label-success" title="exact value match">complete</span>';
         }
+    }
+
+    /**
+     * Format a Date provided in the App format, into the given format
+     * A typical example is when the date is provided with the format dd/mm/yyyy when the format expected by 
+     * the base method is yyyy-mm-dd.
+     * 
+     * @param string $value
+     * @param string $format
+     * @return void
+     */
+    public function asAppDate($value, $format = null)
+    {
+        return $this->asDate(DateHelper::toDateDbFormat($value), $format);
     }
 }

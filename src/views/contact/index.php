@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'format'    => 'gender'
                         ],
-                        //'birthday:date',
+                        'birthday:appDate',
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['nowrap' => 'nowrap']
