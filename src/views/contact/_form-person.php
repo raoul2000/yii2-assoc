@@ -60,11 +60,13 @@ $uploadForm = new \app\models\forms\UploadForm();
         <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
         
         <?php if ($model->isNewRecord): ?>
-            <h2>Attachment</h2>
-            <hr/>
-            <?= $form->field($uploadForm, 'note')->textInput() ?>
-            <?= $form->field($uploadForm, 'file')->fileInput() ?>
-            <hr/>
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>Attachment</a></li>
+            </ul>
+            <div>
+                <?= $form->field($uploadForm, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+                <?= $form->field($uploadForm, 'file')->fileInput() ?>
+            </div>
         <?php endif; ?>
 
         <div class="form-group">

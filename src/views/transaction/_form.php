@@ -7,6 +7,9 @@ use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
 /* @var $form yii\widgets\ActiveForm */
+
+$uploadForm = new \app\models\forms\UploadForm();
+
 ?>
 
 <div class="transaction-form">
@@ -65,7 +68,7 @@ use yii\helpers\ArrayHelper;
                 <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
             </div>
             <div class="col-md-3">
-                <?= $form->field($model, 'type')->listBox( \app\components\Constant::getTransactionTypes(), ['size'=>1])?>
+                <?= $form->field($model, 'type')->listBox(\app\components\Constant::getTransactionTypes(), ['size'=>1])?>
             </div>
             <div class="col-md-5">
                 <?php 
@@ -96,7 +99,17 @@ use yii\helpers\ArrayHelper;
         <?php if (!$model->isNewRecord):?>
             <?= $form->field($model, 'is_verified')->checkbox() ?>
         <?php endif; ?>
-        
+
+        <?php if ($model->isNewRecord): ?>
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>Attachment</a></li>
+            </ul>
+            <div>
+                <?= $form->field($uploadForm, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+                <?= $form->field($uploadForm, 'file')->fileInput() ?>
+            </div>
+        <?php endif; ?>
+
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         </div>
