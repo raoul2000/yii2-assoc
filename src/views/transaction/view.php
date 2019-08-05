@@ -69,7 +69,7 @@ $transactionModel = $model;
                             return Html::encode(\app\components\Constant::getTransactionType($model->type));
                         }
                     ],
-                    'reference_date:date',
+                    'reference_date:appDate',
                     'code',
                     'is_verified:boolean'
                 ],

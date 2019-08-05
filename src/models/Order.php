@@ -47,6 +47,13 @@ class Order extends \yii\db\ActiveRecord
                     'updated_at',
                 ],
             ],
+            [
+                'class' => \app\components\behaviors\DateConverterBehavior::className(),
+                'attributes' => [
+                    'valid_date_start',
+                    'valid_date_end'
+                ],
+            ],
         ];
     }
     /**
@@ -63,16 +70,10 @@ class Order extends \yii\db\ActiveRecord
 
             // Validity Date Range ///////////////////////////////////////////////////
             
-            [['valid_date_start', 'valid_date_end'], 'date', 'format' => 'php:Y-m-d'],
-            ['valid_date_start', 'compare',
-                'when' => function ($model) {
-                    return $model->valid_date_end != null;
-                },
-                'compareAttribute' => 'valid_date_end',
-                'operator' => '<=',
-                'enableClientValidation' => false
-            ],
+            [['valid_date_start', 'valid_date_end'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
+            ['valid_date_start', \app\components\validators\DateRangeValidator::className()],
 
+            // Value
             [['value'], 'default', 'value' => 0],
             [['value'], 'number', 'min' => 0],
         ];

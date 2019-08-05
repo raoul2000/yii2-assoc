@@ -56,8 +56,8 @@ use yii\widgets\Pjax;
                 }
             ],
             'value',
-            'valid_date_start',
-            'valid_date_end',
+            'valid_date_start:appDate',
+            'valid_date_end:appDate',
             'transactionValuesDiff:transactionValuesDiff',
             [
                 'class'     => 'yii\grid\ActionColumn',

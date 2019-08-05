@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = 'link to transaction';
                 'value',
                 'description',
                 'is_verified:boolean',
-                'reference_date:date',
+                'reference_date:appDate',
             ],
         ]); ?>
     <?php Pjax::end(); ?>

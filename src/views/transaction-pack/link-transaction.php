@@ -114,7 +114,7 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
                 'value',
                 'description',
                 'is_verified:boolean',
-                'reference_date:date',
+                'reference_date:appDate',
             ],
         ]); ?>
     <?php Pjax::end(); ?>

@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ],
 
-                'reference_date',
+                'reference_date:appDate',
                 [
                     'attribute' => 'updated_at',
                     'format' => ['date', 'php:d/m/Y H:i']

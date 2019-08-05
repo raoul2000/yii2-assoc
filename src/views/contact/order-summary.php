@@ -201,7 +201,7 @@ function summarize() {
                 } elseif ($item['from_contact_id'] == $model->id) {
                     // vendeur
                 }
-    
+                // WARNNING: this will fail as date format has changed : it is no dd/mm/yyyy
                 return array_merge($result, [[
                     convertDateToInt($item['valid_date_start']),
                     convertDateToInt($item['valid_date_end'])

@@ -42,6 +42,12 @@ class TransactionPack extends \yii\db\ActiveRecord
                     'updated_at',
                 ],
             ],
+            [
+                'class' => \app\components\behaviors\DateConverterBehavior::className(),
+                'attributes' => [
+                    'reference_date',
+                ],
+            ],
         ];
     }
     /**
@@ -58,8 +64,11 @@ class TransactionPack extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['reference_date'], 'safe'],
             [['name'], 'string', 'max' => 128],
+
+            [['reference_date'], 'safe'],
+            [['reference_date'], 'date',  'format' => Yii::$app->params['dateValidatorFormat']],
+            
             [['bank_account_id', 'type'], 'integer'],
             [['bank_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => BankAccount::className(), 'targetAttribute' => ['bank_account_id' => 'id']],
         ];

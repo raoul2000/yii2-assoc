@@ -62,7 +62,7 @@ $transactionPackModel = $model;
             'value',
             'description',
             'is_verified:boolean',
-            'reference_date:date',
+            'reference_date:appDate',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'contentOptions' => ['nowrap' => 'nowrap'],

@@ -70,6 +70,12 @@ class Transaction extends \yii\db\ActiveRecord
                     'updated_at',
                 ],
             ],
+            [
+                'class' => \app\components\behaviors\DateConverterBehavior::className(),
+                'attributes' => [
+                    'reference_date',
+                ],
+            ],
         ];
     }
     /**
@@ -124,7 +130,7 @@ class Transaction extends \yii\db\ActiveRecord
 
             [['is_verified'], 'boolean'],
 
-            [['reference_date'], 'date', 'format' => 'php:Y-m-d'],
+            [['reference_date'], 'date',  'format' => Yii::$app->params['dateValidatorFormat']],
         ];
     }
 

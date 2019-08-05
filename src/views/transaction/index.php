@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->is_verified ? 'oui' : 'non';
                 }
             ],
-            'reference_date:date',
+            'reference_date:appDate',
             //'orderValuesDiff:orderValuesDiff',
             [
                 'class' => 'yii\grid\ActionColumn',

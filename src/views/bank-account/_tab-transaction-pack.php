@@ -27,7 +27,7 @@ $bankAccountModel = $model;
                     'label'     => 'N°'
                 ],
                 'name',
-                'reference_date',
+                'reference_date:appDate',
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'template'  => '{view}',

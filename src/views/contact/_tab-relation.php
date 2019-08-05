@@ -61,10 +61,10 @@ use yii\helpers\Html;
                         )?>
                     </td>
                     <td>
-                        <?= Yii::$app->formatter->asDate($relation->valid_date_start) ?>
+                        <?= Yii::$app->formatter->asAppDate($relation->valid_date_start) ?>
                     </td>
                     <td>
-                        <?= Yii::$app->formatter->asDate($relation->valid_date_end) ?>
+                        <?= Yii::$app->formatter->asAppDate($relation->valid_date_end) ?>
                     </td>
                     <td>
                         <?= Html::a(

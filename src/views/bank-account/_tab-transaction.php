@@ -26,7 +26,7 @@ $bankAccountModel = $model;
                         'style' => 'width:3em'
                     ],
                 ],
-                'reference_date:date',
+                'reference_date:appDate',
                 [
                     'attribute' => 'pack',
                     'format'    => 'raw',

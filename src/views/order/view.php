@@ -85,8 +85,8 @@ $orderModel = $model;
             <?= DetailView::widget([
                 'model' => $model,
                 'attributes' => [
-                    'valid_date_start:date',
-                    'valid_date_end:date',
+                    'valid_date_start:appDate',
+                    'valid_date_end:appDate',
                     'transactionValuesDiff:transactionValuesDiff',
                     'transactions_value_total',
         /*            
@@ -167,7 +167,7 @@ $orderModel = $model;
                             }
                         ],
                         'value',
-                        'reference_date:date',
+                        'reference_date:appDate',
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'template'  => '{view} {unlink} ',
