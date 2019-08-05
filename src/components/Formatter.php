@@ -108,6 +108,10 @@ class Formatter extends \yii\i18n\Formatter
      */
     public function asAppDate($value, $format = null)
     {
-        return $this->asDate(DateHelper::toDateDbFormat($value), $format);
+        if (!empty($value)) {
+            return $this->asDate(DateHelper::toDateDbFormat($value), $format);
+        } else {
+            return $this->asRaw(null);
+        }
     }
 }
