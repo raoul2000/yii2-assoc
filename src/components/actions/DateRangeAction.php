@@ -36,6 +36,7 @@ class DateRangeAction extends Action
             return $this->controller->redirect($redirect_url);
         }
 
+
         if (empty($model->start_date)) {
             $model->start_date = SessionDateRange::getStart();
         }
@@ -45,6 +46,7 @@ class DateRangeAction extends Action
 
         return $this->controller->render('/common/date-range', [
             'model' => $model,
+            'configuredDateRanges' => $model->getConfiguredDateRanges(),
             'redirect_url' => $redirect_url
         ]);
     }

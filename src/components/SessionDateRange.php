@@ -124,26 +124,14 @@ class SessionDateRange
         return $queryOrDataprovider;
     }
 
-    public static function getMenu()
+    public static function getLabel()
     {
-        $items = [];
-        foreach (Yii::$app->params['dateRange'] as $rangeName => $range) {
-            $items[] = [
-                'label' => $rangeName,
-                'encode' => false,
-                'url' => '#'
-            ];
-        }
-
         $dateRange = self::getDateRange();
-        $label = 'no date range selected';
         if ($dateRange) {
             $label = self::getStart() . ' - ' . self::getEnd();
+        } else {
+            $label = 'no date range';
         }
-
-        return [
-            'label' => Html::encode($label),
-            'items' => $items
-        ];
+        return $label;
     }
 }

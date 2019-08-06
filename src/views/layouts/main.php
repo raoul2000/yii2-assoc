@@ -10,6 +10,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\components\Constant;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 ?>
@@ -38,28 +39,17 @@ AppAsset::register($this);
     ]);
 
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-left'],
-        'items' => [
-            [
-                'label' => 'date Range',
-                'url' => '#',
-                'options' => [
-                    'data-toggle' => 'modal',
-                    'data-target' => '#date-range-selector'
-                ]
-            ]
-        ]
-    ]);
-
-    echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
 
             // Date Range Selector Menu ------------------------
 
             Yii::$app->user->isGuest === false ? (
-                \app\components\SessionDateRange::getMenu()
-                ) : (''),
+                [
+                    'label' => \app\components\SessionDateRange::getLabel(),
+                    'url' => ['/admin/home/date-range', 'redirect_url' => Url::current()]
+                ]
+            ) : (''),
                 
             ['label' => 'GymV', 'url' => ['/gymv']],
 
@@ -164,12 +154,12 @@ AppAsset::register($this);
                 ['label' => 'Login', 'url' => ['/user/security/login']]
             ) : (
                 '<li>'
-                . Html::beginForm(['/user/security/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
+                    . Html::beginForm(['/user/security/logout'], 'post')
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                    . Html::endForm()
                 . '</li>'
             )
         ],
@@ -197,89 +187,6 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
-
-<?php 
-// modal BEGIN -------------------------------------------------------------
-
-$jsScriptDateRangeModal=<<<EOS
-    
-$('#btn-date-range-selected').on('click', saveAsTemplate);
-
-$('#date-range-selector').on('show.bs.modal', function (e) {
-    enableStartButtons();
-    showStartButtons();
-    clearTemplateName();
-    showTemplateNameInput();
-});
-
-
-$('#btn-remove-product').on('click', (ev) => {
-        let selectedIds = $('#{$gridViewElementId}').yiiGridView('getSelectedRows');
-        if( selectedIds.length === 0) {
-            alert('No item selected');
-        } else {
-            $.post({
-                url: '{$submitUrl}',
-                dataType: 'json',
-                data: {
-                    ids : selectedIds
-                },
-                success: function(data) {
-                    $.pjax.reload({container: '#pjax_{$gridViewElementId}', async: true});
-                },
-             });            
-        }
-    });
-EOS;
-
-$this->registerJs($jsScriptDateRangeModal, View::POS_READY, 'date-range-selector');
-
-yii\bootstrap\Modal::begin([
-    'id' => 'date-range-selector',
-    'header' => '<h3>Settings</h3>',
-    'footer' => '
-        <div id="btnbar-start">
-            <button id="btn-date-range-selected" class="btn btn-primary">
-                Save
-            </button>
-            &nbsp;
-            <button class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-    '
-]);
-?>
-
-<div class="form-group">
-<?php
-    $dateRanges = [
-        "1" => "dr1",
-        "2" => "dr2",
-        "4" => "dr3",
-    ];
-
-
-    echo Html::listBox('date-range', null, $dateRanges, [
-        'size'=>1,
-        'class' => 'form-control',
-        'options' =>  [
-            "1" => [
-                'data-attr1' => 'data-value1'
-            ],
-            "2" => [
-                'data-attr2' => 'data-value1'
-            ]
-        ],
-        'prompt' => 'select ...',
-        'data-date-range' => true,
-    ]);
-?>
-</div>
-
-<?php
-yii\bootstrap\Modal::end();
-    // modal END -------------------------------------------------------------
-?>    
-
 
 <?php $this->endBody() ?>
 </body>
