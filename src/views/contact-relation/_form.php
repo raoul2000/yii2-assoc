@@ -2,10 +2,27 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ContactRelation */
 /* @var $form yii\widgets\ActiveForm */
+
+$gridViewElementId = 'available-products';
+$jsScript=<<<EOS
+    document.getElementById('chk-define-date-range').addEventListener('click', ev => {
+        debugger;
+        const dateRangeInput =  document.getElementById('date-range-input');
+        dateRangeInput.querySelectorAll('input').forEach( input => {
+            input.value = '';
+        });
+        dateRangeInput.style.display = ev.target.checked ? 'block' : 'none';
+    });
+EOS;
+
+//$this->registerJs($jsScript, View::POS_READY, 'contact-relation-form');
+
+
 ?>
 
 <div class="contact-relation-form">
@@ -61,7 +78,17 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
     </div>
-    <div class="row">
+
+    <!-- div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input id="chk-define-date-range" type="checkbox"> This relation is valid only for a defined date range
+            </label>
+        </div>
+    </div -->
+
+
+    <div id="date-range-input" style="display:block;" class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
         </div>
