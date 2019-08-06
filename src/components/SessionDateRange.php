@@ -4,6 +4,7 @@ namespace app\components;
 
 use Yii;
 use app\components\Constant;
+use yii\helpers\Html;
 
 /**
  * This class is a wrapper around Date range variables stored in the current Session
@@ -121,5 +122,28 @@ class SessionDateRange
             $query->andWhere(['between', 'reference_date', $startDate, $endDate]);
         }
         return $queryOrDataprovider;
+    }
+
+    public static function getMenu()
+    {
+        $items = [];
+        foreach (Yii::$app->params['dateRange'] as $rangeName => $range) {
+            $items[] = [
+                'label' => $rangeName,
+                'encode' => false,
+                'url' => '#'
+            ];
+        }
+
+        $dateRange = self::getDateRange();
+        $label = 'no date range selected';
+        if ($dateRange) {
+            $label = self::getStart() . ' - ' . self::getEnd();
+        }
+
+        return [
+            'label' => Html::encode($label),
+            'items' => $items
+        ];
     }
 }
