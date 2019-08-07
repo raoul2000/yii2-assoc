@@ -7,10 +7,17 @@ use app\components\Constant;
 use yii\helpers\Html;
 
 /**
- * This class is a wrapper around Date range variables stored in the current Session
+ * This is the persistence layer for the Date Range values that may
+ * be set by the user.
  */
 class SessionDateRange
 {
+    const DATE_RANGE  = 'date_range';
+    const RANGE_START = 'start';
+    const RANGE_END   = 'end';
+    const RANGE_ID    = 'id';
+
+    
     /**
      * Set the date range values in the current session
      *
@@ -18,36 +25,37 @@ class SessionDateRange
      * @param string $end_date
      * @return void
      */
-    public static function setDateRange($start_date, $end_date)
+    public static function setDateRange($start_date, $end_date, $rangeId = null)
     {
-        $session = Yii::$app->session;
-        $session[Constant::SESS_PARAM_NAME_DATERANGE] = [
-            Constant::SESS_PARAM_NAME_STARTDATE => $start_date,
-            Constant::SESS_PARAM_NAME_ENDDATE => $end_date,
+        Yii::$app->session[self::DATE_RANGE] = [
+            self::RANGE_ID    => $rangeId,
+            self::RANGE_START => $start_date,
+            self::RANGE_END   => $end_date,
         ];
     }
 
     /**
      * Returns the current date range info or NULL if not date range is defined.
-     * If an array is returned, it contains 2 items : the start and the end date.
-     * example : `[ '2019-01-31', '2019-12-31']`
+     * The returned object has following structure :
      *
-     * @return NULL|array
+     * {
+     *  "start" : yyyy-mm-dd, // the date start range
+     *  "end" : yyyy-mm-dd, // the date end range
+     *  "name" : string| null
+     * }
+     *
+     * @return NULL|object
      */
     public static function getDateRange()
     {
         $session = Yii::$app->session;
 
         // no date range found in session : do nothing and return
-        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+        if (!$session->has(self::DATE_RANGE)) {
             return null;
         }
-        $dateRange = $session[Constant::SESS_PARAM_NAME_DATERANGE];
-
-        return [
-            $dateRange[Constant::SESS_PARAM_NAME_STARTDATE],
-            $dateRange[Constant::SESS_PARAM_NAME_ENDDATE],
-        ];
+        $dateRange = $session[self::DATE_RANGE];
+        return (object) $session[self::DATE_RANGE];
     }
 
     /**
@@ -58,10 +66,10 @@ class SessionDateRange
     public static function getStart()
     {
         $session = Yii::$app->session;
-        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+        if (!$session->has(self::DATE_RANGE)) {
             return null;
         }
-        return $session[Constant::SESS_PARAM_NAME_DATERANGE][Constant::SESS_PARAM_NAME_STARTDATE];
+        return $session[self::DATE_RANGE][self::RANGE_START];
     }
 
     /**
@@ -72,10 +80,10 @@ class SessionDateRange
     public static function getEnd()
     {
         $session = Yii::$app->session;
-        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+        if (!$session->has(self::DATE_RANGE)) {
             return null;
         }
-        return $session[Constant::SESS_PARAM_NAME_DATERANGE][Constant::SESS_PARAM_NAME_ENDDATE];
+        return $session[self::DATE_RANGE][self::RANGE_END];
     }
     /**
      * Remove the date range criteria from the session
@@ -84,7 +92,7 @@ class SessionDateRange
      */
     public static function clearDateRange()
     {
-        Yii::$app->session->remove(Constant::SESS_PARAM_NAME_DATERANGE);
+        Yii::$app->session->remove(self::DATE_RANGE);
     }
 
     /**
@@ -105,21 +113,21 @@ class SessionDateRange
 
         $session = Yii::$app->session;
 
+        if (!$session->has(self::DATE_RANGE)) {
+            return $queryOrDataprovider;
+        }
+        $range = self::getDateRange();
         // no date range found in session : do nothing and return
-        if (!$session->has(Constant::SESS_PARAM_NAME_DATERANGE)) {
+        if ($range == null) {
             return $queryOrDataprovider;
         }
 
         // apply date range criteria to model
-        $range = $session->get(Constant::SESS_PARAM_NAME_DATERANGE);
-        $startDate = $range[Constant::SESS_PARAM_NAME_STARTDATE];
-        $endDate = $range[Constant::SESS_PARAM_NAME_ENDDATE];
-
         // depending on model's attributes, SQL condition is modified to apply
         // date range criteria
         $attributeNames = array_keys($model->getAttributes());
         if (in_array('reference_date', $attributeNames)) {
-            $query->andWhere(['between', 'reference_date', $startDate, $endDate]);
+            $query->andWhere(['between', 'reference_date', $range->start, $range->end]);
         }
         return $queryOrDataprovider;
     }
@@ -127,11 +135,42 @@ class SessionDateRange
     public static function getLabel()
     {
         $dateRange = self::getDateRange();
-        if ($dateRange) {
-            $label = self::getStart() . ' - ' . self::getEnd();
-        } else {
-            $label = 'no date range';
+
+        if (!$dateRange) {
+            return 'no date range';
         }
-        return $label;
+
+        if (!empty($dateRange->id)) {
+            return $dateRange->id;
+        } else {
+            return $dateRange->start . ' - ' . $dateRange->end;
+        }
+    }
+
+    public static function buildMenuItem($redirect_url)
+    {
+        $dateRange = self::getDateRange();
+        if (!$dateRange) {
+            return [
+                'label' => '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
+                'options' => ['title' => 'Select a Date Range'],
+                'encode' => false,
+                'url' => ['/admin/home/date-range', 'redirect_url' => $redirect_url]
+            ];
+        } else {
+            $label = \app\components\SessionDateRange::getLabel();
+            return [
+                //'label' =>  $label,
+                'label' =>  '<span class="label label-primary" style="font-size:1em">' 
+                    . '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> '
+                    . $label
+                . '</span>',
+                //'label' => '<button type="button" class="btn btn-default btn-xs">' . $label . '</button>',
+                
+                'encode' => false,
+                'options' => ['title' => $dateRange->start . ' to ' . $dateRange->end ],
+                'url' => ['/admin/home/date-range', 'redirect_url' => $redirect_url]
+            ];
+        }
     }
 }

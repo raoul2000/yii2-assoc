@@ -13,23 +13,29 @@ class DateRangeForm extends Model
     /**
      * @var date start date (ex: 2019-12-31)
      */
-    public $start_date;
+    public $start;
     /**
      * @var date end date (ex: 2019-01-22)
      */
-    public $end_date;
+    public $end;
     /**
      * @return array the validation rules.
      */
-    private $_configuredDateRanges = null;
+    private $_configuredDateRanges = [];
+
+    public function init()
+    {
+        if (array_key_exists('dateRange', Yii::$app->params)) {
+            $this->_configuredDateRanges =  Yii::$app->params['dateRange'];
+        }
+    }
 
     public function rules()
     {
         return [
             ['configuredDateRangeId', 'validateConfiguredDateRange'],
-            //[['start_date', 'end_date'], 'required'],
-            [['start_date', 'end_date'], 'date', 'format' => 'php:Y-m-d'],
-            [ 'end_date', 'compare', 'compareAttribute' => 'start_date', 'operator' => '>=', 'type' => 'date', 'message' => 'endDate must be after startDate' ],
+            [['start', 'end'], 'date', 'format' => 'php:Y-m-d'],
+            [ 'end', 'compare', 'compareAttribute' => 'start', 'operator' => '>=', 'type' => 'date', 'message' => 'endDate must be after startDate' ],
         ];
     }
 
@@ -37,13 +43,11 @@ class DateRangeForm extends Model
     {
         $valueToValidate = $this->$attribute;
         if (!empty($valueToValidate)) {
-
-            if (!array_key_exists($valueToValidate, $this->getConfiguredDateRanges())) {
+            if (!array_key_exists($valueToValidate, $this->_configuredDateRanges)) {
                 $this->addError($attribute, 'Invalid date range selected');
             } else {
-                $ranges = $this->getConfiguredDateRanges();
-                $this->start_date = $ranges[$valueToValidate]['start'];
-                $this->end_date = $ranges[$valueToValidate]['end'];
+                $this->start = $this->_configuredDateRanges[$valueToValidate]['start'];
+                $this->end   = $this->_configuredDateRanges[$valueToValidate]['end'];
             }
         }
     }
@@ -57,26 +61,10 @@ class DateRangeForm extends Model
      */
     public function getConfiguredDateRanges()
     {
-        if ($this->_configuredDateRanges == null) {
-            $this->_configuredDateRanges = $this->loadConfiguredDateRanges();
+        $dateRangeOptions = [];
+        foreach ($this->_configuredDateRanges as $rangeName => $range) {
+            $dateRangeOptions[$rangeName] = $rangeName;
         }
-        return $this->_configuredDateRanges;
-    }
-
-    /**
-     * Load configured Date Range values.
-     * Values are loaded from the Application parameters array
-     * 
-     * @return array
-     */
-    private function loadConfiguredDateRanges()
-    {
-        $configuredDateRanges = [];
-        if (array_key_exists('dateRange', Yii::$app->params)) {
-            foreach (Yii::$app->params['dateRange'] as $rangeName => $range) {
-                $configuredDateRanges[$rangeName] = $rangeName;
-            }
-        }
-        return $configuredDateRanges;
+        return $dateRangeOptions;
     }
 }

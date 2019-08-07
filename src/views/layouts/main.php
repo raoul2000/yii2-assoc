@@ -38,19 +38,23 @@ AppAsset::register($this);
         ],
     ]);
 
+
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => ['class' => 'navbar-nav navbar-left'],
         'items' => [
 
             // Date Range Selector Menu ------------------------
 
             Yii::$app->user->isGuest === false ? (
-                [
-                    'label' => \app\components\SessionDateRange::getLabel(),
-                    'url' => ['/admin/home/date-range', 'redirect_url' => Url::current()]
-                ]
-            ) : (''),
-                
+                \app\components\SessionDateRange::buildMenuItem(Url::current())
+            ) : ('')
+        ]
+    ]);
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => [
+            
             ['label' => 'GymV', 'url' => ['/gymv']],
 
             Yii::$app->user->isGuest === false ? (

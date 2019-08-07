@@ -129,8 +129,6 @@ $orderModel = $model;
                     'link-transaction',
                     'id' => $model->id
                     ], ['class' => 'btn btn-primary', 'data-pjax'=>0]) ?>
-
-                <?= \app\components\widgets\DateRangeWidget::widget() ?>                
             </p>        
             <?php Pjax::begin(); ?>
                 <?= GridView::widget([

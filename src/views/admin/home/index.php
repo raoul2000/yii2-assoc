@@ -8,8 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1>Administration <small>website</small></h1>
 <hr/>
-<p>
-    <?= \app\components\widgets\DateRangeWidget::widget() ?>      
+<p>   
     <?= \app\components\widgets\UserContactWidget::widget() ?>   
     <?= Html::a('<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuration', ['config/index'], ['class' => 'btn btn-primary']) ?>
 </p>    

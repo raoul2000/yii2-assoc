@@ -32,16 +32,16 @@ class DateRangeAction extends Action
         // set date range
         $model = new DateRangeForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            SessionDateRange::setDateRange($model->start_date, $model->end_date);
+            SessionDateRange::setDateRange($model->start, $model->end, $model->configuredDateRangeId);
             return $this->controller->redirect($redirect_url);
         }
 
 
-        if (empty($model->start_date)) {
-            $model->start_date = SessionDateRange::getStart();
+        if (empty($model->start)) {
+            $model->start = SessionDateRange::getStart();
         }
-        if (empty($model->end_date)) {
-            $model->end_date = SessionDateRange::getEnd();
+        if (empty($model->end)) {
+            $model->end = SessionDateRange::getEnd();
         }
 
         return $this->controller->render('/common/date-range', [

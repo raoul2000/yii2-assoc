@@ -27,10 +27,6 @@ $this->params['breadcrumbs'][] = 'link to transaction';
         </p>
     </div>    
 
-    <p>
-        <?= \app\components\widgets\DateRangeWidget::widget() ?>       
-    </p>
-
     <?php Pjax::begin(); ?>
 
         <?= GridView::widget([

@@ -15,24 +15,25 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
         <?php if (count($configuredDateRanges) != 0): ?>
-            <div class="form-group">
-                <label class="control-label" for="configured-date-range">Configured Date Range</label>
-                <?= Html::listBox('configuredDateRangeId', $model->configuredDateRangeId, $configuredDateRanges, [
-                    'id'     => 'configured-date-range',
-                    'size'   => 1,
-                    'class'  => 'form-control',
-                    'prompt' => 'select ...',
-                ])?>
-            </div>
+            <?= $form
+                ->field($model, 'configuredDateRangeId')
+                ->listBox(
+                    $configuredDateRanges,
+                    [
+                        'size'=>1,
+                        'prompt' => 'select a date range ...'
+                    ]
+                )
+            ?>
         <?php endif; ?>
 
-        <?= $form->field($model, 'start_date')->textInput([ 'autocomplete'=> 'off' ]) ?>
+        <?= $form->field($model, 'start')->textInput([ 'autocomplete'=> 'off' ]) ?>
 
-        <?= $form->field($model, 'end_date')->textInput([ 'autocomplete'=> 'off' ]) ?>
+        <?= $form->field($model, 'end')->textInput([ 'autocomplete'=> 'off' ]) ?>
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-            <?php if (!empty($model->start_date) || !empty($model->end_date)): ?>
+            <?php if (!empty($model->start) || !empty($model->end)): ?>
                 <?= Html::a(
                     'Clear Date Range', 
                     ['date-range', 'clear' => 1, 'redirect_url' => $redirect_url],

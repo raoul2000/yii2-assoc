@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>    
     <p>
         <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= \app\components\widgets\DateRangeWidget::widget() ?>
     </p>
 
     <?= GridView::widget([

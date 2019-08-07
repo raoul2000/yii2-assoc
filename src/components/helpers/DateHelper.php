@@ -25,12 +25,12 @@ class DateHelper
     }
 
     /**
-     * Converts a Date in DB format, into a App Format. 
+     * Converts a Date in DB format, into a App Format.
      * App format is defined by the application parameter 'dateValidatorFormat'
-     * 
+     *
      * DB Format : YYYY-MM-DD
      * App format : DD/MM/YYYY
-     * 
+     *
      * @param string $value
      * @return void
      */
