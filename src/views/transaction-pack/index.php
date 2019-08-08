@@ -42,11 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter'    => $bankAccounts,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                        if ($model->bank_account_id ) {
+                        if ($model->bank_account_id) {
                             return Html::a(
-                                Html::encode($bankAccounts[$model->bank_account_id]),
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                    . Html::encode($bankAccounts[$model->bank_account_id]),
                                 ['bank-account/view','id'=>$model->bank_account_id],
-                                [ 'data-pjax' => 0 ]
+                                [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
                             );
                         } else {
                             return null;

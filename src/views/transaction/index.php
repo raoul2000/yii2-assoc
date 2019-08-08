@@ -57,9 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
                     return Html::a(
-                        Html::encode($bankAccounts[$model->from_account_id]),
+                        '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                            . Html::encode($bankAccounts[$model->from_account_id]),
                         ['bank-account/view','id'=>$model->from_account_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
                     );
                 }
             ],
@@ -69,9 +70,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
                     return Html::a(
-                        Html::encode($bankAccounts[$model->to_account_id]),
+                        '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                            . Html::encode($bankAccounts[$model->to_account_id]),
                         ['bank-account/view','id'=>$model->to_account_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
                     );
                 }
             ],

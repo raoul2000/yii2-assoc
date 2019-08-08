@@ -66,10 +66,21 @@ $bankAccountModel = $model;
                     'filter'    => $bankAccounts,
                     'format'    => 'html',
                     'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
+                        // in the same column render source or target account
                         if ($bankAccountModel->id == $transactionModel->from_account_id) {
-                            return Html::encode($transactionModel->toAccount->contact_name);
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                    . Html::encode($transactionModel->toAccount->contact_name),
+                                ['contact/view','id'=>$transactionModel->toAccount->id],
+                                ['data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
+                            );
                         } else {
-                            return Html::encode($transactionModel->fromAccount->contact_name);
+                            return Html::a(
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                    . Html::encode($transactionModel->fromAccount->contact_name),
+                                ['bank-account/view','id'=>$transactionModel->fromAccount->id],
+                                ['data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
+                            );
                         }
                     }
                 ],
