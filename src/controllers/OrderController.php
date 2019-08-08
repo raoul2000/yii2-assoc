@@ -69,7 +69,9 @@ class OrderController extends Controller
                 ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with('transactions')
         );
+
         //$dataProvider->pagination->pageSize = 3;
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

@@ -34,8 +34,14 @@ class DateRangeForm extends Model
     {
         return [
             ['configuredDateRangeId', 'validateConfiguredDateRange'],
-            [['start', 'end'], 'date', 'format' => 'php:Y-m-d'],
-            [ 'end', 'compare', 'compareAttribute' => 'start', 'operator' => '>=', 'type' => 'date', 'message' => 'endDate must be after startDate' ],
+            [['start', 'end'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
+
+            // use standalone validator but redefined date range attribute names 
+            ['start', \app\components\validators\DateRangeValidator::className(),
+                'startDateAttributeName' => 'start',
+                'endDateAttributeName' => 'end'
+            ],
+
         ];
     }
 

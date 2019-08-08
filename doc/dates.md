@@ -37,7 +37,7 @@ Each model having DATE attributes subject to validation (i.e. user input) are va
 
 In order to handle date conversion correctly during the validation process of a Date Range, a custom validator has been implemented : `\app\components\validators\DateRangeValidator`. 
 
-> this validator only applies to attributes `valid_date_start` and `valid_date_end`, so make sure that the model does inclides thoses attributes
+> this validator only applies to attributes `valid_date_start` and `valid_date_end`, so make sure that the model does includes thoses attributes.
 
 ## Rendering
 

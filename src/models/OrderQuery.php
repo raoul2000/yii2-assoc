@@ -9,7 +9,7 @@ namespace app\models;
  */
 class OrderQuery extends \yii\db\ActiveQuery
 {
-    use \app\components\ValidInDateRangeTrait;
+    use \app\components\DateRangeQueryTrait;
 
     /**
      * {@inheritdoc}

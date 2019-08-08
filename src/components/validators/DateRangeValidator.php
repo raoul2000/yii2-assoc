@@ -7,19 +7,23 @@ use \app\components\helpers\DateHelper;
 
 class DateRangeValidator extends Validator
 {
+    public $startDateAttributeName = 'valid_date_start';
+    public $endDateAttributeName = 'valid_date_end';
+
     public function validateAttribute($model, $attribute)
     {
-        if ($model->hasErrors('valid_date_start') || $model->hasErrors('valid_date_end')) {
+        if ($model->hasErrors($this->startDateAttributeName) || $model->hasErrors($this->endDateAttributeName)) {
             return;
         }
-        if (!empty($model->valid_date_end) && !empty($model->valid_date_start)) {
+        if (!empty($model->{$this->startDateAttributeName}) && !empty($model->{$this->endDateAttributeName})) {
 
-            $start = DateHelper::toDateDbFormat($model->valid_date_start);
-            $end   = DateHelper::toDateDbFormat($model->valid_date_end);
+            // date values are formatted the way user entered them (e.g. dd/mm/yyyy), so don't forget to convert them
+            $start = DateHelper::toDateDbFormat($model->{$this->startDateAttributeName});
+            $end   = DateHelper::toDateDbFormat($model->{$this->endDateAttributeName});
     
             if (strtotime($end) < strtotime($start)) {
-                $this->addError($model, 'valid_date_start', 'Please give correct Start and End dates');
-                $this->addError($model, 'valid_date_end', 'Please give correct Start and End dates');
+                $this->addError($model, $this->startDateAttributeName, 'Please give correct Start and End dates');
+                $this->addError($model, $this->endDateAttributeName, 'Please give correct Start and End dates');
             }
         }
     }

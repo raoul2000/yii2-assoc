@@ -153,7 +153,7 @@ class TransactionController extends Controller
                 ->with('orders')
         );
 
-        SessionDateRange::applyDateRange($dataProvider, $searchModel);
+        //SessionDateRange::applyDateRange($dataProvider, $searchModel);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

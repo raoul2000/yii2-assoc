@@ -8,6 +8,7 @@ use yii\web\NotFoundHttpException;
 use app\components\Constant;
 use app\components\SessionDateRange;
 use yii\helpers\BaseUrl;
+use \app\components\helpers\DateHelper;
 
 class DateRangeAction extends Action
 {
@@ -32,16 +33,21 @@ class DateRangeAction extends Action
         // set date range
         $model = new DateRangeForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            SessionDateRange::setDateRange($model->start, $model->end, $model->configuredDateRangeId);
+
+            SessionDateRange::setDateRange(
+                DateHelper::toDateDBFormat($model->start),
+                DateHelper::toDateDBFormat($model->end),
+                $model->configuredDateRangeId
+            );
             return $this->controller->redirect($redirect_url);
         }
 
 
         if (empty($model->start)) {
-            $model->start = SessionDateRange::getStart();
+            $model->start = DateHelper::toDateAppFormat(SessionDateRange::getStart());
         }
         if (empty($model->end)) {
-            $model->end = SessionDateRange::getEnd();
+            $model->end =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
         }
 
         return $this->controller->render('/common/date-range', [

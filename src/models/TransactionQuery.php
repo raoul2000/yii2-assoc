@@ -9,7 +9,7 @@ namespace app\models;
  */
 class TransactionQuery extends \yii\db\ActiveQuery
 {
-    use \app\components\DateInRangeTrait;
+    use \app\components\DateRangeQueryTrait;
 
     /**
      * {@inheritdoc}
