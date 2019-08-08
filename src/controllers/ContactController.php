@@ -128,8 +128,12 @@ class ContactController extends Controller
         switch ($tab) {
             case 'account':
                 $bankAccountSearchModel = new \app\models\BankAccountSearch();
-                $bankAccountDataProvider = $bankAccountSearchModel->search(Yii::$app->request->queryParams);
-                $bankAccountDataProvider->query->andWhere(['contact_id' => $id]);
+                $bankAccountDataProvider = $bankAccountSearchModel->search(
+                    Yii::$app->request->queryParams
+                );
+                $bankAccountDataProvider
+                    ->query
+                    ->andWhere(['contact_id' => $id]);
     
                 return $this->render('view', [
                     'model' => $model,
@@ -154,10 +158,15 @@ class ContactController extends Controller
             case 'relation':
                     
                 $relations = ContactRelation::find()
-                    ->where(['source_contact_id' => $model->id])
-                    ->orWhere(['target_contact_id' => $model->id])
+                    ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                    ->andWhere([
+                        'or',
+                            ['source_contact_id' => $id],
+                            ['target_contact_id' => $id]
+                    ])
                     ->with(['sourceContact', 'targetContact'])
                     ->all();
+
                 return $this->render('view', [
                     'model' => $model,
                     'tab' => $tab,
@@ -181,13 +190,18 @@ class ContactController extends Controller
             case 'order':
                 $orderSearchModel = new \app\models\OrderSearch();
                 $orderDataProvider = $orderSearchModel->search(
-                    Yii::$app->request->queryParams,
-                    \app\models\Order::find()
-                        ->with('transactions')
+                    Yii::$app->request->queryParams
                 );
-                $orderDataProvider->query->andWhere([
-                    'or', ['to_contact_id' => $id], ['from_contact_id' => $id]
-                ]);
+
+                $orderDataProvider
+                    ->query
+                    ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                    ->andWhere([
+                        'or',
+                            ['to_contact_id' => $id],
+                            ['from_contact_id' => $id]
+                    ])
+                    ->with('transactions');
 
                 return $this->render('view', [
                     'model' => $model,
