@@ -42,7 +42,6 @@ class DateRangeAction extends Action
             return $this->controller->redirect($redirect_url);
         }
 
-
         if (empty($model->start)) {
             $model->start = DateHelper::toDateAppFormat(SessionDateRange::getStart());
         }

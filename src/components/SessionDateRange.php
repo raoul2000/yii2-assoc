@@ -5,6 +5,7 @@ namespace app\components;
 use Yii;
 use app\components\Constant;
 use yii\helpers\Html;
+use \app\components\helpers\DateHelper;
 
 /**
  * This is the persistence layer for the Date Range values that may
@@ -27,11 +28,15 @@ class SessionDateRange
      */
     public static function setDateRange($start_date, $end_date, $rangeId = null)
     {
-        Yii::$app->session[self::DATE_RANGE] = [
-            self::RANGE_ID    => $rangeId,
-            self::RANGE_START => $start_date,
-            self::RANGE_END   => $end_date,
-        ];
+        if (empty($start_date) && empty($end_date) && empty($rangeId)) {
+            self::clearDateRange();
+        } else {
+            Yii::$app->session[self::DATE_RANGE] = [
+                self::RANGE_ID    => $rangeId,
+                self::RANGE_START => $start_date,
+                self::RANGE_END   => $end_date,
+            ];
+        }
     }
 
     /**
@@ -93,84 +98,5 @@ class SessionDateRange
     public static function clearDateRange()
     {
         Yii::$app->session->remove(self::DATE_RANGE);
-    }
-
-    /**
-     * Modifies the provided object to apply date range criteria.
-     * Depending on the $model type, the SQL condition is modified differently.
-     *
-     * @param mixed $queryOrDataprovider
-     * @param object instance of yii\base\Model
-     * @return mixed
-     */
-    public static function applyDateRange($queryOrDataprovider, $model)
-    {
-        if ($queryOrDataprovider instanceof \yii\data\ActiveDataProvider) {
-            $query = $queryOrDataprovider->query;
-        } else {
-            $query = $queryOrDataprovider;
-        }
-
-        $session = Yii::$app->session;
-
-        if (!$session->has(self::DATE_RANGE)) {
-            return $queryOrDataprovider;
-        }
-        $range = self::getDateRange();
-        // no date range found in session : do nothing and return
-        if ($range == null) {
-            return $queryOrDataprovider;
-        }
-
-        // apply date range criteria to model
-        // depending on model's attributes, SQL condition is modified to apply
-        // date range criteria
-        $attributeNames = array_keys($model->getAttributes());
-        if (in_array('reference_date', $attributeNames)) {
-            $query->andWhere(['between', 'reference_date', $range->start, $range->end]);
-        }
-        return $queryOrDataprovider;
-    }
-
-    public static function getLabel()
-    {
-        $dateRange = self::getDateRange();
-
-        if (!$dateRange) {
-            return 'no date range';
-        }
-
-        if (!empty($dateRange->id)) {
-            return $dateRange->id;
-        } else {
-            return $dateRange->start . ' - ' . $dateRange->end;
-        }
-    }
-
-    public static function buildMenuItem($redirect_url)
-    {
-        $dateRange = self::getDateRange();
-        if (!$dateRange) {
-            return [
-                'label' => '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>',
-                'options' => ['title' => 'Select a Date Range'],
-                'encode' => false,
-                'url' => ['/admin/home/date-range', 'redirect_url' => $redirect_url]
-            ];
-        } else {
-            $label = \app\components\SessionDateRange::getLabel();
-            return [
-                //'label' =>  $label,
-                'label' =>  '<span class="label label-primary" style="font-size:1em">' 
-                    . '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> '
-                    . $label
-                . '</span>',
-                //'label' => '<button type="button" class="btn btn-default btn-xs">' . $label . '</button>',
-                
-                'encode' => false,
-                'options' => ['title' => $dateRange->start . ' to ' . $dateRange->end ],
-                'url' => ['/admin/home/date-range', 'redirect_url' => $redirect_url]
-            ];
-        }
     }
 }

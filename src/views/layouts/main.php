@@ -46,7 +46,7 @@ AppAsset::register($this);
             // Date Range Selector Menu ------------------------
 
             Yii::$app->user->isGuest === false ? (
-                \app\components\SessionDateRange::buildMenuItem(Url::current())
+                \app\components\helpers\DateRangeHelper::buildMenuItem(Url::current())
             ) : ('')
         ]
     ]);

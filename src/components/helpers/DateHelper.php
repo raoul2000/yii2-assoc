@@ -36,6 +36,10 @@ class DateHelper
      */
     public static function toDateAppFormat($value)
     {
+        if (empty($value)) {
+            return $value;
+        }
+
         $arr = explode('-', $value);
         if (count($arr) !== 3) {
             throw new InvalidCallException('The date value has not the expected format (' . $value . ')');
@@ -56,6 +60,10 @@ class DateHelper
      */
     public static function toDateDbFormat($value)
     {
+        if (empty($value)) {
+            return $value;
+        }
+
         // input date format : dd/mm/yyyy
         $arr = explode('/', $value);
          //$arr = preg_split('/(-| |\/)/', $this->birthday);

@@ -10,7 +10,9 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="date-range-form">
-    <h1>Date Range</h1>
+    <h1>
+        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Date Range
+    </h1>
     <hr/>
     <?php $form = ActiveForm::begin(); ?>
 
