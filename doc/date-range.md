@@ -1,10 +1,20 @@
 # Date Range
 
-a Date Range is a partial amount of time. It is defined by one ore two date boundaries representing the limits of the range. 3 types of date range exist :
+## Definition 
+
+A *Date Range* is a partial amount of time. It is defined by one ore two dates boundaries representing the limits of the range. 3 types of date range exist :
+
 - *closed* : defined by a `start` and `end` date
 - *right opened* : defined by an `end` date only
 - *left opened* : defined by an `start` date only
 
+## Tables
+
+- product: valid_date_start , valid_date_end
+- contact relation : valid_date_start , valid_date_end
+- order: valid_date_start , valid_date_end
+- transaction : reference_date
+- transaction_pack : reference_date
 
 ## Validity Date Range
 

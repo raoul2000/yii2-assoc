@@ -11,6 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use app\components\SessionDateRange;
 
 /**
  * ContactRelationController implements the CRUD actions for ContactRelation model.
@@ -39,14 +40,18 @@ class ContactRelationController extends Controller
     public function actionIndex()
     {
         $searchModel = new ContactRelationSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->with(['sourceContact', 'targetContact']);
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            ContactRelation::find()
+                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->with(['sourceContact', 'targetContact'])
+        );
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'contacts' => Contact::getNameIndex(),
-            'contactRelationTypes' => ArrayHelper::map(Constant::getContactRelationTypes(),'id', 'name')
+            'contactRelationTypes' => ArrayHelper::map(Constant::getContactRelationTypes(), 'id', 'name')
         ]);
     }
 

@@ -12,6 +12,7 @@ use app\models\TransactionPerAccountSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\components\SessionDateRange;
 
 /**
  * BankAccountController implements the CRUD actions for BankAccount model.
@@ -80,7 +81,9 @@ class BankAccountController extends Controller
                     $bankAccount
                 );
         
-                $transactionDataProvider->query
+                $transactionDataProvider
+                    ->query
+                    ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                     ->with(['fromAccount', 'toAccount']);
 
                 // for filter : remove this bank account
@@ -107,6 +110,7 @@ class BankAccountController extends Controller
                 );
                 $transactionPackDataProvider
                     ->query
+                    ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                     ->andWhere(['bank_account_id' => $bankAccount->id ]);
     
                 return $this->render('view', [

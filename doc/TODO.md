@@ -1,3 +1,7 @@
+## Stats for transactions (propositions)
+
+- display transaction by reference date (per week or month, or cumulative)
+
 ## Refactor invoice template create/save
 
 currently stored in the file system ... CRUD not easy:

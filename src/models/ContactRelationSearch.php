@@ -38,9 +38,11 @@ class ContactRelationSearch extends ContactRelation
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query = null)
     {
-        $query = ContactRelation::find();
+        if ($query == null) {
+            $query = ContactRelation::find();
+        }
 
         // add conditions that should always apply here
 
