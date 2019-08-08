@@ -63,9 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         $linkedContacts = [];
                         foreach ($model->contacts as $contact) {
                             $linkedContacts[] = Html::a(
-                                Html::encode($contact->longName),
+                                '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                    . Html::encode($contact->longName),
                                 ['contact/view', 'id' => $contact->id],
-                                ['title' => 'view Contact']
+                                ['title' => \Yii::t('app', 'view contact')]
                             );
                         }
                         return implode(' | ', $linkedContacts);

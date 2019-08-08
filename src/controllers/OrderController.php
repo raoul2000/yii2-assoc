@@ -14,6 +14,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
+use app\components\helpers\DateHelper;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -148,16 +149,17 @@ class OrderController extends Controller
             // if configured and if the current order has no value, try to use related product value
             if (!empty($model->product->value)
                 && $model->value == 0
-                && Yii::$app->configManager->getItemValue('order.create.setProductValue') == true )
+                && Yii::$app->configManager->getItemValue('order.create.setProductValue') == true)
             {
                 $lazyUpdate['value'] = $model->product->value;
             }
 
-            // if order has no valid date and product has, use the ones from product
+            // RULE : if order has no valid date and product has, use the ones from product
             if (empty($model->valid_date_start) && empty($model->valid_date_end)
-                && ( !empty($model->product->valid_date_start) || !empty($model->product->valid_date_end))) {
-                $lazyUpdate['valid_date_start'] = $model->product->valid_date_start;
-                $lazyUpdate['valid_date_end'] = $model->product->valid_date_end;
+                && ( !empty($model->product->valid_date_start) || !empty($model->product->valid_date_end)))
+            {
+                $lazyUpdate['valid_date_start'] = DateHelper::toDateDbFormat($model->product->valid_date_start);
+                $lazyUpdate['valid_date_end']  = DateHelper::toDateDbFormat($model->product->valid_date_end);
             }
 
             if (count($lazyUpdate) != 0) {
@@ -180,8 +182,8 @@ class OrderController extends Controller
                 && empty($model->valid_date_start)
                 && empty($model->valid_date_end)
         ) {
-            $model->valid_date_start = SessionDateRange::getStart();
-            $model->valid_date_end = SessionDateRange::getEnd();
+            $model->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
+            $model->valid_date_end  =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
         }
 
         // render view
