@@ -28,7 +28,7 @@ class TaggableBehavior extends Behavior
     /**
      * @var string the tags relation name
      */
-    public $tagRelation = 'tag';
+    public $tagRelation = 'tags';
     /**
      * @var string the tags model value attribute name
      */
@@ -152,14 +152,25 @@ class TaggableBehavior extends Behavior
         /* @var ActiveRecord $class */
         $class = $tagRelation->modelClass;
         $rows = [];
+        
+        // store each tag id processed in order to prevent processing twice the same tag. This may happen because
+        // the search tag query is based on string equality where "Todo" is the same than 'TODO'.
+        $tagIdsCache = [];
 
         foreach ($this->_tagValues as $value) {
             /* @var ActiveRecord $tag */
             $tag = $class::findOne([$this->tagValueAttribute => $value]);
+            /*
+            $tag = $class::find()
+                ->where(['=', $this->tagValueAttribute, $value])
+                ->one();
+            */
 
             if ($tag === null) {
                 $tag = new $class();
                 $tag->setAttribute($this->tagValueAttribute, $value);
+            } elseif (in_array($tag->id, $tagIdsCache)) {
+                continue;
             }
 
             if ($this->tagFrequencyAttribute !== false) {
@@ -170,6 +181,7 @@ class TaggableBehavior extends Behavior
             if ($tag->save()) {
                 $rows[] = [$this->owner->getPrimaryKey(), $tag->getPrimaryKey()];
             }
+            $tagIdsCache[] = $tag->id;
         }
 
         if (!empty($rows)) {
@@ -216,11 +228,20 @@ class TaggableBehavior extends Behavior
      */
     public function filterTagValues($values)
     {
-        return array_unique(preg_split(
-            '/\s*,\s*/u',
-            preg_replace('/\s+/u', ' ', is_array($values) ? implode(',', $values) : $values),
-            -1,
-            PREG_SPLIT_NO_EMPTY
-        ));
+        return $this->normalizeTagValues(
+            array_unique(preg_split(
+                '/\s*,\s*/u',
+                preg_replace('/\s+/u', ' ', is_array($values) ? implode(',', $values) : $values),
+                -1,
+                PREG_SPLIT_NO_EMPTY
+            ))
+        );
+    }
+
+    public function normalizeTagValues($values)
+    {
+        return array_map(function ($tagName) {
+            return trim($tagName);
+        }, $values);
     }
 }

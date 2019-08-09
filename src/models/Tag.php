@@ -30,11 +30,10 @@ class Tag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'name'], 'required'],
-            [['id', 'frequency'], 'integer'],
+            [['name'], 'required'],
+            [['frequency'], 'integer'],
             [['name'], 'string', 'max' => 45],
             [['name'], 'unique'],
-            [['id'], 'unique'],
         ];
     }
 
@@ -44,10 +43,16 @@ class Tag extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
             'frequency' => Yii::t('app', 'Frequency'),
         ];
+    }
+
+    public function beforeDelete()
+    {
+        TagHasTransaction::deleteAll(['tag_id' => $this->id]);
+        
+        return true;
     }
 
     /**

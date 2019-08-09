@@ -90,8 +90,6 @@ $uploadForm = new \app\models\forms\UploadForm();
         </div>
 
 
-        
-
 
 
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
@@ -109,6 +107,20 @@ $uploadForm = new \app\models\forms\UploadForm();
                 <?= $form->field($uploadForm, 'file')->fileInput() ?>
             </div>
         <?php endif; ?>
+
+        <?= $form->field($model, 'tagValues')->widget(\dosamigos\selectize\SelectizeTextInput::className(), [
+                // calls an action that returns a JSON object with matched tags
+                'loadUrl' => ['query-tags'],
+                'options' => ['class' => 'form-control'],
+                'clientOptions' => [
+                    'plugins' => ['remove_button'],
+                    'valueField' => 'name',
+                    'labelField' => 'name',
+                    'searchField' => ['name'],
+                    'create' => true,
+                ],
+            ])->hint('Use commas to separate tags')
+        ?>
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

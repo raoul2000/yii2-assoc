@@ -184,9 +184,15 @@ class Transaction extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        /*
+        foreach ($this->tags as $tag) {
+            $this->unlink('tags', $tag, true);
+        }*/
+
         foreach ($this->orders as $order) {
             $this->unlinkFromOrder($order);
         }
+
         return true;
     }
 

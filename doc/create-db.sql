@@ -595,7 +595,7 @@ COLLATE = utf8_unicode_ci;
 -- Table `tag`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tag` (
-  `id` INT(10) UNSIGNED NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `frequency` INT UNSIGNED NULL,
   PRIMARY KEY (`id`),
@@ -603,7 +603,6 @@ CREATE TABLE IF NOT EXISTS `tag` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
-
 
 
 -- -----------------------------------------------------

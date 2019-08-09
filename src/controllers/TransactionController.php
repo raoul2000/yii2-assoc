@@ -56,6 +56,12 @@ class TransactionController extends Controller
                 'class' => 'app\components\actions\attachments\UpdateAction',
             ],
 
+            // tags Actions /////////////////////////////////////////
+
+            'query-tags' => [
+                'class' => 'app\components\actions\TagListAction',
+            ],
+
         ];
     }
 

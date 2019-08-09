@@ -68,6 +68,11 @@ composer require --prefer-dist bupy7/yii2-activerecord-history "*"
 ./yii migrate/up --migrationPath=@bupy7/activerecord/history/migrations
 ```
 
+## Taggable Behavior
+
+- using classes based on https://github.com/creocoder/yii2-taggable and customized
+
+
 ## Export CSV
 
 - using https://github.com/yii2tech/csv-grid
