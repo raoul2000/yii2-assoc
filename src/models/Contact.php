@@ -145,6 +145,9 @@ class Contact extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
         // delete owned bank account(s)
         foreach ($this->bankAccounts as $account) {
             $account->delete();

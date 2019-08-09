@@ -69,6 +69,9 @@ class Category extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
         switch ($this->type) {
             case self::TRANSACTION:
                 Transaction::updateAll(

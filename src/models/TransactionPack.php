@@ -94,6 +94,10 @@ class TransactionPack extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
+        
         foreach ($this->transactions as $transaction) {
             $this->unlink('transactions', $transaction, true);
         }

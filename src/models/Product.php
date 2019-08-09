@@ -108,6 +108,9 @@ class Product extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
         foreach ($this->orders as $order) {
             $order->delete();
         }

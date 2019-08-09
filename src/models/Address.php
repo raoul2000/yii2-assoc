@@ -90,6 +90,9 @@ class Address extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
         foreach ($this->contacts as $contact) {
             $contact->updateAttributes([
                 'address_id' => null

@@ -89,6 +89,9 @@ class BankAccount extends \yii\db\ActiveRecord
      */
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
         foreach ($this->fromTransactions as $transaction) {
             $transaction->delete();
         }

@@ -50,8 +50,11 @@ class Tag extends \yii\db\ActiveRecord
 
     public function beforeDelete()
     {
+        if (!parent::beforeDelete()) {
+            return false;
+        }
         TagHasTransaction::deleteAll(['tag_id' => $this->id]);
-        
+
         return true;
     }
 
