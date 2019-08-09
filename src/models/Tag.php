@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
 
 /**
  * This is the model class for table "tag".
@@ -30,14 +31,14 @@ class Tag extends \yii\db\ActiveRecord
     {
         return [
             \app\components\behaviors\TimestampBehavior::className(),
-            /*
+            
             [
                 'class' => HistoryBehavior::className(),
                 'skipAttributes' => [
                     'created_at',
                     'updated_at',
                 ],
-            ],*/
+            ],
         ];
     }
     /**

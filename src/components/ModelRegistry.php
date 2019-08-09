@@ -21,6 +21,7 @@ class ModelRegistry
     const TRANSACTION = 'transaction';
     const TRANSACTION_PACK = 'transaction_pack';
     const CONTACT_RELATION = 'contact_has_contact';
+    const TAG = 'tag';
 
     /**
      * Model registry map
@@ -83,6 +84,11 @@ class ModelRegistry
                 'tableName' => \app\models\ContactRelation::tableName(),
                 'label' => 'contact relation',
                 'viewRoute' => 'contact-relation/view'
+            ],
+            self::TAG => [
+                'tableName' => \app\models\Tag::tableName(),
+                'label' => 'tag',
+                'viewRoute' => 'tag/view'
             ],
         ];
     }
