@@ -13,7 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tag-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    
+    <h1>
+        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> <?= Html::encode($this->title) ?>
+    </h1>
+    
+    <hr/>
 
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -24,14 +29,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
+        <?= Html::a(Yii::t('app', 'Create Another Tag'), ['create'], ['class' => 'btn btn-success']) ?>        
     </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'name',
             'frequency',
+            'created_at',
+            'updated_at',            
         ],
     ]) ?>
 

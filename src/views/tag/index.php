@@ -12,26 +12,33 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tag-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span> <?= Html::encode($this->title) ?>
+    </h1>
+
+    <hr/>
+
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Tag'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <p>
+            <?= Html::a(Yii::t('app', 'Create Tag'), ['create'], ['class' => 'btn btn-success']) ?>
+        </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-            'frequency',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+        <?= GridView::widget([
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                'id',
+                'name',
+                'frequency',
+                'created_at',
+                'updated_at',
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['nowrap' => 'nowrap']
+                ],            
+            ],
+        ]); ?>
     <?php Pjax::end(); ?>
 </div>

@@ -23,7 +23,23 @@ class Tag extends \yii\db\ActiveRecord
     {
         return 'tag';
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            \app\components\behaviors\TimestampBehavior::className(),
+            /*
+            [
+                'class' => HistoryBehavior::className(),
+                'skipAttributes' => [
+                    'created_at',
+                    'updated_at',
+                ],
+            ],*/
+        ];
+    }
     /**
      * {@inheritdoc}
      */

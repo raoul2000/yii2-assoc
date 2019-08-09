@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="tag-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>
+        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> <?= Html::encode($this->title) ?>
+    </h1>
+    
+    <hr/>
 
     <?= $this->render('_form', [
         'model' => $model,

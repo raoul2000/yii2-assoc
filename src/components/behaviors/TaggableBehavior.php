@@ -152,7 +152,7 @@ class TaggableBehavior extends Behavior
         /* @var ActiveRecord $class */
         $class = $tagRelation->modelClass;
         $rows = [];
-        
+
         // store each tag id processed in order to prevent processing twice the same tag. This may happen because
         // the search tag query is based on string equality where "Todo" is the same than 'TODO'.
         $tagIdsCache = [];
@@ -160,11 +160,6 @@ class TaggableBehavior extends Behavior
         foreach ($this->_tagValues as $value) {
             /* @var ActiveRecord $tag */
             $tag = $class::findOne([$this->tagValueAttribute => $value]);
-            /*
-            $tag = $class::find()
-                ->where(['=', $this->tagValueAttribute, $value])
-                ->one();
-            */
 
             if ($tag === null) {
                 $tag = new $class();
