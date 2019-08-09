@@ -72,17 +72,7 @@ $transactionModel = $model;
                     'reference_date:appDate',
                     'code',
                     'is_verified:boolean',
-                    [
-                        'attribute' => 'tags',
-                        'format'    => 'raw',
-                        'value'     => function ($model) {
-                            $html = '';
-                            foreach ($model->tags as $tag) {
-                                $html .= ' ' . Html::encode($tag->name);
-                            }
-                            return $html;
-                        }
-                    ],                    
+                    'tagValues:tagsList',                  
                 ],
             ]) ?>        
         </div>
@@ -131,9 +121,7 @@ $transactionModel = $model;
                 ],
             ]) ?>        
         </div>
-            
     </div>
-
 
     <div class="tab-view">
         <?= yii\bootstrap\Nav::widget([

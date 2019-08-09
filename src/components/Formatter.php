@@ -8,6 +8,24 @@ use \app\components\helpers\DateHelper;
 
 class Formatter extends \yii\i18n\Formatter
 {
+    /**
+     * Format a tag list provided as a coma separated list of tag names
+     *
+     * @param string $values coma separated list of tag names
+     * @return string the HTMl rendering
+     */
+    public function asTagsList($values)
+    {
+        $htmlTags = array_map( function($tagValue) {
+            return '<span class="label label-default" style="font-size:1em;font-weight:normal">' 
+                . '<span class="glyphicon glyphicon-tag" aria-hidden="true"></span> '
+                . Html::encode(trim($tagValue)) 
+            . '</span>';
+        }, explode(',',$values));
+
+        return \implode(' ',$htmlTags);
+    }
+
     public function asGender($value)
     {
         switch ($value) {
