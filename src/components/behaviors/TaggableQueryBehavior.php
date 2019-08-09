@@ -33,7 +33,9 @@ class TaggableQueryBehavior extends Behavior
         $this->owner
             ->innerJoinWith($model->tagRelation, false)
             ->andWhere([$tagClass::tableName() . '.' . ($attribute ?: $model->tagValueAttribute) => $model->filterTagValues($values)])
-            ->addGroupBy(array_map(function ($pk) use ($model) { return $model->tableName() . '.' . $pk; }, $model->primaryKey()));
+            ->addGroupBy(array_map(function ($pk) use ($model) {
+                 return $model->tableName() . '.' . $pk; 
+                }, $model->primaryKey()));
 
         return $this->owner;
     }

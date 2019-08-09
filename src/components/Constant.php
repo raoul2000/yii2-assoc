@@ -104,7 +104,7 @@ class Constant
      * @param int $typeId
      * @return string
      */
-    public static function getContactRelationName($typeId) 
+    public static function getContactRelationName($typeId)
     {
         $type = self::getContactRelationType($typeId);
         return ( empty($type) ? null : $type['name']);

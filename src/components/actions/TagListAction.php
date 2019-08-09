@@ -11,7 +11,7 @@ use yii\web\Response;
 class TagListAction extends Action
 {
     /**
-     * Set or clear date range
+     * Ajax action that returns a list of matching tags given a query tag
      *
      * @param string $redirect_url
      * @param integer $clear
@@ -19,7 +19,6 @@ class TagListAction extends Action
      */
     public function run($query)
     {
-        //$models = Tag::findAll([ 'name' => $query]);
         $models = Tag::find()
             ->where(['like', 'name',  $query])
             ->all();
@@ -29,8 +28,6 @@ class TagListAction extends Action
         foreach ($models as $model) {
             $items[] = ['name' => $model->name];
         }
-        // We know we can use ContentNegotiator filter
-        // this way is easier to show you here :)
         Yii::$app->response->format = Response::FORMAT_JSON;
     
         return $items;
