@@ -8,35 +8,39 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="transaction-search">
+<div class="transaction-search" style="margin-bottom:1em;">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
         'options' => [
-            'data-pjax' => 1
+            'data-pjax' => 1,
+            'class' => 'form'
         ],
     ]); ?>
-
-    <?= $form->field($model, 'id') ?>
-
-    <?= $form->field($model, 'from_account_id') ?>
-
-    <?= $form->field($model, 'to_account_id') ?>
-
-    <?= $form->field($model, 'value') ?>
-
-    <?= $form->field($model, 'description') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-    </div>
-
+        <table width="100%">
+            <tr>
+                <td style="width: 100%;padding-right: 1em;">
+                    <?= \dosamigos\selectize\SelectizeTextInput::widget([
+                            'name' => 'tagValues',
+                            'value' => $tagValues,
+                            'loadUrl' => ['query-tags'],
+                            'options' => ['class' => 'form-control'],
+                            'clientOptions' => [
+                                'plugins' => ['remove_button'],
+                                'valueField' => 'name',
+                                'labelField' => 'name',
+                                'searchField' => ['name'],
+                                'create' => false,
+                                'placeholder' => \Yii::t('app', 'enter tags to search for...')
+                            ],
+                        ])
+                    ?>
+                </td>
+                <td>
+                    <?= Html::submitButton('Search', ['class' => 'btn btn-default']) ?>
+                </td>
+            </tr>
+        </table>
     <?php ActiveForm::end(); ?>
-
 </div>

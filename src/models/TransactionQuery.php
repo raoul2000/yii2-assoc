@@ -11,6 +11,12 @@ class TransactionQuery extends \yii\db\ActiveQuery
 {
     use \app\components\DateRangeQueryTrait;
 
+    public function behaviors()
+    {
+        return [
+            \app\components\behaviors\TaggableQueryBehavior::className(),
+        ];
+    }
     /**
      * {@inheritdoc}
      * @return Transaction[]|array

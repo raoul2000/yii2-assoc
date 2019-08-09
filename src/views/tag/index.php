@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
 
     <hr/>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php Pjax::begin(); ?>
 

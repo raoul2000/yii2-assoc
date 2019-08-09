@@ -153,16 +153,26 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(
-            Yii::$app->request->queryParams,
-            Transaction::find()
-                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
-                ->with('orders')
+            Yii::$app->request->queryParams
         );
+        $dataProvider
+            ->query
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->with('orders');       
+
+        // apply tag search condition if tag values have been submitted
+        $tagValues = Yii::$app->request->get('tagValues');
+        if (!empty($tagValues)) {
+            $dataProvider
+                ->query
+                ->anyTagValues($tagValues);      
+        }
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
-            'bankAccounts' => BankAccount::getNameIndex()
+            'bankAccounts' => BankAccount::getNameIndex(),
+            'tagValues'    => $tagValues
         ]);
     }
     /**

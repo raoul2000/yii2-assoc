@@ -19,6 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::encode($this->title) ?>
     </h1>
     <hr/>
+
+    
+
     <?php Pjax::begin(); ?>
 
     <div class="pull-right">
@@ -26,7 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>    
     <p>
         <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('Search Tags', [ 'class' => 'btn btn-default', 'onclick' => '(function ( $event ) { alert("Button 3 clicked"); })();' ]) ?>
     </p>
+
+    <?php  echo $this->render('_search', ['model' => $searchModel, 'tagValues' => $tagValues]); ?>    
 
     <?= GridView::widget([
         'tableOptions' => ['class' => 'table table-hover table-condensed'],
