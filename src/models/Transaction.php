@@ -76,6 +76,13 @@ class Transaction extends \yii\db\ActiveRecord
                     'reference_date',
                 ],
             ],
+            'taggable' => [
+                'class' => \app\components\behaviors\TaggableBehavior::className(),
+                // 'tagValuesAsArray' => false,
+                // 'tagRelation' => 'tags',
+                // 'tagValueAttribute' => 'name',
+                // 'tagFrequencyAttribute' => 'frequency',
+            ],
         ];
     }
     /**
@@ -131,6 +138,9 @@ class Transaction extends \yii\db\ActiveRecord
             [['is_verified'], 'boolean'],
 
             [['reference_date'], 'date',  'format' => Yii::$app->params['dateValidatorFormat']],
+
+            // tags
+            ['tagValues', 'safe'],
         ];
     }
 
@@ -284,5 +294,11 @@ class Transaction extends \yii\db\ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])
+            ->viaTable('{{%tag_has_transaction}}', ['transaction_id' => 'id']);
     }
 }

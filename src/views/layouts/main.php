@@ -128,6 +128,11 @@ AppAsset::register($this);
                             'url'    => ['/user/admin']
                         ],
                         [
+                            'label'  => \Yii::t('app', 'Tags'),
+                            'encode' => false,
+                            'url'    => ['/tag']
+                        ],
+                        [
                             'label'  => \Yii::t('app', 'Record History'),
                             'encode' => false,
                             'url'    => ['/record-history']

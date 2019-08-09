@@ -591,6 +591,45 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci;
 
 
+-- -----------------------------------------------------
+-- Table `tag`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tag` (
+  `id` INT(10) UNSIGNED NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `frequency` INT UNSIGNED NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+
+-- -----------------------------------------------------
+-- Table `tag_has_transaction`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `tag_has_transaction` (
+  `tag_id` INT(10) UNSIGNED NOT NULL,
+  `transaction_id` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`tag_id`, `transaction_id`),
+  INDEX `fk_tag_has_transaction_transaction1_idx` (`transaction_id` ASC),
+  INDEX `fk_tag_has_transaction_tag_idx` (`tag_id` ASC),
+  CONSTRAINT `fk_tag_has_transaction_tag`
+    FOREIGN KEY (`tag_id`)
+    REFERENCES `tag` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tag_has_transaction_transaction1`
+    FOREIGN KEY (`transaction_id`)
+    REFERENCES `transaction` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
