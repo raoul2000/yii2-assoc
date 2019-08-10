@@ -35,6 +35,11 @@ yii fixture/generate "*" --count=10 --interactive=0
 yii fixture/load "*" 
 ```
 
+To only load one fixture (ex: Product) :
+```bash
+yii fixture/load Product  --interactive=0 
+```
+
 # Prepare FS
 
 A Data folder is required by several features of the system so check that aliases configured are refering to existing folders :
