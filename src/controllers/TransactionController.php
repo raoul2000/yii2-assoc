@@ -246,7 +246,7 @@ class TransactionController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             // a new category has been entered by user : we must create a new Category entry
-            if (isset($model->category_id) && !is_numeric($model->category_id)) {
+            if (!empty($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
                 $category->setAttributes([
                     'contact_id' => SessionContact::getContactId(),
@@ -316,7 +316,7 @@ class TransactionController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             // a new category has been entered by user : we must create a new Category entry
-            if (isset($model->category_id) && !is_numeric($model->category_id)) {
+            if (!empty($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
                 $category->setAttributes([
                     'contact_id' => SessionContact::getContactId(),
