@@ -11,6 +11,7 @@ use app\models\BankAccount;
 use app\models\Address;
 use app\modules\gymv\models\UploadForm;
 use yii\web\UploadedFile;
+use \app\components\helpers\DateHelper;
 
 /**
  * Default controller for the `gymv` module
@@ -163,6 +164,8 @@ class ContactImportController extends Controller
         // normlize gender
         $record['gender'] = ($record['gender'] == 'Femme' ? '2' : '1');
 
+        // input date is yyyy-mm-dd but contact attribute 'birthday' expects app format (dd/mm/yyyy)
+        $record['birthday'] = DateHelper::toDateAppFormat($record['birthday']);
         return $record;
     }
 }
