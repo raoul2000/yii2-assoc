@@ -80,13 +80,13 @@ class TransactionPack extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'reference_date' => 'Reference Date',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'bank_account_id' => 'Bank Account ID',
-            'type' => 'Type',
+            'id' => \Yii::t('app', 'ID'),
+            'name' => \Yii::t('app', 'Name'),
+            'reference_date' => \Yii::t('app', 'Reference Date'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'bank_account_id' => \Yii::t('app', 'Bank Account ID'),
+            'type' => \Yii::t('app', 'Type'),
         ];
     }
     /**

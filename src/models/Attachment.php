@@ -66,17 +66,17 @@ class Attachment extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'model' => 'Model',
-            'category_id' => 'Category ID',
-            'note' => 'Notes',
-            'hash' => 'Hash',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'itemId' => 'Item ID',
-            'size' => 'Size',
-            'type' => 'Type',
-            'mime' => 'Mime',
+            'name' => \Yii::t('app', 'Name'),
+            'model' => \Yii::t('app', 'Model'),
+            'category_id' => \Yii::t('app', 'Category ID'),
+            'note' => \Yii::t('app', 'Notes'),
+            'hash' => \Yii::t('app', 'Hash'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'itemId' => \Yii::t('app', 'Item ID'),
+            'size' => \Yii::t('app', 'Size'),
+            'type' => \Yii::t('app', 'Type'),
+            'mime' => \Yii::t('app', 'Mime'),
         ];
     }
 }

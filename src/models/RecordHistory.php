@@ -61,15 +61,15 @@ class RecordHistory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'table_name' => 'Table Name',
-            'row_id' => 'Row ID',
-            'event' => 'Event',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
-            'field_name' => 'Field Name',
-            'old_value' => 'Old Value',
-            'new_value' => 'New Value',
+            'id' => \Yii::t('app', 'ID'),
+            'table_name' => \Yii::t('app', 'Table Name'),
+            'row_id' => \Yii::t('app', 'Row ID'),
+            'event' => \Yii::t('app', 'Event'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'created_by' => \Yii::t('app', 'Created By'),
+            'field_name' => \Yii::t('app', 'Field Name'),
+            'old_value' => \Yii::t('app', 'Old Value'),
+            'new_value' => \Yii::t('app', 'New Value'),
         ];
     }
     /**

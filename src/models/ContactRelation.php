@@ -80,14 +80,14 @@ class ContactRelation extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'source_contact_id' => 'Source Contact ID',
-            'target_contact_id' => 'Target Contact ID',
-            'type' => 'Type',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'valid_date_start' => 'Valid Date Start',
-            'valid_date_end' => 'Valid Date End',
+            'id' => \Yii::t('app', 'ID'),
+            'source_contact_id' => \Yii::t('app', 'Source Contact ID'),
+            'target_contact_id' => \Yii::t('app', 'Target Contact ID'),
+            'type' => \Yii::t('app', 'Type'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'valid_date_start' => \Yii::t('app', 'Valid Date Start'),
+            'valid_date_end' => \Yii::t('app', 'Valid Date End'),
         ];
     }
 

@@ -66,15 +66,15 @@ class Address extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'line_1' => 'Line 1',
-            'line_2' => 'Line 2',
-            'line_3' => 'Line 3',
-            'zip_code' => 'Zip Code',
-            'city' => 'City',
-            'country' => 'Country',
-            'note' => 'Note',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'line_1' => \Yii::t('app', 'Line 1'),
+            'line_2' => \Yii::t('app', 'Line 2'),
+            'line_3' => \Yii::t('app', 'Line 3'),
+            'zip_code' => \Yii::t('app', 'Zip Code'),
+            'city' => \Yii::t('app', 'City'),
+            'country' => \Yii::t('app', 'Country'),
+            'note' => \Yii::t('app', 'Note'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
         ];
     }
     /**

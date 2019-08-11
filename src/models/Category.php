@@ -57,9 +57,9 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'contact_id' => 'Contact ID',
-            'type' => 'Type',
-            'name' => 'Name',
+            'contact_id' => \Yii::t('app', 'Contact ID'),
+            'type' => \Yii::t('app', 'Type'),
+            'name' => \Yii::t('app', 'Name'),
         ];
     }
     /**

@@ -150,19 +150,19 @@ class Transaction extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'from_account_id' => 'From Account ID',
-            'to_account_id' => 'To Account ID',
-            'value' => 'Value',
-            'is_verified' => 'Is Verified',
-            'description' => 'Description',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'reference_date' => 'Reference Date',
-            'code' => 'Code',
-            'transaction_pack_id' => 'Pack ID',
-            'type' => 'Type',
-            'category_id' => 'Category ID',
+            'id' => \Yii::t('app', 'ID'),
+            'from_account_id' => \Yii::t('app', 'From Account ID'),
+            'to_account_id' => \Yii::t('app', 'To Account ID'),
+            'value' => \Yii::t('app', 'Value'),
+            'is_verified' => \Yii::t('app', 'Is Verified'),
+            'description' => \Yii::t('app', 'Description'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'reference_date' => \Yii::t('app', 'Reference Date'),
+            'code' => \Yii::t('app', 'Code'),
+            'transaction_pack_id' => \Yii::t('app', 'Pack ID'),
+            'type' => \Yii::t('app', 'Type'),
+            'category_id' => \Yii::t('app', 'Category ID'),
         ];
     }
 

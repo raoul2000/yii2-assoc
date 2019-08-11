@@ -76,11 +76,11 @@ class BankAccount extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'contact_id' => 'Contact ID',
-            'name' => 'Name',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'initial_value' => 'Initial Value',
+            'contact_id' => \Yii::t('app', 'Contact ID'),
+            'name' => \Yii::t('app', 'Name'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'initial_value' => \Yii::t('app', 'Initial Value'),
         ];
     }
     /**

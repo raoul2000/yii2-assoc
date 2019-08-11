@@ -92,14 +92,14 @@ class Product extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'value' => 'Value',
-            'description' => 'Description',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'valid_date_start' => 'Valid Date Start',
-            'valid_date_end' => 'Valid Date End',
+            'id' => \Yii::t('app', 'ID'),
+            'name' => \Yii::t('app', 'Name'),
+            'value' => \Yii::t('app', 'Value'),
+            'description' => \Yii::t('app', 'Description'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'valid_date_start' => \Yii::t('app', 'Valid Date Start'),
+            'valid_date_end' => \Yii::t('app', 'Valid Date End'),
         ];
     }
     /**

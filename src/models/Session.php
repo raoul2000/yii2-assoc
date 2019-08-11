@@ -44,11 +44,11 @@ class Session extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'expire' => 'Expire',
-            'data' => 'Data',
-            'user_id' => 'User ID',
-            'last_write' => 'Last Write',
+            'id' => \Yii::t('app', 'ID'),
+            'expire' => \Yii::t('app', 'Expire'),
+            'data' => \Yii::t('app', 'Data'),
+            'user_id' => \Yii::t('app', 'User ID'),
+            'last_write' => \Yii::t('app', 'Last Write'),
         ];
     }
     /**
