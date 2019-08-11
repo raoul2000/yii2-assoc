@@ -1,3 +1,9 @@
+- to extract message for i18N
+```
+yii message messages/config.php
+```
+
+
 # Requirements
 
 # Build App (app-basic template)

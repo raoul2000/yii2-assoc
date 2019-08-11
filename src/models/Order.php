@@ -85,15 +85,15 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'value' => 'Value',
-            'product_id' => 'Product ID',
-            'to_contact_id' => 'Destinataire',
-            'from_contact_id' => 'Fournisseur',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'valid_date_start' => 'Valid Date Start',
-            'valid_date_end' => 'Valid Date End',
+            'id' => \Yii::t('app', 'ID'),
+            'value' => \Yii::t('app', 'Value'),
+            'product_id' => \Yii::t('app', 'Product ID'),
+            'to_contact_id' => \Yii::t('app', 'Consumer'),
+            'from_contact_id' => \Yii::t('app', 'Provider'),
+            'created_at' => \Yii::t('app', 'Created At'),
+            'updated_at' => \Yii::t('app', 'Updated At'),
+            'valid_date_start' => \Yii::t('app', 'Valid Date Start'),
+            'valid_date_end' => \Yii::t('app', 'Valid Date End'),
         ];
     }
 
