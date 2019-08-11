@@ -86,12 +86,12 @@ AppAsset::register($this);
                             'encode' => false,
                             'url'    => ['/order/index']
                         ],
-                        '<li class="divider"></li>',
                         [
                             'label'  => '<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> ' . \Yii::t('app', 'Products'),
                             'encode' => false,
                             'url'    => ['/product/index']
                         ],
+                        '<li class="divider"></li>',
                         [
                             'label'  => '<span class="glyphicon glyphicon-th" aria-hidden="true"></span> ' . \Yii::t('app', 'Categories'),
                             'encode' => false,
@@ -102,7 +102,11 @@ AppAsset::register($this);
                             'encode' => false,
                             'url'    => ['/attachment/index']
                         ],
-
+                        [
+                            'label'  => '<span class="glyphicon glyphicon-tags" aria-hidden="true"></span> ' . \Yii::t('app', 'Tags'),
+                            'encode' => false,
+                            'url'    => ['/tag']
+                        ],
                     ]
 
                 ]
@@ -126,11 +130,6 @@ AppAsset::register($this);
                             'label'  => \Yii::t('app', 'Users'),
                             'encode' => false,
                             'url'    => ['/user/admin']
-                        ],
-                        [
-                            'label'  => \Yii::t('app', 'Tags'),
-                            'encode' => false,
-                            'url'    => ['/tag']
                         ],
                         [
                             'label'  => \Yii::t('app', 'Record History'),
