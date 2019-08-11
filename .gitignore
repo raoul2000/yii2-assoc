@@ -8,3 +8,4 @@ backups/
 dev.ftp
 node_modules/
 gulp-task/ftp.json
+/.vscode
