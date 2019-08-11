@@ -40,6 +40,7 @@ class InstallController extends \yii\web\Controller
             
             $adminUser = new UserModel();
             $adminUser->username = $username;
+            $adminUser->email = $username . '@email.com';
             $adminUser->confirmed_at = time();
             $adminUser->password = $password;
             $adminUser->save();
@@ -56,7 +57,7 @@ class InstallController extends \yii\web\Controller
         $auth = Yii::$app->authManager;
         $adminRole = $auth->getRole($roleName);
         if (!$adminRole) {
-            $admiRole = $auth->createRole($roleName);
+            $adminRole = $auth->createRole($roleName);
             $auth->add($adminRole);
         }
         return $adminRole;
