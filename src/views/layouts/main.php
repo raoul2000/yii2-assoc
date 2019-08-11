@@ -59,7 +59,7 @@ AppAsset::register($this);
 
             Yii::$app->user->isGuest === false ? (
                 [
-                    'label' => 'Manage',
+                    'label' => \Yii::t('app', 'Manage'),
                     'items' => [
                         [
                             'label'  => '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . \Yii::t('app', 'Contacts'),
