@@ -2,15 +2,19 @@
 
 return [
     [
-        'id' => 0,
-        'name' => 'undefined'
-    ],
-    [
         'id' => 1,
-        'name' => 'is parent of'
+        'name' => 'est parent de'
     ],
     [
         'id' => 2,
-        'name' => 'employs'
+        'name' => 'est enfant de'
+    ],
+    [
+        'id' => 3,
+        'name' => 'emploie'
+    ],
+    [
+        'id' => 4,
+        'name' => 'est employé par'
     ],
 ];
