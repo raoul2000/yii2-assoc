@@ -17,6 +17,8 @@ gulp
 Other Gulp tasks are also available :
 - `gulp buildSource` : copy in the `./build/src` folder all the source files including the `index.php` file, ready for Production. Note that an empty `vendor` folder will be created.
 - `gulp buildVendor` : build composer's dependencies based on the file `composer.lock`, into the folder `./build/composer/vendor`
+- `gulp mergeSourceVendor` : merges the `./build/composer` folder with the source folder.
+
 
 ## Task for deploying 
 

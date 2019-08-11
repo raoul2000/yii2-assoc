@@ -9,14 +9,18 @@ use yii\helpers\Html;
 
     <?php if ($success): ?>
         <div class="alert alert-success" role="alert">
-            <h2>Success</h2>
-            <?= Html::encode($message) ?>
+            <b>Success</b> 
         </div>
     <?php else: ?>
         <div class="alert alert-danger" role="alert">
-            <h2>Error!</h2>
-            <?= Html::encode($message) ?>
+            <b>Error!</b>
+            <?php if ($adminUser->hasErrors()) {
+                    foreach ($adminUser->getErrors() as $key => $value) {
+                        echo $value;
+                    }
+                }
+            ?>
         </div>
     <?php endif; ?>
-    
+
 </div>

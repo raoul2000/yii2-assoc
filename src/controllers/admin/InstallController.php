@@ -10,53 +10,53 @@ class InstallController extends \yii\web\Controller
     public function actionIndex()
     {
         $success = true;
-        $message ='';
+        $username = 'admin';
+        $password = '123456';
+        $roleName = 'admin';
 
-        $adminUser = UserModel::findOne(['username' => 'admin']);
-        if ($adminUser == null) {
-            $adminUser = $this->createAdminUser();
-        }
+        $adminUser = $this->createAdminUser($username, $password);
         
         if ($adminUser->hasErrors()) {
             $success = false;
-            $message = 'Error';
         } else {
             $authManager = Yii::$app->authManager;
 
-            $adminRole = $this->createAdminRole();
-            if (!$authManager->checkAccess($adminUser->getID(), 'admin')) {
+            $adminRole = $this->createRole($roleName);
+            if (!$authManager->checkAccess($adminUser->getID(), $roleName)) {
                 $authManager->assign($adminRole, $adminUser->getID());
             }
-
-            $message = "Admin user created and appropriate rolae assigned";
         }
 
         return $this->render('index', [
             'success' => $success,
-            'message' => $message
+            'adminUser' => $adminUser,
         ]);
     }
 
-    private function createAdminUser()
+    private function createAdminUser($username, $password)
     {
-        $model = new UserModel();
-        $model->confirmed_at = time();
-        $model->password = '123456';
-        $model->save();
-
-        return $model;
+        $adminUser = UserModel::findOne(['username' => $username]);
+        if ($adminUser == null) {
+            
+            $adminUser = new UserModel();
+            $adminUser->username = $username;
+            $adminUser->confirmed_at = time();
+            $adminUser->password = $password;
+            $adminUser->save();
+        } 
+        return $adminUser;
     }
     /**
-     * Create the 'admin' role is not already exist
+     * Create the 'admin' role if not already exist
      *
      * @return void
      */
-    private function createAdminRole()
+    private function createRole($roleName)
     {
         $auth = Yii::$app->authManager;
-        $adminRole = $auth->getRole('admin');
+        $adminRole = $auth->getRole($roleName);
         if (!$adminRole) {
-            $admiRole = $auth->createRole('admin');
+            $admiRole = $auth->createRole($roleName);
             $auth->add($adminRole);
         }
         return $adminRole;
