@@ -99,4 +99,26 @@ class SessionDateRange
     {
         Yii::$app->session->remove(self::DATE_RANGE);
     }
+
+    /**
+     * Load Default Date Range from config
+     *
+     * @return void
+     */
+    public static function loadFromConfig() {
+        $conf = Yii::$app->configManager;
+        $date_range_id = $conf->getItemValue('date_range_id');
+        if (!empty($date_range_id)) {
+            if (!array_key_exists($date_range_id, Yii::$app->params['dateRange'])) {
+                Yii::error('failed to load date range with ID = ' . $date_range_id);
+            } else {
+                $range = Yii::$app->params['dateRange'][$date_range_id];
+                SessionDateRange::setDateRange(
+                    DateHelper::toDateDBFormat($range['start']),
+                    DateHelper::toDateDBFormat($range['end']),
+                    $date_range_id
+                );
+            }
+        }
+    }    
 }

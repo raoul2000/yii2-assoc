@@ -51,5 +51,13 @@ return [
                 ['boolean']
             ],
         ],
+        'date_range_id' => [
+            'value' => '',
+            'label' => 'Date Range ID',
+            'description' => 'ID configured date range to load after login',
+            'rules' => [
+                ['string']
+            ],
+        ],        
     ],
 ];
