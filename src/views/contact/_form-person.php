@@ -13,22 +13,25 @@ $uploadForm = new \app\models\forms\UploadForm();
 <div class="contact-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-sm-6">
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
-            <div class="col-lg-3">
+            <div class="col-sm-6">
                 <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-lg-3">
-                <?php 
-                    //echo $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]); 
-                ?>
+            <div class="col-sm-6">
                 <?= $form->field($model, 'birthday')->widget(
                     \dosamigos\datepicker\DatePicker::className(), [
                         'language' => 'fr',
+                        'options' => [
+                            'placeholder' => \Yii::t('app', 'ex: 30/01/2019'),
+                            'autocomplete'=> 'off'
+                        ],
                         'clientOptions' => [
                             'autoclose' => true,
                             'format' => 'dd/mm/yyyy',
@@ -36,41 +39,40 @@ $uploadForm = new \app\models\forms\UploadForm();
                             'clearBtn' => true,
                             'enableOnReadonly' => true,
                         ]
-                ]);?>
-
+                ]);?>   
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'gender')->radioList(['1' => 'Male', '2' => 'Female', '0' => 'don\'t know'],
+                [
+                    'class' => 'radio',
+                    'itemOptions' => [
+                        'style' => 'display: inline-block'
+                    ]
+                ]) ?>      
             </div>
         </div>
 
-        <?= $form->field($model, 'gender')->radioList(['1' => 'Male', '2' => 'Female', '0' => 'don\'t know']) ?>
         <div class="row">
-            <div class="col-lg-6">
-                <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete'=> 'off', 'placeholder' => \Yii::t('app', 'ex: john@gmail.com') ]) ?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'phone_1')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                <?= $form->field($model, 'phone_2')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>   
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-3">
-               <?= $form->field($model, 'phone_1')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'phone_2')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+            <div class="col-sm-12">
+                <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
         </div>
-
-        <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
         
-        <?php if ($model->isNewRecord): ?>
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>Attachment</a></li>
-            </ul>
-            <div>
-                <?= $form->field($uploadForm, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
-                <?= $form->field($uploadForm, 'file')->fileInput() ?>
-            </div>
-        <?php endif; ?>
+        <hr/>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+            <?= Html::a(\Yii::t('app', 'Cancel'), $cancelUrl, ['class' => 'btn btn-default']) ?>
         </div>
 
     <?php ActiveForm::end(); ?>

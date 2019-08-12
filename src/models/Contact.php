@@ -103,6 +103,7 @@ class Contact extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['name', "required"],
             [['is_natural_person'], 'required'],
             [['is_natural_person'], 'boolean'],
             [['uuid'], 'default', 'value' => UuidHelper::uuid()],

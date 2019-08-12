@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = 'Update';
     <hr/>
     <?= $this->render('_form', [
         'model' => $model,
-        'contacts' => $contacts
+        'contacts' => $contacts,
+        'cancelUrl' => $cancelUrl
     ]) ?>
 
 </div>

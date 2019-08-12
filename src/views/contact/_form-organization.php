@@ -15,41 +15,35 @@ $uploadForm = new \app\models\forms\UploadForm();
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-sm-6">
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
-            <div class="col-lg-3">
+            <div class="col-sm-6">
                 <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
         </div>
-        
+
         <div class="row">
-            <div class="col-lg-6">
-                <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'autocomplete'=> 'off', 'placeholder' => \Yii::t('app', 'ex: john@gmail.com') ]) ?>
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'phone_1')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                <?= $form->field($model, 'phone_2')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>   
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-3">
-               <?= $form->field($model, 'phone_1')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'phone_2')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+            <div class="col-sm-12">
+                <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
         </div>
 
-
-        <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
-        
-        <?php if ($model->isNewRecord): ?>
-            <hr/>
-            <?= $form->field($uploadForm, 'note')->textInput() ?>
-            <?= $form->field($uploadForm, 'file')->fileInput() ?>
-            <hr/>
-        <?php endif; ?>
+        <hr/>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+            <?= Html::a(\Yii::t('app', 'Cancel'), $cancelUrl, ['class' => 'btn btn-default']) ?>      
         </div>
 
     <?php ActiveForm::end(); ?>

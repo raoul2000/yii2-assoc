@@ -26,9 +26,31 @@ use yii\helpers\ArrayHelper;
             </div>
         </div>
 
-        <?= $form->field($model, 'valid_date_start')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">Validity Date Range</div>
+            <div class="panel-body">
 
-        <?= $form->field($model, 'valid_date_end')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <?= $form
+                            ->field($model, 'valid_date_start')
+                            ->textInput(['maxlength' => true, 'autocomplete'=> 'off', 'placeholder' => 'ex: 30/01/2019' ])
+                            ->label('start') 
+                        ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <?= $form
+                            ->field($model, 'valid_date_end')
+                            ->textInput(['maxlength' => true, 'autocomplete'=> 'off', 'placeholder' => 'ex: 31/12/2020' ])
+                            ->label('end') 
+                        ?>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <hr/>
         
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

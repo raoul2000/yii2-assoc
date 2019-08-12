@@ -102,6 +102,12 @@ class Product extends \yii\db\ActiveRecord
             'valid_date_end' => \Yii::t('app', 'Valid Date End'),
         ];
     }
+    public function attributeHints() 
+    {
+        return [
+            'description' => \Yii::t('app', 'Enter a description of the product'),
+        ];
+    }
     /**
      * (non-PHPdoc)
      * @see \yii\db\BaseActiveRecord::beforeDelete()

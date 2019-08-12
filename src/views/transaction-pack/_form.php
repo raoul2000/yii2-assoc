@@ -35,7 +35,8 @@ $userChooseBankAccount = (isset($bankAccounts) && count($bankAccounts) !== 0 && 
                 ]
         ]);?>  
 
-
+        <hr/>
+        
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         </div>

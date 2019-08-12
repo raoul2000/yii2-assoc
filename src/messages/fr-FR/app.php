@@ -59,5 +59,13 @@ return [
     'view account' => 'voir compte',
     'view contact' => 'voir contact',
     'view product' => 'voir produit',
-    'Create Order' => 'Créer Commande'
+    'Create Order' => 'Créer Commande',
+    'Birthday' => 'Date de naissance',
+    // placeholders
+    'ex: 30/01/2019' => 'ex: 30/01/2019',
+    'ex: 31/12/2020' => 'ex: 31/12/2020',
+    'ex: john@gmail.com' => 'ex: jean_dupont@hotmail.com',
+
+    'Save' => 'Sauvegarder',
+    'Cancel' => 'Annuler'
 ];

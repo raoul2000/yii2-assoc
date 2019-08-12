@@ -13,16 +13,18 @@ use app\models\Category;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'contact_id')->textInput() ?>
+        <?= $form->field($model, 'contact_id')->textInput() ?>
 
-    <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => 'select a type ...']) ?>
+        <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => 'select a type ...']) ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+        <div class="form-group">
+            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        </div>
 
+        <hr/>
+    
     <?php ActiveForm::end(); ?>
 
 </div>

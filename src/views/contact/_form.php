@@ -20,7 +20,7 @@ $uploadForm = new \app\models\forms\UploadForm();
 
         <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
 
-        <?= $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+        <?= $form->field($model, 'birthday')->textInput(['maxlength' => true, 'autocomplete'=> 'off', 'placeholder' => \Yii::t('app', 'ex: 30/01/2019') ]) ?>
 
         <?= $form->field($model, 'gender')->radioList(['1' => 'Male', '2' => 'Female', '0' => 'don\'t know']) ?>
 

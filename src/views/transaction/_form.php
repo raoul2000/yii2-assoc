@@ -122,6 +122,8 @@ $uploadForm = new \app\models\forms\UploadForm();
             ])->hint('Use commas to separate tags')
         ?>
 
+        <hr/>
+        
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         </div>

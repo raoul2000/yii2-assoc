@@ -16,6 +16,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
+use yii\helpers\Url;
 
 /**
  * ContactController implements the CRUD actions for Contact model.
@@ -287,7 +288,8 @@ class ContactController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'person' => $person
+            'person' => $person,
+            'cancelUrl' => Url::to(['/contact/index'])
         ]);
     }
     /**
@@ -307,6 +309,7 @@ class ContactController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'cancelUrl' => Url::to(['/contact/view', 'id' => $id])
         ]);
     }
     /**

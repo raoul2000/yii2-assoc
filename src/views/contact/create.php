@@ -36,6 +36,7 @@ if (isset($person)) {
     <?php else: ?>
         <?= $this->render('_form-' . ($person == true ? 'person' : 'organization'), [
             'model' => $model,
+            'cancelUrl' => $cancelUrl
         ]) ?>
     <?php endif; ?>
 

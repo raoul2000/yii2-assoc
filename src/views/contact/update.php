@@ -24,5 +24,6 @@ $subTitle = '<small>' . ($model->is_natural_person == true ? 'Person' : 'Organiz
     <hr/>
     <?= $this->render('_form-' . ($model->is_natural_person == true ? 'person' : 'organization'), [
         'model' => $model,
+        'cancelUrl' => $cancelUrl
     ]) ?>
 </div>

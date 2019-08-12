@@ -13,6 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
+use yii\helpers\Url;
 
 /**
  * BankAccountController implements the CRUD actions for BankAccount model.
@@ -158,7 +159,8 @@ class BankAccountController extends Controller
         return $this->render('create', [
             'model' => $model,
             'contact' => $contact,
-            'contacts' => Contact::getNameIndex()
+            'contacts' => Contact::getNameIndex(),
+            'cancelUrl' => Url::to(['/bank-account/index'])
         ]);
     }
 
@@ -179,7 +181,8 @@ class BankAccountController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'contacts' => Contact::getNameIndex()
+            'contacts' => Contact::getNameIndex(),
+            'cancelUrl' => Url::to(['/bank-account/view', 'id' => $id])
         ]);
     }
 

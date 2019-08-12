@@ -13,30 +13,33 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php if ( ! isset($contact) ):?>
+        <?php if ( ! isset($contact) ):?>
+            <div class="form-group">
+                <label class="control-label" for="contact_id-selectized">
+                    <?= Html::encode($model->getAttributeLabel('contact_id')) ?>
+                </label>
+                <?= \dosamigos\selectize\SelectizeDropDownList::widget([
+                    'name' => Html::getInputName($model, 'contact_id'),
+                    'value' => $model->contact_id,
+                    'id' => 'contact_id-selectized',
+                    'items' => $contacts,
+                    'clientOptions' => [
+                        // ...
+                    ],
+                ]); ?>
+            </div>    
+        <?php endif; ?>
+
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+
+        <?= $form->field($model, 'initial_value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
+        
+        <hr/>
+        
         <div class="form-group">
-            <label class="control-label" for="contact_id-selectized">
-                <?= Html::encode($model->getAttributeLabel('contact_id')) ?>
-            </label>
-            <?= \dosamigos\selectize\SelectizeDropDownList::widget([
-                'name' => Html::getInputName($model, 'contact_id'),
-                'value' => $model->contact_id,
-                'id' => 'contact_id-selectized',
-                'items' => $contacts,
-                'clientOptions' => [
-                    // ...
-                ],
-            ]); ?>
-        </div>    
-    <?php endif; ?>
-
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
-
-    <?= $form->field($model, 'initial_value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
-    
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+            <?= Html::a(\Yii::t('app', 'Cancel'), ['/bank-account/index'], ['class' => 'btn btn-default']) ?>            
+        </div>
 
     <?php ActiveForm::end(); ?>
 
