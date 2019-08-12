@@ -14,12 +14,18 @@ class ConfigController extends Controller
     public function behaviors()
     {
         return [
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
             'access' => [
-                'class' => \yii\filters\AccessControl::className(),
+                'class' =>  \yii\filters\AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => ['@'],
                     ]
                 ],
             ],

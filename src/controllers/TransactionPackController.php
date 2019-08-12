@@ -45,6 +45,7 @@ class TransactionPackController extends Controller
 
         ];
     }
+    
     /**
      * {@inheritdoc}
      */
@@ -52,9 +53,18 @@ class TransactionPackController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' =>  \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
                 ],
             ],
         ];

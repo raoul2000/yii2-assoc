@@ -54,8 +54,12 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            
-            ['label' => 'GymV', 'url' => ['/gymv']],
+            Yii::$app->user->isGuest === false ? (
+                [
+                    'label' => 'GymV', 
+                    'url' => ['/gymv']
+                ]
+            ) : (''),
 
             Yii::$app->user->isGuest === false ? (
                 [
