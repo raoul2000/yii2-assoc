@@ -11,6 +11,8 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\components\Constant;
 use yii\helpers\Url;
+use \app\components\SessionContact;
+
 
 AppAsset::register($this);
 ?>
@@ -54,14 +56,38 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            Yii::$app->user->isGuest === false ? (
+
+
+            Yii::$app->user->isGuest === false ? (  // Gymv Menu -----------------------------------------------------------------------------
                 [
-                    'label' => 'GymV', 
-                    'url' => ['/gymv']
+                    'label' => 'GymV',
+                    'items' => [
+                        SessionContact::getContactId() !== null ? (
+                            [
+                                'label'  => \Yii::t('app', 'Contact'),
+                                'encode' => false,
+                                'url'    => ['/contact/view', 'id' => SessionContact::getContactId()]
+                            ]
+                        ) : (''),
+                        SessionContact::getBankAccountId() !== null ? (
+                            [
+                                'label'  => \Yii::t('app', 'Bank Account'),
+                                'encode' => false,
+                                'url'    => ['/bank-account/view', 'id' => SessionContact::getBankAccountId()]
+                            ]
+                        ) : (''),
+                        [
+                            'label'  => \Yii::t('app', 'Home'),
+                            'encode' => false,
+                            'url'    => ['/gymv']
+                        ],
+                    ],
                 ]
             ) : (''),
 
-            Yii::$app->user->isGuest === false ? (
+
+
+            Yii::$app->user->isGuest === false ? (  // Management Menu -----------------------------------------------------------------------------
                 [
                     'label' => \Yii::t('app', 'Manage'),
                     'items' => [
@@ -116,7 +142,7 @@ AppAsset::register($this);
                 ]
             ) : (''),
 
-            \Yii::$app->user->can('admin') ? (
+            \Yii::$app->user->can('admin') ? (  // Administration Menu -----------------------------------------------------------------------------
                 [
                     'label' => 'Administration',
                     'items' => [
