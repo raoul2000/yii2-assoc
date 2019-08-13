@@ -36,10 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => $products,
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($products) {
-                    return Html::a(
-                        Html::encode($products[$model->product_id]),
+                    return Html::a('<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
+                            . Html::encode($products[$model->product_id]),
                         ['product/view','id'=>$model->product_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view product')]
                     );
                 }
             ],
@@ -49,10 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => $contacts,
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                    return Html::a(
-                        Html::encode($contacts[$model->to_contact_id]),
+                    return Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($contacts[$model->to_contact_id]),
                         ['contact/view','id'=>$model->to_contact_id],
-                        [ 'data-pjax' => 0 ]
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
                     );
                 }
             ],
