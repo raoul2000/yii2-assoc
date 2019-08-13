@@ -308,22 +308,30 @@ const computeOrderDiscountPercent = (productValue, orderValue) => {
     const discount = orderValue - productValue;
     return ((100 * discount) / productValue).toFixed(0);
 };
-
+/**
+ * Calculate and render the discount column.
+ * 
+ * @param {HTMLElement} inputValue 
+ */
 const renderOrderDiscount = (inputValue) => {
     const orderValue = inputValue.value;
     const index = inputValue.id.split('-')[1];
 
     const orderDiscountEl = document.getElementById(`order-discount-${index}`);
-    if (orderValue.trim().length === 0 || isNaN(orderValue)) {
+    if (orderValue.trim().length === 0 || isNaN(orderValue) || orderValue == 0) {
         // hide discount item
         orderDiscountEl.value = "";
     } else {
         const productValue = document.getElementById(`order-${index}-product_id`).selectedOptions[0].dataset.value;
-        const pcDiscount = computeOrderDiscountPercent(productValue, orderValue);
-        if (pcDiscount == 0) {
-            orderDiscountEl.value = "";
+        if (productValue != 0) {
+            const pcDiscount = computeOrderDiscountPercent(productValue, orderValue);
+            if (pcDiscount == 0) {
+                orderDiscountEl.value = "";
+            } else {
+                orderDiscountEl.value = pcDiscount;
+            }
         } else {
-            orderDiscountEl.value = pcDiscount;
+            orderDiscountEl.value = "";
         }
     }
 };
