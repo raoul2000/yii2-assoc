@@ -24,18 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <div class="btn-group">
             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Create <span class="caret"></span>
+                <?= \Yii::t('app', 'Create') ?> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><?= Html::a('Person', ['create', 'person' => true]) ?></li>
-                <li><?= Html::a('Organization', ['create', 'person' => false]) ?></li>
+                <li><?= Html::a(\Yii::t('app', 'Person'), ['create', 'person' => true]) ?></li>
+                <li><?= Html::a(\Yii::t('app', 'Organization'), ['create', 'person' => false]) ?></li>
             </ul>
         </div>    
-        <?= Html::a('Export CSV', ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
-        <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics', ['stat/contact'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
-        <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Quality', ['quality/contact', 'tab' => 'analysis'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a(\Yii::t('app', 'Export CSV'), ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> ' . \Yii::t('app', 'Statistics'), ['stat/contact'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> ' . \Yii::t('app', 'Quality'), ['quality/contact', 'tab' => 'analysis'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
         <div class="pull-right">
-            <?= Html::a('Manage Contact Relations', ['contact-relation/index'], ['class' => 'btn btn-info',  'data-pjax'=>0]) ?>
+            <?= Html::a(\Yii::t('app', 'Manage Contact Relations'), ['contact-relation/index'], ['class' => 'btn btn-info',  'data-pjax'=>0]) ?>
         </div>
     </p>
 
@@ -43,13 +43,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['class' =>'nav-tabs'],
         'items' => [
             [
-                'label' => 'Person',
+                'label' => \Yii::t('app', 'Person'),
                 'encode' => false,
                 'url' => ['index', 'tab'=>'person'],
                 'active' => $tab == 'person'
             ],
             [
-                'label' => 'Organization',
+                'label' => \Yii::t('app', 'Organization'),
                 'url' => ['index', 'tab'=>'organization'],
                 'active' => $tab == 'organization'
             ],
@@ -72,19 +72,19 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'name',
-                            'label' => 'Name'
+                            'label' => \Yii::t('app', 'Name')
                         ],
                         [
                             'attribute' => 'firstname',
-                            'label' => 'Firstname'
+                            'label' => \Yii::t('app', 'Firstname')
                         ],
                         'email:email',
                         [
                             'attribute' => 'gender',
-                            'label' => 'Gender',
+                            'label' => \Yii::t('app', 'Gender'),
                             'filter' => [
-                                Contact::GENDER_MALE => 'man',
-                                Contact::GENDER_FEMALE => 'woman'
+                                Contact::GENDER_MALE   => \Yii::t('app', 'man'),
+                                Contact::GENDER_FEMALE => \Yii::t('app', 'woman')
                             ],
                             'format'    => 'gender'
                         ],
@@ -104,11 +104,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         [
                             'attribute' => 'name',
-                            'label' => 'Raison Sociale'
+                            'label' => \Yii::t('app', 'Raison Sociale')
                         ],
                         [
                             'attribute' => 'firstname',
-                            'label' => 'Complément'
+                            'label' => \Yii::t('app', 'Complément')
                         ],
                         'email:email',
                         [
