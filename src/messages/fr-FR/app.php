@@ -53,7 +53,7 @@ return [
     'Update Tag: {name}' => 'Mettre à jour: {name}',
     'Users' => 'Utilisateurs',
     'Web Shell' => 'web shell',
-    'enter tags to search for...' => 'Entrez les tags à rechercher',
+    'enter tags to search for...' => 'Entrez les tags à rechercher...',
     'female' => 'Femme',
     'male' => 'Homme',
     'view account' => 'voir compte',

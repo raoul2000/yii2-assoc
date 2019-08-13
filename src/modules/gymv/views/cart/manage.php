@@ -246,7 +246,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'data-date-start'    => true,
                                         'data-sync-setting'  => 'orderLockStartDate',
                                         'data-sync-selector' => '.orders input[data-date-start]',
-                                        'title' => 'format : '
+                                        'title' => \Yii::t('app', 'ex: 30/01/2019')
                                     ])
                                     ->label(false)
                                 ?>
@@ -259,7 +259,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'autocomplete'=> 'off',
                                         'data-date-end'      => true,                           // used to select this input (see "data-sync-selector" )
                                         'data-sync-setting'  => 'orderLockEndDate',             // name of the form settings property for lock end date
-                                        'data-sync-selector' => '.orders input[data-date-end]'  // selector for all end date inputs
+                                        'data-sync-selector' => '.orders input[data-date-end]', // selector for all end date inputs
+                                        'title' => \Yii::t('app', 'ex: 31/12/2020')
                                     ])
                                     ->label(false)
                                 ?>
