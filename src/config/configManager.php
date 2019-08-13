@@ -58,6 +58,15 @@ return [
             'rules' => [
                 ['string']
             ],
-        ],        
+        ],   
+        'product.consumed.by.registered.contact' => [
+            'value' => '',
+            'label' => 'Products IDs For Registered Contacts',
+            'description' => 'Comma separated list of product Ids consumed by REGISTERED contacts. Consuming one of these product is enough for a contact to '
+                . ' be considered as REGISTERED',
+            'rules' => [
+                ['string']
+            ],            
+        ]     
     ],
 ];
