@@ -16,14 +16,18 @@ class Formatter extends \yii\i18n\Formatter
      */
     public function asTagsList($values)
     {
-        $htmlTags = array_map(function ($tagValue) {
-            return '<span class="label label-default" style="font-size:1em;font-weight:normal">' 
-                . '<span class="glyphicon glyphicon-tag" aria-hidden="true"></span> '
-                . Html::encode(trim($tagValue))
-            . '</span>';
-        }, explode(',', $values));
+        $html = null;
+        if (!empty($values)) {
+            $htmlTags = array_map(function ($tagValue) {
+                return '<span class="label" style="font-size:1em;font-weight:normal;background-color:#efefef; color:#333333">' 
+                    . '<span class="glyphicon glyphicon-tag" aria-hidden="true"></span> '
+                    . Html::encode(trim($tagValue))
+                . '</span>';
+            }, explode(',', $values));
+            $html = \implode(' ', $htmlTags);
+        } 
+        return $this->asRaw($html);
 
-        return \implode(' ', $htmlTags);
     }
 
     public function asGender($value)
