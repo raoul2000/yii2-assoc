@@ -70,7 +70,7 @@ trait DateRangeQueryTrait
 
         if (!empty($startDate) && !empty($endDate)) {
             $conditions = [
-                'OR',
+                'AND',
                 [
                     'OR',
                     ['IS', 'valid_date_start', $NULL],
