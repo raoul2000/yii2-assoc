@@ -34,10 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter'    =>  $contacts,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) {
-                        return Html::a(
-                            Html::encode($model->contact_name),
+                        return Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                . Html::encode($model->contact_name),
                             ['contact/view','id'=>$model->contact_id],
-                            ['data-pjax' => 0]
+                            ['data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
                         );
                     }
                 ],

@@ -1,3 +1,7 @@
+## "Verified" Transactions
+
+- (to confirm) : verified transactions should not be updatable in their own properties or regarding their linked orders
+
 ## Stats for transactions (propositions)
 
 - display transaction by reference date (per week or month, or cumulative)
