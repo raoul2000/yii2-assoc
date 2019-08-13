@@ -50,4 +50,23 @@ class DateRangeHelper
             ];
         }
     }
+    /**
+     * WIP
+     *
+     * @param [type] $startDate
+     * @param [type] $endDate
+     * @return void
+     */
+    public static function inCurrentDateRange($startDate, $endDate)
+    {
+        // TODO: to implement (maybe)
+        $range = SessionDateRange::getDateRange();
+        if ($range === null) {
+            return true;
+        }
+        if (!empty($range->start) && !empty($range->end)) {
+
+        }
+
+    }
 }
