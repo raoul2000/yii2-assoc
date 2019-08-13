@@ -14,6 +14,10 @@ use yii\helpers\Url;
         <?= Html::a('Enregistrement', ['cart/check-out'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Import I-Reseau', ['contact-import/index'], ['class' => 'btn btn-primary']) ?>
     </p>
+    <h1>
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        Registered Contacts
+    </h1>    
     <hr/>
 
     <?php Pjax::begin(); ?>

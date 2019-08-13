@@ -198,7 +198,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                 <tbody>
                     <?php  foreach ($orders as $index => $order): ?>
                         <tr>
-                            <td>
+                            <td style="min-width:15em">
                                 <?= $form->field($order, "[$index]product_id")
                                     ->listBox($products, [
                                         'size'=>1,
@@ -212,7 +212,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     ->label(false)
                                 ?>
                             </td>                        
-                            <td>
+                            <td style="min-width:15em">
                                 <?= $form->field($order, "[$index]from_contact_id")
                                     ->listBox($contacts, [
                                         'size'=>1,
@@ -224,7 +224,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     ->label(false)
                                 ?>
                             </td>
-                            <td>
+                            <td style="min-width:15em">
                                 <?= $form->field($order, "[$index]to_contact_id")
                                     ->listBox($contacts, [
                                         'size'=>1,
@@ -237,7 +237,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     ->label(false)
                                 ?>
                             </td>    
-                            <td>
+                            <td style="min-width:8em">
                                 <?= $form->field($order, "[$index]valid_date_start")
                                     ->textInput([
                                         'class' => 'form-control',
@@ -245,12 +245,13 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                         'autocomplete'=> 'off',
                                         'data-date-start'    => true,
                                         'data-sync-setting'  => 'orderLockStartDate',
-                                        'data-sync-selector' => '.orders input[data-date-start]'
+                                        'data-sync-selector' => '.orders input[data-date-start]',
+                                        'title' => 'format : '
                                     ])
                                     ->label(false)
                                 ?>
                             </td>                                                
-                            <td>
+                            <td style="min-width:8em">
                                 <?= $form->field($order, "[$index]valid_date_end")
                                     ->textInput([
                                         'class' => 'form-control',
@@ -263,23 +264,23 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     ->label(false)
                                 ?>
                             </td>                                                
-                            <td>
-                                <div class="form-group" style="width:6em">
+                            <td style="min-width:2em">
+                                <div class="form-group">
                                     <input type="text" 
                                         id="product-value-<?=$index?>" 
                                         class="form-control" 
                                         disabled="disabled">
                                 </div>                            
                             </td>
-                            <td>
-                                <div class="form-group" style="width:6em;">
+                            <td  style="min-width:2em">
+                                <div class="form-group">
                                     <input type="text" 
                                         id="order-discount-<?=$index?>" 
                                         class="form-control order-discount" 
                                         autocomplete="off">
                                 </div>                            
                             </td>
-                            <td>
+                            <td  style="min-width:3em">
                                 <?= $form->field($order, "[$index]value")
                                     ->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
                                     ->label(false)
@@ -337,7 +338,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                 <tbody>
                     <?php  foreach ($transactions as $index => $transaction): ?>
                         <tr>
-                            <td>
+                            <td style="min-width:15em">
                                 <?= $form->field($transaction, "[$index]from_account_id")
                                     ->listBox($bankAccounts, [
                                         'size'=>1,
@@ -347,7 +348,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     ->label(false)
                                 ?>
                             </td>
-                            <td>
+                            <td style="min-width:15em">
                                 <?= $form->field($transaction, "[$index]to_account_id")
                                     ->listBox($bankAccounts, [
                                         'size'=>1,
