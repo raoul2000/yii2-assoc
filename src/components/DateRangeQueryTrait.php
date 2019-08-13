@@ -69,31 +69,90 @@ trait DateRangeQueryTrait
         $NULL = new \yii\db\Expression('null');
 
         if (!empty($startDate) && !empty($endDate)) {
+            /**
+             * List of valid dante range configurations
+             * ---------------------------------------
+             * 
+             * B = valid_date_start (Begin)
+             * E = valid_date_end   (End)
+             * 
+             *       $startDate   $endDate
+             * ----------|------------|--------------
+             *     B     :            :
+             *     B     :     E      :       
+             *     B     :            :       E
+             *           :    B       :       
+             *           :    B E     :       
+             *           :    B       :       E
+             *           :    E       :       
+             *           :            :       E
+             *           :            :       
+             */
+
             $conditions = [
                 'AND',
-                [
-                    'OR',
+                ['OR',
                     ['IS', 'valid_date_start', $NULL],
-                    ['BETWEEN', 'valid_date_start', $startDate, $endDate]
+                    ['<=', 'valid_date_start', $endDate],
                 ],
-                [
-                    'OR',
+                ['OR',
                     ['IS', 'valid_date_end', $NULL],
-                    ['BETWEEN', 'valid_date_end', $startDate, $endDate]
+                    ['>=', 'valid_date_end', $startDate]
                 ]
             ];
-        } elseif (!empty($startDate)) {
+        } elseif (!empty($startDate)) { // only start date (valid from date ....)
+            /**
+             * List of valid dante range configurations
+             * ---------------------------------------
+             * 
+             * B = valid_date_start (Begin)
+             * E = valid_date_end   (End)
+             * 
+             *       $startDate   
+             * ----------|--------------------------
+             *     B     :            
+             *     B     :     E             
+             *           :     E
+             *           :                   
+             */     
             $conditions = [
-                'or',
-                ['IS', 'valid_date_end', $NULL],
-                ['>=', 'valid_date_end', $startDate],
+                'AND',
+                ['OR',
+                    ['IS', 'valid_date_start', $NULL],
+                    ['<=', 'valid_date_start', $startDate],
+                ],
+                ['OR',
+                    ['IS', 'valid_date_end', $NULL],
+                    ['>=', 'valid_date_end', $startDate]
+                ]
             ];
-        } elseif (!empty($endDate)) {
+        } elseif (!empty($endDate)) { // only end date (valid until date ... )
+            /**
+             * List of valid dante range configurations
+             * ---------------------------------------
+             * 
+             * B = valid_date_start (Begin)
+             * E = valid_date_end   (End)
+             * 
+             *                    $endDate   
+             * ----------------------|------------
+             *     B                 :            
+             *     B                 :     E             
+             *                       :     E
+             *                       :                   
+             */           
             $conditions = [
-                'or',
-                ['IS', 'valid_date_start', $NULL],
-                ['<=', 'valid_date_start', $endDate],
-            ];
+                'AND',
+                ['OR',
+                    ['IS', 'valid_date_start', $NULL],
+                    ['<=', 'valid_date_start', $endDate],
+                ],
+                ['OR',
+                    ['IS', 'valid_date_end', $NULL],
+                    ['>=', 'valid_date_end', $endDate]
+                ]
+            ];               
+
         }
         
         return $this->andWhere($conditions);
