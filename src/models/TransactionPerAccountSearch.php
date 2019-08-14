@@ -25,7 +25,7 @@ class TransactionPerAccountSearch extends Transaction
             [['id', 'from_account_id', 'to_account_id', 'created_at', 'updated_at', 'transaction_pack_id', 'debit', 'credit', 'account_id'], 'integer'],
             [['is_verified'], 'boolean'],
             [['value'], 'number'],
-            [['description', 'code', 'type'], 'safe'],
+            [['description', 'code', 'type', 'reference_date'], 'safe'],
         ];
     }
 
@@ -102,6 +102,7 @@ class TransactionPerAccountSearch extends Transaction
         ]);*/
 
         $query->andFilterWhere(['like', 'description', $this->description]);
+        $query->addSmartDateCondition('reference_date', $this);
 
         return $dataProvider;
     }
