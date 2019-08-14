@@ -3,24 +3,18 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[Transaction]].
+ * This is the ActiveQuery class for [[Order]].
  *
- * @see Transaction
+ * @see Order
  */
-class TransactionQuery extends \yii\db\ActiveQuery
+class ProductQuery extends \yii\db\ActiveQuery
 {
     use \app\components\DateRangeQueryTrait;
     use \app\components\SmartDateConditionTrait;
 
-    public function behaviors()
-    {
-        return [
-            \app\components\behaviors\TaggableQueryBehavior::className(),
-        ];
-    }
     /**
      * {@inheritdoc}
-     * @return Transaction[]|array
+     * @return Order[]|array
      */
     public function all($db = null)
     {
@@ -29,7 +23,7 @@ class TransactionQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Transaction|array|null
+     * @return Order|array|null
      */
     public function one($db = null)
     {

@@ -20,6 +20,8 @@ class ProductSearch extends Product
             [['id', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'safe'],
             [['value'], 'number'],
+            
+            [['valid_date_start', 'valid_date_end'], 'safe'] // handled by addSmartDateCondition
         ];
     }
 
@@ -66,6 +68,10 @@ class ProductSearch extends Product
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
+
+        // apply smart filter on date
+        $query->addSmartDateCondition('valid_date_start', $this);
+        $query->addSmartDateCondition('valid_date_end',   $this);        
 
         return $dataProvider;
     }

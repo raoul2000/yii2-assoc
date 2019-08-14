@@ -48,6 +48,9 @@ class ProductController extends Controller
     {
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider
+            ->query
+            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
 
         return $this->render('index', [
             'searchModel' => $searchModel,

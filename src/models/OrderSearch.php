@@ -2,9 +2,11 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Order;
+use \app\components\helpers\DateHelper;
 
 /**
  * OrderSearch represents the model behind the search form of `app\models\Order`.
@@ -19,6 +21,8 @@ class OrderSearch extends Order
         return [
             [['id', 'product_id', 'from_contact_id','to_contact_id', 'created_at', 'updated_at'], 'integer'],
             [['value'], 'number', 'min' => 0],
+
+            [['valid_date_start', 'valid_date_end'], 'safe'] // handled by addSmartDateCondition
         ];
     }
 
@@ -73,6 +77,10 @@ class OrderSearch extends Order
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        // apply smart filter on date
+        $query->addSmartDateCondition('valid_date_start', $this);
+        $query->addSmartDateCondition('valid_date_end',   $this);
 
         return $dataProvider;
     }

@@ -23,6 +23,8 @@ class TransactionSearch extends Transaction
             [['is_verified'], 'boolean'],
             [['value'], 'number'],
             [['description', 'code', 'type'], 'safe'],
+
+            [['reference_date'], 'safe']  // handled by addSmartDateCondition
         ];
     }
 
@@ -82,6 +84,9 @@ class TransactionSearch extends Transaction
         ]);
 
         $query->andFilterWhere(['like', 'description', $this->description]);
+
+        // apply smart filter on date
+        $query->addSmartDateCondition('reference_date', $this);
 
         return $dataProvider;
     }

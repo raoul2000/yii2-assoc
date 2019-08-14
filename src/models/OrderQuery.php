@@ -10,6 +10,7 @@ namespace app\models;
 class OrderQuery extends \yii\db\ActiveQuery
 {
     use \app\components\DateRangeQueryTrait;
+    use \app\components\SmartDateConditionTrait;
 
     /**
      * {@inheritdoc}

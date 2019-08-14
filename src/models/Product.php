@@ -108,6 +108,16 @@ class Product extends \yii\db\ActiveRecord
             'description' => \Yii::t('app', 'Enter a description of the product'),
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     * @return ProductQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new ProductQuery(get_called_class());
+    }  
+
     /**
      * (non-PHPdoc)
      * @see \yii\db\BaseActiveRecord::beforeDelete()
