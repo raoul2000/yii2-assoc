@@ -44,14 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'name',
                 'initial_value',
                 [
-                    'attribute' => 'updated_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
-                    'attribute' => 'created_at',
-                    'format' => ['date', 'php:d/m/Y H:i']
-                ],
-                [
                     'class' => 'yii\grid\ActionColumn',
                     'contentOptions' => ['nowrap' => 'nowrap']
                 ],

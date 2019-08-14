@@ -21,10 +21,6 @@ $bankAccountModel = $model;
                 [
                     'attribute' => 'id',
                     'label'     => 'N°',
-                    'filterInputOptions' => [
-                        'class' => 'form-control',
-                        'style' => 'width:3em'
-                    ],
                 ],
                 'reference_date:appDate',
                 [
@@ -42,14 +38,7 @@ $bankAccountModel = $model;
                         }
                     }
                 ],
-                [
-                    'attribute' => 'description',
-                    'filterInputOptions' => [
-                        'class' => 'form-control',
-                        'placeholder' => 'enter description ...',
-                        'autocomplete' => 'off'
-                    ],
-                ],
+                'description',
                 'code',
                 [
                     'attribute' => 'type',
@@ -65,6 +54,9 @@ $bankAccountModel = $model;
                     'label'     => 'Account',
                     'filter'    => $bankAccounts,
                     'format'    => 'html',
+                    'contentOptions'   => [
+                        'nowrap' => true
+                    ],
                     'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccountModel) {
                         // in the same column render source or target account
                         if ($bankAccountModel->id == $transactionModel->from_account_id) {
