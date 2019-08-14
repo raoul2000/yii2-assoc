@@ -16,6 +16,41 @@ $config = [
         '@template' => '@app/../data/templates',
         '@imports' => '@app/../data/imports',
     ],
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Application Parameters
+    //    
+
+    'params' => $params,
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // CONTAINUER 
+    //
+    // @see https://www.yiiframework.com/doc/guide/2.0/en/concept-configurations
+    // @see https://www.yiiframework.com/doc/guide/2.0/en/concept-di-container#advanced-practical-usage
+    //
+
+    'container' => [
+        'definitions' => [
+            /**
+             * Set default parameters to Data column
+             */
+            'yii\grid\DataColumn' => [
+                'filterInputOptions' => [
+                    'class' => 'form-control input-sm', 
+                    'autocomplete'=> 'off',
+                ],                
+            ]
+        ],
+        'singletons' => [
+            // Dependency Injection Container singletons configuration
+        ]
+    ],  
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // COMPONENTS 
+    //
+
     'components' => [
         'configManager' => $configManager,
         'session' => [
@@ -84,7 +119,11 @@ $config = [
             ],
         ],
     ],
-    'params' => $params,
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // MODULES
+    //
+
     'modules' => [
         'webshell' => [
             'class' => 'samdark\webshell\Module',
