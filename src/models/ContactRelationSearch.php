@@ -19,6 +19,8 @@ class ContactRelationSearch extends ContactRelation
         return [
             [['id', 'source_contact_id', 'target_contact_id', 'type'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
+
+            [['valid_date_start', 'valid_date_end'], 'safe'] // handled by addSmartDateCondition
         ];
     }
 
@@ -67,6 +69,10 @@ class ContactRelationSearch extends ContactRelation
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);
+
+        
+        $query->addSmartDateCondition('valid_date_start', $this);
+        $query->addSmartDateCondition('valid_date_end',   $this);
 
         return $dataProvider;
     }
