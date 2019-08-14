@@ -16,12 +16,16 @@
 	// 	"description": "Log output to console"
 	// }
 	"Yii2 translation" : {
-		
 		"scope": "php",
 		"prefix": "yii2:t",
 		"body": "\\Yii::t('app', ${TM_SELECTED_TEXT})",
 		"description": "transation",
-
+	},
+	"Yii2 HTML translation" : {
+		"scope": "html",
+		"prefix": "yii2:t html",
+		"body": "<?= \\Yii::t('app', '${TM_SELECTED_TEXT}') ?>",
+		"description": "transation into HTML",
 	},
 	"Yii::success" : {
 		"prefix": "yii2:success",
