@@ -28,16 +28,16 @@ EOS;
 $this->registerJs($jsScript, View::POS_READY, 'template-selector');
 ?>
 <div>
-    <h1>Select Template</h1>
+    <h1><?= \Yii::t('app', 'Select Template') ?></h1>
     <hr/>
     <?php if (count($templateNames) == 0): ?>
         <div class="alert alert-info" role="alert">
-            You don't have any template available at the moment.        
+           <?= \Yii::t('app', ' You don\'t have any template available at the moment.') ?>        
         </div>    
     <?php else: ?>
         <?php if ($notEmptyCartWarning): ?>    
             <div class="alert alert-warning" role="alert">
-                It seems your cart is not empty. If you choose to apply a template, your existing cart will be reset.
+                <?= \Yii::t('app', 'It seems your cart is not empty. If you choose to apply a template, your existing cart will be reset.') ?>
             </div>
         <?php endif; ?>
 
@@ -47,7 +47,7 @@ $this->registerJs($jsScript, View::POS_READY, 'template-selector');
                 <?= Html::dropDownList('template-name', null, $templateNames, [
                     'id' => 'template-list',
                     'size'=>1,
-                    'prompt' => 'select ...',
+                    'prompt' => \Yii::t('app', 'select a template ...'),
                     'class' => 'form-control'
                 ])?>
             </div>

@@ -311,7 +311,7 @@ class CartController extends \yii\web\Controller
                                 Yii::$app->session->setFlash('success', '' . count($orders) . ' order(s) and ' . count($transactions) . ' transaction(s) created');
     
                                 // go to index
-                                return $this->redirect(['index']);
+                                return $this->redirect(['/gymv']);
                             }
                         }
                     }

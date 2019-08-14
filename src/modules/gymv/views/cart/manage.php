@@ -34,14 +34,14 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         // Form settings
         yii\bootstrap\Modal::begin([
             'id' => 'form-settings-modal',
-            'header' => '<h3>Settings</h3>',
+            'header' => '<h3>' . \Yii::t('app', 'Settings') . '</h3>',
             'footer' => '
                 <div id="btnbar-start">
-                    <button id="btn-save-form-settings" class="btn btn-primary">
-                        Save
-                    </button>
+                    <button id="btn-save-form-settings" class="btn btn-primary">'
+                        . \Yii::t('app', 'Save') . 
+                    '</button>
                     &nbsp;
-                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-default" data-dismiss="modal">' . \Yii::t('app', 'Close') . '</button>
                 </div>
             '
         ]); ?>
@@ -49,27 +49,27 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <div class="form-group">
             <div class="checkbox">
                 <label>
-                    <input id="order-lock-provider" type="checkbox"> lock order Provider
+                    <input id="order-lock-provider" type="checkbox"> <?= \Yii::t('app', 'lock order Provider') ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input id="order-lock-beneficiary" type="checkbox"> lock order Beneficiary
+                    <input id="order-lock-beneficiary" type="checkbox"> <?= \Yii::t('app', 'lock order Beneficiary') ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input id="order-lock-start-date" type="checkbox"> lock order Valid Start Date
+                    <input id="order-lock-start-date" type="checkbox"> <?= \Yii::t('app', 'lock order Valid Start Date') ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input id="order-lock-end-date" type="checkbox"> lock order Valid End Date
+                    <input id="order-lock-end-date" type="checkbox"> <?= \Yii::t('app', 'lock order Valid End Date') ?>
                 </label>
             </div>
             <div class="checkbox">
                 <label>
-                    <input id="order-enable-report" type="checkbox"> Enable auto report order Sum to transaction
+                    <input id="order-enable-report" type="checkbox"> <?= \Yii::t('app', 'Enable auto report order Sum to transaction') ?>
                 </label>
             </div>
         </div>
@@ -86,14 +86,14 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         // define the modal to "save template As ..."
         yii\bootstrap\Modal::begin([
             'id' => 'save-template-modal',
-            'header' => '<h3>Save Template As ...</h3>',
+            'header' => '<h3>' . \Yii::t('app', 'Save Template') . '</h3>',
             'footer' => '
             <div id="tmpl-btnbar-start">
-                <button id="btn-save-as-template" class="btn btn-primary">Save</button>&nbsp;
-                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="btn-save-as-template" class="btn btn-primary">' . \Yii::t('app', 'Save') . '</button>&nbsp;
+                <button class="btn btn-default" data-dismiss="modal">' . \Yii::t('app', 'Cancel') . '</button>
             </div>
             <div id="tmpl-btnbar-end">
-                <button class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" data-dismiss="modal">' . \Yii::t('app', 'Close') . '</button>
             </div>
                 ',
             'closeButton' => false, // no close button
@@ -103,16 +103,16 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         ]); ?>
 
         <div class="alert alert-danger" role="alert">
-            An error occured that prevent the template for being saved.
+            <?= \Yii::t('app', 'An error occured that prevent the template for being saved.') ?>
         </div>
         <div class="alert alert-success" role="alert">
-            Template saved correctly.
+           <?  \Yii::t('app', 'Template saved correctly.') ?>
         </div>
         <div class="alert alert-info" role="alert">
-            Saving Template ...
+            <? \Yii::t('app', 'Saving Template ...') ?>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="template-name" placeholder="enter template name ....">
+            <input type="text" class="form-control" id="template-name" placeholder="<?= \Yii::t('app', 'enter template name ....') ?>">
         </div>
     <?php
         yii\bootstrap\Modal::end();
@@ -125,7 +125,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
     <div class="toolbar">
         <div class="btn-group">     
             <?= Html::button(
-                'Template...',
+                \Yii::t('app', 'Template...'),
                 [
                     'class' => 'btn btn-default',
                     'data-toggle' => 'dropdown'
@@ -135,20 +135,20 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             <ul class="dropdown-menu">
                 <?php if( !empty($templateName) ) :?>
                     <li class="dropdown-header">
-                        Template : <?= Html::encode($templateName) ?>
+                        <?= \Yii::t('app', 'Template') ?> : <?= Html::encode($templateName) ?>
                     </li>
                     <li role="separator" class="divider"></li>
                 <?php endif; ?>
                 <li>
                     <?= Html::a(
-                        'Select Template',
+                        \Yii::t('app', 'Select Template'),
                         ['select-template']
                     )?>                 
                 </li>
                 <?php if ($countOrders != 0 || $countTransactions != 0): ?>
                     <li>
                     <?= Html::a(
-                        'Save As Template ....',
+                        \Yii::t('app', 'Save As ...'),
                         '#',
                         [
                             'data-toggle' => 'modal',
@@ -161,11 +161,11 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         </div>      
 
         <?php if ($countOrders != 0 || $countTransactions != 0): ?>
-            <?= Html::button('Reset', ['class' => 'btn btn-danger', 'data-action' => 'reset']) ?>
+            <?= Html::button(\Yii::t('app', 'Reset'), ['class' => 'btn btn-danger', 'data-action' => 'reset']) ?>
         <?php endif;?>      
 
         <?= Html::button(
-            'Settings', 
+            \Yii::t('app', 'Settings'), 
             [
                 'id' => 'btn-open-settings-modal', 
                 'class' => 'btn btn-default',
@@ -182,23 +182,26 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
         <h2>      
             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-            Orders
+            <?= \Yii::t('app', 'Orders') ?>
         </h2>
         <hr>
-        <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add order', ['class' => 'btn btn-success', 'data-action' => 'add-order']) ?>
+        <?= Html::button(
+            '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' . \Yii::t('app', 'add order'), 
+            ['class' => 'btn btn-success', 'data-action' => 'add-order']
+        )?>
 
         <?php if ($countOrders): ?>
             <table id="orders" class="table table-condensed table-hover orders">
                 <thead>
                     <tr>
-                        <th>Product</th>
-                        <th>Fournisseur</th>
-                        <th>Beneficiaire</th>
-                        <th>From</th>
-                        <th>Until</th>
-                        <th>Prix unitaire</th>
-                        <th>discount (%)</th>
-                        <th>Value</th>
+                        <th><?= \Yii::t('app', 'Product') ?></th>
+                        <th><?= \Yii::t('app', 'Fournisseur') ?></th>
+                        <th><?= \Yii::t('app', 'Beneficiaire') ?></th>
+                        <th><?= \Yii::t('app', 'From') ?></th>
+                        <th><?= \Yii::t('app', 'Until') ?></th>
+                        <th><?= \Yii::t('app', 'Prix unitaire') ?></th>
+                        <th><?= \Yii::t('app', 'discount') ?> (%)</th>
+                        <th><?= \Yii::t('app', 'Value') ?></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -210,7 +213,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                     ->listBox($products, [
                                         'size'=>1,
                                         'options' =>  $productOptions,
-                                        'prompt' => 'select ...',
+                                        'prompt' => \Yii::t('app', 'select ...'),
                                         'data-product' => true,
                                         'data-order-value-id' => Html::getInputId($order, "[$index]value"),
                                         'data-target-id' => 'product-value-' . $index,
@@ -223,7 +226,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                 <?= $form->field($order, "[$index]from_contact_id")
                                     ->listBox($contacts, [
                                         'size'=>1,
-                                        'prompt' => 'select ...',
+                                        'prompt' => \Yii::t('app', 'select ...'),
                                         'data-from-contact-id' => true,
                                         'data-sync-setting'    => 'orderLockProvider',
                                         'data-sync-selector'   => '.orders select[data-from-contact-id]'
@@ -235,7 +238,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                 <?= $form->field($order, "[$index]to_contact_id")
                                     ->listBox($contacts, [
                                         'size'=>1,
-                                        'prompt' => 'select ...',
+                                        'prompt' => \Yii::t('app', 'select ...'),
                                         'data-to-contact-id' => true,
                                         'data-sync-setting'  => 'orderLockBeneficiary',
                                         'data-sync-selector' => '.orders select[data-to-contact-id]'
@@ -322,24 +325,27 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
 
         <h2>
             <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
-            Transactions
+            <?= \Yii::t('app', 'Transactions') ?>
         </h2>
         <hr>
-        <?= Html::button('<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  add transaction', ['class' => 'btn btn-success', 'data-action' => 'add-transaction']) ?>
+        <?= Html::button(
+            '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>' . \Yii::t('app', 'add transaction'), 
+            ['class' => 'btn btn-success', 'data-action' => 'add-transaction']
+        ) ?>
         <?php if ($countOrders != 0 && $countTransactions != 0): ?>
-            <?= Html::button('report total order value', ['id' => 'btn-report-sum-order','class' => 'btn btn-default']) ?>
+            <?= Html::button(\Yii::t('app', 'report total order value'), ['id' => 'btn-report-sum-order','class' => 'btn btn-default']) ?>
         <?php endif; ?>
 
         <?php if ($countTransactions): ?>
             <table id="transactions" class="table table-condensed table-hover">
                 <thead>
                     <tr>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Code</th>
-                        <th>Value</th>
+                        <th><?= \Yii::t('app', 'From') ?></th>
+                        <th><?= \Yii::t('app', 'To') ?></th>
+                        <th><?= \Yii::t('app', 'Date') ?></th>
+                        <th><?= \Yii::t('app', 'Type') ?></th>
+                        <th><?= \Yii::t('app', 'Code') ?></th>
+                        <th><?= \Yii::t('app', 'Value') ?></th>
                         <th></th>
                     </tr>
                 </thead>        
@@ -350,7 +356,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                 <?= $form->field($transaction, "[$index]from_account_id")
                                     ->listBox($bankAccounts, [
                                         'size'=>1,
-                                        'prompt' => 'select ...',
+                                        'prompt' => \Yii::t('app', 'select ...'),
                                         'data-from-account-id' => true,
                                     ])
                                     ->label(false)
@@ -360,7 +366,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
                                 <?= $form->field($transaction, "[$index]to_account_id")
                                     ->listBox($bankAccounts, [
                                         'size'=>1,
-                                        'prompt' => 'select ...',
+                                        'prompt' => \Yii::t('app', 'select ...'),
                                         'data-to-account-id' => true,
                                     ])
                                     ->label(false)
@@ -415,7 +421,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
         <?php endif; ?>
 
         <?php if ($countOrders != 0 && $countTransactions != 0): ?>
-            <?= Html::button('Submit Cart', ['class' => 'btn btn-primary', 'data-action' => 'submit']) ?>
+            <?= Html::button(\Yii::t('app', 'Submit Cart'), ['class' => 'btn btn-primary', 'data-action' => 'submit']) ?>
         <?php endif; ?>
     <?php ActiveForm::end(); ?>
 </div>
