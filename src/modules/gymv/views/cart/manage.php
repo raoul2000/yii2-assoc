@@ -88,10 +88,11 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             'id' => 'save-template-modal',
             'header' => '<h3>Save Template As ...</h3>',
             'footer' => '
-            <div id="btnbar-start">
-                <button id="btn-save-as-template" class="btn btn-primary">Save</button>&nbsp;<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <div id="tmpl-btnbar-start">
+                <button id="btn-save-as-template" class="btn btn-primary">Save</button>&nbsp;
+                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
-            <div id="btnbar-end">
+            <div id="tmpl-btnbar-end">
                 <button class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
                 ',
@@ -132,6 +133,12 @@ $this->registerJs(file_get_contents(__DIR__ . '/manage.js'), View::POS_READY, 'c
             )?>                                         
 
             <ul class="dropdown-menu">
+                <?php if( !empty($templateName) ) :?>
+                    <li class="dropdown-header">
+                        Template : <?= Html::encode($templateName) ?>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                <?php endif; ?>
                 <li>
                     <?= Html::a(
                         'Select Template',

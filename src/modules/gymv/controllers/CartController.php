@@ -156,6 +156,23 @@ class CartController extends \yii\web\Controller
 
     public function actionSelectTemplate()
     {
+        $selectedTemplate = Yii::$app->request->post('template-name'); // file name ex : 1265-66589-99878.json
+        if (!empty($selectedTemplate)) {
+            $templateFilePath = Yii::getAlias('@template/' . $selectedTemplate);
+
+            $action = Yii::$app->request->post('action');
+            if( $action == 'delete-template') {
+                FileHelper::unlink($templateFilePath);
+            } else {
+                $template = json_decode(file_get_contents($templateFilePath), true);
+                Yii::$app->session['cart'] = [
+                    'template-name' => $template['name'],
+                    'orders' => $template['orders'],
+                    'transactions' => $template['transactions']
+                ];
+                return $this->redirect(['check-out']);
+            }
+        }
 
         $templateFiles = FileHelper::findFiles(
             Yii::getAlias('@template'),
@@ -164,16 +181,6 @@ class CartController extends \yii\web\Controller
                 'caseSensitive' => false
             ]
         );
-        $selectedTemplate = Yii::$app->request->post('template-name'); // file name ex : 1265-66589-99878.json
-        if (!empty($selectedTemplate)) {
-            $templateFilepath = Yii::getAlias('@template/' . $selectedTemplate);
-            $template = json_decode(file_get_contents($templateFilepath), true);
-            Yii::$app->session['cart'] = [
-                'orders' => $template['orders'],
-                'transactions' => $template['transactions']
-            ];
-            return $this->redirect(['check-out']);
-        }
 
         $templateNames = [];
         foreach ($templateFiles as $templateFilePath) {
@@ -195,6 +202,7 @@ class CartController extends \yii\web\Controller
     {
         $orders = [];
         $transactions = [];
+        $templateName = '';
 
         if (Yii::$app->request->isGet) {
             // convert selected products into orders and clear cart
@@ -221,10 +229,12 @@ class CartController extends \yii\web\Controller
         if (!$session->has('cart')) {
             // initialize empty session storage
             $session['cart'] = [
-                'orders' => [],
-                'transactions' => []
+                'template-name' => '',
+                'orders'        => [],
+                'transactions'  => []
             ];
         } else {
+            $templateName = $session['cart']['template-name'];
             // load ORDER models from session storage
             $orders = array_map(function ($orderAttr){
                 $order = new Order();
@@ -370,6 +380,7 @@ class CartController extends \yii\web\Controller
                     break;
                 case 'reset': ///////////////////////////////////////////////////////////
                     $transactions = $orders = [];
+                    $templateName = '';
                     break;
                 case 'remove-order': //////////////////////////////////////////////////////////////
                     $indexToRemove = Yii::$app->request->post('index', null);
@@ -387,6 +398,8 @@ class CartController extends \yii\web\Controller
                     $orders = $updatedOrders;
                     break;
                 case 'save-as-template': ///////////////////////////////////////////////////////////
+                    Yii::$app->response->format = Response::FORMAT_JSON;    // response a JSON
+
                     if (!Yii::$app->request->isAjax) {
                         throw new \yii\web\ForbiddenHttpException();
                     }
@@ -394,6 +407,27 @@ class CartController extends \yii\web\Controller
                     if (empty($templateName)) {
                         throw new \yii\web\BadRequestHttpException('template name is missing');
                     }
+
+                    // Validate : the template name must be unique
+                    $templateFiles = FileHelper::findFiles(
+                        Yii::getAlias('@template'),
+                        [
+                            'only' => ['*.json'],
+                            'caseSensitive' => false
+                        ]
+                    );
+            
+                    $templateNames = [];
+                    foreach ($templateFiles as $templateFilePath) {
+                        $template = json_decode(file_get_contents($templateFilePath));
+                        if( $template->name === $templateName) {
+                            return [
+                                'success' => false,
+                                "errorMessage" => \Yii::t('app', 'A template with the same name already exists')
+                            ];                            
+                        }
+                    }
+
                     // filename has random unique name - it is stored in @template folder : alias MUST be defined
                     // and target folder MUST exist
                     $uuid = \thamtech\uuid\helpers\UuidHelper::uuid();
@@ -408,7 +442,7 @@ class CartController extends \yii\web\Controller
                         }, $transactions),
                     ];
                     file_put_contents($filepath, json_encode($data, true));
-                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    
                     return [
                         'success' => true,
                         'filepath' => $filepath
@@ -423,10 +457,11 @@ class CartController extends \yii\web\Controller
         if (count($orders) != 0 || count($transactions) != 0) {
             // save models back to session storage
             $session['cart'] = [
-                'orders' => array_map(function ($order) {
+                'template-name' => $session['cart']['template-name'],
+                'orders'        => array_map(function ($order) {
                     return $order->getAttributes();
                 }, $orders),
-                'transactions' => array_map(function ($transaction) {
+                'transactions'  => array_map(function ($transaction) {
                     return $transaction->getAttributes();
                 }, $transactions)
             ];
@@ -445,6 +480,7 @@ class CartController extends \yii\web\Controller
         }
 
         return $this->render('manage', [
+            'templateName' => $templateName,
             'orders' => $orders,
             'transactions' => $transactions,
             'bankAccounts' => BankAccount::getNameIndex(),

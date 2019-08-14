@@ -120,27 +120,32 @@ $('#btn-save-form-settings').on('click', (ev) => {
 // Save As Template .. modal
 
 
-const showContent = (selector) => {
+const showContent = (selector, textContent) => {
     document.querySelectorAll('#save-template-modal .alert, #save-template-modal .form-group').forEach((el) => el.style.display = 'none');
-    document.querySelector(`#save-template-modal ${selector}`).style.display = 'block';
+    const container  =  document.querySelector(`#save-template-modal ${selector}`);
+    if(textContent) {
+        container.textContent = textContent;
+    }
+    container.style.display = 'block';
 }
 const showTemplateNameInput = () => showContent('.form-group');
 const showSavingTemplate = () => showContent('.alert-info');
 const showSaveSuccess = () => showContent('.alert-success');
-const showSaveError = () => showContent('.alert-danger');
+const showSaveError = (errorMessage) => showContent('.alert-danger', errorMessage);
 const showStartButtons = () => {
-    document.getElementById('btnbar-end').style.display = 'none';
-    document.getElementById('btnbar-start').style.display = 'block';
+    document.getElementById('tmpl-btnbar-end').style.display = 'none';
+    document.getElementById('tmpl-btnbar-start').style.display = 'block';
 };
 const showEndButtons = () => {
-    document.getElementById('btnbar-start').style.display = 'none';
-    document.getElementById('btnbar-end').style.display = 'block';
+    debugger;
+    document.getElementById('tmpl-btnbar-start').style.display = 'none';
+    document.getElementById('tmpl-btnbar-end').style.display = 'block';
 };
 const disableStartButtons = () => {
-    document.querySelectorAll('#btnbar-start > button').forEach((el) => el.disabled = true);
+    document.querySelectorAll('#tmpl-btnbar-start > button').forEach((el) => el.disabled = true);
 }
 const enableStartButtons = () => {
-    document.querySelectorAll('#btnbar-start > button').forEach((el) => el.disabled = false);
+    document.querySelectorAll('#tmpl-btnbar-start > button').forEach((el) => el.disabled = false);
 }
 const clearTemplateName = () => {
     document.getElementById('template-name').value = "";
@@ -155,18 +160,24 @@ const saveAsTemplate = (ev) => {
     showSavingTemplate();
     document.getElementById('cart-template-name').value = templateName;
     document.getElementById('cart-action').value = 'save-as-template';
-
+    debugger;
     const postURL = document.forms['cart-manager-form'].getAttribute('action');
     $.post(postURL, $('#cart-manager-form').serialize())
         .done((data) => {
             console.log(data);
-            showSaveSuccess();
+            debugger;
+            if(data.success) {
+                showSaveSuccess();
+            } else {
+                showSaveError(data.errorMessage);
+            }
         })
         .fail((err) => {
             console.error(err);
             showSaveError();
         })
         .always(() => {
+            enableStartButtons();
             showEndButtons();
         });
 };

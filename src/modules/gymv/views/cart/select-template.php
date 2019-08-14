@@ -6,7 +6,26 @@ use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this yii\web\View */
+$confirmMessage = \Yii::t('app', 'Are you sure you want to delete the selected template ?');
+$noSeledctionMessage = \Yii::t('app', 'no template selected');
 
+$jsScript=<<<EOS
+    document.getElementById('btn-delete-template').addEventListener('click', (ev) => {
+        if(document.getElementById('template-list').value.length != 0) {
+            if(confirm("$confirmMessage")) {
+                document.getElementById('template-action').value = 'delete-template';
+            } else {
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
+        } else {
+            alert("$noSeledctionMessage");
+            ev.stopPropagation();
+        }
+    });
+EOS;
+
+$this->registerJs($jsScript, View::POS_READY, 'template-selector');
 ?>
 <div>
     <h1>Select Template</h1>
@@ -23,9 +42,10 @@ use yii\web\View;
         <?php endif; ?>
 
         <?php $form = ActiveForm::begin(); ?>
-
+            <?= Html::hiddenInput('action', '', [ 'id' => 'template-action']) ?>
             <div class="form-group">
                 <?= Html::dropDownList('template-name', null, $templateNames, [
+                    'id' => 'template-list',
                     'size'=>1,
                     'prompt' => 'select ...',
                     'class' => 'form-control'
@@ -33,7 +53,9 @@ use yii\web\View;
             </div>
 
             <div class="form-group">
-                <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
+                <?= Html::submitButton(\Yii::t('app', 'Submit'), ['class' => 'btn btn-success']) ?>
+                <?= Html::a(\Yii::t('app', 'Cancel'), ['cart/check-out'], ['class' => 'btn btn-default']) ?>
+                <?= Html::submitButton(\Yii::t('app', 'Delete'), ['id' => 'btn-delete-template', 'class' => 'btn btn-danger']) ?>
             </div>
         <?php ActiveForm::end(); ?>
     <?php endif; ?>
