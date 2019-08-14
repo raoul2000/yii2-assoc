@@ -145,10 +145,10 @@ $orderModel = $model;
                             'filter'    => $bankAccounts,
                             'format'    => 'raw',
                             'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                                return Html::a(
-                                    Html::encode($bankAccounts[$model->from_account_id]),
+                                return Html::a('<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                        . Html::encode($bankAccounts[$model->from_account_id]),
                                     ['bank-account/view','id'=>$model->from_account_id],
-                                    [ 'title' => 'view bank account', 'any' => '1', 'data-pjax' => '0' ]
+                                    [ 'any' => '1', 'data-pjax' => '0', 'title' => \Yii::t('app', 'view account') ]
                                 );
                             }
                         ],
@@ -157,10 +157,10 @@ $orderModel = $model;
                             'filter'    =>  $bankAccounts,
                             'format'    => 'raw',
                             'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
-                                return Html::a(
-                                    Html::encode($bankAccounts[$model->to_account_id]),
+                                return Html::a('<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                        . Html::encode($bankAccounts[$model->to_account_id]),
                                     ['bank-account/view','id'=>$model->to_account_id],
-                                    [ 'data-pjax' => 0 ]
+                                    [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view account') ]
                                 );
                             }
                         ],
@@ -181,7 +181,7 @@ $orderModel = $model;
                                     return Html::a(
                                         '<span class="glyphicon glyphicon-remove"></span>',
                                         $url,
-                                        ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => 'Are you sure you want to unlink this transaction ?']
+                                        ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => \Yii::t('app', 'Are you sure you want to unlink this transaction ?')]
                                     );
                                 },
                             ]

@@ -146,11 +146,13 @@ AppAsset::register($this);
                 [
                     'label' => 'Administration',
                     'items' => [
+                        /*
                         [
                             'label'  => \Yii::t('app', 'Dashboard'),
                             'encode' => false,
                             'url'    => ['/admin/home']
                         ],
+                        */
                         [
                             'label'  => \Yii::t('app', 'Configuration'),
                             'encode' => false,
