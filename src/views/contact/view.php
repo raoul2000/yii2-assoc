@@ -47,6 +47,8 @@ $contactModel = $model;
         </div> 
     </div>
 
+    <?= Yii::$app->formatter->asNoteBox($model->note) ?>
+
     <?php if ($model->is_natural_person):?>
         <div class="row">
             <div class="col-lg-6">

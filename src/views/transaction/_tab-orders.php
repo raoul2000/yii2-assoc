@@ -23,9 +23,9 @@ $transactionModel = $model;
     </p>
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
-        'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
+        'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $orderDataProvider,
-        'filterModel' => $orderSearchModel,
+        'filterModel'  => $orderSearchModel,
         'columns' => [
             [
                 'attribute' => 'product_id',
@@ -56,14 +56,8 @@ $transactionModel = $model;
                 }
             ],
             'value',
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
+            'valid_date_start:appDate',
+            'valid_date_end:appDate',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'  => '{view} {unlink} ',

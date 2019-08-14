@@ -80,6 +80,24 @@ class Formatter extends \yii\i18n\Formatter
         }
     }
     /**
+     * Renders a text inside an infor box (bootstrap alert)
+     *
+     * @param string $note
+     * @return string the HTML to render
+     */
+    public function asNoteBox($note)
+    {
+        if (empty(trim($note))) {
+            return '';
+        } else {
+            return 
+                '<div class="alert alert-info" role="alert">
+                    <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
+                    ' . Html::encode($note) . '
+                </div>';
+        }        
+    }
+    /**
      * Format a value interpreted as the difference between an order value and the sum
      * of all its related transactions.
      *

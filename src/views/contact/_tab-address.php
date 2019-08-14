@@ -45,6 +45,9 @@ $contactModel = $model;
             ['class' => 'btn btn-danger', 'data-pjax' => 0]
         ) ?>
     </p>
+    
+    <?= Yii::$app->formatter->asNoteBox($model->address->note) ?>
+    
     <?= DetailView::widget([
         'model' => $model->address,
         'attributes' => [

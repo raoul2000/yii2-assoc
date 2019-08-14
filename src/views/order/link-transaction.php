@@ -15,12 +15,12 @@ $this->params['breadcrumbs'][] = 'link to transaction';
 \yii\web\YiiAsset::register($this);
 ?>
 <div>
-    <p>
+    <h3>
         <?= Html::a(
             '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Order',
             ['view', 'id' => $order->id]
         ) ?>
-    </p>
+    </h3>
     <div class="alert alert-info" role="alert">
         <p>
             <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one transaction to pay this order
