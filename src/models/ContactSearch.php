@@ -17,7 +17,8 @@ class ContactSearch extends Contact
     public function rules()
     {
         return [
-            [['name', 'firstname', 'is_deleted', 'email', 'gender'], 'safe'],
+            // 'birthday' is handled by addSmartDateCondition
+            [['name', 'firstname', 'is_deleted', 'email', 'gender', 'birthday'], 'safe'],
         ];
     }
 
@@ -65,6 +66,8 @@ class ContactSearch extends Contact
             ->andFilterWhere(['like', 'firstname', $this->firstname]);
 
         $query->andFilterWhere(['gender' => $this->gender]);
+
+        $query->addSmartDateCondition('birthday', $this);
 
         return $dataProvider;
     }

@@ -85,18 +85,18 @@ class Contact extends \yii\db\ActiveRecord
             ],*/
         ];
     }
-
     public static function find()
     {
-        $query = parent::find();
         // Hard code soft delete condition because I could not use
         // the SoftDeleteQueryBehavior behavior described in https://github.com/yii2tech/ar-softdelete
         //    $query->attachBehavior('softDelete', SoftDeleteQueryBehavior::className());
 
         // disable soft delete
         //$query->andWhere([ 'is_deleted' => 0]);
-        return $query;
+
+        return new ContactQuery(get_called_class());
     }
+
     /**
      * {@inheritdoc}
      */
