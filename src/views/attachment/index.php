@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\AttachmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Attachments';
+$this->title = \Yii::t('app', 'Attachments');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="attachment-index">
