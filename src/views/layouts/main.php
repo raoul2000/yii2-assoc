@@ -62,6 +62,11 @@ AppAsset::register($this);
                 [
                     'label' => 'GymV',
                     'items' => [
+                        [
+                            'label'  => \Yii::t('app', 'Home'),
+                            'encode' => false,
+                            'url'    => ['/gymv']
+                        ],
                         SessionContact::getContactId() !== null ? (
                             [
                                 'label'  => \Yii::t('app', 'Contact'),
@@ -76,11 +81,6 @@ AppAsset::register($this);
                                 'url'    => ['/bank-account/view', 'id' => SessionContact::getBankAccountId()]
                             ]
                         ) : (''),
-                        [
-                            'label'  => \Yii::t('app', 'Home'),
-                            'encode' => false,
-                            'url'    => ['/gymv']
-                        ],
                     ],
                 ]
             ) : (''),

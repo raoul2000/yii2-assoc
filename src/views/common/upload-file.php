@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 <div class="contact-form">
     <h1>
         <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-        Upload File
+        <?= \Yii::t('app', 'Upload File') ?>
     </h1>
     <hr/>
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
@@ -24,8 +24,15 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'file[]')->fileInput(['multiple' => true]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('Cancel', $redirect_url, ['class' => 'btn btn-default']) ?>
+            <?= Html::submitButton(
+                \Yii::t('app', 'Save'), 
+                ['class' => 'btn btn-success']
+            )?>
+            <?= Html::a(
+                \Yii::t('app', 'Cancel'), 
+                $redirect_url, 
+                ['class' => 'btn btn-default']
+            )?>
         </div>
 
     <?php ActiveForm::end(); ?>

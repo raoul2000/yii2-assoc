@@ -13,7 +13,7 @@ use yii\helpers\Url;
     <div class="col-sm-5">
         <h1>
             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-            Update
+            <?= \Yii::t('app', 'Update') ?>
         </h1>
         <hr/>
         <div class="attachment-form">
@@ -27,8 +27,15 @@ use yii\helpers\Url;
                 <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-                    <?= Html::a('Cancel', $redirect_url, ['class' => 'btn btn-default']) ?>
+                    <?= Html::submitButton(
+                        \Yii::t('app', 'Save'), 
+                        ['class' => 'btn btn-success']
+                    )?>
+                    <?= Html::a(
+                        \Yii::t('app', 'Cancel'), 
+                        $redirect_url, 
+                        ['class' => 'btn btn-default']
+                    )?>
                 </div>
 
             <?php ActiveForm::end(); ?>

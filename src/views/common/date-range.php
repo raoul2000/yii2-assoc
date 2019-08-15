@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 
 <div class="date-range-form">
     <h1>
-        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Date Range
+        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <?= \Yii::t('app', 'Date Range') ?>
     </h1>
     <hr/>
     <?php $form = ActiveForm::begin(); ?>
@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
                     $configuredDateRanges,
                     [
                         'size'=>1,
-                        'prompt' => 'select a date range ...'
+                        'prompt' => \Yii::t('app', 'select a date range ...')
                     ]
                 )
             ?>
@@ -37,12 +37,16 @@ use yii\widgets\ActiveForm;
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
             <?php if (!empty($model->start) || !empty($model->end)): ?>
                 <?= Html::a(
-                    'Clear Date Range', 
+                    \Yii::t('app', 'Clear Date Range'), 
                     ['date-range', 'clear' => 1, 'redirect_url' => $redirect_url],
                     ['class' => 'btn btn-danger']
                 )?>
             <?php endif;?>
-            <?= Html::a('Cancel', $redirect_url, ['class' => 'btn btn-default']) ?>
+            <?= Html::a(
+                \Yii::t('app', 'Cancel'), 
+                $redirect_url, 
+                ['class' => 'btn btn-default']
+            )?>
         </div>
 
     <?php ActiveForm::end(); ?>

@@ -10,12 +10,12 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="user-contact-form">
-    <h1>User Contact</h1>
+    <h1><?= \Yii::t('app', 'User Contact') ?></h1>
     <hr/>
     <?php if (count($contactNames) === 0): ?>
         <div class="alert alert-warning" role="alert">
             <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-            <b>No Contact available</b><br/>
+            <b><?= \Yii::t('app', 'No Contact available') ?></b><br/>
             Please <?= Html::a('click here', ['contact/create'],['class'=> 'alert-link']) ?> to create a contact.
         </div>        
     <?php else: ?>

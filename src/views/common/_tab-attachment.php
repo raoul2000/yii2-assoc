@@ -8,10 +8,14 @@ $allAttachments = $model->attachments;
 ?>
 
 <p>
-    <?= Html::a('Add Attachment', ['create-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ], ['class' => 'btn btn-success']) ?>
+    <?= Html::a(
+        \Yii::t('app', 'Add Attachment'), 
+        ['create-attachment', 'id' => $model->id, 'redirect_url' => Url::current() ], 
+        ['class' => 'btn btn-success']
+    )?>
 </p>
 <?php if (count($allAttachments) == 0): ?>
-    no attachment
+    <?= \Yii::t('app', 'no attachment') ?>
 <?php else: ?>
     <?= \app\components\widgets\AttachmentGridView::widget([
         'dataProvider' => new ArrayDataProvider(['allModels' => $allAttachments]),
