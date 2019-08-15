@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\CategorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Categories';
+$this->title = \Yii::t('app', 'Categories');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
@@ -20,7 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
 
     <p>
-        <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(
+            \Yii::t('app', 'Create Category'), 
+            ['create'], 
+            ['class' => 'btn btn-success']
+        )?>
     </p>
 
     <?php Pjax::begin(); ?>    
@@ -39,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a(
                                 Html::encode($contacts[$model->contact_id]),
                                 ['contact/view','id'=>$model->contact_id],
-                                [ 'data-pjax' => 0 ]
+                                [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
                             );
                         } else {
                             return null;

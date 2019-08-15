@@ -15,7 +15,7 @@ use app\models\Category;
 
         <?= $form->field($model, 'contact_id')->textInput() ?>
 
-        <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => 'select a type ...']) ?>
+        <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => \Yii::t('app', 'select a type ...')]) ?>
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
