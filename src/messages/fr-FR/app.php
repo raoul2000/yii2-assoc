@@ -176,5 +176,7 @@ return [
     'Dashboard' => '@@Tableau de bord@@',
     'select a template ...' => 'sélectionnez un modèle ...',
     'Save Template' => 'Enregistrer le modèle',
-    'Registered Contacts' => 'Adhérents'
+    'Registered Contacts' => 'Adhérents',
+    'Login' => 'Connexion',
+    'Logout' => 'Déconnexion',
 ];

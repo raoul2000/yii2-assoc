@@ -191,13 +191,13 @@ AppAsset::register($this);
             ) : (''),
 
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/user/security/login']]
+                ['label' => \Yii::t('app', 'Login'), 'url' => ['/user/security/login']]
             ) : (
                 '<li>'
                     . Html::beginForm(['/user/security/logout'], 'post')
                     . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
-                        ['class' => 'btn btn-link logout']
+                        '<span class="glyphicon glyphicon-off" aria-hidden="true"></span> (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'btn btn-link logout', 'title' => \Yii::t('app', 'Logout')]
                     )
                     . Html::endForm()
                 . '</li>'
