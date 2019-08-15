@@ -5,10 +5,13 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Address */
 
-$this->title = 'Update Address';
-$this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$addrTitle = $model->line_1 . ' ' . $model->line_2 . ' ' . $model->line_3;
+$addrTitle = substr($addrTitle, 0, 30) . '...';
+
+$this->title = \Yii::t('app', 'Update Address');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Addresses'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Html::encode($addrTitle), 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = \Yii::t('app', 'Update');
 
 ?>
 <div class="address-update">
@@ -21,7 +24,7 @@ $this->params['breadcrumbs'][] = 'Update';
                 for <?= Html::a(
                     Html::encode($contact->longName),
                     ['contact/view' , 'id' => $contact->id],
-                    ['title' => 'view contact']
+                    ['title' => \Yii::t('app', 'view contact')]
                 )?>
             </small>
         <?php endif; ?>
@@ -33,11 +36,11 @@ $this->params['breadcrumbs'][] = 'Update';
         <?php if (isset($contact)) {
             $icon = 'glyphicon-warning-sign';
             $className = 'alert-warning';
-            $text = 'This address is also used by';
+            $text = \Yii::t('app', 'This address is also used by');
         } else {
             $icon = 'glyphicon-info-sign';
             $className = 'alert-info';
-            $text = 'This address is used by';
+            $text = \Yii::t('app', 'This address is used by');
         }?>
         <div class="alert <?= $className ?>" role="alert">
             <p>
@@ -45,9 +48,15 @@ $this->params['breadcrumbs'][] = 'Update';
                 <?php
                 $linkedContacts = [];
                 foreach ($otherContacts as $contact) {
-                    $linkedContacts[] = '<b>' . Html::a(Html::encode($contact->longName), ['contact/view', 'id' => $contact->id]) . '</b>';
+                    $linkedContacts[] = '<b>' 
+                        . Html::a(
+                            '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' 
+                                . Html::encode($contact->longName), 
+                            ['contact/view', 'id' => $contact->id],
+                            ['title' => \Yii::t('app', 'view contact')]) 
+                        . '</b>';
                 }
-                echo implode(' | ', $linkedContacts);
+                echo implode(', ', $linkedContacts);
                 ?>
             </p>
         </div>

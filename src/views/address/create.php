@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Address */
 
-$this->title = 'Create Address';
+$this->title = \Yii::t('app', 'Create Address');
 $this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 for <?= Html::a(
                     Html::encode($contact->longName),
                     ['contact/view', 'id' => $contact->id],
-                    ['title' => 'view contact']
+                    ['title' => \Yii::t('app', 'view contact')]
                 )?>
             </small>
         <?php endif; ?>

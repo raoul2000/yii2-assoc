@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
 $title = $model->line_1 . ' ' . $model->line_2 . ' ' . $model->line_3;
 $title = substr($title, 0, 30) . '...';
 $this->title = $title;
-$this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Addresses'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -22,15 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a(\Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(\Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => \Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Create Another Address', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(\Yii::t('app', 'Create Another Address'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -53,12 +53,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => ['date', 'php:d/m/Y H:i']
             ],
             [
-                'label' => 'Used  By',
+                'label' => \Yii::t('app', 'Used  By'),
                 'format' => 'raw',
                 'value' => function ($model) {
                     $count = count($model->contacts);
                     if ($count == 0) {
-                        return '<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> this address is not used by any contact';
+                        return '<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> ' 
+                        . \Yii::t('app', 'this address is not used by any contact');
                     } else {
                         $linkedContacts = [];
                         foreach ($model->contacts as $contact) {
@@ -69,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ['title' => \Yii::t('app', 'view contact')]
                             );
                         }
-                        return implode(' | ', $linkedContacts);
+                        return implode(', ', $linkedContacts);
                     }
                 }
             ],

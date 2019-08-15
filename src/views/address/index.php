@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\AddressSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Addresses';
+$this->title = \Yii::t('app', 'Addresses');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="address-index">
@@ -24,9 +24,17 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Address', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Statistics', ['stat/address'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
-        <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> Quality', ['quality/address', 'tab' => 'analysis'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::a(\Yii::t('app', 'Create Address'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(
+            '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> ' . \Yii::t('app', 'Statistics'), 
+            ['stat/address'], 
+            ['class' => 'btn btn-default',  'data-pjax'=>0]
+        )?>
+        <?= Html::a(
+            '<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> ' .\Yii::t('app', 'Quality'), 
+            ['quality/address', 'tab' => 'analysis'], 
+            ['class' => 'btn btn-default',  'data-pjax'=>0]
+        )?>
     </p>
 
     <?= GridView::widget([
