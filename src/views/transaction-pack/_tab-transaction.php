@@ -80,7 +80,7 @@ $transactionPackModel = $model;
                         return Html::a(
                             '<span class="glyphicon glyphicon-remove"></span>',
                             $url,
-                            ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => \Yii::t('app', 'Are you sure you want to unlink this Transaction ?')]
+                            ['title' => 'unlink', 'data-pjax'=>0, 'data-confirm' => \Yii::t('app', 'Are you sure you want to unlink this transaction ?')]
                         );
                     },
                 ]

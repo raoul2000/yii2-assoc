@@ -34,7 +34,10 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'end')->textInput([ 'autocomplete'=> 'off' ]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(
+                \Yii::t('app', 'Save'), 
+                ['class' => 'btn btn-success']
+            )?>
             <?php if (!empty($model->start) || !empty($model->end)): ?>
                 <?= Html::a(
                     \Yii::t('app', 'Clear Date Range'), 

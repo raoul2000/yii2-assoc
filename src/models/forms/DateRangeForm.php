@@ -44,7 +44,17 @@ class DateRangeForm extends Model
 
         ];
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'configuredDateRangeId' => \Yii::t('app', 'Configured Date Range'),
+            'start' => \Yii::t('app', 'Range Start'),
+            'end' => \Yii::t('app', 'Range End'),
+        ];
+    }
     public function validateConfiguredDateRange($attribute, $params, $validator)
     {
         $valueToValidate = $this->$attribute;
