@@ -10,8 +10,8 @@ use yii\helpers\Url;
 /* @var $model app\models\TransactionPack */
 
 $this->title = 'N°' . $model->id . ' - ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
-$this->params['breadcrumbs'][] = ['label' => 'Packs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['transaction/index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Packs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $transactionPackModel = $model;
@@ -23,15 +23,15 @@ $transactionPackModel = $model;
     </h1>
     <hr/>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a(\Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(\Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => \Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('Create Another Transaction Pack', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(\Yii::t('app', 'Create Another Transaction Pack'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= DetailView::widget([
@@ -39,14 +39,14 @@ $transactionPackModel = $model;
         'attributes' => [
             'id',
             [
-                'label' => 'Total Value',
+                'label' => \Yii::t('app', 'Total Value'),
                 'format' => 'raw',
                 'value' => function ($model) {
                     return '<b>' . $model->getValueSum() . '</b>';
                 }
             ],
             [
-                'label' => 'Bank Account',
+                'label' => \Yii::t('app', 'Bank Account'),
                 'format' => 'raw',
                 'value' => function ($model) {
                     if ($model->bankAccount) {
@@ -54,7 +54,7 @@ $transactionPackModel = $model;
                             '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
                                 . Html::encode($model->bankAccount->longName),
                             ['bank-account/view','id' => $model->bankAccount->id],
-                            ['title' => 'view Account', 'data-pjax' => 0]
+                            ['title' => \Yii::t('app', 'view Account'), 'data-pjax' => 0]
                         );
                     } else {
                         return null;
@@ -79,13 +79,15 @@ $transactionPackModel = $model;
         'options' => ['class' =>'nav-tabs'],
         'items' => [
             [
-                'label' => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span>  Transaction',
+                'label' => '<span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> '
+                    . \Yii::t('app', 'Transaction'),
                 'encode' => false,
                 'url' => ['view', 'id' => $model->id, 'tab'=>'transaction'],
                 'active' => $tab == 'transaction'
             ],
             [
-                'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> ' 
+                    . \Yii::t('app', 'Attachment'),
                 'encode' => false,
                 'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
                 'active' => $tab == 'attachment'

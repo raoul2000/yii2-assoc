@@ -8,8 +8,8 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\TransactionPackSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Packs';
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
+$this->title = \Yii::t('app', 'Packs');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['transaction/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-pack-index">
@@ -17,13 +17,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1>
         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 
         <?= Html::encode($this->title) ?>
-        <small>Transactions</small>
+        <small><?= \Yii::t('app', 'Transactions') ?></small>
     </h1>    
 
     <hr/>    
 
     <p>
-        <?= Html::a('Create Transaction Pack', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(\Yii::t('app', 'Create Transaction Pack'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>

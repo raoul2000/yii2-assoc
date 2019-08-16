@@ -13,11 +13,11 @@ use yii\helpers\Url;
 
 
 $longName = 'N°' . $transactionPack->id . ' - ' . $transactionPack->name;
-$this->title = 'Update Pack: ' . $longName;
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['transaction/index']];
-$this->params['breadcrumbs'][] = ['label' => 'Transaction Packs', 'url' => ['index']];
+$this->title = \Yii::t('app', 'Update Pack') . ': ' . $longName;
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['transaction/index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transaction Packs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $longName, 'url' => ['view', 'id' => $transactionPack->id]];
-$this->params['breadcrumbs'][] = 'link Transaction';
+$this->params['breadcrumbs'][] = \Yii::t('app', 'link Transaction');
 \yii\web\YiiAsset::register($this);
 
 // Client Js script 
@@ -52,14 +52,15 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
 <div>
     <p>
         <?= Html::a(
-            '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction Pack',
+            '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> '
+            .  \Yii::t('app', 'Back To Transaction Pack'),
             ['view', 'id' => $transactionPack->id]
         )?>
     </p>
     <div class="alert alert-info" role="alert">
         <p>
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one or
-             more transactions to add to this pack.
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
+            <?= \Yii::t('app', 'Please select one or more transactions to add to this pack.') ?>
         </p>
     </div>    
 
@@ -84,9 +85,10 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
                         return Html::a(
-                            Html::encode($bankAccounts[$model->from_account_id]),
+                            '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                . Html::encode($bankAccounts[$model->from_account_id]),
                             ['bank-account/view','id'=>$model->from_account_id],
-                            [ 'data-pjax' => 0 ]
+                            [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
                         );
                     }
                 ],
@@ -96,9 +98,10 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
                         return Html::a(
-                            Html::encode($bankAccounts[$model->to_account_id]),
+                            '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
+                                . Html::encode($bankAccounts[$model->to_account_id]),
                             ['bank-account/view','id'=>$model->to_account_id],
-                            [ 'data-pjax' => 0 ]
+                            [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
                         );
                     }
                 ],
@@ -120,6 +123,9 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
     <?php Pjax::end(); ?>
     
     <div class="form-group">
-        <?= Html::Button('Link Selected Transaction(s)', ['id' => 'btn-link-transactions', 'class' => 'btn btn-success']) ?>
+        <?= Html::Button(
+            \Yii::t('app', 'Link Selected Transaction(s)'), 
+            ['id' => 'btn-link-transactions', 'class' => 'btn btn-success']
+        )?>
     </div>
 </div>
