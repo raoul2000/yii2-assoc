@@ -151,8 +151,8 @@ class Transaction extends \yii\db\ActiveRecord
     {
         return [
             'id' => \Yii::t('app', 'ID'),
-            'from_account_id' => \Yii::t('app', 'From Account ID'),
-            'to_account_id' => \Yii::t('app', 'To Account ID'),
+            'from_account_id' => \Yii::t('app', 'Sender Account'),
+            'to_account_id' => \Yii::t('app', 'Receiver Account'),
             'value' => \Yii::t('app', 'Value'),
             'is_verified' => \Yii::t('app', 'Is Verified'),
             'description' => \Yii::t('app', 'Description'),

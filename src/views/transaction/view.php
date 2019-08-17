@@ -54,7 +54,7 @@ $transactionModel = $model;
                 'model' => $model,
                 'attributes' => [
                     [
-                        'label' => \Yii::t('app', 'From'),
+                        'label' => \Yii::t('app', 'Sender Account'),
                         'format' => 'raw',
                         'value' => function ($model) {
                             return Html::a(
@@ -66,7 +66,7 @@ $transactionModel = $model;
                         }
                     ],
                     [
-                        'label' => \Yii::t('app', 'To'),
+                        'label' => \Yii::t('app', 'Receiver Account'),
                         'format' => 'raw',
                         'value' => function ($model) {
                             return Html::a(
