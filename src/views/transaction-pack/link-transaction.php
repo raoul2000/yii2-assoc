@@ -67,10 +67,10 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
 
     <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
         <?= GridView::widget([
-            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
-            'id' => $gridViewElementId,
-            'dataProvider' => $transactionDataProvider,
-            'filterModel' => $transactionSearchModel,
+            'id'            => $gridViewElementId,
+            'tableOptions' 	=> ['class' => 'table table-hover table-condensed'],
+            'dataProvider'  => $transactionDataProvider,
+            'filterModel'   => $transactionSearchModel,
             'columns' => [
                 [
                     'class' => 'yii\grid\CheckboxColumn',
