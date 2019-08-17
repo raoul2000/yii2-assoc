@@ -376,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `updated_at` DATETIME NULL DEFAULT NULL,
   `is_verified` TINYINT(1) NULL DEFAULT '0',
   `reference_date` DATE NULL DEFAULT NULL,
-  `code` VARCHAR(10) NULL DEFAULT NULL,
+  `code` VARCHAR(128) NULL DEFAULT NULL,
   `transaction_pack_id` INT(10) UNSIGNED NULL DEFAULT NULL,
   `type` VARCHAR(10) NULL DEFAULT NULL,
   `orders_value_total` DECIMAL(6,2) NULL DEFAULT NULL,
