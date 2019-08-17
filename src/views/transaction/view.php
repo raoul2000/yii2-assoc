@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 /* @var $model app\models\Transaction */
 
 $this->title = 'N°' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $transactionModel = $model;
@@ -18,20 +18,34 @@ $transactionModel = $model;
 
     <h1>
         <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
-        Transaction <?= Html::encode($this->title) ?>
+        <?= \Yii::t('app', 'Transaction') ?> <?= Html::encode($this->title) ?>
     </h1>
     <hr/>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a(
+            \Yii::t('app', 'Update'), 
+            ['update', 'id' => $model->id], 
+            ['class' => 'btn btn-primary']
+        )?>
+        <?= Html::a(
+            \Yii::t('app', 'Delete'), 
+            ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => \Yii::t('app', 'Are you sure you want to delete this item?'),
                 'method' => 'post',
             ],
-        ]) ?>
-        <?= Html::a('Create Another Transaction', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('View Complete', ['view-complete', 'id'=> $model->id], ['class' => 'btn btn-default']) ?>
+        ])?>
+        <?= Html::a(
+            \Yii::t('app', 'Create Another Transaction'), 
+            ['create'], 
+            ['class' => 'btn btn-success']
+        )?>
+        <?= Html::a(
+            \Yii::t('app', 'View Complete'), 
+            ['view-complete', 'id'=> $model->id],
+            ['class' => 'btn btn-default']
+        )?>
     </p>
 
     <div class="row">
@@ -40,24 +54,26 @@ $transactionModel = $model;
                 'model' => $model,
                 'attributes' => [
                     [
-                        'label' => 'From',
+                        'label' => \Yii::t('app', 'From'),
                         'format' => 'raw',
                         'value' => function ($model) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->fromAccount->longName),
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' 
+                                    . Html::encode($model->fromAccount->longName),
                                 ['bank-account/view','id' => $model->fromAccount->id],
-                                ['title' => 'view Account', 'data-pjax' => 0]
+                                ['title' => \Yii::t('app', 'view Account'), 'data-pjax' => 0]
                             );
                         }
                     ],
                     [
-                        'label' => 'To',
+                        'label' => \Yii::t('app', 'To'),
                         'format' => 'raw',
                         'value' => function ($model) {
                             return Html::a(
-                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' . Html::encode($model->toAccount->longName),
+                                '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' 
+                                    . Html::encode($model->toAccount->longName),
                                 ['bank-account/view','id' => $model->toAccount->id],
-                                ['title' => 'view Account', 'data-pjax' => 0]
+                                ['title' => \Yii::t('app', 'view Account'), 'data-pjax' => 0]
                             );
                         }
                     ],
@@ -81,7 +97,7 @@ $transactionModel = $model;
                 'model' => $model,
                 'attributes' => [
                     [
-                        'label' => 'Category',
+                        'label' => \Yii::t('app', 'Category'),
                         'format' => 'raw',
                         'value' => function ($model) {
                             if ($model->category_id) {
@@ -95,7 +111,7 @@ $transactionModel = $model;
                     'orders_value_total',
                     'orderValuesDiff:orderValuesDiff',
                     [
-                        'label' => 'pack',
+                        'label' => \Yii::t('app', 'pack'),
                         'format' => 'raw',
                         'value' => function ($model) {
                             if ($model->transaction_pack_id) {
@@ -103,7 +119,7 @@ $transactionModel = $model;
                                     '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> '
                                         . Html::encode('pack N°' . $model->transaction_pack_id . ' - ' . $model->pack->name),
                                     ['transaction-pack/view', 'id' => $model->transaction_pack_id],
-                                    ['title' => 'view pack', 'data-pjax' => 0]
+                                    ['title' => \Yii::t('app', 'view pack'), 'data-pjax' => 0]
                                 );
                             } else {
                                 return null;
@@ -128,15 +144,17 @@ $transactionModel = $model;
             'options' => ['class' =>'nav-tabs'],
             'items' => [
                 [
-                    'label' => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders',
+                    'label'  => '<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> ' 
+                        . \Yii::t('app', 'Orders'),
                     'encode' => false,
-                    'url' => ['view', 'id' => $model->id,'tab'=>'orders'],
+                    'url'    => ['view', 'id' => $model->id,'tab'=>'orders'],
                     'active' => $tab == 'orders'
                 ],
                 [
-                    'label' => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> Attachment',
+                    'label'  => '<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> ' 
+                        . \Yii::t('app', 'Attachment'),
                     'encode' => false,
-                    'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
+                    'url'    => ['view', 'id' => $model->id,'tab'=>'attachment'],
                     'active' => $tab == 'attachment'
                 ],
             ]

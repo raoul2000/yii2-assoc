@@ -18,7 +18,7 @@ $uploadForm = new \app\models\forms\UploadForm();
         <div class="row">
             <div class="col-md-5">
                 <div class="form-group">
-                    <label class="control-label" for="from_account-selectized">Source Account</label>
+                    <label class="control-label" for="from_account-selectized"><?= \Yii::t('app', 'Source Account') ?></label>
                     <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                         'name' => Html::getInputName($model, 'from_account_id'),
                         'value' => $model->from_account_id,
@@ -32,7 +32,7 @@ $uploadForm = new \app\models\forms\UploadForm();
             </div>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label class="control-label" for="to_account-selectized">Target Account</label>
+                    <label class="control-label" for="to_account-selectized"><?= \Yii::t('app', 'Target Account') ?></label>
                     <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                         'name' => Html::getInputName($model, 'to_account_id'),
                         'id' => 'to_account-selectized',
@@ -75,7 +75,7 @@ $uploadForm = new \app\models\forms\UploadForm();
                     //echo $form->field($model, 'category_id')->dropDownList($categories, ['prompt' => 'select a category ...']) 
                 ?>
                 <div class="form-group">
-                    <label class="control-label" for="category-selectized">Category</label>
+                    <label class="control-label" for="category-selectized"><?= \Yii::t('app', 'Category') ?></label>
                     <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                         'name' => Html::getInputName($model, 'category_id'),
                         'id' => 'category-selectized',
@@ -90,22 +90,10 @@ $uploadForm = new \app\models\forms\UploadForm();
         </div>
 
 
-
-
         <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
         
         <?php if (!$model->isNewRecord):?>
             <?= $form->field($model, 'is_verified')->checkbox() ?>
-        <?php endif; ?>
-
-        <?php if ($model->isNewRecord): ?>
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>Attachment</a></li>
-            </ul>
-            <div>
-                <?= $form->field($uploadForm, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
-                <?= $form->field($uploadForm, 'file')->fileInput() ?>
-            </div>
         <?php endif; ?>
 
         <?= $form->field($model, 'tagValues')->widget(\dosamigos\selectize\SelectizeTextInput::className(), [
@@ -119,13 +107,24 @@ $uploadForm = new \app\models\forms\UploadForm();
                     'searchField' => ['name'],
                     'create' => true,
                 ],
-            ])->hint('Use commas to separate tags')
+            ])->hint(\Yii::t('app', 'Use commas to separate tags'))
         ?>
+
+
+        <?php if ($model->isNewRecord): ?>
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active"><a href="#"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span><?= \Yii::t('app', 'Attachment') ?></a></li>
+            </ul>
+            <div>
+                <?= $form->field($uploadForm, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+                <?= $form->field($uploadForm, 'file')->fileInput() ?>
+            </div>
+        <?php endif; ?>
 
         <hr/>
         
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
         </div>
 
     <?php ActiveForm::end(); ?>

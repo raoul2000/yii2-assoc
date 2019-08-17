@@ -10,13 +10,13 @@ $transactionModel = $model;
 ?>
 <div class="tab-orders">
     <p>
-        <?= Html::a('Create Order For This Transaction', [
+        <?= Html::a(\Yii::t('app', 'Create Order For This Transaction'), [
             'order/create',
             'transaction_id' => $model->id,
             'contact_id' => $model->fromAccount->contact->id
             ], ['class' => 'btn btn-success', 'data-pjax'=>0]) ?>
         
-        <?= Html::a('Link To Existing Order', [
+        <?= Html::a(\Yii::t('app', 'Link To Existing Order'), [
             'link-order',
             'id' => $model->id
             ], ['class' => 'btn btn-primary', 'data-pjax'=>0]) ?>
@@ -29,7 +29,7 @@ $transactionModel = $model;
         'columns' => [
             [
                 'attribute' => 'product_id',
-                'label'     => 'Product',
+                'label'     => \Yii::t('app', 'Product'),
                 'filter'    => $products,
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($products) {
@@ -43,7 +43,7 @@ $transactionModel = $model;
             ],
             [
                 'attribute' => 'to_contact_id',
-                'label'     => 'Beneficiary',
+                'label'     => \Yii::t('app', 'Beneficiary'),
                 'filter'    => $contacts,
                 'format'    => 'raw',
                 'value'     => function ($model, $key, $index, $column) use ($contacts) {
@@ -73,7 +73,7 @@ $transactionModel = $model;
                         return Html::a(
                             '<span class="glyphicon glyphicon-remove"></span>',
                             $url,
-                            ['title' => 'unlink', 'data-pjax' => 0, 'data-confirm' => 'Are you sure you want to unlink this order ?']
+                            ['title' => 'unlink', 'data-pjax' => 0, 'data-confirm' => \Yii::t('app', 'Are you sure you want to unlink this order ?')]
                         );
                     },
                 ]

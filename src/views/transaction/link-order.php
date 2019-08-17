@@ -12,9 +12,9 @@ use yii\helpers\Url;
 /* @var $model app\models\Contact */
 
 $this->title = 'N°' . $transaction->id;
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $transaction->id]];
-$this->params['breadcrumbs'][] = 'link Order';
+$this->params['breadcrumbs'][] = \Yii::t('app', 'link Order');
 \yii\web\YiiAsset::register($this);
 
 // Client Js script
@@ -49,24 +49,26 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
 ?>
 <p>
     <?= Html::a(
-        '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Back To Transaction N°' . $transaction->id,
+        '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> ' 
+            . \Yii::t('app', 'Back To Transaction N°') . $transaction->id,
         ['view', 'id' => $transaction->id]
     )?>
 </p>
 
 <div class="alert alert-info" role="alert">
     <p>
-        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select one or more orders for this transaction
+        <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
+        <?= \Yii::t('app', 'Please select one or more orders for this transaction') ?>
     </p>
 </div>  
 
     <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
         <?= GridView::widget([
-            'tableOptions' 		=> ['class' => 'table table-hover table-condensed'],
-            'id' => $gridViewElementId,
+            'id'           => $gridViewElementId,
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $orderDataProvider,
-            'filterModel' => $orderSearchModel,
-            'columns' => [
+            'filterModel'  => $orderSearchModel,
+            'columns'      => [
                 [
                     'class' => 'yii\grid\CheckboxColumn',
                     'checkboxOptions' => function ($model) {
@@ -76,7 +78,7 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
                 'id',
                 [
                     'attribute' => 'product_id',
-                    'label'     => 'Product',
+                    'label'     => \Yii::t('app', 'Product'),
                     'filter'    => $products,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($products) {
@@ -90,7 +92,7 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
                 ],
                 [
                     'attribute' => 'to_contact_id',
-                    'label'     => 'Beneficiary',
+                    'label'     => \Yii::t('app', 'Beneficiary'),
                     'filter'    => $contacts,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column) use ($contacts) {
@@ -108,5 +110,8 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-order-link-handler');
     <?php Pjax::end(); ?>
     
     <div class="form-group">
-        <?= Html::Button('Link Selected Orders', ['id' => 'btn-link-orders', 'class' => 'btn btn-success']) ?>
+        <?= Html::Button(
+            \Yii::t('app', 'Link Selected Orders'), 
+            ['id' => 'btn-link-orders', 'class' => 'btn btn-success']
+        )?>
     </div>

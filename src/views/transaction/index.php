@@ -9,7 +9,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\TransactionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Transactions';
+$this->title = \Yii::t('app', 'Transactions');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-index">
@@ -22,10 +22,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); ?>
         <div class="pull-right">
-            <?= Html::a('<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Manage Transaction Packs', ['transaction-pack/index'], ['class' => 'btn btn-info',  'data-pjax'=>0]) ?>
+            <?= Html::a(
+                '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ' 
+                    . \Yii::t('app', 'Manage Transaction Packs'), 
+                ['transaction-pack/index'], 
+                ['class' => 'btn btn-info',  'data-pjax'=>0]) 
+            ?>
         </div>    
         <p>
-            <?= Html::a('Create Transaction', ['create'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(
+                \Yii::t('app', 'Create Transaction'), 
+                ['create'],
+                ['class' => 'btn btn-success']
+            )?>
         </p>
 
         <?php  echo $this->render('_search', ['model' => $searchModel, 'tagValues' => $tagValues]); ?>    
@@ -33,8 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
+            'filterModel'  => $searchModel,
+            'columns'      => [
                 [
                     'attribute' => 'id',
                     'label'     => 'N°',
@@ -94,11 +103,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'is_verified',
                     'format'    => 'raw',
                     'filter'    =>  [
-                        '1' => 'oui',
-                        '0' => 'non'
+                        '1' => \Yii::t('app', 'oui'),
+                        '0' => \Yii::t('app', 'non')
                     ],
                     'value'     => function ($model, $key, $index, $column) {
-                        return $model->is_verified ? 'oui' : 'non';
+                        return $model->is_verified ? \Yii::t('app', 'oui') : \Yii::t('app', 'non');
                     }
                 ],
                 'reference_date:appDate',

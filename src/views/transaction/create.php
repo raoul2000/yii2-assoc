@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
 
-$this->title = 'Create Transaction';
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
+$this->title = \Yii::t('app', 'Create Transaction');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="transaction-create">
@@ -15,16 +15,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
         <?= Html::encode($this->title) ?>
         <?php if ($model->from_account_id != null): ?>
-            <small>Debit From <?= Html::a(
-                Html::encode($bankAccounts[$model->from_account_id]),
-                ['bank-account/view', 'id' => $model->from_account_id ],
-                ['title' => 'view bank account'])
-            ?></small>
+            <small>
+                <?= \Yii::t('app', 'Debit From') ?> <?= Html::a(
+                    Html::encode($bankAccounts[$model->from_account_id]),
+                    ['bank-account/view', 'id' => $model->from_account_id ],
+                    ['title' => \Yii::t('app', 'view bank account')]
+                )?>
+            </small>
         <?php elseif ($model->to_account_id != null): ?>
-        <small>Credit To <?= Html::a(
+        <small><?= \Yii::t('app', 'Credit To') ?> <?= Html::a(
                 Html::encode($bankAccounts[$model->to_account_id]),
                 ['bank-account/view', 'id' => $model->to_account_id ],
-                ['title' => 'view bank account'])
+                ['title' => \Yii::t('app', 'view bank account')])
             ?></small>
         <?php endif; ?>
     </h1>

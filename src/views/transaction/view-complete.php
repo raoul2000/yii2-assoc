@@ -8,8 +8,8 @@ use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transaction */
 
-$this->title = 'complete';
-$this->params['breadcrumbs'][] = ['label' => 'Transactions', 'url' => ['index']];
+$this->title = \Yii::t('app', 'Complete');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Transactions'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $valueSumRowClass = '';
@@ -55,7 +55,7 @@ if (count($orders) && count($transactions)) {
                             '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' .
                                 Html::encode($bankAccounts[$transaction->from_account_id]),
                             ['bank-account/view', 'id' => $transaction->from_account_id ],
-                            ['title' => 'view Account']
+                            ['title' => \Yii::t('app', 'view Account')]
                         )?>                                         
                     </td>
                     <td>
@@ -63,7 +63,7 @@ if (count($orders) && count($transactions)) {
                             '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' .
                                 Html::encode($bankAccounts[$transaction->to_account_id]),
                             ['bank-account/view', 'id' => $transaction->to_account_id ],
-                            ['title' => 'view Account']
+                            ['title' => \Yii::t('app', 'view Account')]
                         )?>                                         
                     </td>
                     <td><?= $transaction->reference_date ?></td>
@@ -74,7 +74,7 @@ if (count($orders) && count($transactions)) {
                         <?= Html::a(
                             '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>',
                             ['transaction/view', 'id' => $transaction->id],
-                            ['title' => 'view Transaction']
+                            ['title' => \Yii::t('app', 'view Transaction')]
                         ) ?>                        
                     </td>
                 </tr>
@@ -94,11 +94,11 @@ if (count($orders) && count($transactions)) {
 
     <?php if (count($orders) == 0): ?>
         <div class="alert alert-info" role="alert">
-            There is no order related to transactions
+            <?= \Yii::t('app', 'There is no order related to transactions') ?>
         </div>
     <?php else: ?>
         <h2>
-        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Orders
+        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> <?= \Yii::t('app', 'Orders') ?>
         </h2>
         <hr/>    
         <table class="table table-condensed table-hover">
@@ -119,7 +119,7 @@ if (count($orders) && count($transactions)) {
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
                                     Html::encode($contacts[$order->from_contact_id]),
                                 ['contact/view', 'id' => $order->from_contact_id ],
-                                ['title' => 'view Contact']
+                                ['title' => \Yii::t('app', 'view Contact')]
                             )?>
                         </td>
                         <td>
@@ -127,14 +127,14 @@ if (count($orders) && count($transactions)) {
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
                                     Html::encode($contacts[$order->to_contact_id]),
                                 ['contact/view', 'id' => $order->to_contact_id ],
-                                ['title' => 'view Contact']
+                                ['title' => \Yii::t('app', 'view Contact')]
                             )?>
                         </td>
                         <td>
                             <?= Html::a(
                                 Html::encode($products[$order->product_id]),
                                 ['product/view', 'id' => $order->product_id ],
-                                ['title' => 'view Product']
+                                ['title' => \Yii::t('app', 'view Product')]
                             )?>                        
                         </td>
                         <td><?= $order->value?></td>
@@ -142,7 +142,7 @@ if (count($orders) && count($transactions)) {
                             <?= Html::a(
                                 '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>',
                                 ['order/view', 'id' => $order->id],
-                                ['title' => 'view Order']
+                                ['title' => \Yii::t('app', 'view Order')]
                             ) ?>                        
                         </td>
                     </tr>
