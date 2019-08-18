@@ -24,7 +24,7 @@ $vdo->min($value1, $value2);         // $value1 or $value2
 
 ```php
 // create a closed interval [$value1, $value2]
-$int1 = IntervalFactory::create($value1,);  // returns Interval
+$int1 = IntervalFactory::create($value1, $value2);  // returns Interval
 
 // create right opened interval [$value1
 $int1 = IntervalFactory::create($value1);   // returns Interval
