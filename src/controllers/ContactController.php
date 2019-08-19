@@ -241,8 +241,16 @@ class ContactController extends Controller
             ])
             ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->asArray();
+        /* could it be replace by ...
+        $queryOrders = $model
+            ->getOrders()
+            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->asArray();
+        */
+
 
         $byProduct = [];
+        // group orders per product
         foreach ($queryOrders->each() as $order) {
             // data is being fetched from the server in batches of 100,
             // but $order represents one row of data from the order table
@@ -253,6 +261,44 @@ class ContactController extends Controller
                 $byProduct[$productKey] = [];
             }
             $byProduct[$productKey][] = $order;
+        }
+
+        // associative array :
+        // key : p + product_id
+        // value : DateRangeSet
+        $validity = [];
+        foreach ($byProduct as $productKey => $orders) {
+            if ($orders[0]['from_contact_id'] === $model->id) {
+                // contact is the producer
+                continue;
+            }
+            // create initial date range  Set with the first Validity date Range
+            $validity[$productKey] = new DateRangeSet(
+                new DateRange(
+                    $order['valid_date_start'], 
+                    $order['valid_date_end']
+                )
+            );
+
+            if( count($orders) === 1) {
+                // contact is a consumer but did not return this product : validity is not modified
+                continue;
+            }
+
+            // contact consumed the product and has done other exchanges that will extend or reduce
+            // the validity date range of the consumed product
+            for ($idx=1; $idx < count($orders); $idx++) { 
+                $order = $orders[$idx];
+                
+                $orderValidity = new DateRange($order['valid_date_start'], $order['valid_date_end']);
+                if( $order['from_contact_id'] == $id) {
+                    // contact is the provider : reduce validity date range
+                    $validity[$productKey]->substract($orderValidity);
+                } else {
+                    // contact is the consumer : expand validity date range
+                    $validity[$productKey]->add($orderValidity);
+                }
+            }
         }
 
         return $this->render('order-summary', [
