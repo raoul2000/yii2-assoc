@@ -476,7 +476,11 @@ class CartController extends \yii\web\Controller
         $productOptions = [];
         foreach ($allProducts as $product) {
             $productValues[$product->id] = $product->name;
-            $productOptions[$product->id] = ['data-value' => $product->value];
+            $productOptions[$product->id] = [
+                'data-value'            => $product->value,
+                'data-valid-date-start' => $product->valid_date_start,
+                'data-valid-date-end'   => $product->valid_date_end
+            ];
         }
 
         return $this->render('manage', [

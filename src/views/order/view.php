@@ -80,7 +80,6 @@ $orderModel = $model;
             ]) ?>
         </div>
 
-
         <div class="col-xs-6">
             <?= DetailView::widget([
                 'model' => $model,
@@ -89,6 +88,16 @@ $orderModel = $model;
                     'valid_date_end:appDate',
                     'transactionValuesDiff:transactionValuesDiff',
                     'transactions_value_total',
+                    [
+                        'label' => \Yii::t('app', 'History'),
+                        'format' => 'raw',
+                        'value' => function ($model) {
+                            return Html::a(
+                                \Yii::t('app', 'view'), 
+                                \app\models\RecordHistory::getHistoryUrl($model)
+                            );
+                        }
+                    ],
         /*            
                     [
                         'attribute' => 'updated_at',

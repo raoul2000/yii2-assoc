@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 $contactModel = $model;
 ?>
 <div class="contact-view">
-
     <h1>
         <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
         <?= Html::encode($this->title) ?>
@@ -93,7 +92,10 @@ $contactModel = $model;
                             'label' => \Yii::t('app', 'History'),
                             'format' => 'raw',
                             'value' => function ($model) {
-                                return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
+                                return Html::a(
+                                    \Yii::t('app', 'view'), 
+                                    \app\models\RecordHistory::getHistoryUrl($model)
+                                );
                             }
                         ],
                     ],
@@ -130,7 +132,10 @@ $contactModel = $model;
                             'label' => \Yii::t('app', 'History'),
                             'format' => 'raw',
                             'value' => function ($model) {
-                                return Html::a('(view)', \app\models\RecordHistory::getRecordHistoryIndex(\app\models\Contact::tableName(), $model->id));
+                                return Html::a(
+                                    \Yii::t('app', 'view'), 
+                                    \app\models\RecordHistory::getHistoryUrl($model)
+                                );
                             }
                         ],
                     ],

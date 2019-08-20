@@ -72,6 +72,16 @@ $transactionPackModel = $model;
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y H:i']
             ],
+            [
+                'label' => \Yii::t('app', 'History'),
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        \Yii::t('app', 'view'), 
+                        \app\models\RecordHistory::getHistoryUrl($model)
+                    );
+                }
+            ],
         ],
     ]) ?>
     
@@ -91,7 +101,7 @@ $transactionPackModel = $model;
                 'encode' => false,
                 'url' => ['view', 'id' => $model->id,'tab'=>'attachment'],
                 'active' => $tab == 'attachment'
-            ],
+            ],            
         ]
     ]) ?>
     <div style="margin-top:1em;">

@@ -124,12 +124,13 @@ class RecordHistory extends \yii\db\ActiveRecord
      * @param int $id
      * @return string the URL
      */
-    public static function getRecordHistoryIndex($tableName, $id)
+    public static function getHistoryUrl($model)
     {
         return Url::toRoute([
             'record-history/index',
-            'RecordHistorySearch[table_name]' => $tableName,
-            'RecordHistorySearch[row_id]' => $id
+            'RecordHistorySearch[table_name]' => $model::tableName(),
+            'RecordHistorySearch[row_id]' => $model->id
         ]);
+
     }
 }

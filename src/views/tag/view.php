@@ -38,7 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'frequency',
             'created_at',
-            'updated_at',            
+            'updated_at',       
+            [
+                'label' => \Yii::t('app', 'History'),
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a(
+                        \Yii::t('app', 'view'), 
+                        \app\models\RecordHistory::getHistoryUrl($model)
+                    );
+                }
+            ],
         ],
     ]) ?>
 
