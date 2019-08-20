@@ -83,7 +83,7 @@ $contactModel = $model;
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
                                     . Html::encode($contact->longName),
                                 ['contact/view', 'id' => $contact->id],
-                                ['title' => 'view Contact', 'data-pjax' => 0]
+                                ['title' => 'view contact', 'data-pjax' => 0]
                             );
                         }
                         

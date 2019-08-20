@@ -61,7 +61,7 @@ $transactionModel = $model;
                                 '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' 
                                     . Html::encode($model->fromAccount->longName),
                                 ['bank-account/view','id' => $model->fromAccount->id],
-                                ['title' => \Yii::t('app', 'view Account'), 'data-pjax' => 0]
+                                ['title' => \Yii::t('app', 'view account'), 'data-pjax' => 0]
                             );
                         }
                     ],
@@ -73,7 +73,7 @@ $transactionModel = $model;
                                 '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' 
                                     . Html::encode($model->toAccount->longName),
                                 ['bank-account/view','id' => $model->toAccount->id],
-                                ['title' => \Yii::t('app', 'view Account'), 'data-pjax' => 0]
+                                ['title' => \Yii::t('app', 'view account'), 'data-pjax' => 0]
                             );
                         }
                     ],

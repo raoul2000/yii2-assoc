@@ -49,7 +49,7 @@ $orderModel = $model;
                                 '<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
                                     . Html::encode($model->product->name),
                                 ['product/view', 'id' => $model->product->id],
-                                ['title' => 'view Product']
+                                ['title' => 'view product']
                             );
                         }
                     ],
@@ -60,7 +60,7 @@ $orderModel = $model;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . Html::encode($model->fromContact->name),
                                 ['contact/view','id' => $model->fromContact->id],
-                                ['title' => 'view Contact']
+                                ['title' => 'view contact']
                             );
                         }
                     ],
@@ -71,7 +71,7 @@ $orderModel = $model;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . Html::encode($model->toContact->longName),
                                 ['contact/view','id' => $model->toContact->id],
-                                ['title' => 'view Contact']
+                                ['title' => 'view contact']
                             );
                         }
                     ],

@@ -55,7 +55,7 @@ if (count($orders) && count($transactions)) {
                             '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' .
                                 Html::encode($bankAccounts[$transaction->from_account_id]),
                             ['bank-account/view', 'id' => $transaction->from_account_id ],
-                            ['title' => \Yii::t('app', 'view Account')]
+                            ['title' => \Yii::t('app', 'view account')]
                         )?>                                         
                     </td>
                     <td>
@@ -63,7 +63,7 @@ if (count($orders) && count($transactions)) {
                             '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> ' .
                                 Html::encode($bankAccounts[$transaction->to_account_id]),
                             ['bank-account/view', 'id' => $transaction->to_account_id ],
-                            ['title' => \Yii::t('app', 'view Account')]
+                            ['title' => \Yii::t('app', 'view account')]
                         )?>                                         
                     </td>
                     <td><?= $transaction->reference_date ?></td>
@@ -74,7 +74,7 @@ if (count($orders) && count($transactions)) {
                         <?= Html::a(
                             '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>',
                             ['transaction/view', 'id' => $transaction->id],
-                            ['title' => \Yii::t('app', 'view Transaction')]
+                            ['title' => \Yii::t('app', 'view transaction')]
                         ) ?>                        
                     </td>
                 </tr>
@@ -119,7 +119,7 @@ if (count($orders) && count($transactions)) {
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
                                     Html::encode($contacts[$order->from_contact_id]),
                                 ['contact/view', 'id' => $order->from_contact_id ],
-                                ['title' => \Yii::t('app', 'view Contact')]
+                                ['title' => \Yii::t('app', 'view contact')]
                             )?>
                         </td>
                         <td>
@@ -127,14 +127,14 @@ if (count($orders) && count($transactions)) {
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
                                     Html::encode($contacts[$order->to_contact_id]),
                                 ['contact/view', 'id' => $order->to_contact_id ],
-                                ['title' => \Yii::t('app', 'view Contact')]
+                                ['title' => \Yii::t('app', 'view contact')]
                             )?>
                         </td>
                         <td>
                             <?= Html::a(
                                 Html::encode($products[$order->product_id]),
                                 ['product/view', 'id' => $order->product_id ],
-                                ['title' => \Yii::t('app', 'view Product')]
+                                ['title' => \Yii::t('app', 'view product')]
                             )?>                        
                         </td>
                         <td><?= $order->value?></td>
@@ -142,7 +142,7 @@ if (count($orders) && count($transactions)) {
                             <?= Html::a(
                                 '<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>',
                                 ['order/view', 'id' => $order->id],
-                                ['title' => \Yii::t('app', 'view Order')]
+                                ['title' => \Yii::t('app', 'view order')]
                             ) ?>                        
                         </td>
                     </tr>

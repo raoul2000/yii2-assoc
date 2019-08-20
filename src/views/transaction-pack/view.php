@@ -54,7 +54,7 @@ $transactionPackModel = $model;
                             '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
                                 . Html::encode($model->bankAccount->longName),
                             ['bank-account/view','id' => $model->bankAccount->id],
-                            ['title' => \Yii::t('app', 'view Account'), 'data-pjax' => 0]
+                            ['title' => \Yii::t('app', 'view account'), 'data-pjax' => 0]
                         );
                     } else {
                         return null;
