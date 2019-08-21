@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\Contact;
@@ -11,9 +12,51 @@ use app\models\Contact;
 
 $this->title = 'Contacts';
 $this->params['breadcrumbs'][] = $this->title;
+$currentUrl = Url::current();
 ?>
 <div class="contact-index">
+    <script type="text/javascript">
+        (function(){
+            const downloadReport = () => {
+                $.ajax({
+                    url: '<?= $currentUrl ?>',
+                    method: 'GET',
+                    headers : {
+                        "X-Download-Report" : true
+                    },
+                    xhrFields: {
+                        responseType: 'blob'
+                    }
+                })
+                .done((data, textStatus, jqXHR) => {
+                      // Try to find out the filename from the content disposition `filename` value
+                    var disposition = jqXHR.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : 'file.csv');
 
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = filename;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                })
+                .fail((err) => {
+                    console.error(err);
+                })
+                .always( () => {
+                    console.log('always');
+                });                
+            };
+
+            document.addEventListener('DOMContentLoaded', (ev) => {
+                document.getElementById('btn-export-report').addEventListener('click', downloadReport);
+            })
+        })();
+    </script>
+    
     <h1>
         <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
         <?= Html::encode($this->title) ?>
@@ -32,6 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </ul>
         </div>    
         <?= Html::a(\Yii::t('app', 'Export CSV'), ['export-csv'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
+        <?= Html::button(\Yii::t('app', 'Export CSV-X'), ['id' => 'btn-export-report', 'class' => 'btn btn-default',  'data-pjax'=>0]) ?>
         <?= Html::a('<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> ' . \Yii::t('app', 'Statistics'), ['stat/contact'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
         <?= Html::a('<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span> ' . \Yii::t('app', 'Quality'), ['quality/contact', 'tab' => 'analysis'], ['class' => 'btn btn-default',  'data-pjax'=>0]) ?>
         <div class="pull-right">
@@ -57,7 +101,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <div style="margin-top:1em;">
-        <?php Pjax::begin(); ?>
+        <?php 
+            //Pjax::begin(); 
+        ?>
             <?php if ($tab == 'person'):?>
                 <?= GridView::widget([
                     'tableOptions' => ['class' => 'table table-hover table-condensed'],
@@ -118,6 +164,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]); ?>
             <?php endif; ?>
-        <?php Pjax::end(); ?>
+        <?php 
+            //Pjax::end(); 
+        ?>
     </div>
 </div>

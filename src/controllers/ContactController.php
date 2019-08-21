@@ -80,17 +80,48 @@ class ContactController extends Controller
      */
     public function actionIndex($tab = 'person')
     {
+
         $searchModel = new ContactSearch();
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams
         );
         $dataProvider->query->andWhere(['is_natural_person' => ($tab == 'person')]);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'tab' => $tab
-        ]);
+
+        $headers = Yii::$app->request->getHeaders();
+        if ($headers->has('X-Download-Report')) {
+            // request for downloading report
+            $exporter = new \yii2tech\csvgrid\CsvGrid(
+                [
+                    'dataProvider' => new \yii\data\ActiveDataProvider([
+                        'query' => $dataProvider->query,
+                        'pagination' => [
+                            'pageSize' => 100, // export batch size
+                        ],
+                    ]),
+                    'columns' => [
+                        [
+                            'attribute' => 'name',
+                        ],
+                        [
+                            'attribute' => 'created_at',
+                            'format' => 'date',
+                        ],
+                    ],
+                ]
+            );
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+            return $exporter->export()->send('contacts.csv');
+    
+        } else {
+
+    
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'tab' => $tab
+            ]);
+        }
     }
 
     /**
