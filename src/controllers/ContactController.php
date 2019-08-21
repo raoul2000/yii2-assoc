@@ -87,9 +87,25 @@ class ContactController extends Controller
         );
         $dataProvider->query->andWhere(['is_natural_person' => ($tab == 'person')]);
 
-        $headers = Yii::$app->request->getHeaders();
-        if ($headers->has('X-Download-Report')) {
+        
+        if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
             // request for downloading report
+
+            // columns that depends on contact being a person or not
+            if ($tab == 'person') {
+                $typedColumns = [
+                    ['attribute' => 'name',         'label' => 'name'],
+                    ['attribute' => 'firstname',    'label' => 'firstname'],
+                    ['attribute' => 'gender'],
+                    ['attribute' => 'birthday']
+                ];
+            } else {
+                $typedColumns = [
+                    ['attribute' => 'name',         'label' => 'raison sociale'],
+                    ['attribute' => 'firstname',    'label' => 'complément'],
+                ];
+            }
+
             $exporter = new \yii2tech\csvgrid\CsvGrid(
                 [
                     'dataProvider' => new \yii\data\ActiveDataProvider([
@@ -98,22 +114,22 @@ class ContactController extends Controller
                             'pageSize' => 100, // export batch size
                         ],
                     ]),
-                    'columns' => [
-                        ['attribute' => 'name'],
-                        ['attribute' => 'firstname'],
-                        ['attribute' => 'gender'],
-                        ['attribute' => 'birthday'],
-                        ['attribute' => 'email'],
-                        ['attribute' => 'address.line_1'],
-                        ['attribute' => 'address.line_2'],
-                        ['attribute' => 'address.line_3'],
-                        ['attribute' => 'address.city'],
-                    ],
+                    'columns' => array_merge(
+                        $typedColumns,
+                        [
+                            ['attribute' => 'email'],
+                            ['attribute' => 'address.line_1'],
+                            ['attribute' => 'address.line_2'],
+                            ['attribute' => 'address.line_3'],
+                            ['attribute' => 'address.city'],    
+                        ]
+                    )
                 ]
             );
             \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
             return $exporter->export()->send('contacts.csv');
         } else {
+            // request to render
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,

@@ -13,6 +13,7 @@ use app\components\SessionContact;
 
 class DownloadDataGrid extends Widget
 {
+    const TRIGGER_HEADER_NAME = 'X-Download-Report';
     public $url;
     public $defaultFilename = 'file.csv'; 
     public $label;
@@ -36,6 +37,7 @@ class DownloadDataGrid extends Widget
 
     public function registerJs()
     {
+        $headerName = self::TRIGGER_HEADER_NAME;
         $jsScript=<<<EOS
         const downloadReport = (ev) => {
             ev.target.disabled = true;
@@ -43,7 +45,7 @@ class DownloadDataGrid extends Widget
                 url: '$this->url',
                 method: 'GET',
                 headers : {
-                    "X-Download-Report" : true
+                    "$headerName" : true
                 },
                 xhrFields: {
                     responseType: 'blob'
@@ -89,5 +91,15 @@ EOS;
                 'class' => 'btn btn-default',  
                 'data-pjax'=>0]
         );
+    }
+
+    static public function isDownloadRequest()
+    {
+        $headers = Yii::$app->request->getHeaders();
+        return $headers->has(self::TRIGGER_HEADER_NAME);
+    }
+    static public function downloadAction()
+    {
+
     }
 }
