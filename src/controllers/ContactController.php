@@ -87,7 +87,6 @@ class ContactController extends Controller
         );
         $dataProvider->query->andWhere(['is_natural_person' => ($tab == 'person')]);
 
-
         $headers = Yii::$app->request->getHeaders();
         if ($headers->has('X-Download-Report')) {
             // request for downloading report
@@ -100,22 +99,21 @@ class ContactController extends Controller
                         ],
                     ]),
                     'columns' => [
-                        [
-                            'attribute' => 'name',
-                        ],
-                        [
-                            'attribute' => 'created_at',
-                            'format' => 'date',
-                        ],
+                        ['attribute' => 'name'],
+                        ['attribute' => 'firstname'],
+                        ['attribute' => 'gender'],
+                        ['attribute' => 'birthday'],
+                        ['attribute' => 'email'],
+                        ['attribute' => 'address.line_1'],
+                        ['attribute' => 'address.line_2'],
+                        ['attribute' => 'address.line_3'],
+                        ['attribute' => 'address.city'],
                     ],
                 ]
             );
             \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
             return $exporter->export()->send('contacts.csv');
-    
         } else {
-
-    
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
@@ -124,35 +122,6 @@ class ContactController extends Controller
         }
     }
 
-    /**
-     * Export all contacts as a CSV file
-     *
-     * @return void
-     */
-    public function actionExportCsv()
-    {
-        $exporter = new \yii2tech\csvgrid\CsvGrid(
-            [
-            'dataProvider' => new \yii\data\ActiveDataProvider([
-                'query' => Contact::find(),
-                'pagination' => [
-                    'pageSize' => 100, // export batch size
-                ],
-            ]),
-            'columns' => [
-                [
-                    'attribute' => 'name',
-                ],
-                [
-                    'attribute' => 'created_at',
-                    'format' => 'date',
-                ],
-            ],
-            ]
-        );
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-        return $exporter->export()->send('contacts.csv');
-    }
     /**
      * Displays a single Contact model.
      * @param string $id
