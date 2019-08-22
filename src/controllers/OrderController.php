@@ -72,13 +72,48 @@ class OrderController extends Controller
         );
 
         //$dataProvider->pagination->pageSize = 3;
+
+        $productIndex = Product::getNameIndex();
+        $contactIndex = Contact::getNameIndex();
+
+        if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
+            // request for downloading data grid
+            $exporter = new \yii2tech\csvgrid\CsvGrid(
+                [
+                    'dataProvider' => new \yii\data\ActiveDataProvider([
+                        'query' => $dataProvider->query,
+                        'pagination' => [
+                            'pageSize' => 100, // export batch size
+                        ],
+                    ]),
+                    'columns' => [
+                        ['attribute' => 'product', 'value' => function($model) use($productIndex) {
+                            return $productIndex[$model->product_id];
+                        }],
+                        ['attribute' => 'provider', 'value' => function($model) use($contactIndex) {
+                            return $contactIndex[$model->from_contact_id];
+                        }],
+                        ['attribute' => 'consumer', 'value' => function($model) use($contactIndex) {
+                            return $contactIndex[$model->to_contact_id];
+                        }],
+                        ['attribute' => 'value'],
+                        ['attribute' => 'valid_date_start'],
+                        ['attribute' => 'valid_date_end'],
+                    ]
+                ]
+            );
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+            return $exporter->export()->send('orders.csv');
+
+        } else {
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'products' => $productIndex,
+                'contacts' => $contactIndex
+            ]);
+        }
         
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'products' => Product::getNameIndex(),
-            'contacts' => Contact::getNameIndex()
-        ]);
     }
 
     /**

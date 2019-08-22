@@ -19,10 +19,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <hr/>
 
-    <?php Pjax::begin(); ?>
+    <?php 
+        //Pjax::begin(); 
+    ?>
 
     <p>
         <?= Html::a(\Yii::t('app', 'Create Order'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= \app\components\widgets\DownloadDataGrid::widget() ?>             
     </p>
 
     <?= GridView::widget([
@@ -40,6 +43,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             . Html::encode($products[$model->product_id]),
                         ['product/view','id'=>$model->product_id],
                         [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view product')]
+                    );
+                }
+            ],
+            [
+                'attribute' => 'from_contact_id',
+                'label'     => 'Provider',
+                'filter'    => $contacts,
+                'format'    => 'raw',
+                'value'     => function ($model, $key, $index, $column) use ($contacts) {
+                    return Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($contacts[$model->from_contact_id]),
+                        ['contact/view','id'=>$model->from_contact_id],
+                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
                     );
                 }
             ],
@@ -66,5 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+    <?php 
+        // Pjax::end(); 
+    ?>
 </div>
