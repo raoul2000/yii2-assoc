@@ -12,23 +12,50 @@ return [
     'dateValidatorFormat' => 'dd/MM/yyyy',
     /**
      * Configured Date Ranges
+     * key : name of the date range
+     * value : Array with key 'start' and 'end'. Each one can be a string or a function returning a string.
+     * In both cases the string must be a date formatted like : yyyy-mm-dd
      */
     'dateRange' => [
+        // example of hard coded date range
         'saison 2019-2020' => [
-            'start' => '01/09/2019',
-            'end'   => '30/06/2020'
+            'start' => '2019-09-01',
+            'end'   => '2020-08-30'
         ],
-        '1er Trimestre ' => [
-            'start' => '01/09/2019',
-            'end'   => '31/12/2019'
+        'saison en cours' => [
+            'start' => function() {
+                $now = new DateTime('now');
+                $thisMonth = $now->format('m');
+                $thisYear  = $now->format('Y');
+                if ( $thisMonth >= 9 && $thisMonth <= 12) {
+                    $start = new DateTime('first day of September');
+                } else {
+                    $start = new DateTime('first day of September ' . ($thisYear - 1));
+                }
+                return $start->format('Y-m-d');
+            },
+            'end' => function() {
+                $now = new DateTime('now');
+                $thisMonth = $now->format('m');
+                $thisYear  = $now->format('Y');
+                if ( $thisMonth >= 9 && $thisMonth <= 12) {
+                    $end = new DateTime('last day of August ' . ($thisYear + 1));
+                } else {
+                    $end = new DateTime('last day of August');
+                }            
+                return $end->format('Y-m-d');
+            }
+
         ],
-        '2nd Trimestre ' => [
-            'start' => '01/01/2020',
-            'end'   => '31/03/2020'
-        ],
-        '3ieme Trimestre ' => [
-            'start' => '01/04/2020',
-            'end'   => '30/06/2020'
+        'This month' => [
+            'start' => function() {
+                $date = new DateTime('first day of this month');
+                return $date->format('Y-m-d');
+            },
+            'end' => function() {
+                $date = new DateTime('last day of this month');
+                return $date->format('Y-m-d');
+            }
         ],
     ]
 ];

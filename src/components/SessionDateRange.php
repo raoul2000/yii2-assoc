@@ -6,6 +6,7 @@ use Yii;
 use app\components\Constant;
 use yii\helpers\Html;
 use \app\components\helpers\DateHelper;
+use \app\components\helpers\DateRangeHelper;
 
 /**
  * This is the persistence layer for the Date Range values that may
@@ -101,7 +102,8 @@ class SessionDateRange
     }
 
     /**
-     * Load Default Date Range from config
+     * Load Default Date Range from config.
+     * Tha configured value must be the same as the configured date range key
      *
      * @return void
      */
@@ -113,9 +115,10 @@ class SessionDateRange
                 Yii::error('failed to load date range with ID = ' . $date_range_id);
             } else {
                 $range = Yii::$app->params['dateRange'][$date_range_id];
+
                 SessionDateRange::setDateRange(
-                    DateHelper::toDateDBFormat($range['start']),
-                    DateHelper::toDateDBFormat($range['end']),
+                    DateRangeHelper::evaluateConfiguredRangeValue($range['start']),
+                    DateRangeHelper::evaluateConfiguredRangeValue($range['end']),
                     $date_range_id
                 );
             }

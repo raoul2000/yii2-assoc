@@ -67,6 +67,30 @@ class DateRangeHelper
         if (!empty($range->start) && !empty($range->end)) {
 
         }
+    }
 
+    /**
+     * Evaluate a configured date range value.
+     * Configured range values may be provided as string or as anonymous functions. This method detects
+     * the actual type of the passed argument and returns the corresponding value.
+     *
+     * @param string|closure $arg
+     * @return string
+     */
+    public static function evaluateConfiguredRangeValue($arg)
+    {
+        if (is_string($arg)) {
+            // string value returned unchanged
+            return $arg;
+        } else {
+            $reflection = new \ReflectionFunction($arg);
+            if ($reflection->isClosure()) {
+                // we have an anonymous function : evaluate it and return its results that is
+                // expected to be a string
+                return $arg();
+            } else {
+                throw new Exception('date range configured is neither a string nor a function');
+            }
+        }
     }
 }

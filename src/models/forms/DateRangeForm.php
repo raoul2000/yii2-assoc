@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
+use \app\components\helpers\DateRangeHelper;
+use \app\components\helpers\DateHelper;
 
 class DateRangeForm extends Model
 {
@@ -62,12 +64,28 @@ class DateRangeForm extends Model
             if (!array_key_exists($valueToValidate, $this->_configuredDateRanges)) {
                 $this->addError($attribute, 'Invalid date range selected');
             } else {
-                $this->start = $this->_configuredDateRanges[$valueToValidate]['start'];
-                $this->end   = $this->_configuredDateRanges[$valueToValidate]['end'];
+                $start = DateRangeHelper::evaluateConfiguredRangeValue($this->_configuredDateRanges[$valueToValidate]['start']);
+                $end   = DateRangeHelper::evaluateConfiguredRangeValue($this->_configuredDateRanges[$valueToValidate]['end']);
+
+                $this->start = DateHelper::toDateAppFormat($start);
+                $this->end   = DateHelper::toDateAppFormat($end);
             }
         }
     }
 
+    private function getRangeValue($arg)
+    {
+        if (is_string($arg)) {
+            return $arg;
+        } else {
+            $reflection = new \ReflectionFunction($arg);
+            if ($reflection->isClosure()) {
+                return $arg();
+            } else {
+                throw new Exception('date range configured is neither a string nor a function');
+            }
+        }
+    }
     /**
      * Read Only property that holds the list of all configured date ranges
      * The values are loaded and then cached for further read. If not date range is configured
