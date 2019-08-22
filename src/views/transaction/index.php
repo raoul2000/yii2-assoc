@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['create'],
                 ['class' => 'btn btn-success']
             )?>
+            <?= \app\components\widgets\DownloadDataGrid::widget() ?>            
         </p>
 
         <?php  echo $this->render('_search', ['model' => $searchModel, 'tagValues' => $tagValues]); ?>    

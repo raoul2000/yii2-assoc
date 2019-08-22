@@ -52,19 +52,29 @@ class DownloadDataGrid extends Widget
                 }
             })
             .done((data, textStatus, jqXHR) => {
-                  // Try to find out the filename from the content disposition `filename` value
-                const disposition = jqXHR.getResponseHeader('content-disposition');
-                const matches = /"([^"]*)"/.exec(disposition);
-                const filename = (matches != null && matches[1] ? matches[1] : '$this->defaultFilename');
-
-                const a = document.createElement('a');
-                const url = window.URL.createObjectURL(data);
-                a.href = url;
-                a.download = filename;
-                document.body.append(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
+                const responseContentType = jqXHR.getResponseHeader("content-type") || "";
+                if( responseContentType.indexOf('text/csv') == -1) {
+                    alert('Unexpected data format received : "csv" is expected');
+                    return;
+                }
+                try {
+                    // Try to find out the filename from the content disposition `filename` value
+                  const disposition = jqXHR.getResponseHeader('content-disposition');
+                  const matches = /"([^"]*)"/.exec(disposition);
+                  const filename = (matches != null && matches[1] ? matches[1] : '$this->defaultFilename');
+  
+                  const a = document.createElement('a');
+                  const url = window.URL.createObjectURL(data);
+                  a.href = url;
+                  a.download = filename;
+                  document.body.append(a);
+                  a.click();
+                  a.remove();
+                  window.URL.revokeObjectURL(url);
+                } catch(err) {
+                    alert('something went really wrong : failed to download data');
+                    console.error(err);
+                }
             })
             .fail((err) => {
                 alert('Failed to download');
