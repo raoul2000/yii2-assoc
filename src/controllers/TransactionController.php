@@ -168,12 +168,50 @@ class TransactionController extends Controller
                 ->anyTagValues($tagValues);      
         }
 
-        return $this->render('index', [
-            'searchModel'  => $searchModel,
-            'dataProvider' => $dataProvider,
-            'bankAccounts' => BankAccount::getNameIndex(),
-            'tagValues'    => $tagValues
-        ]);
+        $bankAccounts = BankAccount::getNameIndex();
+        if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
+            // request for downloading data grid
+            $exporter = new \yii2tech\csvgrid\CsvGrid(
+                [
+                    'dataProvider' => new \yii\data\ActiveDataProvider([
+                        'query' => $dataProvider->query,
+                        'pagination' => [
+                            'pageSize' => 100, // export batch size
+                        ],
+                    ]),
+                    'columns' => [
+                        ['attribute' => 'id'],
+                        ['attribute' => 'sender account', 'value' => function($model) use ($bankAccounts) {
+                            return $bankAccounts[$model->from_account_id];
+                        }],
+                        ['attribute' => 'recipient account', 'value' => function($model) use ($bankAccounts) {
+                            return $bankAccounts[$model->to_account_id];
+                        }],
+                        ['attribute' => 'value'],
+                        ['attribute' => 'reference_date'],
+                        ['attribute' => 'code'],
+                        ['attribute' => 'type'],   
+                        ['attribute' => 'description'],   
+                        ['attribute' => 'is_verified', 'format' => 'boolean'],
+                        /*
+                        ['attribute' => 'orders_value_total'],
+                        ['attribute' => 'orderValuesDiff'],
+                        */
+                    ]
+                ]
+            );
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+            return $exporter->export()->send('transactions.csv');
+
+        } else {
+            return $this->render('index', [
+                'searchModel'  => $searchModel,
+                'dataProvider' => $dataProvider,
+                'bankAccounts' => $bankAccounts,
+                'tagValues'    => $tagValues
+            ]);
+        }
+
     }
     /**
      * Displays a single Transaction model.

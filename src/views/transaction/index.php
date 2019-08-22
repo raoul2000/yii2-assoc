@@ -20,7 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <hr/>
 
-    <?php Pjax::begin(); ?>
+    <?php 
+        //Pjax::begin(); 
+    ?>
         <div class="pull-right">
             <?= Html::a(
                 '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ' 
@@ -119,5 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]); ?>
-    <?php Pjax::end(); ?>
+    <?php 
+        //Pjax::end(); 
+    ?>
 </div>
