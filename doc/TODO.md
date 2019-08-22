@@ -1,3 +1,9 @@
+## Category
+
+The category represnetation is not robust enough:
+- The category type can be updated (which will break data consistency)
+- it is used right now only for transactions and should also be used for any pther model (like Products)
+
 ## "Verified" Transactions
 
 - (to confirm) : verified transactions should not be updatable in their own properties or regarding their linked orders
