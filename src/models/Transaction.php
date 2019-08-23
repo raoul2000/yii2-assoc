@@ -116,7 +116,7 @@ class Transaction extends \yii\db\ActiveRecord
             [['from_account_id', 'to_account_id', 'transaction_pack_id'], 'integer'],
             [['value'], 'number', 'min' => 0],
 
-            [['description'], 'string', 'max' => 128],
+            [['description'], 'safe'],
             [['code', 'type'], 'string', 'max' => 128],
             /*
             // from and to account must not be the same, expect when transaction value is 0. This is a
