@@ -52,10 +52,31 @@ class ProductController extends Controller
             ->query
             ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
+            $exporter = new \yii2tech\csvgrid\CsvGrid(
+                [
+                    'dataProvider' => new \yii\data\ActiveDataProvider([
+                        'query' => $dataProvider->query,
+                        'pagination' => [
+                            'pageSize' => 100, // export batch size
+                        ],
+                    ]),
+                    'columns' => [
+                        ['attribute' => 'name'],
+                        ['attribute' => 'value'],
+                        ['attribute' => 'valid_date_start'],
+                        ['attribute' => 'valid_date_end'],
+                    ]
+                ]
+            );
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+            return $exporter->export()->send('products.csv');
+        } else {
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
     }
 
     /**

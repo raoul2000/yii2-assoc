@@ -17,12 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
         <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
         <?= Html::encode($this->title) ?>
     </h1>
+
     <hr/>
-    <?php Pjax::begin(); ?>
+    
+    <?php 
+        //Pjax::begin(); 
+    ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a(\Yii::t('app', 'Create Product'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= \app\components\widgets\DownloadDataGrid::widget() ?>   
     </p>
 
     <?= GridView::widget([
@@ -51,5 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+    <?php 
+        //Pjax::end(); 
+    ?>
 </div>
