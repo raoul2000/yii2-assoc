@@ -57,5 +57,25 @@ return [
                 return $date->format('Y-m-d');
             }
         ],
+        'Last month' => [
+            'start' => function() {
+                $date = new DateTime('first day of last month');
+                return $date->format('Y-m-d');
+            },
+            'end' => function() {
+                $date = new DateTime('last day of last month');
+                return $date->format('Y-m-d');
+            }
+        ],
+        'Next month' => [
+            'start' => function() {
+                $date = new DateTime('first day of next month');
+                return $date->format('Y-m-d');
+            },
+            'end' => function() {
+                $date = new DateTime('last day of next month');
+                return $date->format('Y-m-d');
+            }
+        ],
     ]
 ];
