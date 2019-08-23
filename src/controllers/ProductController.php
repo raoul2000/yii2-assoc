@@ -5,11 +5,13 @@ namespace app\controllers;
 use Yii;
 use app\models\Product;
 use app\models\ProductSearch;
+use app\models\Category;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
 use app\components\helpers\DateHelper;
+use app\components\ModelRegistry;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -52,6 +54,9 @@ class ProductController extends Controller
             ->query
             ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
 
+        $categories = Category::getCategories(
+            ModelRegistry::PRODUCT 
+        );
         if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
             $exporter = new \yii2tech\csvgrid\CsvGrid(
                 [
@@ -64,6 +69,14 @@ class ProductController extends Controller
                     'columns' => [
                         ['attribute' => 'name'],
                         ['attribute' => 'value'],
+                        [
+                            'attribute' => 'category', 
+                            'label' => \Yii::t('app', 'category'),
+                            'value' => function($model) use($categories) {
+                                return $model->category_id != null 
+                                ? $categories[$model->category_id]
+                                : null;          
+                            }],
                         ['attribute' => 'valid_date_start'],
                         ['attribute' => 'valid_date_end'],
                     ]
@@ -75,6 +88,7 @@ class ProductController extends Controller
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'categories' => $categories
             ]);
         }
     }
@@ -118,6 +132,9 @@ class ProductController extends Controller
         // render view
         return $this->render('create', [
             'model' => $model,
+            'categories' => Category::getCategories(
+                ModelRegistry::PRODUCT 
+            )
         ]);
     }
 
@@ -138,6 +155,9 @@ class ProductController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'categories' => Category::getCategories(
+                ModelRegistry::PRODUCT 
+            )
         ]);
     }
 

@@ -37,6 +37,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'name',
             'value',
+            [
+                'attribute' => 'category_id',
+                'label' => \Yii::t('app', 'Category'),
+                'filter' => $categories,
+                'value'     => function ($model, $key, $index, $column) use($categories){
+                    return $model->category_id != null 
+                        ? Html::encode($categories[$model->category_id])
+                        : null;  
+                }
+            ],
+
             'valid_date_start:appDate',
             'valid_date_end:appDate',
             /*

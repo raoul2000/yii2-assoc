@@ -18,6 +18,7 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property string $description
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
+ * @property int $category_id
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -62,6 +63,7 @@ class Product extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 45],
             [['description'], 'safe'],
             [['name'], 'unique'],
+            [['category_id'], 'integer'],
 
             // Validity Date Range ///////////////////////////////////////////////////
             
@@ -100,6 +102,7 @@ class Product extends \yii\db\ActiveRecord
             'updated_at' => \Yii::t('app', 'Updated At'),
             'valid_date_start' => \Yii::t('app', 'Valid Date Start'),
             'valid_date_end' => \Yii::t('app', 'Valid Date End'),
+            'category_id' => \Yii::t('app', 'Category'),
         ];
     }
     public function attributeHints() 
@@ -139,6 +142,13 @@ class Product extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Order::className(), ['product_id' => 'id']);
     }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }    
     /**
      * Returns an array containing all product names indexed by contact Id.
      *

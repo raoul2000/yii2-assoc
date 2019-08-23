@@ -38,6 +38,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'value',
+            [
+                'label' => \Yii::t('app', 'Category'),
+                'format' => 'raw',
+                'value' => function ($model) {
+                    if ($model->category_id) {
+                        return Html::encode($model->category->name);
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+
             'description:raw',
             'valid_date_start:appDate',
             'valid_date_end:appDate',

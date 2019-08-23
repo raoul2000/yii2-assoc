@@ -21,6 +21,11 @@ use dosamigos\datepicker\DateRangePicker;
 
                 <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 
+                <?= $form->field($model, 'category_id')->listBox($categories, [
+                    'size'=>1,
+                    'prompt' => \Yii::t('app', 'select a category ...')
+                ])?>                
+
                 <?php
                 /*
                 $form->field($model, 'valid_date_start')->widget(DateRangePicker::className(), [
