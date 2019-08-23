@@ -50,7 +50,8 @@ class CategoryController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'contacts' => \app\models\Contact::getNameIndex()
+            // 'contacts' => \app\models\Contact::getNameIndex(),   // categories are not private anymore
+            'types' => Category::getTypes()
         ]);
     }
 
@@ -82,6 +83,7 @@ class CategoryController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            //'contacts' => \app\models\Contact::getNameIndex(),    // categories are not private anymore
         ]);
     }
 
@@ -102,6 +104,7 @@ class CategoryController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            //'contacts' => \app\models\Contact::getNameIndex(),    // categories are not private anymore
         ]);
     }
 

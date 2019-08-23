@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <hr/>
     <?= $this->render('_form', [
         'model' => $model,
+        //'contacts' => $contacts // categories are not private anymore
     ]) ?>
 
 </div>

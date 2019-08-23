@@ -18,6 +18,7 @@ use app\models\Attachment;
 use app\components\SessionDateRange;
 use app\components\SessionContact;
 use app\models\Category;
+use app\components\ModelRegistry;
 
 /**
  * TransactionController implements the CRUD actions for Transaction model.
@@ -287,8 +288,8 @@ class TransactionController extends Controller
             if (!empty($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
                 $category->setAttributes([
-                    'contact_id' => SessionContact::getContactId(),
-                    'type' => Category::TRANSACTION,
+                    //'contact_id' => SessionContact::getContactId(),   // categories are not private anymore
+                    'type' => ModelRegistry::TRANSACTION,
                     'name' => $model->category_id
                 ]);
                 if ($category->save()) {
@@ -335,8 +336,7 @@ class TransactionController extends Controller
             'products' => isset($order) ? null : Product::getNameIndex(),
             'order' => $order,
             'categories' => Category::getCategories(
-                Category::TRANSACTION,
-                SessionContact::getContactId()
+                ModelRegistry::TRANSACTION  // categories are not private anymore
             )
         ]);
     }
@@ -357,8 +357,8 @@ class TransactionController extends Controller
             if (!empty($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
                 $category->setAttributes([
-                    'contact_id' => SessionContact::getContactId(),
-                    'type' => Category::TRANSACTION,
+                    //'contact_id' => SessionContact::getContactId(),   // categories are not private anymore
+                    'type' => ModelRegistry::TRANSACTION,
                     'name' => $model->category_id
                 ]);
                 if ($category->save()) {
@@ -373,8 +373,7 @@ class TransactionController extends Controller
             }
         }
         $categories = Category::getCategories(
-            Category::TRANSACTION,
-            \app\components\SessionContact::getContactId()
+            ModelRegistry::TRANSACTION  // categories are not private anymore
         );
         
         // the category Id could have been set using another session contact and then, the category

@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use \app\components\ModelRegistry;
 
 /**
  * This is the model class for table "category".
@@ -18,6 +19,7 @@ use yii\helpers\ArrayHelper;
 class Category extends \yii\db\ActiveRecord
 {
     const TRANSACTION = 'TR';
+    const PRODUCT = 'PR';
 
     /**
      * {@inheritdoc}
@@ -36,7 +38,7 @@ class Category extends \yii\db\ActiveRecord
             [['type', 'name'], 'required'],
             [['contact_id'], 'integer'],
             [['name'], 'string', 'max' => 140],
-            [['type'], 'string', 'max' => 7],
+            [['type'], 'string', 'max' => 128],
             ['type', function ($attribute, $params, $validator) {
                 if (!array_key_exists($this->$attribute, Category::getTypes())) {
                     $this->addError($attribute, 'Invalid type');
@@ -73,7 +75,13 @@ class Category extends \yii\db\ActiveRecord
             return false;
         }
         switch ($this->type) {
-            case self::TRANSACTION:
+            case ModelRegistry::TRANSACTION:
+                Transaction::updateAll(
+                    ['category_id' => null],
+                    ['category_id' => $this->id]
+                );
+            break;
+            case ModelRegistry::PRODUCT:
                 Transaction::updateAll(
                     ['category_id' => null],
                     ['category_id' => $this->id]
@@ -99,7 +107,8 @@ class Category extends \yii\db\ActiveRecord
     public static function getTypes()
     {
         return [
-            self::TRANSACTION => 'transaction'
+            ModelRegistry::TRANSACTION => ModelRegistry::getById(ModelRegistry::TRANSACTION)->label,
+            ModelRegistry::PRODUCT     => ModelRegistry::getById(ModelRegistry::PRODUCT)->label,
         ];
     }
     /**
@@ -110,11 +119,11 @@ class Category extends \yii\db\ActiveRecord
      */
     public static function getTypeName($typeId)
     {
-        $types = self::getTypes();
-        if (!array_key_exists($typeId, $types)) {
+        $type = ModelRegistry::getById($typeId);
+        if ($type === null) { 
             throw new Exception('type name not found for id ' . $typeId);
         }
-        return $types[$typeId];
+        return $type->label;
     }
     /**
      * {@inheritdoc}
@@ -124,13 +133,14 @@ class Category extends \yii\db\ActiveRecord
     {
         return new CategoryQuery(get_called_class());
     }
+
     public static function getCategories($type, $contact_id = null)
     {
         $categories = parent::find()
             ->select(['id','name'])
             ->where([
                 'type' => $type,
-                'contact_id' => $contact_id
+                //'contact_id' => $contact_id   // categories are not private anymore
             ])
             ->asArray()
             ->all();

@@ -35,23 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 'id',
                 [
-                    'attribute' => 'contact_id',
-                    'filter'    => $contacts,
-                    'format'    => 'raw',
-                    'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                        if (isset($model->contact_id)) {
-                            return Html::a(
-                                Html::encode($contacts[$model->contact_id]),
-                                ['contact/view','id'=>$model->contact_id],
-                                [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
-                            );
-                        } else {
-                            return null;
-                        }
-                    }
+                    'attribute' => 'type',
+                    'filter' => $types
                 ],
-    
-                'type',
                 'name',
                 [
                     'class' => 'yii\grid\ActionColumn',
