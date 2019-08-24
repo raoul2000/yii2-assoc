@@ -169,6 +169,10 @@ class TransactionController extends Controller
                 ->anyTagValues($tagValues);      
         }
 
+        $categories = Category::getCategories(
+            ModelRegistry::TRANSACTION 
+        );
+
         $bankAccounts = BankAccount::getNameIndex();
         if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
             // request for downloading data grid
@@ -209,7 +213,8 @@ class TransactionController extends Controller
                 'searchModel'  => $searchModel,
                 'dataProvider' => $dataProvider,
                 'bankAccounts' => $bankAccounts,
-                'tagValues'    => $tagValues
+                'tagValues'    => $tagValues,
+                'categories'   => $categories
             ]);
         }
 
@@ -332,10 +337,10 @@ class TransactionController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'bankAccounts' => BankAccount::getNameIndex(),
+            'bankAccounts' => [[ '' => 'null']] +  BankAccount::getNameIndex(),
             'products' => isset($order) ? null : Product::getNameIndex(),
             'order' => $order,
-            'categories' => Category::getCategories(
+            'categories' => [[ '' => 'null']] + Category::getCategories(
                 ModelRegistry::TRANSACTION  // categories are not private anymore
             )
         ]);
@@ -384,9 +389,9 @@ class TransactionController extends Controller
         }
         return $this->render('update', [
             'model' => $model,
-            'bankAccounts' => BankAccount::getNameIndex(),
+            'bankAccounts' => [[ '' => 'null']] + BankAccount::getNameIndex(),
             'products' => isset($order) ? null : Product::getNameIndex(),
-            'categories' => $categories
+            'categories' =>[[ '' => 'null']] +  $categories
         ]);
     }
 

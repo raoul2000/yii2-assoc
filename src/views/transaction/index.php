@@ -103,6 +103,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'description',
                 //'is_verified:boolean',
                 [
+                    'attribute' => 'category_id',
+                    'label' => \Yii::t('app', 'Category'),
+                    'filter' => $categories,
+                    'value'     => function ($model, $key, $index, $column) use($categories){
+                        return $model->category_id != null 
+                            ? Html::encode($categories[$model->category_id])
+                            : null;  
+                    }
+                ],    
+                [
                     'attribute' => 'is_verified',
                     'format'    => 'raw',
                     'filter'    =>  [
