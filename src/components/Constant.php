@@ -24,6 +24,7 @@ class Constant
     public static function getTransactionTypes()
     {
         return [
+            'PREL' => 'PREL - Prélèvement',
             'VIR' => 'VIR - Virement',
             'CHQ' => 'CHQ - Chèque',
             'NUM' => 'NUM - Espèce',
