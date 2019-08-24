@@ -82,7 +82,7 @@ class Category extends \yii\db\ActiveRecord
                 );
             break;
             case ModelRegistry::PRODUCT:
-                Transaction::updateAll(
+                Product::updateAll(
                     ['category_id' => null],
                     ['category_id' => $this->id]
                 );
