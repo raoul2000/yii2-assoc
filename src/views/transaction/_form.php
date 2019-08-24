@@ -13,7 +13,12 @@ $uploadForm = new \app\models\forms\UploadForm();
 ?>
 
 <div class="transaction-form">
-
+    <?php if ($model->hasErrors()) : ?>
+    <div class="alert alert-danger" role="alert">
+        <?= var_dump($model->getErrors()) ?>
+    </div>
+    <?= var_dump($bankAccounts) ?>
+    <?php endif; ?>
     <?php $form = ActiveForm::begin(); ?>
         <div class="row">
             <div class="col-md-5">
@@ -23,9 +28,9 @@ $uploadForm = new \app\models\forms\UploadForm();
                         'name' => Html::getInputName($model, 'from_account_id'),
                         'value' => $model->from_account_id,
                         'id' => 'from_account-selectized',
-                        'items' => $bankAccounts,
+                        'items' =>   $bankAccounts,
                         'clientOptions' => [
-                            // ...
+                            'placeholder' => \Yii::t('app', 'select a source account')
                         ],
                     ]); ?>
                 </div>
@@ -39,7 +44,7 @@ $uploadForm = new \app\models\forms\UploadForm();
                         'value' => $model->to_account_id,
                         'items' => $bankAccounts,
                         'clientOptions' => [
-                            // ...
+                            'placeholder' => \Yii::t('app', 'select a target account')
                         ],
                     ]); ?>
                 </div>
@@ -68,7 +73,12 @@ $uploadForm = new \app\models\forms\UploadForm();
                 <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
             </div>
             <div class="col-md-3">
-                <?= $form->field($model, 'type')->listBox(\app\components\Constant::getTransactionTypes(), ['size'=>1])?>
+                <?= $form->field($model, 'type')->listBox(
+                    \app\components\Constant::getTransactionTypes(), 
+                    [
+                        'size'=> 1,
+                        'prompt' => \Yii::t('app', 'select type the type of transaction')
+                    ])?>
             </div>
             <div class="col-md-5">
                 <?php 
@@ -82,7 +92,8 @@ $uploadForm = new \app\models\forms\UploadForm();
                         'value' => $model->category_id,
                         'items' => $categories,
                         'clientOptions' => [
-                            'create' => true
+                            'create' => true,
+                            'placeholder' => \Yii::t('app', 'select or enter a category'),
                         ],
                     ]); ?>
                 </div>
@@ -90,7 +101,12 @@ $uploadForm = new \app\models\forms\UploadForm();
         </div>
 
 
-        <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'description')->textarea(
+            [
+                'maxlength' => true, 
+                'autocomplete'=>'off',
+                'placeholder' => \Yii::t('app', 'Enter a description...')
+            ]) ?>
         
         <?php if (!$model->isNewRecord):?>
             <?= $form->field($model, 'is_verified')->checkbox() ?>
