@@ -139,7 +139,7 @@ return [
     'Submit' => 'Enregistrer',
     'Tag ID' => 'ID de Tag',
     'Tags' => 'Tags',
-    'Target Account' => 'Comte Cible',
+    'Target Account' => 'Compte Cible',
     'Template' => 'Modèle',
     'Template...' => 'Modèle ...',
     'The requested page does not exist.' => 'La page demandée n\'existe pas',
