@@ -60,6 +60,7 @@ $bankAccountModel = $model;
                 }
             ],
             'initial_value',
+            /*
             [
                 'attribute' => 'updated_at',
                 'format' => ['date', 'php:d/m/Y H:i']
@@ -67,7 +68,7 @@ $bankAccountModel = $model;
             [
                 'attribute' => 'created_at',
                 'format' => ['date', 'php:d/m/Y H:i']
-            ],
+            ],*/
             [
                 'label' => \Yii::t('app', 'History'),
                 'format' => 'raw',

@@ -63,6 +63,8 @@ return [
     'Create Category' => 'Créer Catégorie',
     'Create Contact Relation' => 'Créer une relation entre Contact',
     'Create Order' => 'Créer Commande',
+    'Create Account' => 'Créer Compte',
+    'Create Relation' => 'Créer Relation',
     'Create Order For This Transaction' => 'Créer une autre Commande pour cette Transaction',
     'Create Product' => 'Créer Produit',
     'Create Tag' => 'Créer un Tag',

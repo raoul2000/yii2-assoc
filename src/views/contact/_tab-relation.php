@@ -7,7 +7,11 @@ use yii\helpers\Html;
 ?>
 <div>
     <p>
-        <?= Html::a('Create Relation', ['contact-relation/create', 'source_contact_id' => $model->id, 'redirect_url' => Url::current()], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(
+            \Yii::t('app', 'Create Relation'), 
+            ['contact-relation/create', 'source_contact_id' => $model->id, 'redirect_url' => Url::current()], 
+            ['class' => 'btn btn-success']) 
+        ?>
     </p>
     <table class='table table-hover'>
         <thead>
