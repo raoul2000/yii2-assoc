@@ -13,6 +13,10 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
+
         <?php if ( ! isset($contact) ):?>
             <div class="form-group">
                 <label class="control-label" for="contact_id-selectized">

@@ -14,6 +14,10 @@ $uploadForm = new \app\models\forms\UploadForm();
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
+
         <div class="row">
             <div class="col-sm-6">
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>

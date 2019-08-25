@@ -14,6 +14,10 @@ $userChooseBankAccount = (isset($bankAccounts) && count($bankAccounts) !== 0 && 
 
     <?php $form = ActiveForm::begin(); ?>
 
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
+
         <?php if ($userChooseBankAccount): ?>
             <?= $form->field($model, 'bank_account_id')->listBox($bankAccounts, ['size'=>1])?>
         <?php endif; ?>

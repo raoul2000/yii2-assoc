@@ -13,13 +13,13 @@ $uploadForm = new \app\models\forms\UploadForm();
 ?>
 
 <div class="transaction-form">
-    <?php if ($model->hasErrors()) : ?>
-    <div class="alert alert-danger" role="alert">
-        <?= var_dump($model->getErrors()) ?>
-    </div>
-    <?= var_dump($bankAccounts) ?>
-    <?php endif; ?>
+    
     <?php $form = ActiveForm::begin(); ?>
+
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
+
         <div class="row">
             <div class="col-md-5">
                 <div class="form-group">

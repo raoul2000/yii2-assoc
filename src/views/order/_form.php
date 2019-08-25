@@ -12,6 +12,10 @@ use yii\helpers\ArrayHelper;
 <div class="order-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
 
         <?= $form->field($model, 'product_id')->listBox($products, ['size'=>1])?>
 

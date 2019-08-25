@@ -11,6 +11,10 @@ use yii\widgets\ActiveForm;
 <div class="address-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
 
         <?= $form->field($model, 'line_1')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 

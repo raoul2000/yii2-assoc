@@ -13,6 +13,10 @@ $uploadForm = new \app\models\forms\UploadForm();
 <div class="contact-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+    
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
 
         <div class="row">
             <div class="col-sm-6">

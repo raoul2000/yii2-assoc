@@ -12,6 +12,10 @@ use app\models\Category;
 <div class="category-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
 
         <?php if ($model->getIsNewRecord()): ?>
             <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => \Yii::t('app', 'select a type ...')]) ?>

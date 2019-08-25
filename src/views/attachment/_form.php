@@ -12,6 +12,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
+
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'note')->textInput(['maxlength' => true]) ?>

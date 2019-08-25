@@ -27,6 +27,10 @@ EOS;
 <div class="contact-relation-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
 
         <div class="row">
             <div class="col-sm-4">
