@@ -54,6 +54,7 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['line_1', 'country', 'city'], 'required'],
             [['line_1', 'line_2', 'line_3', 'note'], 'string', 'max' => 128],
             [['zip_code', 'city', 'country'], 'string', 'max' => 45],
         ];
