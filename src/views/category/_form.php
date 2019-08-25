@@ -13,7 +13,11 @@ use app\models\Category;
 
     <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => \Yii::t('app', 'select a type ...')]) ?>
+        <?php if ($model->getIsNewRecord()): ?>
+            <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['prompt' => \Yii::t('app', 'select a type ...')]) ?>
+        <?php else: ?>
+            <?= $form->field($model, 'type')->dropDownList(Category::getTypes(), ['disabled' => 'true']) ?>
+        <?php endif; ?>
 
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 

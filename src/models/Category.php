@@ -21,6 +21,8 @@ class Category extends \yii\db\ActiveRecord
     const TRANSACTION = 'TR';
     const PRODUCT = 'PR';
 
+    const SCENARIO_INSERT = 1;
+    const SCENARIO_UPDATE = 2;
     /**
      * {@inheritdoc}
      */
@@ -51,7 +53,13 @@ class Category extends \yii\db\ActiveRecord
             ],
         ];
     }
-
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_INSERT => ['type', 'name', 'contact_id'],
+            self::SCENARIO_UPDATE => ['!type', 'name', '!contact_id' ],
+        ];
+    }
     /**
      * {@inheritdoc}
      */
