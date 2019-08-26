@@ -45,7 +45,6 @@ return [
                 }            
                 return $end->format('Y-m-d');
             }
-
         ],
         'This month' => [
             'start' => function() {

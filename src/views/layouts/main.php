@@ -67,6 +67,11 @@ AppAsset::register($this);
                             'encode' => false,
                             'url'    => ['/gymv']
                         ],
+                        [
+                            'label'  => \Yii::t('app', 'Registration Address'),
+                            'encode' => false,
+                            'url'    => ['/gymv/registration/address']
+                        ],
                         SessionContact::getContactId() !== null ? (
                             [
                                 'label'  => \Yii::t('app', 'Contact'),
