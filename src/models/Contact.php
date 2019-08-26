@@ -117,7 +117,20 @@ class Contact extends \yii\db\ActiveRecord
             [['birthday', 'date_1'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
         ];
     }
-
+    /**
+     * Filter attributes to return by the REST API
+     *
+     * @return array
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+    
+        // remove fields that contain sensitive information
+        unset($fields['address_id'], $fields['uuid'], $fields['is_natural_person'], $fields['is_deleted']);
+    
+        return $fields;
+    }
     /**
      * {@inheritdoc}
      */

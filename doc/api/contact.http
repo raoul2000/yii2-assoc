@@ -1,0 +1,8 @@
+
+@baseUrl = http://localhost/dev/yii2-assoc/src/web/index.php
+
+GET  {{baseUrl}}
+    ?r=api%2Fcontact
+Accept: application/json
+    
+    
