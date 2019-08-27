@@ -1,13 +1,12 @@
 (function () {
 
     const ui = {
-        "contactNameInput" : document.getElementById('contact-name'),
-        "contactFirstnameInput" : document.getElementById('contact-firstname'),
+        "contactNameOrEmailInput" : document.getElementById('contact-name-or-email'),
         "contactSearchResultList": document.getElementById('contact-result-list'),
         "searchButton" : document.getElementById('btn-search-contact')
     };
 
-    const sendSearchContactRequest = (name, firstname) => new Promise((resolve, reject) => {
+    const sendSearchContactRequest = (nameOrEmail) => new Promise((resolve, reject) => {
         // @ts-ignore
         $.getJSON("https://api-adresse.data.gouv.fr/search", { q: term }, function (data) {
             console.log("success");
@@ -32,16 +31,14 @@
     const searchContact = (ev) => {
 
         // @ts-ignore
-        const contactName = ui.contactNameInput.value.trim();
-        // @ts-ignore
-        const contactFirstname = ui.contactFirstnameInput.value.trim();
+        const contactNameOrEmail = ui.contactNameOrEmailInput.value.trim();
 
-        if (contactName.length == 0 || contactFirstname.length == 0) {
-            alert('enter the name and firstname');
+        if (contactNameOrEmail.length == 0 ) {
+            alert('enter the name or email to search');
             return;
         }
 
-        sendSearchContactRequest(contactName, contactFirstname)
+        sendSearchContactRequest(contactNameOrEmail)
             .then(renderSearchResults)
             .catch(handleSearchError);
     };

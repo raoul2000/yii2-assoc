@@ -35,8 +35,13 @@ class ContactController extends BaseAPIController
 
         return new ActiveDataProvider([
             'query' => Contact::find()
-                ->andFilterWhere(['like', 'name', $name])
-                ->andFilterWhere(['like', 'email', $email])
+                ->where([
+                    'and',
+                    [],
+                    [],
+                ])
+                ->where(['like', 'name', $nameOrEmail])
+                ->orWhere(['like', 'email', $nameOrEmail])
                 ->andWhere(['is_natural_person' => true]),
             'sort'=> [
                 'defaultOrder' => [
