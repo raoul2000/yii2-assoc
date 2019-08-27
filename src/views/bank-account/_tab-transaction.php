@@ -9,15 +9,26 @@ $bankAccountModel = $model;
 ?>
 <div class="tab-transaction">
     <p>
-        <?= Html::a('Create Debit', ['transaction/create', 'from_account_id' => $model->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Create Credit', ['transaction/create', 'to_account_id' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(
+            \Yii::t('app', 'Create Debit'), 
+            ['transaction/create', 'from_account_id' => $model->id], 
+            ['class' => 'btn btn-success']) 
+        ?>
+        <?= Html::a(
+            \Yii::t('app', 'Create Credit'), 
+            ['transaction/create', 'to_account_id' => $model->id], 
+            ['class' => 'btn btn-success']) 
+        ?>
+        <?= \app\components\widgets\DownloadDataGrid::widget() ?>            
     </p>
-    <?php Pjax::begin(); ?>
+    <?php 
+        //Pjax::begin(); 
+    ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $transactionDataProvider,
-            'filterModel' => $transactionSearchModel,
-            'columns' => [
+            'filterModel'  => $transactionSearchModel,
+            'columns'      => [
                 [
                     'attribute' => 'id',
                     'label'     => 'N°',
@@ -107,5 +118,7 @@ $bankAccountModel = $model;
                 ],
             ],
         ]); ?>
-    <?php Pjax::end(); ?>
+    <?php 
+        //Pjax::end(); 
+    ?>
 </div>

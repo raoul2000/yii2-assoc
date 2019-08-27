@@ -92,17 +92,74 @@ class BankAccountController extends Controller
                     return $accountId != $bankAccount->id;
                 }, ARRAY_FILTER_USE_KEY);
 
-                return $this->render('view', [
-                    'model' => $bankAccount,
-                    'tab' => $tab,
-                    'accountBalance' => $bankAccount->getBalanceInfo(),
-                    'tabContent' => $this->renderPartial('_tab-transaction', [
+                if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
+                    // request for downloading data grid
+                    $exporter = new \yii2tech\csvgrid\CsvGrid(
+                        [
+                            'dataProvider' => new \yii\data\ActiveDataProvider([
+                                'query'      => $transactionDataProvider->query,
+                                'pagination' => [
+                                    'pageSize' => 100, // export batch size
+                                ],
+                            ]),
+                            'columns' => [
+                                [
+                                    'attribute' => 'id',
+                                    'label'     => 'N°',
+                                ],
+                                ['attribute' => 'reference_date'],
+                                'description',
+                                'code',
+                                [
+                                    'attribute' => 'type',
+                                    'value'     => function ($model, $key, $index, $column) {
+                                        return \app\components\Constant::getTransactionType($model->type);
+                                    }
+                                ],
+                                [
+                                    'label'     => 'Account',
+                                    'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccount) {
+                                        if ($bankAccount->id == $transactionModel->from_account_id) {
+                                            return $transactionModel->toAccount->contact_name;
+                                        } else {
+                                            return $transactionModel->fromAccount->contact_name;
+                                        }
+                                    }
+                                ],
+                                [
+                                    'label'    => 'credit',
+                                    'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccount) {
+                                        return $transactionModel->from_account_id == $bankAccount->id
+                                        ? ''
+                                        : $transactionModel->value;
+                                    }
+                                ],
+                                [
+                                    'label'     => 'debit',
+                                    'value'     => function ($transactionModel, $key, $index, $column) use ($bankAccount) {
+                                        return $transactionModel->from_account_id == $bankAccount->id
+                                            ? $transactionModel->value
+                                            : '';
+                                    }
+                                ],
+                            ]
+                        ]
+                    );
+                    \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+                    return $exporter->export()->send('account-transactions.csv');
+                } else {
+                    return $this->render('view', [
                         'model' => $bankAccount,
-                        'transactionDataProvider' => $transactionDataProvider,
-                        'transactionSearchModel' => $transactionSearchModel,
-                        'bankAccounts' => $bankAccounts
-                    ])
-                ]);
+                        'tab' => $tab,
+                        'accountBalance' => $bankAccount->getBalanceInfo(),
+                        'tabContent' => $this->renderPartial('_tab-transaction', [
+                            'model' => $bankAccount,
+                            'transactionDataProvider' => $transactionDataProvider,
+                            'transactionSearchModel' => $transactionSearchModel,
+                            'bankAccounts' => $bankAccounts
+                        ])
+                    ]);
+                }
             break;
             case 'pack': // ----------------------------------------------------
                 $transactionPackSearchModel = new TransactionPackSearch();
