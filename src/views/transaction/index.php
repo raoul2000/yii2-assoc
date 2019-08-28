@@ -20,27 +20,26 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <hr/>
 
-    <?php 
-        //Pjax::begin(); 
-    ?>
-        <div class="pull-right">
-            <?= Html::a(
-                '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ' 
-                    . \Yii::t('app', 'Manage Transaction Packs'), 
-                ['transaction-pack/index'], 
-                ['class' => 'btn btn-info',  'data-pjax'=>0]) 
-            ?>
-        </div>    
-        <p>
-            <?= Html::a(
-                \Yii::t('app', 'Create Transaction'), 
-                ['create'],
-                ['class' => 'btn btn-success']
-            )?>
-            <?= \app\components\widgets\DownloadDataGrid::widget() ?>            
-        </p>
+    <div class="pull-right">
+        <?= Html::a(
+            '<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> ' 
+                . \Yii::t('app', 'Manage Transaction Packs'), 
+            ['transaction-pack/index'], 
+            ['class' => 'btn btn-info',  'data-pjax'=>0]) 
+        ?>
+    </div>    
+    <p>
+        <?= Html::a(
+            \Yii::t('app', 'Create Transaction'), 
+            ['create'],
+            ['class' => 'btn btn-success']
+        )?>
+        <?= \app\components\widgets\DownloadDataGrid::widget() ?>            
+    </p>
 
-        <?php  echo $this->render('_search', ['model' => $searchModel, 'tagValues' => $tagValues]); ?>    
+    <?php  echo $this->render('_search', ['model' => $searchModel, 'tagValues' => $tagValues]); ?>    
+
+    <?php Pjax::begin(); ?>
 
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
@@ -131,7 +130,5 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]); ?>
-    <?php 
-        //Pjax::end(); 
-    ?>
+    <?php  Pjax::end();?>
 </div>

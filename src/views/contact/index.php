@@ -58,14 +58,12 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <div style="margin-top:1em;">
-        <?php 
-            //Pjax::begin(); 
-        ?>
+        <?php Pjax::begin(); ?>
             <?php if ($tab == 'person'):?>
                 <?= GridView::widget([
                     'tableOptions' => ['class' => 'table table-hover table-condensed'],
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
+                    'filterModel'  => $searchModel,
                     'columns' => [
                         [
                             'attribute' => 'note',
@@ -121,8 +119,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]); ?>
             <?php endif; ?>
-        <?php 
-            //Pjax::end(); 
-        ?>
+        <?php Pjax::end(); ?>
     </div>
 </div>

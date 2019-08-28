@@ -22,7 +22,7 @@ $bankAccountModel = $model;
         <?= \app\components\widgets\DownloadDataGrid::widget() ?>            
     </p>
     <?php 
-        //Pjax::begin(); 
+        Pjax::begin(); 
     ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
@@ -119,6 +119,6 @@ $bankAccountModel = $model;
             ],
         ]); ?>
     <?php 
-        //Pjax::end(); 
+        Pjax::end(); 
     ?>
 </div>

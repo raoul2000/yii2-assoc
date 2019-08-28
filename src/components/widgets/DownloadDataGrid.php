@@ -16,6 +16,11 @@ class DownloadDataGrid extends Widget
     const TRIGGER_HEADER_NAME = 'X-Download-Report';
     public $url;
     public $defaultFilename = 'file.csv'; 
+    /**
+     * Button Label
+     *
+     * @var string
+     */
     public $label;
 
     public function init()
@@ -42,7 +47,11 @@ class DownloadDataGrid extends Widget
         const downloadReport = (ev) => {
             ev.target.disabled = true;
             $.ajax({
-                url: '$this->url',
+                // use the URL of the current page. This is possible because the GridView widget updates
+                // the current url when filters are applied to the grid by users (and the "export" button 
+                // must exports the filtered data).
+                // Note that the request is made to the current page when the url value is an empty string
+                url : document.location.href,
                 method: 'GET',
                 headers : {
                     "$headerName" : true
@@ -81,14 +90,14 @@ class DownloadDataGrid extends Widget
                 console.error(err);
             })
             .always( () => {
-                console.log('always');
                 ev.target.disabled = false;
             });                
         };
+        console.log('loading DownloadDataGrid widget');
         document.getElementById('btn-export-report').addEventListener('click', downloadReport);
 EOS;
     
-        $this->getView()->registerJs($jsScript, View::POS_READY, 'add-product-to-cart');        
+        $this->getView()->registerJs($jsScript, View::POS_READY, 'download-data-grid');        
     }
     public function createButton()
     {
