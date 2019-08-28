@@ -20,9 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <hr/>
     
-    <?php 
-        //Pjax::begin(); 
-    ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -30,44 +27,47 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= \app\components\widgets\DownloadDataGrid::widget() ?>   
     </p>
 
-    <?= GridView::widget([
-        'tableOptions' => ['class' => 'table table-hover table-condensed'],
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            'name',
-            'value',
-            [
-                'attribute' => 'category_id',
-                'label' => \Yii::t('app', 'Category'),
-                'filter' => $categories,
-                'value'     => function ($model, $key, $index, $column) use($categories){
-                    return $model->category_id != null 
-                        ? Html::encode($categories[$model->category_id])
-                        : null;  
-                }
-            ],
-
-            'valid_date_start:appDate',
-            'valid_date_end:appDate',
-            /*
-            [
-                'attribute' => 'updated_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            [
-                'attribute' => 'created_at',
-                'format' => ['date', 'php:d/m/Y H:i']
-            ],
-            */
-
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'contentOptions' => ['nowrap' => 'nowrap']
-            ],
-        ],
-    ]); ?>
     <?php 
-        //Pjax::end(); 
+        Pjax::begin(); 
+    ?>
+        <?= GridView::widget([
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                'name',
+                'value',
+                [
+                    'attribute' => 'category_id',
+                    'label' => \Yii::t('app', 'Category'),
+                    'filter' => $categories,
+                    'value'     => function ($model, $key, $index, $column) use($categories){
+                        return $model->category_id != null 
+                            ? Html::encode($categories[$model->category_id])
+                            : null;  
+                    }
+                ],
+
+                'valid_date_start:appDate',
+                'valid_date_end:appDate',
+                /*
+                [
+                    'attribute' => 'updated_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                [
+                    'attribute' => 'created_at',
+                    'format' => ['date', 'php:d/m/Y H:i']
+                ],
+                */
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['nowrap' => 'nowrap']
+                ],
+            ],
+        ]); ?>
+    <?php 
+        Pjax::end(); 
     ?>
 </div>
