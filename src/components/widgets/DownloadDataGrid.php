@@ -36,8 +36,8 @@ class DownloadDataGrid extends Widget
     */
     public function run()
     {
-        //$this->registerJs();
-        $this->registerJs2();
+        $this->registerJs();
+        //$this->registerJs2();
         return $this->createButton();
     }
 
@@ -45,51 +45,66 @@ class DownloadDataGrid extends Widget
     {
         $headerName = self::TRIGGER_HEADER_NAME;
         $js=<<<EOS
-        // This will hold the the file as a local object URL
-        var _OBJECT_URL;
-        
-        // Call an AJAX
         document.getElementById('btn-export-report').addEventListener('click', function() {
-            var request = new XMLHttpRequest();
             
-            request.addEventListener('readystatechange', function(e) {
-                if(request.readyState == 2 && request.status == 200) {
-                    // Download is being started
-                }
-                else if(request.readyState == 3) {
-                    // Download is under progress
-                }
-                else if(request.readyState == 4) {
-                    // Downloaing has finished
-        
-                    _OBJECT_URL = URL.createObjectURL(request.response);
-        
-                    // Set href as a local object URL
-                    document.querySelector('#save-file').setAttribute('href', _OBJECT_URL);
-                    
-                    // Set name of download
-                    document.querySelector('#save-file').setAttribute('download', 'img.jpeg');
-                    
-                    // Recommended : Revoke the object URL after some time to free up resources
-                    // There is no way to find out whether user finished downloading
-                    setTimeout(function() {
-                        window.URL.revokeObjectURL(_OBJECT_URL);
-                    }, 60*1000);
-                }
+            // from https://dev.to/bnevilleoneill/programmatic-file-downloads-in-the-browser-2cbh
+
+            function downloadBlob(blob, filename) {
+                // Create an object URL for the blob object
+                const url = URL.createObjectURL(blob);
+              
+                // Create a new anchor element
+                const a = document.createElement('a');
+              
+                // Set the href and download attributes for the anchor element
+                // You can optionally set other attributes like `title`, etc
+                // Especially, if the anchor element will be attached to the DOM
+                a.href = url;
+                a.download = filename || 'download';
+              
+                // Click handler that releases the object URL after the element has been clicked
+                // This is required for one-off downloads of the blob content
+                const clickHandler = () => {
+                  setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                    this.removeEventListener('click', clickHandler);
+                  }, 150);
+                };
+              
+                // Add the click event listener on the anchor element
+                // Comment out this line if you don't want a one-off download of the blob content
+                a.addEventListener('click', clickHandler, false);
+              
+                // Programmatically trigger a click on the anchor element
+                // Useful if you want the download to happen automatically
+                // Without attaching the anchor element to the DOM
+                // Comment out this line if you don't want an automatic download of the blob content
+                a.click();
+              
+                // Return the anchor element
+                // Useful if you want a reference to the element
+                // in order to attach it to the DOM or use it in some other way
+                return a;
+              }
+              
+            const headers = new Headers({
+                "$headerName" : true
             });
-            
-            request.addEventListener('progress', function(e) {
-                var percent_complete = (e.loaded / e.total)*100;
-                console.log(percent_complete);
-            });
-            
-            request.responseType = 'blob';
-            
-            // Downloading a JPEG file
-            request.open('get', document.location.href); 
-            request.setRequestHeader('$headerName', true);
-            
-            request.send(); 
+
+            const url = window.location.href;
+            fetch(url, { 
+                method: 'GET',
+                headers: headers,
+                cache: 'default' 
+            })
+                .then( response => response.blob())
+                .then( blob => { // csv blob
+                    debugger;
+                    
+                    downloadBlob(blob,'file.csv');
+                    window.location.replace(url);
+                })
+                .catch(console.error);
         });        
 EOS;
 
@@ -102,17 +117,21 @@ EOS;
         $jsScript=<<<EOS
         const downloadReport = (ev) => {
             ev.target.disabled = true;
+
+            // use the URL of the current page. This is possible because the GridView widget updates
+            // the current url when filters are applied to the grid by users (and the "export" button 
+            // must exports the filtered data).
+
+            const url = document.location.href;
+
             $.ajax({
-                // use the URL of the current page. This is possible because the GridView widget updates
-                // the current url when filters are applied to the grid by users (and the "export" button 
-                // must exports the filtered data).
                 // Note that the request is made to the current page when the url value is an empty string
-                url : document.location.href,
-                method: 'GET',
-                headers : {
+                "url" : url,
+                "method": 'GET',
+                "headers" : {
                     "$headerName" : true
                 },
-                xhrFields: {
+                "xhrFields": {
                     responseType: 'blob'
                 }
             })
@@ -136,6 +155,7 @@ EOS;
                   a.click();
                   a.remove();
                   window.URL.revokeObjectURL(url);
+
                 } catch(err) {
                     alert('something went really wrong : failed to download data');
                     console.error(err);
@@ -147,6 +167,9 @@ EOS;
             })
             .always( () => {
                 ev.target.disabled = false;
+                // mandatory to prevent the back button to trigger downlad when the user wants to 
+                // navigate back to the grid view page
+                window.location.replace(url);
             });                
         };
         console.log('loading DownloadDataGrid widget');
