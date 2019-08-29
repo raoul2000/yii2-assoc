@@ -129,7 +129,9 @@ class Contact extends \yii\db\ActiveRecord
     
         // remove fields that contain sensitive information
         unset($fields['address_id'], $fields['uuid'], $fields['is_natural_person'], $fields['is_deleted']);
-    
+        $fields['fullname'] = function($model) {
+            return $model->getFullname();
+        };
         return $fields;
     }
     /**
@@ -305,6 +307,14 @@ class Contact extends \yii\db\ActiveRecord
         } else {
             return $this->name;
         }
-
+    }
+    /**
+     * Synonym for getLongName
+     *
+     * @return string
+     */
+    public function getFullname()
+    {
+        return $this->getLongName();
     }
 }
