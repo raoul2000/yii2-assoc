@@ -29,20 +29,15 @@ class ContactController extends BaseAPIController
      * @param string $email
      * @return void
      */
-    public function actionSearch($name = null, $email = null)
+    public function actionSearch($name)
     {
         $this->checkAccess('search');
 
         return new ActiveDataProvider([
             'query' => Contact::find()
-                ->where([
-                    'and',
-                    [],
-                    [],
-                ])
-                ->where(['like', 'name', $nameOrEmail])
-                ->orWhere(['like', 'email', $nameOrEmail])
-                ->andWhere(['is_natural_person' => true]),
+                ->where(['like', 'name', $name])
+                ->andWhere(['is_natural_person' => true])
+                ->with('address'),
             'sort'=> [
                 'defaultOrder' => [
                     'name' => SORT_DESC
