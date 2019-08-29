@@ -100,13 +100,11 @@ $uploadForm = new \app\models\forms\UploadForm();
             </div>
         </div>
 
-
-        <?= $form->field($model, 'description')->textarea(
-            [
-                'maxlength' => true, 
-                'autocomplete'=>'off',
-                'placeholder' => \Yii::t('app', 'Enter a description...')
-            ]) ?>
+        <?= $form->field($model, 'description')->textInput([
+            'maxlength' => true, 
+            'autocomplete'=>'off', 
+            'placeholder' => \Yii::t('app', 'Enter a description...')
+        ])?>
         
         <?php if (!$model->isNewRecord):?>
             <?= $form->field($model, 'is_verified')->checkbox() ?>

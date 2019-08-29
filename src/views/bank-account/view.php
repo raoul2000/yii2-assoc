@@ -5,7 +5,6 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\BankAccount */
@@ -22,7 +21,9 @@ $bankAccountModel = $model;
         <span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
         <?= Html::encode($this->title) ?>
     </h1>
+
     <hr/>
+    
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -82,8 +83,6 @@ $bankAccountModel = $model;
         ],
     ]) ?>
 
-
-    
     <?= yii\bootstrap\Nav::widget([
         'options' => ['class' =>'nav-tabs'],
         'items' => [
@@ -100,6 +99,7 @@ $bankAccountModel = $model;
             ],
         ]
     ]) ?>
+
     <div style="margin-top:1em;">
         <?= $tabContent ?>
     </div>

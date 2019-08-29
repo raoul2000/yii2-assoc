@@ -110,10 +110,11 @@ class Contact extends \yii\db\ActiveRecord
             [['is_deleted', 'gender'], 'integer'],
             ['gender','in', 'range' => [0,1,2] ],
             [['name', 'firstname', 'email'], 'string', 'max' => 128],
-            [['note'], 'safe'],
+            [['note'], 'string', 'max' => 255],
+
             [['phone_1', 'phone_2'], 'string', 'max' => 50],
             ['email', 'email'],
-            //[['birthday', 'date_1'], 'date', 'format' => 'php:Y-m-d'],
+
             [['birthday', 'date_1'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
         ];
     }
