@@ -25,7 +25,35 @@ class RegistrationController extends \yii\web\Controller
             'value' => 'value'
         ]);
     }
+    public function actionContactSearch()
+    {
+        if (Yii::$app->request->getIsPost()) {
+            $contactId = Yii::$app->request->post('contactId', null);
+            if (empty($contactId)) {
+                // contact was not found in DB : create a new one
+                $contact = new Contact();
+                $contact->is_natural_person = true;
+            } else {
+                // contact found : validate it exists
+                $contact = Contact::find()
+                    ->where([
+                        'id' => $contactId,
+                        'is_natural_person' => true
+                    ])
+                    ->one();
+                if ($contact == null) {
+                    throw new NotFoundHttpException('Contact not found.');
+                }    
+            }
+            Yii::$app->session['registration'] = [
+                'contact' => $contact->getAttributes()
+            ];
+        }
+        return $this->renderWizard(
+            $this->renderPartial('_contact-search')
+        );
 
+    }
     public function actionContact()
     {
         $model = Contact::create();
@@ -51,7 +79,7 @@ class RegistrationController extends \yii\web\Controller
 
         return $this->renderWizard(
             $this->renderPartial('_contact', [
-                'data' => 'data'
+                'model' => $model
             ])
         );
     }
