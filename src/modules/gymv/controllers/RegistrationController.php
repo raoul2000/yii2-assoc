@@ -5,6 +5,7 @@ use Yii;
 use app\models\Address;
 use app\models\Contact;
 use app\models\AddressSearch;
+use yii\web\NotFoundHttpException;
 
 class RegistrationController extends \yii\web\Controller
 {
@@ -27,62 +28,107 @@ class RegistrationController extends \yii\web\Controller
     }
     public function actionContactSearch()
     {
+        $contact = new Contact();
+        $contact->is_natural_person = true;
+
         if (Yii::$app->request->getIsPost()) {
             $contactId = Yii::$app->request->post('contactId', null);
             if (empty($contactId)) {
                 // contact was not found in DB : create a new one
-                $contact = new Contact();
-                $contact->is_natural_person = true;
-            } else {
-                // contact found : validate it exists
+                $contact->name = '';
+            } elseif( is_numeric($contactId) ) {
+                // existing contact selected (id provided) : validate it exists
                 $contact = Contact::find()
                     ->where([
-                        'id' => $contactId,
+                        'id'                => $contactId,
                         'is_natural_person' => true
                     ])
                     ->one();
                 if ($contact == null) {
                     throw new NotFoundHttpException('Contact not found.');
                 }    
+            } elseif (preg_match('/new-contact@(.+)/', $contactId, $matches, PREG_OFFSET_CAPTURE, 0)) {
+                // user entered a contact name that could not be found : create a new contact
+                // with entered name (ex : new-contact@Dupond converted to name = 'Dupond')
+                $contact->name = $matches[1][0];
+            } else {
+                throw new NotFoundHttpException('invalid input');
             }
             Yii::$app->session['registration'] = [
                 'contact' => $contact->getAttributes()
             ];
+            $this->redirect(['contact-edit']);
         }
+
         return $this->renderWizard(
             $this->renderPartial('_contact-search')
         );
-
     }
-    public function actionContact()
+
+    public function actionContactEdit()
     {
+        if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
+            // session variable is not as expected
+            $this->redirect(['contact-search']);
+        }
+
         $model = Contact::create();
+        $model->setAttributes(Yii::$app->session['registration']['contact']);
 
-        // only create person contact during registration
-        $model->is_natural_person = true;
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-        if ( isset($model->id)) {
-            // check it exists
-        } else  {
-            
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                // by default, create an account for new contact
-                $bankAccount = new BankAccount();
-                $bankAccount->contact_id = $model->id;
-                $bankAccount->name = '';
-                $bankAccount->save(false);
+            Yii::$app->session['registration'] = [
+                'contact' => $model->getAttributes()
+            ];
 
-                // go to next step
-                return $this->redirect(['address']);
+            if ( empty($model->address_id)) {
+                return $this->redirect(['address-search-fr']);
             }
         }
 
         return $this->renderWizard(
-            $this->renderPartial('_contact', [
+            $this->renderPartial('_contact-edit', [
                 'model' => $model
             ])
         );
     }
+
+    public function actionAddressSearchFr()
+    {
+        if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
+            // session variable is not as expected
+            $this->redirect(['contact-search']);
+        }
+
+        $model = Contact::create();
+        $model->setAttributes(Yii::$app->session['registration']['contact']);
+
+
+        return $this->renderWizard(
+            $this->renderPartial('_address-search-fr', [
+                'model' => $model
+            ])
+        );
+    }
+
+    public function actionAddressCreate()
+    {
+        if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
+            // session variable is not as expected
+            $this->redirect(['contact-search']);
+        }
+
+        $model = Contact::create();
+        $model->setAttributes(Yii::$app->session['registration']['contact']);
+
+
+        return $this->renderWizard(
+            $this->renderPartial('_address-create', [
+                'model' => $model
+            ])
+        );
+    }
+
     public function actionAddress($contact_id = null, $redirect_url = null)
     {
         $model = new Address();

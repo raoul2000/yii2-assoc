@@ -21,7 +21,11 @@ $contactSearchServiceUrl = Url::to(['/api/contact/search']);
             'options' => ['class' => 'form-control'],
             'clientOptions' => [
                 'placeholder' => \Yii::t('app', 'enter contact name to search ...'),
-                'create' => false,
+                'create' => new \yii\web\JsExpression("
+                    function(input) {
+                        return { 'id' : 'new-contact@' + input, 'fullname' : input};
+                    }
+                "),
                 'valueField' => 'id',
                 'labelField' => 'fullname',
                 'searchField' => 'name',                            
@@ -47,10 +51,10 @@ $contactSearchServiceUrl = Url::to(['/api/contact/search']);
         ]); ?>        
 
         <?= Html::submitButton(
-            \Yii::t('app', 'Continue ...'), 
+            \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>', 
             [
                 'id' => 'btn-contact-found', 
-                'class' => 'btn btn-default', 
+                'class' => 'btn btn-primary', 
                 'disabled' => false 
             ]
         )?>
