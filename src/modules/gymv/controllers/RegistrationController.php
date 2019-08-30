@@ -5,6 +5,7 @@ use Yii;
 use app\models\Address;
 use app\models\Contact;
 use app\models\AddressSearch;
+use yii\web\Response;
 use yii\web\NotFoundHttpException;
 
 class RegistrationController extends \yii\web\Controller
@@ -82,7 +83,7 @@ class RegistrationController extends \yii\web\Controller
             ];
 
             if ( empty($model->address_id)) {
-                return $this->redirect(['address-search-fr']);
+                return $this->redirect(['address-search']);
             }
         }
 
@@ -92,38 +93,119 @@ class RegistrationController extends \yii\web\Controller
             ])
         );
     }
+    //TODO: searcg in both addresses.gouv api and internal DB and then merge results
+    public function actionAjaxAddressSearch()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException('invalid input');
+        }
+        Yii::$app->response->format = Response::FORMAT_JSON; 
 
-    public function actionAddressSearchFr()
+        // read query and validate params
+        $address = Yii::$app->request->get('address');  // mandatory
+        $city = Yii::$app->request->get('city');        // optional
+        if (empty($address)) {
+            throw new yii\web\BadRequestHttpException('the parameter "address" is missing');
+        }
+
+        // performing REST request to the addresses.gouv.fr service
+        $wsResult = [];
+        if (true) {
+            $params = ['q' => $address . (!empty($city) ? ' ' . $city : '')];
+            
+            $client = new \yii\httpclient\Client();
+            $response = $client->createRequest()
+                ->setMethod('GET')
+                ->setUrl('https://api-adresse.data.gouv.fr/search')
+                ->setData($params)
+                ->send();
+    
+            $wsResult = array_map(function($item){
+                $property = $item['properties'];
+                return [
+                    'id'       => null,
+                    'address'  => $property['name'],
+                    'city'     => $property['city'],
+                    'zip_code' => $property['postcode'],
+                    'country'  => 'FRANCE'
+                ];
+            }, $response->data['features']);
+        }
+
+        // searching in DB
+        $dbRows = Address::find()
+            ->where(['LIKE', 'line_1', $address])
+            ->andFilterWhere(['city' => $city])
+            ->limit(5)
+            ->asArray()
+            ->all();
+
+        $dbResult = array_map(function($row){
+            return [
+                'id'       => $row['id'],
+                'address'  => $row['line_1'],
+                'city'     => $row['city'],
+                'zip_code' => $row['zip_code'],
+                'country'  => $row['country']
+            ];
+        }, $dbRows);
+
+        
+        // building response body
+        
+        // done : return response
+        return $dbResult + $wsResult;
+    }
+
+    public function actionAddressSearch()
     {
         if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
             // session variable is not as expected
             $this->redirect(['contact-search']);
         }
 
-        $model = Contact::create();
-        $model->setAttributes(Yii::$app->session['registration']['contact']);
+        $model = new Address();
 
-
+        if (Yii::$app->request->getIsPost()) {
+            $addressId = Yii::$app->request->post('address_id', null);
+            if ($addressId) {
+                $model = Address::findOne($addressId);
+                if (!$model) {
+                    throw new NotFoundHttpException('Address not found.');
+                }
+            } elseif ($model->load(Yii::$app->request->post()) ) {
+                $model->id = null;
+            }  else {
+                throw new NotFoundHttpException('invalid input');
+            }
+            Yii::$app->session['registration'] = [
+                'address' => $model->getAttributes()
+            ];
+            $this->redirect(['address-edit']);
+        }
+        
         return $this->renderWizard(
-            $this->renderPartial('_address-search-fr', [
+            $this->renderPartial('_address-search', [
                 'model' => $model
             ])
         );
     }
 
-    public function actionAddressCreate()
+    public function actionAddressEdit()
     {
-        if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
+        if (!Yii::$app->session->has('registration') || !array_key_exists('address', Yii::$app->session['registration'])) {
             // session variable is not as expected
-            $this->redirect(['contact-search']);
+            $this->redirect(['address-search']);
         }
 
-        $model = Contact::create();
-        $model->setAttributes(Yii::$app->session['registration']['contact']);
+        $model = new Address();
+        if (Yii::$app->request->isGet()) {
+            $model->setAttributes(Yii::$app->session['registration']['address']);
+        } elseif ($model->load(Yii::$app->request->post() && $model->validate())) {
 
-
+        }
         return $this->renderWizard(
-            $this->renderPartial('_address-create', [
+            $this->renderPartial('_address-edit', [
                 'model' => $model
             ])
         );
