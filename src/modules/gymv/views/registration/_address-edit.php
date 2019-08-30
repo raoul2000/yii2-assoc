@@ -30,8 +30,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
 
-    <hr/>
-    
     <div class="form-group">
         <?= Html::a(
             '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> ' . \Yii::t('app', 'Previous'),

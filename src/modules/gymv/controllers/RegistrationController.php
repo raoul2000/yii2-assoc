@@ -56,7 +56,8 @@ class RegistrationController extends \yii\web\Controller
                 throw new NotFoundHttpException('invalid input');
             }
             Yii::$app->session['registration'] = [
-                'contact' => $contact->getAttributes()
+                'contact' => $contact->getAttributes(),
+                'address' => null
             ];
             $this->redirect(['contact-edit']);
         }
@@ -79,7 +80,8 @@ class RegistrationController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             Yii::$app->session['registration'] = [
-                'contact' => $model->getAttributes()
+                'contact' => $model->getAttributes(),
+                'address' => null
             ];
 
             if ( empty($model->address_id)) {
@@ -163,6 +165,11 @@ class RegistrationController extends \yii\web\Controller
             // session variable is not as expected
             $this->redirect(['contact-search']);
         }
+        
+        Yii::$app->session['registration'] = [
+            'contact' => Yii::$app->session['registration']['contact'],
+            'address' => null
+        ];
 
         $model = new Address();
 
@@ -179,6 +186,7 @@ class RegistrationController extends \yii\web\Controller
                 throw new NotFoundHttpException('invalid input');
             }
             Yii::$app->session['registration'] = [
+                'contact' => Yii::$app->session['registration']['contact'],
                 'address' => $model->getAttributes()
             ];
             $this->redirect(['address-edit']);
@@ -199,10 +207,14 @@ class RegistrationController extends \yii\web\Controller
         }
 
         $model = new Address();
-        if (Yii::$app->request->isGet()) {
+        if (Yii::$app->request->isGet) {
             $model->setAttributes(Yii::$app->session['registration']['address']);
-        } elseif ($model->load(Yii::$app->request->post() && $model->validate())) {
-
+        } elseif ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->session['registration'] = [
+                'contact' => Yii::$app->session['registration']['contact'],
+                'address' => $model->getAttributes()
+            ];  
+            return $this->redirect(['order']);
         }
         return $this->renderWizard(
             $this->renderPartial('_address-edit', [
@@ -211,6 +223,12 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+    public function actionOrder()
+    {
+        return $this->renderWizard(
+            $this->renderPartial('_order', [])
+        );
+    }
     public function actionAddress($contact_id = null, $redirect_url = null)
     {
         $model = new Address();

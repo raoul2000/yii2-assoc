@@ -20,6 +20,7 @@
             addressData = data;
             resolve(data);
         })
+            // @ts-ignore
             .fail(function (jqxhr, textStatus, error) {
                 console.error(error);
                 reject(error);
@@ -41,12 +42,13 @@
         }).join('\n');
     };
 
+    
     const handleSearchError = (err) => {
         alert('search error');
     };
 
+    
     const searchAddress = (ev) => {
-
         // @ts-ignore
         const addressToSearch = el.address.value.trim();
         // @ts-ignore
@@ -62,17 +64,28 @@
     };
 
     const loadForm = (record) => {
+        // @ts-ignore
         el.form_record_id.value = record.id;
+        // @ts-ignore
         el.form_line_1.value = record.address;
+        // @ts-ignore
         el.form_zip_code.value = record.zip_code;
+        // @ts-ignore
         el.form_city.value = record.city;
+        // @ts-ignore
         el.form_country.value = record.country;
     };
+    // @ts-ignore
     const clearForm = (record) => {
+        // @ts-ignore
         el.form_record_id.value = null;
+        // @ts-ignore
         el.form_line_1.value = null;
+        // @ts-ignore
         el.form_zip_code.value = null;
+        // @ts-ignore
         el.form_city.value = null;
+        // @ts-ignore
         el.form_country.value = null;
     };
     const selectResultItem = (ev) => {

@@ -67,8 +67,7 @@ $searchAddressUrl = 'url';
         </div>
     </div>
 
-
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
         <input type="hidden" id="address-record_id" name="address_id" value="" />
         <?= $form->field($model, 'line_1')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
 
