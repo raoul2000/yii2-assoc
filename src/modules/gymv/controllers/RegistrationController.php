@@ -10,6 +10,9 @@ use yii\web\NotFoundHttpException;
 
 class RegistrationController extends \yii\web\Controller
 {
+    const SESS_CONTACT = 'registration.contact';
+    const SESS_ADDRESS = 'registration.address';
+
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
 
@@ -27,8 +30,12 @@ class RegistrationController extends \yii\web\Controller
             'value' => 'value'
         ]);
     }
+
     public function actionContactSearch()
     {
+        Yii::$app->session->remove(self::SESS_CONTACT);
+        Yii::$app->session->remove(self::SESS_ADDRESS);
+
         $contact = new Contact();
         $contact->is_natural_person = true;
 
@@ -55,10 +62,7 @@ class RegistrationController extends \yii\web\Controller
             } else {
                 throw new NotFoundHttpException('invalid input');
             }
-            Yii::$app->session['registration'] = [
-                'contact' => $contact->getAttributes(),
-                'address' => null
-            ];
+            Yii::$app->session[self::SESS_CONTACT] = $contact->getAttributes();
             $this->redirect(['contact-edit']);
         }
 
@@ -69,21 +73,18 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionContactEdit()
     {
-        if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
+        if (!Yii::$app->session->has(self::SESS_CONTACT)) {
             // session variable is not as expected
             $this->redirect(['contact-search']);
         }
+        Yii::$app->session->remove(self::SESS_ADDRESS);
 
         $model = Contact::create();
-        $model->setAttributes(Yii::$app->session['registration']['contact']);
+        $model->setAttributes(Yii::$app->session[self::SESS_CONTACT]);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            Yii::$app->session['registration'] = [
-                'contact' => $model->getAttributes(),
-                'address' => null
-            ];
-
+            // save contact to session
+            Yii::$app->session[self::SESS_CONTACT] = $model->getAttributes();
             if ( empty($model->address_id)) {
                 return $this->redirect(['address-search']);
             }
@@ -161,15 +162,11 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionAddressSearch()
     {
-        if (!Yii::$app->session->has('registration') || !array_key_exists('contact', Yii::$app->session['registration'])) {
+        if (!Yii::$app->session->has(self::SESS_CONTACT)) {
             // session variable is not as expected
             $this->redirect(['contact-search']);
         }
-        
-        Yii::$app->session['registration'] = [
-            'contact' => Yii::$app->session['registration']['contact'],
-            'address' => null
-        ];
+        Yii::$app->session->remove(self::SESS_ADDRESS);
 
         $model = new Address();
 
@@ -185,10 +182,7 @@ class RegistrationController extends \yii\web\Controller
             }  else {
                 throw new NotFoundHttpException('invalid input');
             }
-            Yii::$app->session['registration'] = [
-                'contact' => Yii::$app->session['registration']['contact'],
-                'address' => $model->getAttributes()
-            ];
+            Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes(); 
             $this->redirect(['address-edit']);
         }
         
@@ -201,21 +195,19 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionAddressEdit()
     {
-        if (!Yii::$app->session->has('registration') || !array_key_exists('address', Yii::$app->session['registration'])) {
+        if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
             // session variable is not as expected
             $this->redirect(['address-search']);
         }
 
         $model = new Address();
         if (Yii::$app->request->isGet) {
-            $model->setAttributes(Yii::$app->session['registration']['address']);
+            $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS]);
         } elseif ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            Yii::$app->session['registration'] = [
-                'contact' => Yii::$app->session['registration']['contact'],
-                'address' => $model->getAttributes()
-            ];  
+            Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes();
             return $this->redirect(['order']);
         }
+
         return $this->renderWizard(
             $this->renderPartial('_address-edit', [
                 'model' => $model
