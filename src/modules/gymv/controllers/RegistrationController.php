@@ -5,6 +5,7 @@ use Yii;
 use app\models\Address;
 use app\models\Contact;
 use app\models\AddressSearch;
+use app\modules\gymv\models\ProductForm;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
 
@@ -12,9 +13,15 @@ class RegistrationController extends \yii\web\Controller
 {
     const SESS_CONTACT = 'registration.contact';
     const SESS_ADDRESS = 'registration.address';
+    const SESS_PRODUCTS = 'registration.products';
 
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
+
+    public function init()
+    {
+        parent::init();
+    }
 
     private function renderWizard($mainContent)
     {
@@ -26,6 +33,7 @@ class RegistrationController extends \yii\web\Controller
     }
     private function buildWizSummary()
     {
+        
         return $this->renderPartial('_summary', [
             'value' => 'value'
         ]);
@@ -205,7 +213,7 @@ class RegistrationController extends \yii\web\Controller
             $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS]);
         } elseif ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes();
-            return $this->redirect(['order']);
+            return $this->redirect(['product-select']);
         }
 
         return $this->renderWizard(
@@ -215,12 +223,46 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
-    public function actionOrder()
+    public function actionProductSelect()
     {
+        $model = new ProductForm();
+        if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
+            $this->redirect(['address-search']);
+        }
+        Yii::$app->session->remove(self::SESS_PRODUCTS);
+
         return $this->renderWizard(
-            $this->renderPartial('_order', [])
+            $this->renderPartial('_product-select', [
+                'model' => $model
+            ])
         );
     }
+
+    public function actionAjaxSelectProduct($name)
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException('invalid input');
+        }
+
+        $rows = \app\models\Product::find()
+            ->where(['like', 'name', $name ])
+            ->limit(10)
+            ->asArray()
+            ->all();
+
+        $results = array_map(function($row) {
+            return [
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'value' => $row['value'],
+            ];
+        }, $rows);
+
+        Yii::$app->response->format = Response::FORMAT_JSON; 
+
+        return $results;
+    }
+
     public function actionAddress($contact_id = null, $redirect_url = null)
     {
         $model = new Address();

@@ -77,14 +77,22 @@ $searchAddressUrl = 'url';
 
         <?= $form->field($model, 'country')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
 
-        <?= Html::submitButton(
-                \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>', 
-                [
-                    'id' => 'btn-address-found', 
-                    'class' => 'btn btn-primary', 
-                    'disabled' => false 
-                ]
-        )?>
+        <div class="form-group">
+            <?= Html::a(
+                '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> ' . \Yii::t('app', 'Previous'),
+                ['contact-edit'],
+                ['class' => 'btn btn-primary']
+            )?>
+
+            <?= Html::submitButton(
+                    \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>', 
+                    [
+                        'id' => 'btn-address-found', 
+                        'class' => 'btn btn-primary', 
+                        'disabled' => false 
+                    ]
+            )?>
+        </div>
 
     <?php ActiveForm::end(); ?>    
 
