@@ -57,7 +57,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                 <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                     'name' => 'productId',
                     'id' => 'selectized-product',
-                    'loadUrl' => ['ajax-select-product'],
+                    'loadUrl' => ['/api/product/search'], //['ajax-select-product'],
                     'queryParam' => 'name',
                     'options' => ['class' => 'form-control'],
                     'clientOptions' => [
@@ -93,6 +93,9 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                     ],
                 ]); ?>   
                 <div id="selected-product-list">
+                    <?php foreach ($model as $productId) {
+                        # code...
+                    }?>
                 </div>     
             </div>
         </div>

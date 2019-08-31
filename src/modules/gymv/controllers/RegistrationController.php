@@ -231,6 +231,11 @@ class RegistrationController extends \yii\web\Controller
         }
         Yii::$app->session->remove(self::SESS_PRODUCTS);
 
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->session[self::SESS_PRODUCTS] = $model->getAttributes();
+            return $this->redirect(['order']);
+        }
+
         return $this->renderWizard(
             $this->renderPartial('_product-select', [
                 'model' => $model
@@ -238,31 +243,24 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
-    public function actionAjaxSelectProduct($name)
+    public function actionOrder()
     {
-        if (!Yii::$app->request->isAjax) {
-            throw new NotFoundHttpException('invalid input');
+        if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
+            $this->redirect(['product-select']);
         }
 
-        $rows = \app\models\Product::find()
-            ->where(['like', 'name', $name ])
-            ->limit(10)
-            ->asArray()
-            ->all();
+        $products = new ProductForm();
+        $products->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
 
-        $results = array_map(function($row) {
-            return [
-                'id' => $row['id'],
-                'name' => $row['name'],
-                'value' => $row['value'],
-            ];
-        }, $rows);
+        return $this->renderWizard(
+            $this->renderPartial('_order', [
+                'products' => $products
+            ])
+        );
 
-        Yii::$app->response->format = Response::FORMAT_JSON; 
-
-        return $results;
     }
 
+/*
     public function actionAddress($contact_id = null, $redirect_url = null)
     {
         $model = new Address();
@@ -293,16 +291,12 @@ class RegistrationController extends \yii\web\Controller
             'redirect_url' => ($redirect_url ? $redirect_url : ['index'])
         ]);
     }
-
+*/
 
     public function actionIndex()
     {
         return $this->render('index');
     }
 
-    public function actionOrders()
-    {
-        return $this->render('orders');
-    }
 
 }
