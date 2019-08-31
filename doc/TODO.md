@@ -1,3 +1,7 @@
+## Escape Registration text
+
+In registration wizards, several HTML are inserted by js but content is not escaped
+
 ## "Verified" Transactions
 
 - (to confirm) : verified transactions should not be updatable in their own properties or regarding their linked orders

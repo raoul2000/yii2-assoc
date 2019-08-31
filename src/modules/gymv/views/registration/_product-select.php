@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this yii\web\View */
-//$this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, 'registration-address');
+$this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_READY, 'registration-product-select');
 ?>
 <div>
     <style>
@@ -17,6 +17,21 @@ use yii\web\View;
         .product-result {
             margin:4px;
         }
+        .selected-product-item {
+            float:left;
+            width: 100%;
+            padding:0.5em;
+        }
+        .selected-product-item:hover {
+            background-color : #eee;
+        }
+        .selected-product-item .product-remove{
+            float:right;
+            color: red;
+            cursor:pointer;
+            
+        }
+
     </style>
     <h3>Product Select</h3>
     <hr/>
@@ -31,10 +46,14 @@ use yii\web\View;
         }?>
         <div class="row">
             <div class="col-xs-5">
+                <h3>Top Product</h3>
                 <?= $form->field($model, 'top_products')
-                    ->checkboxList(\app\modules\gymv\models\ProductForm::getTopProductsList())?>
+                    ->checkboxList(\app\modules\gymv\models\ProductForm::getTopProductsList())
+                    ->label(false)
+                ?>
             </div>
             <div class="col-xs-7">
+                <h3>Product</h3>
                 <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                     'name' => 'productId',
                     'id' => 'selectized-product',
@@ -50,9 +69,9 @@ use yii\web\View;
                             'option' => new \yii\web\JsExpression("
                                 function(item, escape) {
                                     if(!this.productItemsData) {
-                                        this.productItemsData = [];
+                                        this.productItemsData = {};
                                     }
-                                    this.productItemsData.push(item);
+                                    this.productItemsData[item.id] = item;
                                     return '<div>' 
                                         + '<span class=\"product-result\">'
                                             + '<span class=\"glyphicon glyphicon-gift\" aria-hidden=\"true\"></span>' 
@@ -65,17 +84,16 @@ use yii\web\View;
                         ],
                         'onChange' => new \yii\web\JsExpression("
                             function(value) {
-                                console.log(value);
-                                //this.clearOptions();
                                 this.clear(true);
-                                //console.log(this.getItem(value));
-                                console.log(this.productItemsData);
-                                //this.addOption({ id : 333, name : 'hello'});
-                                //$('#selectized-product').selectize.addOption({ id : 333, name : 'hello'});                                
+                                this.clearOptions();
+                                gymv.addToSelectedProducts(this.productItemsData[value]);
+                                this.focus();
                             }
                         ")
                     ],
-                ]); ?>        
+                ]); ?>   
+                <div id="selected-product-list">
+                </div>     
             </div>
         </div>
         <hr/>
