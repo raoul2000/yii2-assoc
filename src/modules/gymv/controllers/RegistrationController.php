@@ -41,8 +41,8 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionContactSearch()
     {
-        Yii::$app->session->remove(self::SESS_CONTACT);
-        Yii::$app->session->remove(self::SESS_ADDRESS);
+        //Yii::$app->session->remove(self::SESS_CONTACT);
+        //Yii::$app->session->remove(self::SESS_ADDRESS);
 
         $contact = new Contact();
         $contact->is_natural_person = true;
@@ -85,7 +85,7 @@ class RegistrationController extends \yii\web\Controller
             // session variable is not as expected
             $this->redirect(['contact-search']);
         }
-        Yii::$app->session->remove(self::SESS_ADDRESS);
+        //Yii::$app->session->remove(self::SESS_ADDRESS);
 
         $model = Contact::create();
         $model->setAttributes(Yii::$app->session[self::SESS_CONTACT]);
@@ -174,8 +174,7 @@ class RegistrationController extends \yii\web\Controller
             // session variable is not as expected
             $this->redirect(['contact-search']);
         }
-        Yii::$app->session->remove(self::SESS_ADDRESS);
-
+        //Yii::$app->session->remove(self::SESS_ADDRESS);
         $model = new Address();
 
         if (Yii::$app->request->getIsPost()) {
@@ -192,7 +191,7 @@ class RegistrationController extends \yii\web\Controller
             }
             Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes(); 
             $this->redirect(['address-edit']);
-        }
+        } 
         
         return $this->renderWizard(
             $this->renderPartial('_address-search', [
@@ -229,16 +228,28 @@ class RegistrationController extends \yii\web\Controller
         if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
             $this->redirect(['address-search']);
         }
-        Yii::$app->session->remove(self::SESS_PRODUCTS);
+        //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session[self::SESS_PRODUCTS] = $model->getAttributes();
             return $this->redirect(['order']);
         }
+        $products_2 = [];
+        if (Yii::$app->session->has(self::SESS_PRODUCTS)) {
+            $model->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
+
+            $products_2 = \app\models\Product::find()
+                ->where(['in', 'id', $model->products_2])
+                ->asArray()
+                ->indexBy('id')
+                ->all();
+        }
+
 
         return $this->renderWizard(
             $this->renderPartial('_product-select', [
-                'model' => $model
+                'model' => $model,
+                'products_2' => $products_2
             ])
         );
     }
@@ -257,46 +268,10 @@ class RegistrationController extends \yii\web\Controller
                 'products' => $products
             ])
         );
-
     }
-
-/*
-    public function actionAddress($contact_id = null, $redirect_url = null)
-    {
-        $model = new Address();
-        $contact = null;
-
-        if (isset($contact_id)) {
-            $contact = Contact::findOne($contact_id);
-            if ($contact == null) {
-                throw new NotFoundHttpException('Contact not found.');
-            }
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if (isset($contact)) {
-                $contact->updateAttributes([
-                    'address_id' => $model->id
-                ]);
-            }
-            if ($redirect_url === null) {
-                $redirect_url = ['view', 'id' => $model->id];
-            }
-            return $this->redirect($redirect_url);
-        }
-
-        return $this->render('address', [
-            'model' => $model,
-            'contact' => $contact,
-            'redirect_url' => ($redirect_url ? $redirect_url : ['index'])
-        ]);
-    }
-*/
 
     public function actionIndex()
     {
         return $this->render('index');
     }
-
-
 }

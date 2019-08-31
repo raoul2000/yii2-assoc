@@ -6,8 +6,8 @@ use yii\base\Model;
 
 class ProductForm extends Model
 {
-    public $top_products;
-    public $products_2;
+    public $top_products = [];
+    public $products_2 = [];
 
     public function rules()
     {
