@@ -244,6 +244,14 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            /*
+            $orders = [];
+            foreach ($$model->top_products as $product) {
+
+                $orders[] = [
+                    'model' => 
+                ]
+            }*/
             Yii::$app->session[self::SESS_PRODUCTS] = $model->getAttributes();
             return $this->redirect(['order']);
         }
