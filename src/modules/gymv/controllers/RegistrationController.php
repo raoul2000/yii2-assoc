@@ -33,9 +33,18 @@ class RegistrationController extends \yii\web\Controller
     }
     private function buildWizSummary()
     {
+        $data = [];
+        $session = Yii::$app->session;
+
+        if ($session->has(self::SESS_CONTACT)) {
+            $data['contact'] = $session[self::SESS_CONTACT];
+        }
+        if ($session->has(self::SESS_ADDRESS)) {
+            $data['address'] = $session[self::SESS_ADDRESS];
+        }
         
         return $this->renderPartial('_summary', [
-            'value' => 'value'
+            'data' => $data
         ]);
     }
 
@@ -43,6 +52,7 @@ class RegistrationController extends \yii\web\Controller
     {
         //Yii::$app->session->remove(self::SESS_CONTACT);
         //Yii::$app->session->remove(self::SESS_ADDRESS);
+        //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         $contact = new Contact();
         $contact->is_natural_person = true;
@@ -245,7 +255,6 @@ class RegistrationController extends \yii\web\Controller
                 ->all();
         }
 
-
         return $this->renderWizard(
             $this->renderPartial('_product-select', [
                 'model' => $model,
@@ -260,12 +269,41 @@ class RegistrationController extends \yii\web\Controller
             $this->redirect(['product-select']);
         }
 
-        $products = new ProductForm();
-        $products->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
+        $productIdsForm = new ProductForm();
+        $productIdsForm->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
+
+        // maintain 2 groups : top products and class 2 products (courses)
+        $products_1 = \app\models\Product::find()
+            ->where(['in', 'id', $productIdsForm->top_products ])
+            ->indexBy('id')
+            ->all();
+
+        $products_2 = \app\models\Product::find()
+            ->where(['in', 'id', $productIdsForm->products_2 ])
+            ->indexBy('id')
+            ->all();
+
+        $orders_1 = array_map(function($product) {
+            return new \app\models\Order([
+                'product_id' => $product->id,
+                'value' => $product->value
+            ]);
+        }, $products_1);        
+
+        $orders_2 = array_map(function($product) {
+            return new \app\models\Order([
+                'product_id' => $product->id,
+                'value' => $product->value
+            ]);
+        }, $products_2);        
+
 
         return $this->renderWizard(
             $this->renderPartial('_order', [
-                'products' => $products
+                'orders_1'   => $orders_1,
+                'orders_2'   => $orders_2,
+                'products_1' => $products_1,
+                'products_2' => $products_2,
             ])
         );
     }

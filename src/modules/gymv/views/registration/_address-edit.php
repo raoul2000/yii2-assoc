@@ -9,40 +9,71 @@ use yii\widgets\ActiveForm;
 
 ?>
 <div class="address-form">
+    <h3>
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
+        <?= \Yii::t('app', 'Address') ?>
+    </h3>
 
-<?php $form = ActiveForm::begin(); ?>
+    <hr/>
 
-    <?php if ($model->hasErrors()) {
-        echo $form->errorSummary($model);
-    }?>
+    <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'line_1')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <?php if ($model->hasErrors()) {
+            echo $form->errorSummary($model);
+        }?>
 
-    <?= $form->field($model, 'line_2')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'line_1')
+            ->textInput([
+                'maxlength'    => true, 
+                'autocomplete' => 'off', 
+                'placeholder'  => \Yii::t('app', 'Enter the address here ...')
+            ])
+            ->label(\Yii::t('app', 'address'))
+        ?>
 
-    <?= $form->field($model, 'line_3')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'line_2')
+            ->textInput([
+                'maxlength'    => true, 
+                'autocomplete' => 'off', 
+                'placeholder'  => \Yii::t('app', 'address extra information ..')
+            ])
+            ->label(false)
+        ?>
 
-    <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <?= $form->field($model, 'line_3')
+            ->textInput([
+                'maxlength'    => true, 
+                'autocomplete' => 'off', 
+                'placeholder'  => \Yii::t('app', 'address extra information ..')
+            ])
+            ->label(false)
+        ?>
 
-    <?= $form->field($model, 'city')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+        <div class="row">
+            <div class="col-sm-2">
+                <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?> 
+            </div>
+            <div class="col-sm-6">
+                <?= $form->field($model, 'city')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>        
+            </div>
+            <div class="col-sm-4">
+                <?= $form->field($model, 'country')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>        
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <?= Html::a(
+                '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> ' . \Yii::t('app', 'Previous'),
+                ['address-search'],
+                ['class' => 'btn btn-primary']
+            )?>
 
-    <?= $form->field($model, 'country')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
+            <?= Html::submitButton(
+                \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>',
+                ['class' => 'btn btn-primary']
+            )?>
+        </div>
 
-    <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=>'off']) ?>
-
-    <div class="form-group">
-        <?= Html::a(
-            '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> ' . \Yii::t('app', 'Previous'),
-            ['address-search'],
-            ['class' => 'btn btn-primary']
-        )?>
-
-        <?= Html::submitButton(
-            \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>',
-            ['class' => 'btn btn-primary']
-        )?>
-    </div>
-
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 
 </div>

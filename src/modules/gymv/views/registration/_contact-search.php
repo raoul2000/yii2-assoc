@@ -11,6 +11,13 @@ $contactSearchServiceUrl = Url::to(['/api/contact/search']);
 ?>
 <div id="wiz-contact">
 
+    <h3>
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+        <?= \Yii::t('app', 'Contact') ?>
+    </h3>
+
+    <hr/>
+
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
         <?= \dosamigos\selectize\SelectizeDropDownList::widget([
@@ -50,6 +57,8 @@ $contactSearchServiceUrl = Url::to(['/api/contact/search']);
             ],
         ]); ?>        
 
+        <hr/>
+        
         <?= Html::submitButton(
             \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>', 
             [

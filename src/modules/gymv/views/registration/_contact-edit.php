@@ -11,7 +11,14 @@ use yii\widgets\ActiveForm;
 
 <div class="contact-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+    <h3>
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
+        <?= \Yii::t('app', 'Contact') ?>
+    </h3>
+
+    <hr/>
+
+    <?php $form = ActiveForm::begin(); ?>
     
         <?php if ($model->hasErrors()) {
             echo $form->errorSummary($model);

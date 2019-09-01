@@ -20,9 +20,9 @@ class ProductForm extends Model
     {
         return [
             '1' => "Adhésion GymV",
-            '2' => "License Fédération",
-            '3' => "Assurance optionnelle",
-            '4' => "Inscription Espace Sorano",
+            '11' => "License Fédération",
+            '12' => "Assurance optionnelle",
+            '13' => "Inscription Espace Sorano",
         ];
     }
     

@@ -11,6 +11,14 @@ $this->registerJs(file_get_contents(__DIR__ . '/_address-search.js'), View::POS_
 $searchAddressUrl = 'url';
 ?>
 <div id="wiz-contact">
+
+    <h3>
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
+        <?= \Yii::t('app', 'Address') ?>
+    </h3>
+
+    <hr/>
+
     <?= Html::hiddenInput('url',$searchAddressUrl, ['id' => 'address-search-ws-url']) ?>
 
     <form class="row">
@@ -29,7 +37,7 @@ $searchAddressUrl = 'url';
         #address-search-result-list {
             /*padding : 1em;*/
             margin-bottom:1em;
-            height: calc(100vh - 260px);
+            height: calc(100vh - 370px);
             /*background-color: #eee;*/
             overflow:auto;
             /*border:1px solid #eee;*/

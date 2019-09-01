@@ -32,7 +32,12 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
         }
 
     </style>
-    <h3>Sélection des produits</h3>
+
+    <h3>
+        <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
+        <?= \Yii::t('app', 'Product Selection') ?>
+    </h3>
+
     <hr/>
 
     <?php $form = ActiveForm::begin([
@@ -71,7 +76,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                                     this.productItemsData[item.id] = item;
                                     return '<div>' 
                                         + '<span class=\"product-result\">'
-                                            + '<span class=\"glyphicon glyphicon-gift\" aria-hidden=\"true\"></span>' 
+                                            + '<span class=\"glyphicon glyphicon-gift\" aria-hidden=\"true\"></span> ' 
                                                 + escape(item.name)
                                             + '</span>'
                                         + '</span>' 

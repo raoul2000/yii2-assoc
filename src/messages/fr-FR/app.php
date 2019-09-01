@@ -21,7 +21,7 @@ return [
     'A template with the same name already exists' => 'Un modèle avec le même nom existe déjà',
     'Account' => 'Compte',
     'Add Attachment' => 'Ajouter Pièce jointe',
-    'Address' => 'Adresses',
+    'Address' => 'Adresse',
     'Addresses' => 'Adresse',
     'An error occured that prevent the template for being saved.' => 'Une erreur est survenue lors de l\'enregistrement de ce modèle',
     'Are you sure you want to delete the selected template ?' => 'Etes-vous sûr de vouloir supprimer le modèle sélectionné ?',
