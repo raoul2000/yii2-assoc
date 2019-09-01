@@ -8,12 +8,15 @@ use app\models\AddressSearch;
 use app\modules\gymv\models\ProductForm;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
+use yii\base\Model;
 
 class RegistrationController extends \yii\web\Controller
 {
     const SESS_CONTACT = 'registration.contact';
     const SESS_ADDRESS = 'registration.address';
     const SESS_PRODUCTS = 'registration.products';
+    const SESS_ORDERS_1 = 'registration.orders_1';
+    const SESS_ORDERS_2 = 'registration.orders_2';
 
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
@@ -297,6 +300,20 @@ class RegistrationController extends \yii\web\Controller
             ]);
         }, $products_2);        
 
+        if( \Yii::$app->request->isPost) {
+            
+            Model::loadMultiple($orders_1, Yii::$app->request->post());
+            Model::loadMultiple($orders_2, Yii::$app->request->post());
+
+            $orders1AreValid = Model::validateMultiple($orders_1);
+            $orders2AreValid = Model::validateMultiple($orders_2);
+
+            if ($orders1AreValid && $orders2AreValid) {
+                Yii::$app->session[self::SESS_ORDERS_1] = $orders_1->getAttributes();
+                Yii::$app->session[self::SESS_ORDERS_2] = $orders_2->getAttributes();
+                return $this->redirect(['transaction']);
+            }
+        }
 
         return $this->renderWizard(
             $this->renderPartial('_order', [
@@ -308,6 +325,17 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+    public function actionTransaction()
+    {
+        return $this->renderWizard(
+            $this->renderPartial('_transaction', [
+                'orders_1'   => $orders_1,
+                'orders_2'   => $orders_2,
+                'products_1' => $products_1,
+                'products_2' => $products_2,
+            ])
+        );
+    }
     public function actionIndex()
     {
         return $this->render('index');

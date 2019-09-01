@@ -7,11 +7,9 @@
         console.log("adding product ", product);
         const html = `
         <div class="selected-product-item" data-item-id="${product.id}">
-
             <div class="product-remove" title="remove">
                 <span data-action="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </div>
-
             <span class="product-name">
                 <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> ${product.name}
             </span>

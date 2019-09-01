@@ -90,6 +90,10 @@ use yii\web\View;
                 ['product-select'],
                 ['class' => 'btn btn-primary']
             )?>
+            <?= Html::submitButton(
+                \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>',
+                ['class' => 'btn btn-primary']
+            )?>
         </div>
     <?php ActiveForm::end(); ?>
 </div>
