@@ -6,13 +6,13 @@ use yii\base\Model;
 
 class ProductForm extends Model
 {
-    public $top_products = [];
+    public $products_1 = [];
     public $products_2 = [];
 
     public function rules()
     {
         return [
-            [['top_products', 'products_2'], 'safe'], 
+            [['products_1', 'products_2'], 'safe'], 
         ];
     }
 

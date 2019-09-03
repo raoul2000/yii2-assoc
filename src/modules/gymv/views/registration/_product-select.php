@@ -10,7 +10,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
 ?>
 <div>
     <style>
-        #productform-top_products label {
+        #productform-products_1 label {
             display:block;
         }
         .product-result {
@@ -50,8 +50,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
         }?>
         <div class="row">
             <div class="col-xs-5">
-                <?= $form->field($model, 'top_products')
-                    ->checkboxList(\app\modules\gymv\models\ProductForm::getTopProductsList())
+                <?= $form->field($model, 'products_1')
+                    ->checkboxList($firstClassProductIndex)
                     ->label(false)
                 ?>
             </div>

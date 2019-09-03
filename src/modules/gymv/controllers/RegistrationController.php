@@ -4,11 +4,13 @@ namespace app\modules\gymv\controllers;
 use Yii;
 use app\models\Address;
 use app\models\Contact;
+use app\models\Product;
 use app\models\AddressSearch;
 use app\modules\gymv\models\ProductForm;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 
 class RegistrationController extends \yii\web\Controller
 {
@@ -237,27 +239,50 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionProductSelect()
     {
-        $model = new ProductForm();
         if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
             $this->redirect(['address-search']);
         }
+        $model = new ProductForm();
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            /*
-            $orders = [];
-            foreach ($$model->top_products as $product) {
+            // form sumitted : get selected product Ids and save corresmonding product models attributes
+            // into SESS_PRODUCTS
+            $allProductIds = (is_array($model->products_1) ?  $model->products_1 : []) + (is_array($model->products_2) ?  $model->products_2 : []);
+            
+            $productModels = [];
+            foreach ($allProductIds as $productId) {
+                $product = Product::findOne($productId);
+                if ($product == null) {
+                    throw new NotFoundHttpException('product not found (id = '.$productId.')');
+                }
+                $productModels[] = $product->getAttributes();
+            }
+            Yii::$app->session[self::SESS_PRODUCTS] = $productModels;
 
-                $orders[] = [
-                    'model' => 
-                ]
-            }*/
-            Yii::$app->session[self::SESS_PRODUCTS] = $model->getAttributes();
+            // next step : orders
             return $this->redirect(['order']);
+        } elseif ( Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS) ) {
+            $productModels =  Yii::$app->session[self::SESS_PRODUCTS];
         }
+        // prepare to render the view
+
+        // This is the configured list of ids for first class products (they are displayed as a checkbox list in the first col)
+        $firstClassProductIds = [ 1, 2, 3];
+
+        $rows = \app\models\Product::find()
+            ->select('name')
+            ->where(['in', 'id', $firstClassProductIds])
+            ->asArray()
+            ->all();        
+
+        $firstClassProductIndex = ArrayHelper::map($rows, 'id', 'name');
+
+        // products class 2 : if some are already selected, they must be rendered
         $products_2 = [];
         if (Yii::$app->session->has(self::SESS_PRODUCTS)) {
-            $model->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
+            $productModels = Yii::$app->session[self::SESS_PRODUCTS];
+
 
             $products_2 = \app\models\Product::find()
                 ->where(['in', 'id', $model->products_2])
@@ -269,6 +294,7 @@ class RegistrationController extends \yii\web\Controller
         return $this->renderWizard(
             $this->renderPartial('_product-select', [
                 'model' => $model,
+                'firstClassProductIndex' => $firstClassProductIndex,
                 'products_2' => $products_2
             ])
         );
@@ -285,7 +311,7 @@ class RegistrationController extends \yii\web\Controller
 
         // maintain 2 groups : top products and class 2 products (courses)
         $products_1 = \app\models\Product::find()
-            ->where(['in', 'id', $productIdsForm->top_products ])
+            ->where(['in', 'id', $productIdsForm->products_1 ])
             ->indexBy('id')
             ->all();
 
