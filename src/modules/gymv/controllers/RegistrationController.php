@@ -23,6 +23,10 @@ class RegistrationController extends \yii\web\Controller
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
 
+    // This is the configured list of ids for first class products 
+    // they are displayed as a checkbox list in the first col
+    private $_firstClassProductIds = [ 1, 2, 3];
+
     public function init()
     {
         parent::init();
@@ -278,12 +282,8 @@ class RegistrationController extends \yii\web\Controller
             $this->redirect(['address-search']);
         }
 
-        // This is the configured list of ids for first class products 
-        // they are displayed as a checkbox list in the first col
-        $firstClassProductIds = [ 1, 2, 3];
-
         $model = new ProductSelectionForm();
-        $model->setCategory1ProductIds($firstClassProductIds);
+        $model->setCategory1ProductIds($this->_firstClassProductIds);
 
         if (Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS)) {
             foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
@@ -300,13 +300,11 @@ class RegistrationController extends \yii\web\Controller
         }
 
         // prepare to render the view
-
         $rows = \app\models\Product::find()
-            ->where(['in', 'id', $firstClassProductIds])
+            ->where(['in', 'id', $this->_firstClassProductIds])
             ->asArray()
             ->all();        
-        // [ productId => productName]
-        $firstClassProductIndex = ArrayHelper::map($rows, 'id', 'name');
+        $firstClassProductIndex = ArrayHelper::map($rows, 'id', 'name'); // [ productId => productName]
 
         $products_2 = $model
             ->querySelectedProductModels(ProductSelectionForm::CATEGORY_2)
@@ -322,8 +320,30 @@ class RegistrationController extends \yii\web\Controller
             ])
         );
     }
-
+    
     public function actionOrder()
+    {
+        if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
+            $this->redirect(['product-select']);
+        }
+
+        $productModels = new ProductSelectionForm();
+        $productModels->setCategory1ProductIds($this->_firstClassProductIds);
+
+
+
+        return $this->renderWizard(
+            $this->renderPartial('_product-select', [
+                'models' => $models,
+                'firstClassProductIndex' => $firstClassProductIndex,
+                'products_2' => $products_2
+            ])
+        );
+
+
+    }
+    // xxxxxxxxxxxxxxxxxxxxxxxx
+    public function actionOrder_v0()
     {
         if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
             $this->redirect(['product-select']);

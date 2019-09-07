@@ -11,7 +11,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
 ?>
 <div>
     <style>
-        #productform-products_1 label {
+        #productselectionform-product_ids label {
             display:block;
         }
         .product-result {
