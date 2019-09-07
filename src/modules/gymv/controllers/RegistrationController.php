@@ -28,6 +28,24 @@ class RegistrationController extends \yii\web\Controller
         parent::init();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' =>  \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
+
     private function renderWizard($mainContent)
     {
         return $this->render('index', [
@@ -136,9 +154,8 @@ class RegistrationController extends \yii\web\Controller
 
         // performing REST request to the addresses.gouv.fr service
         $wsResult = [];
-        if (true) {
-            $params = ['q' => $address . (!empty($city) ? ' ' . $city : '')];
-            
+        $params = ['q' => $address . (!empty($city) ? ' ' . $city : '')];
+        try {
             $client = new \yii\httpclient\Client();
             $response = $client->createRequest()
                 ->setMethod('GET')
@@ -156,9 +173,13 @@ class RegistrationController extends \yii\web\Controller
                     'country'  => 'FRANCE'
                 ];
             }, $response->data['features']);
+        } catch (\Exception $ex) {
+            // Failed silently
+            Yii::error('Failed to request api-addresse.data.gouv.fr/search service');
+            Yii::error($ex);
         }
 
-        // searching in DB
+        // searching address in the database
         $dbRows = Address::find()
             ->where(['LIKE', 'line_1', $address])
             ->andFilterWhere(['city' => $city])
