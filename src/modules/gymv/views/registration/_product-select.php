@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
+use app\modules\gymv\models\ProductSelectionForm;
 
 /* @var $this yii\web\View */
 $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_READY, 'registration-product-select');
@@ -28,9 +29,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
             float:right;
             color: red;
             cursor:pointer;
-            
         }
-
     </style>
 
     <h3>
@@ -50,7 +49,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
         }?>
         <div class="row">
             <div class="col-xs-5">
-                <?= $form->field($model, 'products_1')
+                <?= $form->field($model, 'product_ids')
                     ->checkboxList($firstClassProductIndex)
                     ->label(false)
                 ?>
@@ -95,7 +94,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                     ],
                 ]); ?>   
                 <div id="selected-product-list">
-                    <?php foreach ($model->products_2 as $productId) :?>
+                    <?php foreach ($model->getSelectedProductIdsByCategory(ProductSelectionForm::CATEGORY_2) as $productId) :?>
                         <div class="selected-product-item" data-item-id="<?= $productId ?>">
                             <div class="product-remove" title="remove">
                                 <span data-action="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -104,7 +103,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                             <span class="product-name">
                                 <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> <?= Html::encode($products_2[$productId]['name']) ?>
                             </span>
-                            <input type="hidden" name="ProductForm[products_2][]" value="3">
+                            <input type="hidden" name="ProductSelectionForm[product_ids][]" value="<?= $productId ?>">
                         </div>
                     <?php endforeach ?>
                 </div>     

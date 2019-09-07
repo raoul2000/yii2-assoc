@@ -6,7 +6,7 @@ use app\models\Address;
 use app\models\Contact;
 use app\models\Product;
 use app\models\AddressSearch;
-use app\modules\gymv\models\ProductForm;
+use app\modules\gymv\models\ProductSelectionForm;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\base\Model;
@@ -137,7 +137,12 @@ class RegistrationController extends \yii\web\Controller
             ])
         );
     }
-    //TODO: searcg in both addresses.gouv api and internal DB and then merge results
+    /**
+     * REST endpoint to perform address search on both the gouv.fr addresses service and in the
+     * database. Results are merged and returned as a JSON object.
+     *
+     * @return void
+     */
     public function actionAjaxAddressSearch()
     {
         if (!Yii::$app->request->isAjax) {
@@ -204,6 +209,8 @@ class RegistrationController extends \yii\web\Controller
         return $dbResult + $wsResult;
     }
 
+    // TODO: if contact is already in DB, then it may already be linked to an address
+    // so we should check for existing address
     public function actionAddressSearch()
     {
         if (!Yii::$app->session->has(self::SESS_CONTACT)) {
@@ -258,59 +265,54 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+    /**
+     * Ask the user to select products.
+     * Products are split in First class and Second class, each class being displayed 
+     * differently from the other.
+     *
+     * @return void
+     */
     public function actionProductSelect()
     {
         if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
             $this->redirect(['address-search']);
         }
-        $model = new ProductForm();
-        //Yii::$app->session->remove(self::SESS_PRODUCTS);
-        
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // form sumitted : get selected product Ids and save corresmonding product models attributes
-            // into SESS_PRODUCTS
-            $allProductIds = (is_array($model->products_1) ?  $model->products_1 : []) + (is_array($model->products_2) ?  $model->products_2 : []);
-            
-            $productModels = [];
-            foreach ($allProductIds as $productId) {
-                $product = Product::findOne($productId);
-                if ($product == null) {
-                    throw new NotFoundHttpException('product not found (id = '.$productId.')');
-                }
-                $productModels[] = $product->getAttributes();
-            }
-            Yii::$app->session[self::SESS_PRODUCTS] = $productModels;
 
-            // next step : orders
-            return $this->redirect(['order']);
-        } elseif ( Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS) ) {
-            $productModels =  Yii::$app->session[self::SESS_PRODUCTS];
-        }
-        // prepare to render the view
-
-        // This is the configured list of ids for first class products (they are displayed as a checkbox list in the first col)
+        // This is the configured list of ids for first class products 
+        // they are displayed as a checkbox list in the first col
         $firstClassProductIds = [ 1, 2, 3];
 
+        $model = new ProductSelectionForm();
+        $model->setCategory1ProductIds($firstClassProductIds);
+
+        if (Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS)) {
+            foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
+                $model->product_ids[] = $productAttributes['id'];
+            }
+        } else if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ( empty($model->product_ids)) {
+                Yii::$app->session->remove(self::SESS_PRODUCTS);
+            } else {
+                Yii::$app->session[self::SESS_PRODUCTS] = $model->querySelectedProductModels()
+                    ->asArray()
+                    ->all();
+            }
+        }
+
+        // prepare to render the view
+
         $rows = \app\models\Product::find()
-            ->select('name')
             ->where(['in', 'id', $firstClassProductIds])
             ->asArray()
             ->all();        
-
+        // [ productId => productName]
         $firstClassProductIndex = ArrayHelper::map($rows, 'id', 'name');
 
-        // products class 2 : if some are already selected, they must be rendered
-        $products_2 = [];
-        if (Yii::$app->session->has(self::SESS_PRODUCTS)) {
-            $productModels = Yii::$app->session[self::SESS_PRODUCTS];
-
-
-            $products_2 = \app\models\Product::find()
-                ->where(['in', 'id', $model->products_2])
-                ->asArray()
-                ->indexBy('id')
-                ->all();
-        }
+        $products_2 = $model
+            ->querySelectedProductModels(ProductSelectionForm::CATEGORY_2)
+            ->indexBy('id')
+            ->asArray()
+            ->all();
 
         return $this->renderWizard(
             $this->renderPartial('_product-select', [
@@ -327,17 +329,19 @@ class RegistrationController extends \yii\web\Controller
             $this->redirect(['product-select']);
         }
 
-        $productIdsForm = new ProductForm();
-        $productIdsForm->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
+        $productIdsForm = new ProductSelectionForm();
+        foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
+            $model->product_ids[] = $productAttributes['id'];
+        }
 
         // maintain 2 groups : top products and class 2 products (courses)
         $products_1 = \app\models\Product::find()
-            ->where(['in', 'id', $productIdsForm->products_1 ])
+            ->where(['in', 'id', $productIdsForm->getSelectedProductIdsByCategory(ProductSelectionForm::CATEGORY_1) ])
             ->indexBy('id')
             ->all();
 
         $products_2 = \app\models\Product::find()
-            ->where(['in', 'id', $productIdsForm->products_2 ])
+            ->where(['in', 'id', $productIdsForm->getSelectedProductIdsByCategory(ProductSelectionForm::CATEGORY_2) ])
             ->indexBy('id')
             ->all();
 

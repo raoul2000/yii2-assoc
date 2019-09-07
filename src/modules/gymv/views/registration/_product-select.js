@@ -13,7 +13,7 @@
             <span class="product-name">
                 <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> ${product.name}
             </span>
-            <input type="hidden" name="ProductForm[products_2][]" value="${product.id}"/>
+            <input type="hidden" name="ProductSelectionForm[product_ids][]" value="${product.id}"/>
         </div>`;
         el.selectedProductList.insertAdjacentHTML('afterbegin',html);
     }
