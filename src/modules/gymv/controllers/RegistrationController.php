@@ -5,20 +5,23 @@ use Yii;
 use app\models\Address;
 use app\models\Contact;
 use app\models\Product;
+use app\models\Order;
 use app\models\AddressSearch;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use \app\components\Helpers\DateHelper;
+use \app\components\SessionDateRange;
 
 class RegistrationController extends \yii\web\Controller
 {
     const SESS_CONTACT = 'registration.contact';
     const SESS_ADDRESS = 'registration.address';
     const SESS_PRODUCTS = 'registration.products';
-    const SESS_ORDERS_1 = 'registration.orders_1';
-    const SESS_ORDERS_2 = 'registration.orders_2';
+    const SESS_ORDERS = 'registration.orders';
+    const SESS_TRANSACTION = 'registration.transaction';
 
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
@@ -296,6 +299,7 @@ class RegistrationController extends \yii\web\Controller
                 Yii::$app->session[self::SESS_PRODUCTS] = $model->querySelectedProductModels()
                     ->asArray()
                     ->all();
+                return $this->redirect(['order']);
             }
         }
 
@@ -320,7 +324,7 @@ class RegistrationController extends \yii\web\Controller
             ])
         );
     }
-    
+
     public function actionOrder()
     {
         if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
@@ -329,89 +333,81 @@ class RegistrationController extends \yii\web\Controller
 
         $productModels = new ProductSelectionForm();
         $productModels->setCategory1ProductIds($this->_firstClassProductIds);
+        $orderModels = [];
+        $products = []; // for rendering only
 
+        // load orders from products selected in the previous step
+        $fromContactID = \app\components\SessionContact::getContactId();
 
+        foreach (Yii::$app->session[self::SESS_PRODUCTS] as $product) {
+            $order = new Order();
+            // compute date range values
+            $dateStart = SessionDateRange::getStart();
+            if (!empty($product['valid_date_start'])) {
+                $dateStart = $product['valid_date_start'];
+            }
+            $dateEnd = SessionDateRange::getEnd();
+            if (!empty($product['valid_date_end'])) {
+                $dateEnd = $product['valid_date_end'];
+            }
 
-        return $this->renderWizard(
-            $this->renderPartial('_product-select', [
-                'models' => $models,
-                'firstClassProductIndex' => $firstClassProductIndex,
-                'products_2' => $products_2
-            ])
-        );
+            $order->setAttributes([
+                'product_id'       => $product['id'],
+                // by CONVENTION : because the contact may be new and so, doesn't have any id,
+                // we temporary set the to_contact_id with the same value as the from_contact_id set the
+                // This WILL NEED TO BE UPDATED when registration is submited
+                'to_contact_id'    => $fromContactID,
+                'from_contact_id'  => $fromContactID,
+                'value'            => $product['value'],
+                'valid_date_start' => DateHelper::toDateAppFormat($dateStart),
+                'valid_date_end'   => DateHelper::toDateAppFormat($dateEnd),
+            ]);
+            $orderModels[] = $order;
 
-
-    }
-    // xxxxxxxxxxxxxxxxxxxxxxxx
-    public function actionOrder_v0()
-    {
-        if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
-            $this->redirect(['product-select']);
+            // we need product name for rendering
+            $products[$product['id']] = $product;
         }
 
-        $productIdsForm = new ProductSelectionForm();
-        foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
-            $model->product_ids[] = $productAttributes['id'];
-        }
+        // load validate and save user updates
+        if (\Yii::$app->request->isPost) {
+            Model::loadMultiple($orderModels, Yii::$app->request->post());
+            if (Model::validateMultiple($orderModels)) {
+                $ordersToSave = array_map(function($order) {
+                    return $order->getAttributes();
+                }, $orderModels);
 
-        // maintain 2 groups : top products and class 2 products (courses)
-        $products_1 = \app\models\Product::find()
-            ->where(['in', 'id', $productIdsForm->getSelectedProductIdsByCategory(ProductSelectionForm::CATEGORY_1) ])
-            ->indexBy('id')
-            ->all();
-
-        $products_2 = \app\models\Product::find()
-            ->where(['in', 'id', $productIdsForm->getSelectedProductIdsByCategory(ProductSelectionForm::CATEGORY_2) ])
-            ->indexBy('id')
-            ->all();
-
-        $orders_1 = array_map(function($product) {
-            return new \app\models\Order([
-                'product_id' => $product->id,
-                'value' => $product->value
-            ]);
-        }, $products_1);        
-
-        $orders_2 = array_map(function($product) {
-            return new \app\models\Order([
-                'product_id' => $product->id,
-                'value' => $product->value
-            ]);
-        }, $products_2);        
-
-        if( \Yii::$app->request->isPost) {
-            
-            Model::loadMultiple($orders_1, Yii::$app->request->post());
-            Model::loadMultiple($orders_2, Yii::$app->request->post());
-
-            $orders1AreValid = Model::validateMultiple($orders_1);
-            $orders2AreValid = Model::validateMultiple($orders_2);
-
-            if ($orders1AreValid && $orders2AreValid) {
-                Yii::$app->session[self::SESS_ORDERS_1] = $orders_1->getAttributes();
-                Yii::$app->session[self::SESS_ORDERS_2] = $orders_2->getAttributes();
-                return $this->redirect(['transaction']);
+                Yii::$app->session[self::SESS_ORDERS] = $ordersToSave;
+                $this->redirect(['transaction']);
             }
         }
 
+        // compute total order value
+        $orderTotalValue = 0;
+        foreach ($orderModels as $order) {
+            $orderTotalValue += $order->value;
+        }
+
+        // render Wizard step
         return $this->renderWizard(
             $this->renderPartial('_order', [
-                'orders_1'   => $orders_1,
-                'orders_2'   => $orders_2,
-                'products_1' => $products_1,
-                'products_2' => $products_2,
+                'orderModels' => $orderModels,
+                'products' => $products,
+                'orderTotalValue' => $orderTotalValue
             ])
         );
     }
 
     public function actionTransaction()
     {
+        if (!Yii::$app->session->has(self::SESS_ORDERS)) {
+            $this->redirect(['order']);
+        }
+
+        $transactionModels = [];
+
         return $this->renderWizard(
             $this->renderPartial('_transaction', [
-                'orders_1'   => $orders_1,
-                'orders_2'   => $orders_2,
-                'products_1' => $products_1,
-                'products_2' => $products_2,
+                'transactionModels' => $transactionModels
             ])
         );
     }
