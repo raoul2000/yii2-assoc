@@ -6,6 +6,7 @@ use app\models\Address;
 use app\models\Contact;
 use app\models\Product;
 use app\models\Order;
+use app\models\Transaction;
 use app\models\AddressSearch;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\web\Response;
@@ -21,7 +22,7 @@ class RegistrationController extends \yii\web\Controller
     const SESS_ADDRESS = 'registration.address';
     const SESS_PRODUCTS = 'registration.products';
     const SESS_ORDERS = 'registration.orders';
-    const SESS_TRANSACTION = 'registration.transaction';
+    const SESS_TRANSACTIONS = 'registration.transactions';
 
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
@@ -403,11 +404,96 @@ class RegistrationController extends \yii\web\Controller
             $this->redirect(['order']);
         }
 
+        // compute order total value
+        $orders = Yii::$app->session[self::SESS_ORDERS];
+        $orderTotalValue = 0;
+        foreach ($orders as $order) {
+            $orderTotalValue += $order['value'];
+        }
+
         $transactionModels = [];
+
+        if (Yii::$app->request->isGet) {
+            $transaction = new Transaction();
+            $transaction->value =$orderTotalValue;
+            $transactionModels[] = $transaction;
+        } else {
+            // POST request
+
+            $trForms = Yii::$app->request->post('Transaction');
+            for ($i=0; $i < count($trForms); $i++) { 
+                $transactionModels[] = new Transaction();
+            }
+            
+            Model::loadMultiple($transactionModels, Yii::$app->request->post());
+    
+            // force account attributes
+            foreach ($transactionModels as $transaction) {
+                $transaction->from_account_id = 2;
+                $transaction->to_account_id = 3;
+            }
+
+
+            $action = Yii::$app->request->post('action');
+            switch ($action) {
+                case 'add-transaction': ////////////////////////////////////////////////////////
+                    $transaction = new Transaction();
+                    $transaction->from_account_id = 2;
+                    $transaction->to_account_id = 3;        
+                    $transaction->value = $orderTotalValue;
+                    $transactionModels[] = $transaction;
+                    break;
+
+                case 'remove-transaction': ////////////////////////////////////////////////////////
+                    $indexToRemove = Yii::$app->request->post('index', null);
+                    if ($indexToRemove === null) {
+                        throw new NotFoundHttpException('invalid request : missing index');
+                    }
+                    // remove the transaction based on the index argument
+                    $updatedTransactions = [];
+                    foreach ($transactionModels as $idx => $value) {
+                        if ($idx == $indexToRemove) {
+                            continue;
+                        }
+                        $updatedTransactions[] = $value;
+                    }
+                    $transactionModels = $updatedTransactions;
+                    break;    
+
+                default: ////////////////////////////////////////////////////////
+                    // default submit action = standard submit
+                    if (Model::validateMultiple($transactionModels)) {
+                        // additional validation
+                        $isValid = true;
+                        $totalTransaction = 0;
+                        foreach ($transactionModels as $transaction) {
+                            $totalTransaction += $transaction->value;
+                        }
+                        // float comparaison
+                        // @see https://php.net/manual/en/language.types.float.php
+                        if (abs($orderTotalValue-$totalTransaction)>0.01) {
+                            Yii::$app->session->setFlash('error', "Order Sum ($orderTotalValue) and Transaction Sum ($totalTransaction) don't match");
+                            $isValid = false;
+                        }
+
+                        if ($isValid) {
+                            $toSave = [];
+                            foreach ($transactionModels as $transaction) {
+                                $toSave[] = $transaction->getAttributes();
+                            }
+                            \Yii::$app->session[self::SESS_TRANSACTIONS] = $toSave;
+                            $this->redirect(['final']);
+                        }
+                    }
+                    break;
+            }
+        }
+
 
         return $this->renderWizard(
             $this->renderPartial('_transaction', [
-                'transactionModels' => $transactionModels
+                'transactionModels' => $transactionModels,
+                'orderTotalValue' => $orderTotalValue
             ])
         );
     }
