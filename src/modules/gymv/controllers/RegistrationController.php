@@ -15,6 +15,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use \app\components\Helpers\DateHelper;
 use \app\components\SessionDateRange;
+use \app\components\SessionContact;
 
 class RegistrationController extends \yii\web\Controller
 {
@@ -400,40 +401,48 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionTransaction()
     {
+        // orders MUST be present in the session
         if (!Yii::$app->session->has(self::SESS_ORDERS)) {
             $this->redirect(['order']);
         }
 
-        // compute order total value
+        // compute order total value (for later use)
         $orders = Yii::$app->session[self::SESS_ORDERS];
         $orderTotalValue = 0;
         foreach ($orders as $order) {
             $orderTotalValue += $order['value'];
         }
 
+        // holds the list of transactions
         $transactionModels = [];
 
         if (Yii::$app->request->isGet) {
+            // displaying the form : initialize the transaction list with one transaction
+            // to cover order(s) value
             $transaction = new Transaction();
-            $transaction->value =$orderTotalValue;
+            $transaction->value = $orderTotalValue;
             $transactionModels[] = $transaction;
         } else {
-            // POST request
+            // POST request : user submit the form fot save or ad/remove transactions
 
+            // populate transactions model list : 
+            // 1. create all as empty models 
             $trForms = Yii::$app->request->post('Transaction');
             for ($i=0; $i < count($trForms); $i++) { 
                 $transactionModels[] = new Transaction();
             }
-            
+            // 2. use "loadMultiple" to assign value to model attributes
             Model::loadMultiple($transactionModels, Yii::$app->request->post());
     
-            // force account attributes
+            // 3. force account attributes
+            // from_account_id is temprary set to a value (here same as to_account_id) but
+            // it will be set to its actual value on save
             foreach ($transactionModels as $transaction) {
-                $transaction->from_account_id = 2;
-                $transaction->to_account_id = 3;
+                $transaction->from_account_id = SessionContact::getBankAccountId();;
+                $transaction->to_account_id = SessionContact::getBankAccountId();
             }
 
-
+            // handle submit actions : 'action' and optionally 'index'
             $action = Yii::$app->request->post('action');
             switch ($action) {
                 case 'add-transaction': ////////////////////////////////////////////////////////
@@ -482,13 +491,12 @@ class RegistrationController extends \yii\web\Controller
                                 $toSave[] = $transaction->getAttributes();
                             }
                             \Yii::$app->session[self::SESS_TRANSACTIONS] = $toSave;
-                            $this->redirect(['final']);
+                            $this->redirect(['commit']);
                         }
                     }
                     break;
             }
         }
-
 
         return $this->renderWizard(
             $this->renderPartial('_transaction', [
@@ -497,6 +505,67 @@ class RegistrationController extends \yii\web\Controller
             ])
         );
     }
+
+    public function actionCommit()
+    {
+        if (!Yii::$app->session->has(self::SESS_TRANSACTIONS)) {
+            $this->redirect(['transaction']);
+        }        
+
+        // let's load all models from session
+        // contact
+        $contact = new Contact();
+        $contact->setAttributes(Yii::$app->session[self::SESS_CONTACT]);
+
+        // address
+        $address = new Address();
+        $address->setAttributes(Yii::$app->session[self::SESS_ADDRESS]);
+
+        // orders
+        $orders = array_map(function($orderAttr){
+            $order = new Order();
+            $order->setAttributes($orderAttr);
+            return $order;
+        },Yii::$app->session[self::SESS_ORDERS]);
+
+        // transactions
+        $transactions = array_map(function($transactionAttr){
+            $transaction = new Transaction();
+            $transaction->setAttributes($transactionAttr);
+            return $transaction;
+        },Yii::$app->session[self::SESS_TRANSACTIONS]);
+
+        // save/update 
+
+        // address
+        // begin with address because contact has a col that points to the address record
+        $isNewAddress = $address->isNewRecord;
+        $address->save();
+
+        // contact
+        $isNewContact = $contact->isNewRecord;
+        $contact->address_id = $address->id;
+        $contact->save();
+
+        if($isNewContact) {
+            // TODO: create bank account
+            $bankAccount = new \app\models\BankAccount();
+            $bankAccount->contact_id = $contact->id;
+            $bankAccount->name = '';
+            $bankAccount->save(false);
+            
+        }
+
+        // transactions
+        foreach ($transaction as  $transaction) {
+            // set account id
+        }
+
+
+
+        return $this->render('commit');
+    }
+
     public function actionIndex()
     {
         return $this->render('index');
