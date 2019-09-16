@@ -25,6 +25,11 @@ class RegistrationController extends \yii\web\Controller
     const SESS_ORDERS = 'registration.orders';
     const SESS_TRANSACTIONS = 'registration.transactions';
 
+
+    const DEFAULT_TRANSACTION_CATEGORY_ID = 2;
+    const DEFAULT_TRANSACTION_TYPE = 'CHQ';
+
+
     private $_step = ['contact', 'address', 'order', 'transaction'];
     private $_currentStep = 'contact';
 
@@ -113,7 +118,7 @@ class RegistrationController extends \yii\web\Controller
                 throw new NotFoundHttpException('invalid input');
             }
             Yii::$app->session[self::SESS_CONTACT] = $contact->getAttributes();
-            $this->redirect(['contact-edit']);
+            return $this->redirect(['contact-edit']);
         }
 
         return $this->renderWizard(
@@ -125,7 +130,7 @@ class RegistrationController extends \yii\web\Controller
     {
         if (!Yii::$app->session->has(self::SESS_CONTACT)) {
             // session variable is not as expected
-            $this->redirect(['contact-search']);
+            return $this->redirect(['contact-search']);
         }
         //Yii::$app->session->remove(self::SESS_ADDRESS);
 
@@ -134,9 +139,15 @@ class RegistrationController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // save contact to session
-            Yii::$app->session[self::SESS_CONTACT] = $model->getAttributes();
+            Yii::$app->session[$this::SESS_CONTACT] = $model->getAttributes();
             if ( empty($model->address_id)) {
+                // contact has no address : add one
                 return $this->redirect(['address-search']);
+            } else {
+                // contact has address : review
+                $address = $model->address;
+                Yii::$app->session[self::SESS_ADDRESS] = $address->getAttributes(); 
+                return $this->redirect(['address-edit']);                
             }
         }
 
@@ -224,7 +235,7 @@ class RegistrationController extends \yii\web\Controller
     {
         if (!Yii::$app->session->has(self::SESS_CONTACT)) {
             // session variable is not as expected
-            $this->redirect(['contact-search']);
+            return $this->redirect(['contact-search']);
         }
         //Yii::$app->session->remove(self::SESS_ADDRESS);
         $model = new Address();
@@ -242,7 +253,7 @@ class RegistrationController extends \yii\web\Controller
                 throw new NotFoundHttpException('invalid input');
             }
             Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes(); 
-            $this->redirect(['address-edit']);
+            return $this->redirect(['address-edit']);
         } 
         
         return $this->renderWizard(
@@ -256,13 +267,13 @@ class RegistrationController extends \yii\web\Controller
     {
         if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
             // session variable is not as expected
-            $this->redirect(['address-search']);
+            return $this->redirect(['address-search']);
         }
 
         $model = new Address();
-        if (Yii::$app->request->isGet) {
-            $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS], false);
-        } elseif ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS], false);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes();
             return $this->redirect(['product-select']);
         }
@@ -284,7 +295,7 @@ class RegistrationController extends \yii\web\Controller
     public function actionProductSelect()
     {
         if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
-            $this->redirect(['address-search']);
+            return $this->redirect(['address-search']);
         }
 
         $model = new ProductSelectionForm();
@@ -330,7 +341,7 @@ class RegistrationController extends \yii\web\Controller
     public function actionOrder()
     {
         if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
-            $this->redirect(['product-select']);
+            return $this->redirect(['product-select']);
         }
 
         $productModels = new ProductSelectionForm();
@@ -379,7 +390,7 @@ class RegistrationController extends \yii\web\Controller
                 }, $orderModels);
 
                 Yii::$app->session[self::SESS_ORDERS] = $ordersToSave;
-                $this->redirect(['transaction']);
+                return $this->redirect(['transaction']);
             }
         }
 
@@ -403,7 +414,7 @@ class RegistrationController extends \yii\web\Controller
     {
         // orders MUST be present in the session
         if (!Yii::$app->session->has(self::SESS_ORDERS)) {
-            $this->redirect(['order']);
+            return $this->redirect(['order']);
         }
 
         // compute order total value (for later use)
@@ -426,8 +437,13 @@ class RegistrationController extends \yii\web\Controller
             // displaying the form : initialize the transaction list with one transaction
             // to cover all order(s) value
             $transaction = new Transaction([
-                'value'          => $orderTotalValue,
-                'reference_date' => date('d/m/Y')
+                'from_account_id'   =>  SessionContact::getBankAccountId(),
+                'to_account_id'     =>  SessionContact::getBankAccountId(),    
+                'value'             =>  $orderTotalValue,
+                'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
+                'code'              =>  '',
+                'category_id'       =>  self::DEFAULT_TRANSACTION_CATEGORY_ID,                   
+                'reference_date'    => date('d/m/Y') // only the first transaction has reference date initialized
             ]);
             $transactionModels[] = $transaction;
         } else {
@@ -454,10 +470,22 @@ class RegistrationController extends \yii\web\Controller
             $action = Yii::$app->request->post('action');
             switch ($action) {
                 case 'add-transaction': ////////////////////////////////////////////////////////
-                    $transaction = new Transaction();
-                    $transaction->from_account_id = 2;
-                    $transaction->to_account_id = 3;        
+                    $transaction = new Transaction([
+                        'from_account_id'   =>  SessionContact::getBankAccountId(),
+                        'to_account_id'     =>  SessionContact::getBankAccountId(),    
+                        'value'             =>  $orderTotalValue,
+                        'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
+                        'code'              =>  '',
+                        'category_id'       =>  self::DEFAULT_TRANSACTION_CATEGORY_ID,                        
+                    ]);
+                    /*
+                    $transaction->from_account_id = SessionContact::getBankAccountId();
+                    $transaction->to_account_id = SessionContact::getBankAccountId();    
                     $transaction->value = $orderTotalValue;
+                    $transaction->type = 'CHQ';
+                    $transaction->code = '';
+                    $transaction->category_id = '';
+                    */
                     $transactionModels[] = $transaction;
                     break;
 
@@ -500,14 +528,27 @@ class RegistrationController extends \yii\web\Controller
                             $isValid = false;
                         }
 
+                        // prepare the fromAccountId
+                        // default is : the contact is a new record, it doesn't have account at all so BY CONVENTION set
+                        // fromAccountID with same value than toAccountId. Later on, we will update this attribute
+                        $finalFromAccountId = SessionContact::getBankAccountId();
+                        if (count($fromAccounts) > 1) {
+                            // contact exists and has more than one account : user had to select the one to use
+                            $finalFromAccountId = $fromAccountId;
+                        } elseif( count($fromAccounts) === 1) {
+                            // contact exists and has exactly one account : use it !
+                            $finalFromAccountId = $fromAccounts[0]->id;
+                        }
+
                         if ($isValid) {
+                            // time to save to session
                             $toSave = [];
                             foreach ($transactionModels as $transaction) {
-                                //$transaction->from_account_id = $fromAccountId;
+                                $transaction->from_account_id = $finalFromAccountId;
                                 $toSave[] = $transaction->getAttributes();
                             }
                             \Yii::$app->session[self::SESS_TRANSACTIONS] = $toSave;
-                            $this->redirect(['commit']);
+                            return $this->redirect(['commit']);
                         }
                     }
                     break;
@@ -526,65 +567,104 @@ class RegistrationController extends \yii\web\Controller
 
     public function actionCommit()
     {
-        $this->redirect(['transaction']);
-        return;
+        //return $this->redirect(['transaction']);
 
         if (!Yii::$app->session->has(self::SESS_TRANSACTIONS)) {
-            $this->redirect(['transaction']);
+            return $this->redirect(['transaction']);
         }        
 
         // let's load all models from session
-        // contact
-        $contact = new Contact();
-        $contact->setAttributes(Yii::$app->session[self::SESS_CONTACT], false);
-
-        // address
-        $address = new Address();
-        $address->setAttributes(Yii::$app->session[self::SESS_ADDRESS], false);
-
-        // orders
+        $contact = new Contact(Yii::$app->session[self::SESS_CONTACT]);
+        $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
         $orders = array_map(function($orderAttr){
-            $order = new Order();
-            $order->setAttributes($orderAttr, false);
-            return $order;
+            return new Order($orderAttr);
         },Yii::$app->session[self::SESS_ORDERS]);
-
-        // transactions
         $transactions = array_map(function($transactionAttr){
-            $transaction = new Transaction();
-            $transaction->setAttributes($transactionAttr, false);
-            return $transaction;
+            return new Transaction($transactionAttr);
         },Yii::$app->session[self::SESS_TRANSACTIONS]);
-        return ;
+
+        
         // save/update 
 
         // address
         // begin with address because contact has a col that points to the address record
-        $isNewAddress = $address->isNewRecord;
-        $address->save();
+        $isNewAddress = null;
+        if( !empty($address->id)) {
+            // address already in DB : update
+            $dbAddress = Address::findOne($address->id);
+            $dbAddress->setAttributes($address->getAttributes(), false);
+            $dbAddress->save();
+            $address = $dbAddress;
+            $isNewAddress = false;
+        } else {
+            // new address : insert
+            $address->save();   // insert
+            $isNewAddress = true;
+        }
+    
 
         // contact
-        $isNewContact = $contact->isNewRecord;
+        $lazyFromAccountId = null;
+        $isNewContact = null;
         $contact->address_id = $address->id;
-        $contact->save();
+        if (!empty($contact->id)) {
+            // contact already in DB : update
+            $dbContact = Contact::findOne($contact->id);
+            $dbContact->setAttributes($contact->getAttributes(), false);
+            $dbContact->save(); // update
+            $contact = $dbContact;
+            $isNewContact = false;
+        } else {
+            // contact is new
+            $contact->save();   // insert
+            $isNewContact = true;
 
-        if($isNewContact) {
-            // TODO: create bank account
+            // create default bank account
             $bankAccount = new \app\models\BankAccount();
             $bankAccount->contact_id = $contact->id;
             $bankAccount->name = '';
-            $bankAccount->save(false);
-            
+            $bankAccount->save(false);  // insert
+            $lazyFromAccountId = $bankAccount->id;            
         }
 
         // transactions
-        foreach ($transaction as  $transaction) {
+        foreach ($transactions as  $transaction) {
             // set account id
+            // by CONVENTION, in the actionTransaction when a contact is new, the from_account_id is set
+            // with the same value as the to_account_id. Now thta tyhe contact has bee ninserted in DB and
+            // the bank account created, update from_account_id
+            if ($transaction->from_account_id == $transaction->to_account_id) {
+                // lazy assignement : the contact has been created just now, it's bank account id
+                // was not known until  then but now we know it !
+                $transaction->from_account_id = $lazyFromAccountId;
+            }
+            $transaction->save();
         }
 
+        // orders
+        foreach ($orders as $order) {
+            $order->to_contact_id = $contact->id;
+            $order->save();
 
+            foreach ($transactions as $transaction) {
+                $order->linkToTransaction($transaction);
+            }
+        }
 
-        return $this->render('commit');
+        // clean up session data
+        Yii::$app->session->remove(self::SESS_CONTACT);
+        Yii::$app->session->remove(self::SESS_ADDRESS);
+        Yii::$app->session->remove(self::SESS_PRODUCTS);
+        Yii::$app->session->remove(self::SESS_ORDERS);
+        Yii::$app->session->remove(self::SESS_TRANSACTIONS);
+
+        // render result
+        return $this->render('commit', [
+            'contact' => $contact,
+            'address' => $address,
+            'orders'  => $orders,
+            'transactions' => $transactions
+        ]);
     }
 
     public function actionIndex()

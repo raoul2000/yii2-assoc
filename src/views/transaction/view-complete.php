@@ -67,7 +67,7 @@ if (count($orders) && count($transactions)) {
                         )?>                                         
                     </td>
                     <td><?= $transaction->reference_date ?></td>
-                    <td><?= $transactionType[$transaction->type] ?></td>
+                    <td><?= $transaction->type ? $transactionType[$transaction->type] : '' ?></td>
                     <td><?= $transaction->code ?></td>
                     <td><?= $transaction->value ?></td>
                     <td>
