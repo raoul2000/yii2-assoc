@@ -130,7 +130,7 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_ADDRESS);
 
         $model = Contact::create();
-        $model->setAttributes(Yii::$app->session[self::SESS_CONTACT]);
+        $model->setAttributes(Yii::$app->session[self::SESS_CONTACT], false);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // save contact to session
@@ -261,7 +261,7 @@ class RegistrationController extends \yii\web\Controller
 
         $model = new Address();
         if (Yii::$app->request->isGet) {
-            $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS]);
+            $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS], false);
         } elseif ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes();
             return $this->redirect(['product-select']);
@@ -363,7 +363,7 @@ class RegistrationController extends \yii\web\Controller
                 'value'            => $product['value'],
                 'valid_date_start' => DateHelper::toDateAppFormat($dateStart),
                 'valid_date_end'   => DateHelper::toDateAppFormat($dateEnd),
-            ]);
+            ], false);
             $orderModels[] = $order;
 
             // we need product name for rendering
@@ -413,14 +413,22 @@ class RegistrationController extends \yii\web\Controller
             $orderTotalValue += $order['value'];
         }
 
+        // select the from_account_id attribute
+        // If the contact exist and has more than one bank_account we must ask which one to use
+        $contact = new Contact();
+        $contact->setAttributes(Yii::$app->session[self::SESS_CONTACT] , false);
+        $fromAccounts = $contact->bankAccounts;
+
         // holds the list of transactions
         $transactionModels = [];
 
         if (Yii::$app->request->isGet) {
             // displaying the form : initialize the transaction list with one transaction
-            // to cover order(s) value
-            $transaction = new Transaction();
-            $transaction->value = $orderTotalValue;
+            // to cover all order(s) value
+            $transaction = new Transaction([
+                'value'          => $orderTotalValue,
+                'reference_date' => date('d/m/Y')
+            ]);
             $transactionModels[] = $transaction;
         } else {
             // POST request : user submit the form fot save or ad/remove transactions
@@ -471,7 +479,14 @@ class RegistrationController extends \yii\web\Controller
 
                 default: ////////////////////////////////////////////////////////
                     // default submit action = standard submit
-                    if (Model::validateMultiple($transactionModels)) {
+                    $fromAccountId = Yii::$app->request->post('fromAccountId',null);
+                    
+                    if (count($fromAccounts) > 1 && empty($fromAccountId)) {
+                        // user must select a bank account if contact owns more than one
+                        $transactionModels[0]->addError('from_account_id', \Yii::t('app', 'no account selected'));
+                    } 
+                    elseif (Model::validateMultiple($transactionModels)) {
+
                         // additional validation
                         $isValid = true;
                         $totalTransaction = 0;
@@ -488,6 +503,7 @@ class RegistrationController extends \yii\web\Controller
                         if ($isValid) {
                             $toSave = [];
                             foreach ($transactionModels as $transaction) {
+                                //$transaction->from_account_id = $fromAccountId;
                                 $toSave[] = $transaction->getAttributes();
                             }
                             \Yii::$app->session[self::SESS_TRANSACTIONS] = $toSave;
@@ -501,13 +517,18 @@ class RegistrationController extends \yii\web\Controller
         return $this->renderWizard(
             $this->renderPartial('_transaction', [
                 'transactionModels' => $transactionModels,
-                'orderTotalValue' => $orderTotalValue
+                'orderTotalValue' => $orderTotalValue,
+                'fromAccounts' =>  ArrayHelper::map($fromAccounts, 'id', 'longName'),
+                'contact' => $contact
             ])
         );
     }
 
     public function actionCommit()
     {
+        $this->redirect(['transaction']);
+        return;
+
         if (!Yii::$app->session->has(self::SESS_TRANSACTIONS)) {
             $this->redirect(['transaction']);
         }        
@@ -515,26 +536,26 @@ class RegistrationController extends \yii\web\Controller
         // let's load all models from session
         // contact
         $contact = new Contact();
-        $contact->setAttributes(Yii::$app->session[self::SESS_CONTACT]);
+        $contact->setAttributes(Yii::$app->session[self::SESS_CONTACT], false);
 
         // address
         $address = new Address();
-        $address->setAttributes(Yii::$app->session[self::SESS_ADDRESS]);
+        $address->setAttributes(Yii::$app->session[self::SESS_ADDRESS], false);
 
         // orders
         $orders = array_map(function($orderAttr){
             $order = new Order();
-            $order->setAttributes($orderAttr);
+            $order->setAttributes($orderAttr, false);
             return $order;
         },Yii::$app->session[self::SESS_ORDERS]);
 
         // transactions
         $transactions = array_map(function($transactionAttr){
             $transaction = new Transaction();
-            $transaction->setAttributes($transactionAttr);
+            $transaction->setAttributes($transactionAttr, false);
             return $transaction;
         },Yii::$app->session[self::SESS_TRANSACTIONS]);
-
+        return ;
         // save/update 
 
         // address

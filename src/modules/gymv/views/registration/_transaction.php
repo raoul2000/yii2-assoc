@@ -19,10 +19,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
     <p>
         Total : <?= $orderTotalValue ?>
     </p>
-    <?= Html::button(
-            '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' . \Yii::t('app', 'add transaction'), 
-            ['class' => 'btn btn-success', 'data-action' => 'add-transaction']
-        ) ?>
+
+
 
     <?php $form = ActiveForm::begin(['options' => [ 'id' => 'transaction-manager-form', 'name' => 'tr-form']]); ?>
 
@@ -33,11 +31,34 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
             echo $form->errorSummary($transactionModels);
         ?>
 
+        <?php if (count($fromAccounts) > 1): ?>
+            <div class="alert alert-info">
+                <p>
+                    The contact <b><?= html::encode($contact->longName) ?></b> has more than one bank account. Select the one you want to use :
+                </p>
+                <div class="form-group">
+                    <?= Html::dropDownList('fromAccountId', null, $fromAccounts, [
+                        'id' => 'template-list',
+                        'size'=>1,
+                        'prompt' => \Yii::t('app', 'select the account ...'),
+                        'class' => 'form-control'
+                    ])?>
+                </div>            
+            </div>
+        <?php endif; ?>
+
+        <div class="toolbar" style="margin-bottom:1em;">
+            <?= Html::button(
+                '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' . \Yii::t('app', 'add transaction'), 
+                ['class' => 'btn btn-success', 'data-action' => 'add-transaction']
+            ) ?>
+        </div>
+
         <table id="transactions" class="table table-condensed table-hover transactions">
             <tbody>
                 <?php foreach ($transactionModels as $index => $transaction):?>
                     <tr>
-                        <td>
+                        <td style="font-size: 2em;vertical-align: middle;">
                             <?= $index+1 ?>
                         </td>
                         <td>
@@ -52,12 +73,12 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                                 
                             ?>
                         </td>
-                        <td>
+                        <td style="vertical-align: middle;">
                             <?php if($index != 0) {
                                 echo Html::button(
-                                    '<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>',
+                                    '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>',
                                     [
-                                        'class' => 'btn btn-danger btn-sm', 
+                                        'class' => 'btn btn-default btn-sm', 
                                         'data-action' => 'remove-transaction', 
                                         'data-index' => $index,
                                         'title' => 'remove'
