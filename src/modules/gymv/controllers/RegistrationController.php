@@ -425,7 +425,7 @@ class RegistrationController extends \yii\web\Controller
         }
 
         // select the from_account_id attribute
-        // If the contact exist and has more than one bank_account we must ask which one to use
+        // If the contact exists and has more than one bank_account we must ask which one to use
         $contact = new Contact();
         $contact->setAttributes(Yii::$app->session[self::SESS_CONTACT] , false);
         $fromAccounts = $contact->bankAccounts;
@@ -453,7 +453,15 @@ class RegistrationController extends \yii\web\Controller
             // 1. create all as empty models 
             $trForms = Yii::$app->request->post('Transaction');
             for ($i=0; $i < count($trForms); $i++) { 
-                $transactionModels[] = new Transaction();
+                $transactionModels[] = new Transaction([
+                    'from_account_id'   =>  SessionContact::getBankAccountId(),
+                    'to_account_id'     =>  SessionContact::getBankAccountId(),    
+                    'value'             =>  $orderTotalValue,
+                    'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
+                    'code'              =>  '',
+                    'category_id'       =>  self::DEFAULT_TRANSACTION_CATEGORY_ID,                   
+                    'reference_date'    => date('d/m/Y') // only the first transaction has reference date initialized                    
+                ]);
             }
             // 2. use "loadMultiple" to assign value to model attributes
             Model::loadMultiple($transactionModels, Yii::$app->request->post());
@@ -462,8 +470,8 @@ class RegistrationController extends \yii\web\Controller
             // from_account_id is temprary set to a value (here same as to_account_id) but
             // it will be set to its actual value on save
             foreach ($transactionModels as $transaction) {
-                $transaction->from_account_id = SessionContact::getBankAccountId();;
-                $transaction->to_account_id = SessionContact::getBankAccountId();
+                $transaction->from_account_id = SessionContact::getBankAccountId();
+                $transaction->to_account_id   = SessionContact::getBankAccountId();
             }
 
             // handle submit actions : 'action' and optionally 'index'
@@ -558,9 +566,9 @@ class RegistrationController extends \yii\web\Controller
         return $this->renderWizard(
             $this->renderPartial('_transaction', [
                 'transactionModels' => $transactionModels,
-                'orderTotalValue' => $orderTotalValue,
-                'fromAccounts' =>  ArrayHelper::map($fromAccounts, 'id', 'longName'),
-                'contact' => $contact
+                'orderTotalValue'   => $orderTotalValue,
+                'fromAccounts'      => ArrayHelper::map($fromAccounts, 'id', 'longName'),
+                'contact'           => $contact
             ])
         );
     }
@@ -659,7 +667,7 @@ class RegistrationController extends \yii\web\Controller
             Yii::$app->session->remove(self::SESS_ORDERS);
             Yii::$app->session->remove(self::SESS_TRANSACTIONS);
         }
-        
+
         // render result
         return $this->render('commit', [
             'contact'      => $contact,
