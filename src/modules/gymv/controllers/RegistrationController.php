@@ -584,85 +584,87 @@ class RegistrationController extends \yii\web\Controller
         },Yii::$app->session[self::SESS_TRANSACTIONS]);
 
         
-        // save/update 
+        // save/update /////////////////////////////////////////////////////////////////
 
-        // address
-        // begin with address because contact has a col that points to the address record
-        $isNewAddress = null;
-        if( !empty($address->id)) {
-            // address already in DB : update
-            $dbAddress = Address::findOne($address->id);
-            $dbAddress->setAttributes($address->getAttributes(), false);
-            $dbAddress->save();
-            $address = $dbAddress;
-            $isNewAddress = false;
-        } else {
-            // new address : insert
-            $address->save();   // insert
-            $isNewAddress = true;
-        }
-    
-
-        // contact
-        $lazyFromAccountId = null;
-        $isNewContact = null;
-        $contact->address_id = $address->id;
-        if (!empty($contact->id)) {
-            // contact already in DB : update
-            $dbContact = Contact::findOne($contact->id);
-            $dbContact->setAttributes($contact->getAttributes(), false);
-            $dbContact->save(); // update
-            $contact = $dbContact;
-            $isNewContact = false;
-        } else {
-            // contact is new
-            $contact->save();   // insert
-            $isNewContact = true;
-
-            // create default bank account
-            $bankAccount = new \app\models\BankAccount();
-            $bankAccount->contact_id = $contact->id;
-            $bankAccount->name = '';
-            $bankAccount->save(false);  // insert
-            $lazyFromAccountId = $bankAccount->id;            
-        }
-
-        // transactions
-        foreach ($transactions as  $transaction) {
-            // set account id
-            // by CONVENTION, in the actionTransaction when a contact is new, the from_account_id is set
-            // with the same value as the to_account_id. Now thta tyhe contact has bee ninserted in DB and
-            // the bank account created, update from_account_id
-            if ($transaction->from_account_id == $transaction->to_account_id) {
-                // lazy assignement : the contact has been created just now, it's bank account id
-                // was not known until  then but now we know it !
-                $transaction->from_account_id = $lazyFromAccountId;
+        if (false) {
+            // address
+            // begin with address because contact has a col that points to the address record
+            $isNewAddress = null;
+            if( !empty($address->id)) {
+                // address already in DB : update
+                $dbAddress = Address::findOne($address->id);
+                $dbAddress->setAttributes($address->getAttributes(), false);
+                $dbAddress->save();
+                $address = $dbAddress;
+                $isNewAddress = false;
+            } else {
+                // new address : insert
+                $address->save();   // insert
+                $isNewAddress = true;
             }
-            $transaction->save();
-        }
+        
 
-        // orders
-        foreach ($orders as $order) {
-            $order->to_contact_id = $contact->id;
-            $order->save();
+            // contact
+            $lazyFromAccountId = null;
+            $isNewContact = null;
+            $contact->address_id = $address->id;
+            if (!empty($contact->id)) {
+                // contact already in DB : update
+                $dbContact = Contact::findOne($contact->id);
+                $dbContact->setAttributes($contact->getAttributes(), false);
+                $dbContact->save(); // update
+                $contact = $dbContact;
+                $isNewContact = false;
+            } else {
+                // contact is new
+                $contact->save();   // insert
+                $isNewContact = true;
 
-            foreach ($transactions as $transaction) {
-                $order->linkToTransaction($transaction);
+                // create default bank account
+                $bankAccount = new \app\models\BankAccount();
+                $bankAccount->contact_id = $contact->id;
+                $bankAccount->name = '';
+                $bankAccount->save(false);  // insert
+                $lazyFromAccountId = $bankAccount->id;            
             }
+
+            // transactions
+            foreach ($transactions as  $transaction) {
+                // set account id
+                // by CONVENTION, in the actionTransaction when a contact is new, the from_account_id is set
+                // with the same value as the to_account_id. Now thta tyhe contact has bee ninserted in DB and
+                // the bank account created, update from_account_id
+                if ($transaction->from_account_id == $transaction->to_account_id) {
+                    // lazy assignement : the contact has been created just now, it's bank account id
+                    // was not known until  then but now we know it !
+                    $transaction->from_account_id = $lazyFromAccountId;
+                }
+                $transaction->save();
+            }
+
+            // orders
+            foreach ($orders as $order) {
+                $order->to_contact_id = $contact->id;
+                $order->save();
+
+                foreach ($transactions as $transaction) {
+                    $order->linkToTransaction($transaction);
+                }
+            }
+
+            // clean up session data
+            Yii::$app->session->remove(self::SESS_CONTACT);
+            Yii::$app->session->remove(self::SESS_ADDRESS);
+            Yii::$app->session->remove(self::SESS_PRODUCTS);
+            Yii::$app->session->remove(self::SESS_ORDERS);
+            Yii::$app->session->remove(self::SESS_TRANSACTIONS);
         }
-
-        // clean up session data
-        Yii::$app->session->remove(self::SESS_CONTACT);
-        Yii::$app->session->remove(self::SESS_ADDRESS);
-        Yii::$app->session->remove(self::SESS_PRODUCTS);
-        Yii::$app->session->remove(self::SESS_ORDERS);
-        Yii::$app->session->remove(self::SESS_TRANSACTIONS);
-
+        
         // render result
         return $this->render('commit', [
-            'contact' => $contact,
-            'address' => $address,
-            'orders'  => $orders,
+            'contact'      => $contact,
+            'address'      => $address,
+            'orders'       => $orders,
             'transactions' => $transactions
         ]);
     }
