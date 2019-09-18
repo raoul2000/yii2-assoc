@@ -37,9 +37,14 @@ $contactSearchServiceUrl = Url::to(['/api/contact/search']);
                 'labelField' => 'fullname',
                 'searchField' => 'name',                            
                 'render' => [
+                    'option_create' => new \yii\web\JsExpression("
+                        function(data, escape) {
+                            return '<div class=\"create rw-selectize-create-item\">Ajouter '+ escape(data.input) +'</div>';
+                        }
+                    "),
                     'option' => new \yii\web\JsExpression("
                         function(item, escape) {
-                            return '<div>' 
+                            return '<div class=\"rw-selectize-item\">' 
                                 + '<span class=\"fullname\">'
                                     + '<span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span>' 
                                         + escape(item.fullname)

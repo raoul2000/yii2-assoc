@@ -19,8 +19,6 @@ $searchAddressUrl = 'url';
 
     <hr/>
 
-    <?= Html::hiddenInput('url',$searchAddressUrl, ['id' => 'address-search-ws-url']) ?>
-
     <form class="row">
         <div class="form-group col-xs-7" style="padding-right:0px">
             <input type="text" class="form-control" id="address" placeholder="Enter the address ...">
@@ -40,13 +38,29 @@ $searchAddressUrl = 'url';
 
     <?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
         <input type="hidden" id="address-record_id" name="address_id" value="" />
-        <?= $form->field($model, 'line_1')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
 
-        <?= $form->field($model, 'zip_code')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
+        <?= $form
+            ->field($model, 'line_1')
+            ->hiddenInput([ 'maxlength' => true,  'autocomplete'=>'off'])
+            ->label(false) 
+        ?>
 
-        <?= $form->field($model, 'city')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
+        <?= $form
+            ->field($model, 'zip_code')
+            ->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])
+            ->label(false) 
+        ?>
+        <?= $form
+            ->field($model, 'city')
+            ->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])
+            ->label(false) 
+        ?>
 
-        <?= $form->field($model, 'country')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
+        <?= $form
+            ->field($model, 'country')
+            ->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])
+            ->label(false) 
+        ?>
 
         <hr />
         <div class="form-group">

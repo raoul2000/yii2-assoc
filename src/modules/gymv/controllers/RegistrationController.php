@@ -13,6 +13,7 @@ use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use \app\components\Helpers\DateHelper;
 use \app\components\SessionDateRange;
 use \app\components\SessionContact;
@@ -91,8 +92,10 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_ADDRESS);
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
-        $contact = new Contact();
-        $contact->is_natural_person = true;
+        $contact = new Contact([
+            'is_natural_person' => true
+        ]);
+        
 
         if (Yii::$app->request->getIsPost()) {
             $contactId = Yii::$app->request->post('contactId', null);
@@ -188,10 +191,11 @@ class RegistrationController extends \yii\web\Controller
                 ->setData($params)
                 ->send();
     
+            // build the web service result set
             $wsResult = array_map(function($item){
                 $property = $item['properties'];
                 return [
-                    'id'       => null,
+                    'id'       => null, // by convention id = null for  WS result items
                     'address'  => $property['name'],
                     'city'     => $property['city'],
                     'zip_code' => $property['postcode'],
@@ -212,13 +216,15 @@ class RegistrationController extends \yii\web\Controller
             ->asArray()
             ->all();
 
+        // build the DB result set
         $dbResult = array_map(function($row){
             return [
                 'id'       => $row['id'],
                 'address'  => $row['line_1'],
                 'city'     => $row['city'],
                 'zip_code' => $row['zip_code'],
-                'country'  => $row['country']
+                'country'  => $row['country'],
+                'urlView'  => Url::to(['/address/view', 'id' => $row['id']])
             ];
         }, $dbRows);
 
@@ -270,17 +276,42 @@ class RegistrationController extends \yii\web\Controller
             return $this->redirect(['address-search']);
         }
 
-        $model = new Address();
-        $model->setAttributes(Yii::$app->session[self::SESS_ADDRESS], false);
+        $model = new Address(Yii::$app->session[self::SESS_ADDRESS]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes();
-            return $this->redirect(['product-select']);
+        if (Yii::$app->request->isPost) {
+            $action = Yii::$app->request->post('action');
+  
+            switch ($action) {
+                case 'reset-form':
+                    $model = new Address();
+                    break;
+                
+                default:
+                    if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                        Yii::$app->session[self::SESS_ADDRESS] = $model->getAttributes();
+                        return $this->redirect(['product-select']);
+                    }  
+                    break;
+            }
+        }
+
+        $contact = new Contact(Yii::$app->session[self::SESS_CONTACT]);
+        $contactsSameAddress = [];
+        if ( !empty($model->id)) {
+            // user has choosen an address that exists in the db. Maybe it is already used
+            // by contacts ? 
+            foreach($model->contacts as $contactPerAdress) {
+                if ($contactPerAdress->id !== $contact->id) {
+                    $contactsSameAddress[] = $contactPerAdress;
+                }
+            }            
         }
 
         return $this->renderWizard(
             $this->renderPartial('_address-edit', [
-                'model' => $model
+                'model' => $model,
+                'contact' => $contact,
+                'contactsSameAddress' => $contactsSameAddress
             ])
         );
     }

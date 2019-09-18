@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
 /* @var $form yii\widgets\ActiveForm */
-
+$this->registerJs(file_get_contents(__DIR__ . '/_address-edit.js'), View::POS_READY, 'address-edit');
 ?>
 <div class="address-form">
     <h3>
@@ -16,8 +17,37 @@ use yii\widgets\ActiveForm;
 
     <hr/>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php if (count($contactsSameAddress) != 0): ?>
+        <div class="alert alert-warning">
+            This address is also used by <?php foreach ($contactsSameAddress as $contactPerAdress) {
+                echo '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . Html::encode($contactPerAdress->longName);
+            }?>.<br/>
+            If you change information below it will affect all other contacts linked to this address.
+        </div>
+    <?php endif; ?>
 
+    <?php if (!empty($model->id)) :?>
+        <p>
+            <?= Html::button(
+                \Yii::t('app', 'Update This Address'),
+                [
+                    'id' => 'btn-update-address',
+                    'class' => 'btn btn-primary'
+                ]
+            )?>
+            <?= Html::button(
+                \Yii::t('app', 'Create a New Address'),
+                [
+                    'id' => 'btn-reset-form',
+                    'class' => 'btn btn-success'
+                ]
+            )?>
+        </p>            
+    <?php endif ?>
+
+    <?php $form = ActiveForm::begin(['id' => 'address-edit-form']); ?>
+        <?= Html::hiddenInput('readonly', (!empty($model->id) ? true : false), [ 'id' => 'read-only-form']) ?>
+        <?= Html::hiddenInput('action', '', [ 'id' => 'action']) ?>
         <?php if ($model->hasErrors()) {
             echo $form->errorSummary($model);
         }?>
@@ -26,7 +56,7 @@ use yii\widgets\ActiveForm;
             ->textInput([
                 'maxlength'    => true, 
                 'autocomplete' => 'off', 
-                'placeholder'  => \Yii::t('app', 'Enter the address here ...')
+                'placeholder'  => \Yii::t('app', 'Enter the address here ...'),
             ])
             ->label(\Yii::t('app', 'address'))
         ?>

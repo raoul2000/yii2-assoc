@@ -23,13 +23,32 @@ use yii\widgets\ActiveForm;
         <?php if ($model->hasErrors()) {
             echo $form->errorSummary($model);
         }?>
-
+        <?php if (!empty($model->id)) :?>
+            <div class="alert alert-info">
+                This Contact is already registered in the system. You can verify the informations and correct any error if needed.
+            </div>
+        <?php endif; ?>
+    
         <div class="row">
             <div class="col-sm-6">
-                <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                <?= $form
+                    ->field($model, 'name')
+                    ->textInput([
+                        'maxlength'    => true, 
+                        'autocomplete' => 'off', 
+                        'readonly'     => true
+                    ]) 
+                ?>
             </div>
             <div class="col-sm-6">
-                <?= $form->field($model, 'firstname')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
+                <?= $form
+                    ->field($model, 'firstname')
+                    ->textInput([
+                        'maxlength'    => true, 
+                        'autocomplete' => 'off',
+                        'readonly'     => !empty($model->id)
+                    ])
+                ?>
             </div>
         </div>
 

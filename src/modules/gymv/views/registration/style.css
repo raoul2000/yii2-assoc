@@ -39,7 +39,7 @@
 }
 #wiz-address-search .address-name {
     display:block;
-    font-size:1.1em;
+    font-size:1.3em;
 }
 #wiz-address-search .is-selected .selected-address {
     display:block;
@@ -49,6 +49,17 @@
     color:green;
     font-size:2em;
     display:none;
+}
+#wiz-address-search .address-zip,
+#wiz-address-search .address-city,
+#wiz-address-search .address-country {
+    font-size:1.3em;
+}
+#wiz-address-search .extra-info-line {
+    display:block;
+    font-size:0.8em;
+    color:grey;
+    border-top: 1px solid #80808040;    
 }
 /* 
  * / address search 

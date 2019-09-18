@@ -3,7 +3,6 @@
         "address": document.getElementById('address'),
         "city": document.getElementById('city'),
         "buttonSearchAddress" : document.getElementById('btn-search-address'),
-        "addressSearchUrl" : document.getElementById('address-search-ws-url'),
         "addressSearchResultList" : document.getElementById('address-search-result-list'),
         "form_record_id" : document.getElementById("address-record_id"),
         "form_line_1" : document.getElementById("address-line_1"),
@@ -29,15 +28,21 @@
 
     const renderSearchResults = (results) => {
         el.addressSearchResultList.innerHTML = results.map( (result, index) => {
+            let extraInfoLine = 'from api-adresse.data.gouv.fr';
+            if (result.id) {
+                extraInfoLine = `<a href="${result.urlView}" target="_blank" class="view-address"> view </a>`;
+            }
             return `
             <div class="result-address-item" data-item-id="${result.id}" data-index="${index}">
                 <div class="selected-address">
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 
                 </div>
-                <span class="address-name">${result.address}</span>
+               
+                <span class="address-name"> ${result.address}</span>
                 <span class="address-zip">${result.zip_code}</span>
                 <span class="address-city">${result.city}</span>
                 <span class="address-country">${result.country}</span>
+                <span class="extra-info-line">${extraInfoLine}</span>
             </div>`;
         }).join('\n');
     };
@@ -89,21 +94,23 @@
         el.form_country.value = null;
     };
     const selectResultItem = (ev) => {
-        const resultItem = ev.target.closest('.result-address-item');
-        if(!resultItem) {
+
+        if( ev.target.closest('.view-address')) {   // user clicked the "view address" link
             return;
         }
-        const isSelected = resultItem.classList.contains('is-selected');
-        // @ts-ignore
-        el.addressSearchResultList.querySelectorAll('.result-address-item').forEach( item => item.classList.remove('is-selected'));
-        if( ! isSelected) {
-            resultItem.classList.add('is-selected');
-            debugger;
-            const index = resultItem.dataset.index;
-            const record = addressData[index];
-            loadForm(record);
-        } else {
-            clearForm();
+        const resultItem = ev.target.closest('.result-address-item');
+        if(resultItem) { // user select an address
+            const isSelected = resultItem.classList.contains('is-selected');
+            // @ts-ignore
+            el.addressSearchResultList.querySelectorAll('.result-address-item').forEach( item => item.classList.remove('is-selected'));
+            if( ! isSelected) {
+                resultItem.classList.add('is-selected');
+                const index = resultItem.dataset.index;
+                const record = addressData[index];
+                loadForm(record);
+            } else {
+                clearForm();
+            }            
         }
     };
     el.buttonSearchAddress.addEventListener('click', searchAddress);
