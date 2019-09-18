@@ -10,7 +10,7 @@ use yii\web\View;
 $this->registerJs(file_get_contents(__DIR__ . '/_address-search.js'), View::POS_READY, 'address-search');
 $searchAddressUrl = 'url';
 ?>
-<div id="wiz-contact">
+<div id="wiz-address-search">
 
     <h3>
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
@@ -33,43 +33,6 @@ $searchAddressUrl = 'url';
             Search
         </button>
     </form>
-    <style>
-        #address-search-result-list {
-            /*padding : 1em;*/
-            margin-bottom:1em;
-            height: calc(100vh - 370px);
-            /*background-color: #eee;*/
-            overflow:auto;
-            /*border:1px solid #eee;*/
-        }
-        .result-address-item {
-            width:100%;
-            margin-bottom:1em;
-            cursor:pointer;
-            padding:1em;
-            border-left: 1px solid white;
-        }
-        .result-address-item.is-selected {
-            background-color:#eee;
-        }
-        .result-address-item:hover {
-            background-color:#eee;
-            border-left: 1px solid blue;
-        }
-        .address-name {
-            display:block;
-            font-size:1.1em;
-        }
-        .is-selected .selected-address {
-            display:block;
-        }
-        .selected-address {
-            float:right;
-            color:green;
-            font-size:2em;
-            display:none;
-        }
-    </style>
     <div id="search-result-container">
         <div id="address-search-result-list">
         </div>
@@ -85,6 +48,7 @@ $searchAddressUrl = 'url';
 
         <?= $form->field($model, 'country')->hiddenInput(['maxlength' => true, 'autocomplete'=>'off'])->label(false) ?>
 
+        <hr />
         <div class="form-group">
             <?= Html::a(
                 '<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> ' . \Yii::t('app', 'Previous'),

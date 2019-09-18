@@ -8,6 +8,7 @@ use yii\web\View;
 
 /* @var $this yii\web\View */
 //$this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, 'registration-address');
+$this->registerCss(file_get_contents(__DIR__ . '/style.css'));
 ?>
 <div id="registration-wizard">
     <div class="row">

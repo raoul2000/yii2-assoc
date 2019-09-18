@@ -1,0 +1,55 @@
+
+.rw-selectize-create-item {
+    padding: 0.5em 1em;
+}
+.rw-selectize-item {
+    padding: 0.5em 1em;
+
+}
+.rw-selectize-item .glyphicon {
+    padding-right:1em;
+}
+
+/* 
+ * address search
+ */
+ 
+ #wiz-address-search #address-search-result-list {
+    /*padding : 1em;*/
+    margin-bottom:1em;
+    height: calc(100vh - 390px);
+    /*background-color: #eee;*/
+    overflow:auto;
+    /*border:1px solid #eee;*/
+}
+
+#wiz-address-search .result-address-item {
+    width:100%;
+    margin-bottom:1em;
+    cursor:pointer;
+    padding:1em;
+    border-left: 1px solid white;
+}
+#wiz-address-search .result-address-item.is-selected {
+    background-color:#eee;
+}
+#wiz-address-search .result-address-item:hover {
+    background-color:#eee;
+    border-left: 1px solid blue;
+}
+#wiz-address-search .address-name {
+    display:block;
+    font-size:1.1em;
+}
+#wiz-address-search .is-selected .selected-address {
+    display:block;
+}
+#wiz-address-search .selected-address {
+    float:right;
+    color:green;
+    font-size:2em;
+    display:none;
+}
+/* 
+ * / address search 
+ */
