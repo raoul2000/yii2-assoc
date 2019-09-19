@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this yii\web\View */
-//$this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, 'registration-address');
+$this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'registration-order');
 ?>
 <div id="wiz-order">
     <h3>
@@ -35,17 +35,18 @@ use yii\web\View;
                 <?php foreach ($orderModels as $index => $order):?>
                     <tr>
                         <td width="50%">
+                            <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 
                             <?= Html::encode($products[$order->product_id]['name']) ?>
                         </td>
                         <td>
                             <?= $form->field($order, "[$index]valid_date_start")
-                                ->textInput(['class' => 'order-valid_date_start form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->textInput(['class' => 'order-valid_date_start form-control input-sm', 'maxlength' => true, 'autocomplete'=> 'off'])
                                 ->label(false)
                             ?>
                         </td>
                         <td>
                             <?= $form->field($order, "[$index]valid_date_end")
-                                ->textInput(['class' => 'order-valid_date_end form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->textInput(['class' => 'order-valid_date_end form-control input-sm', 'maxlength' => true, 'autocomplete'=> 'off'])
                                 ->label(false)
                             ?>
                         </td>
@@ -53,27 +54,27 @@ use yii\web\View;
                         <td width="10%">
                             <input type="text" 
                                 value="<?= $products[$order->product_id]['value'] ?>" 
-                                class="form-control" 
+                                class="form-control input-sm" 
                                 title="unitary value"
                                 disabled="disabled">
                         </td>
                         <td width="10%">
                             <?= $form->field($order, "[$index]value")
-                                ->textInput(['class' => 'order-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->textInput(['class' => 'order-value form-control input-sm order-value', 'maxlength' => true, 'autocomplete'=> 'off'])
                                 ->label(false)
                             ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="valueSum">
-                        <h3><span id="order-value-sum"><?= $orderTotalValue ?></span></h3>
+                <tr class="bottom-row">
+                    <td colspan="4">
+                        <span class="text-total">
+                            Total
+                        </span>
                     </td>
-                    <td></td>
+                    <td class="valueSum">
+                        <span id="order-value-sum" class="value-total"><?= $orderTotalValue ?></span>
+                    </td>
                 </tr>                    
             </tbody>
         </table>

@@ -61,8 +61,11 @@
     color:grey;
     border-top: 1px solid #80808040;    
 }
+/* / address search */
+
+
 /* 
- * / address search 
+ * Wizard Summary Col
  */
 
  #wiz-summary .product-line {
@@ -92,3 +95,31 @@
     border-top: 1px solid grey;
     margin-top: 1em;    
 }
+/* / Wizard Summary Col */
+
+
+/* 
+ * Orders 
+ */
+ 
+#wiz-order .bottom-row {
+    background-color: #f8f7f7;
+}
+#wiz-order .bottom-row .text-total {
+    font-size: 1.3em;
+    text-align: right;
+}
+
+#wiz-order #orders tbody div.form-group {
+    margin-bottom: 0px;
+}
+
+#wiz-order .bottom-row .valueSum {
+    text-align: right;
+}
+#wiz-order .bottom-row .value-total {
+    font-size: 1.3em;
+    text-align: right;
+    font-weight: bold;
+}
+/* / Orders  */

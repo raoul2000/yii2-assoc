@@ -25,7 +25,12 @@ use yii\widgets\ActiveForm;
         }?>
         <?php if (!empty($model->id)) :?>
             <div class="alert alert-info">
-                This Contact is already registered in the system. You can verify the informations and correct any error if needed.
+                This Contact is already registered in the system. You can verify the informations and correct any error if needed.<br/>
+                <?= Html::a('view this contact', ['/contact/view', 'id' => $model->id], ['target' => '_blank']) ?>
+            </div>
+        <?php else: ?>
+            <div class="alert alert-success">
+                This person is not already registered : you are creating a new entry ...
             </div>
         <?php endif; ?>
     

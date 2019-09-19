@@ -20,7 +20,12 @@ $this->registerJs(file_get_contents(__DIR__ . '/_address-edit.js'), View::POS_RE
     <?php if (count($contactsSameAddress) != 0): ?>
         <div class="alert alert-warning">
             This address is also used by <?php foreach ($contactsSameAddress as $contactPerAdress) {
-                echo '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . Html::encode($contactPerAdress->longName);
+                echo Html::a(
+                    '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                        . Html::encode($contactPerAdress->longName),
+                    ['/contact/view', 'id' => $contactPerAdress->id],
+                    ['target' => '_blank', 'title' => \Yii::t('app', 'open in a new window')]
+                );
             }?>.<br/>
             If you change information below it will affect all other contacts linked to this address.
         </div>
