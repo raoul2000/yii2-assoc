@@ -13,6 +13,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
     <h3>
         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Orders') ?>
+        <small class="wizard-step">step 4/5</small>
     </h3>
 
     <hr/>

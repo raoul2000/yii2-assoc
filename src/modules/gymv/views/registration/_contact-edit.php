@@ -14,6 +14,7 @@ use yii\widgets\ActiveForm;
     <h3>
         <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Contact') ?>
+        <small class="wizard-step">step 1/5</small>
     </h3>
 
     <hr/>

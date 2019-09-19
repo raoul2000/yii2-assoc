@@ -13,6 +13,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
     <h3>
         <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Transaction') ?>
+        <small class="wizard-step">step 5/5</small>
     </h3>
 
     <hr/>

@@ -15,6 +15,7 @@ $searchAddressUrl = 'url';
     <h3>
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Address') ?>
+        <small class="wizard-step">step 2/5</small>
     </h3>
 
     <hr/>
