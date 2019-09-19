@@ -80,6 +80,25 @@ class RegistrationController extends \yii\web\Controller
         if ($session->has(self::SESS_ADDRESS)) {
             $data['address'] = $session[self::SESS_ADDRESS];
         }
+
+        if ($session->has(self::SESS_PRODUCTS) && $session->has(self::SESS_ORDERS)) {            
+            $products = $session[self::SESS_PRODUCTS];
+            $data['orders'] = array_map(function($order) use ($products) {
+                $foundProduct = null;
+                foreach ($products as $product) {
+                    if ($product['id'] == $order['product_id']) {
+                        $foundProduct = $product;
+                        break;
+                    }
+                }
+                if ( $foundProduct !== null) {
+                    $order['product_name'] = $foundProduct['name'];
+                    return $order;
+                } else {
+                    throw new Exception('missing product');
+                }
+            },  $session[self::SESS_ORDERS]);
+        }
         
         return $this->renderPartial('_summary', [
             'data' => $data
@@ -122,6 +141,8 @@ class RegistrationController extends \yii\web\Controller
             }
             Yii::$app->session[self::SESS_CONTACT] = $contact->getAttributes();
             return $this->redirect(['contact-edit']);
+        } else {
+            $this->cleanSessionData();
         }
 
         return $this->renderWizard(
@@ -243,7 +264,7 @@ class RegistrationController extends \yii\web\Controller
             // session variable is not as expected
             return $this->redirect(['contact-search']);
         }
-        //Yii::$app->session->remove(self::SESS_ADDRESS);
+        Yii::$app->session->remove(self::SESS_ADDRESS);
         $model = new Address();
 
         if (Yii::$app->request->getIsPost()) {
@@ -283,7 +304,9 @@ class RegistrationController extends \yii\web\Controller
   
             switch ($action) {
                 case 'reset-form':
-                    $model = new Address();
+                    //$model = new Address();
+                    Yii::$app->session->remove(self::SESS_ADDRESS);
+                    return $this->redirect(['address-search']);
                     break;
                 
                 default:
@@ -328,6 +351,7 @@ class RegistrationController extends \yii\web\Controller
         if (!Yii::$app->session->has(self::SESS_ADDRESS)) {
             return $this->redirect(['address-search']);
         }
+        //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         $model = new ProductSelectionForm();
         $model->setCategory1ProductIds($this->_firstClassProductIds);
@@ -692,11 +716,7 @@ class RegistrationController extends \yii\web\Controller
             }
 
             // clean up session data
-            Yii::$app->session->remove(self::SESS_CONTACT);
-            Yii::$app->session->remove(self::SESS_ADDRESS);
-            Yii::$app->session->remove(self::SESS_PRODUCTS);
-            Yii::$app->session->remove(self::SESS_ORDERS);
-            Yii::$app->session->remove(self::SESS_TRANSACTIONS);
+            $this->cleanSessionData();
         }
 
         // render result
@@ -708,6 +728,14 @@ class RegistrationController extends \yii\web\Controller
         ]);
     }
 
+    private function cleanSessionData() 
+    {
+        Yii::$app->session->remove(self::SESS_CONTACT);
+        Yii::$app->session->remove(self::SESS_ADDRESS);
+        Yii::$app->session->remove(self::SESS_PRODUCTS);
+        Yii::$app->session->remove(self::SESS_ORDERS);
+        Yii::$app->session->remove(self::SESS_TRANSACTIONS);        
+    }
     public function actionIndex()
     {
         return $this->render('index');

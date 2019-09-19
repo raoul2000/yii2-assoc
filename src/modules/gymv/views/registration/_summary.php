@@ -38,4 +38,25 @@ use yii\web\View;
 
         </div>
     <?php endif; ?>
+
+    <?php if (isset($data['orders'])) :?>
+        <div class="address" style="margin-top:2em">
+            <h4>
+                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                Commandes
+            </h4>
+            <?php $totalOrderValue = 0; ?>
+            <?php foreach ($data['orders'] as $order) :?>
+                <?php $totalOrderValue += $order['value']; ?>
+                <div class="product-line">
+                    <span class="product-name"><?= Html::encode($order['product_name'])?></span>
+                    <span class="order-value"><?= $order['value']?></span>
+                </div>
+            <?php endforeach;?>
+            <div class="product-line total-order-value" >
+                    <span class="product-name"><em>Total</em></span>
+                    <span class="order-value"><b><?= $totalOrderValue?></b></span>
+                </div>            
+        </div>
+    <?php endif; ?>
 </div>
