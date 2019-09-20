@@ -21,10 +21,10 @@ use \app\components\SessionContact;
 
 class RegistrationController extends \yii\web\Controller
 {
-    const SESS_CONTACT = 'registration.contact';
-    const SESS_ADDRESS = 'registration.address';
-    const SESS_PRODUCTS = 'registration.products';
-    const SESS_ORDERS = 'registration.orders';
+    const SESS_CONTACT      = 'registration.contact';
+    const SESS_ADDRESS      = 'registration.address';
+    const SESS_PRODUCTS     = 'registration.products';
+    const SESS_ORDERS       = 'registration.orders';
     const SESS_TRANSACTIONS = 'registration.transactions';
 
 
@@ -44,6 +44,9 @@ class RegistrationController extends \yii\web\Controller
         'categoryId' => [1]
     ];
 
+    private $_class2Products = [
+        'categoryId' => [1]
+    ];
     private function buildModelIdList($conf)
     {
         $result = [];
@@ -61,13 +64,14 @@ class RegistrationController extends \yii\web\Controller
         foreach ($rows as $product) {
             $result[] = $product['id'];
         }
+        return $result;
     }
 
 
     public function init()
     {
         parent::init();
-        $this->buildModelIdList($this->_class1Products);
+        $this->_firstClassProductIds = $this->buildModelIdList($this->_class1Products);
     }
 
     /**
@@ -366,6 +370,36 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+
+    public function actionAjaxProductSearch()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException('invalid input');
+        }
+
+        // read query and validate params
+        $productName = Yii::$app->request->get('name');  // mandatory
+        if (empty($productName)) {
+            throw new yii\web\BadRequestHttpException('the parameter "name" is missing');
+        }
+
+        // preparing the response format
+        Yii::$app->response->format = Response::FORMAT_JSON; 
+
+        // searching product in the DB
+        $query = Product::find()
+            ->where(['LIKE', 'name', $productName])
+            ->asArray();
+
+        //$product_category_2 = $this->buildModelIdList($this->_class2Products);
+        $product_group_2 = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_2);        
+        if ( count($product_group_2) > 0) {
+            $query->andWhere(['IN', 'id', $product_group_2 ]);
+        }
+
+        // done : return response
+        return $query->all();
+    }
     /**
      * Ask the user to select products.
      * Products are split in First class and Second class, each class being displayed 
@@ -381,7 +415,9 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         $model = new ProductSelectionForm();
-        $model->setCategory1ProductIds($this->_firstClassProductIds);
+        
+        $firstClassProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_1); 
+        $model->setCategory1ProductIds($firstClassProductIds);
 
         if (Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS)) {
             foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
@@ -402,13 +438,13 @@ class RegistrationController extends \yii\web\Controller
         // prepare to render the view
         // we need the producrt id => name map only for product rendered as checkbox list
         $rows = \app\models\Product::find()
-            ->where(['in', 'id', $this->_firstClassProductIds])
+            ->where(['in', 'id', $firstClassProductIds])
             ->asArray()
             ->all();        
         $firstClassProductIndex = ArrayHelper::map($rows, 'id', 'name'); // [ productId => productName]
 
         $products_2 = $model
-            ->querySelectedProductModels(ProductSelectionForm::CATEGORY_2)
+            ->querySelectedProductModels(ProductSelectionForm::GROUP_2)
             ->indexBy('id')
             ->asArray()
             ->all();
@@ -676,7 +712,7 @@ class RegistrationController extends \yii\web\Controller
         
         // save/update /////////////////////////////////////////////////////////////////
 
-        if (false) {
+        if (true) {
             // address
             // begin with address because contact has a col that points to the address record
             $isNewAddress = null;

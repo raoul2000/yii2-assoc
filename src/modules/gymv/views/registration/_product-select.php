@@ -9,29 +9,7 @@ use app\modules\gymv\models\ProductSelectionForm;
 /* @var $this yii\web\View */
 $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_READY, 'registration-product-select');
 ?>
-<div>
-    <style>
-        #productselectionform-product_ids label {
-            display:block;
-        }
-        .product-result {
-            margin:4px;
-        }
-        .selected-product-item {
-            float:left;
-            width: 100%;
-            padding:0.5em;
-        }
-        .selected-product-item:hover {
-            background-color : #eee;
-        }
-        .selected-product-item .product-remove{
-            float:right;
-            color: red;
-            cursor:pointer;
-        }
-    </style>
-
+<div id="wiz-product-select">
     <h3>
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Product Selection') ?>
@@ -40,14 +18,12 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
 
     <hr/>
 
-    <?php $form = ActiveForm::begin([
-        //'layout' => 'vertical',
-        //'options' => ['class' => 'form-horizontal']
-    ]); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
         <?php if ($model->hasErrors()) {
             echo $form->errorSummary($model);
         }?>
+
         <div class="row">
             <div class="col-xs-5">
                 <?= $form->field($model, 'product_ids')
@@ -59,7 +35,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                 <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                     'name' => 'productId',
                     'id' => 'selectized-product',
-                    'loadUrl' => ['/api/product/search'], //['ajax-select-product'],
+                    'loadUrl' => ['ajax-product-search'],
                     'queryParam' => 'name',
                     'options' => ['class' => 'form-control'],
                     'clientOptions' => [
@@ -95,7 +71,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                     ],
                 ]); ?>   
                 <div id="selected-product-list">
-                    <?php foreach ($model->getSelectedProductIdsByCategory(ProductSelectionForm::CATEGORY_2) as $productId) :?>
+                    <?php foreach ($model->getSelectedProductIdsByGroup(ProductSelectionForm::GROUP_2) as $productId) :?>
                         <div class="selected-product-item" data-item-id="<?= $productId ?>">
                             <div class="product-remove" title="remove">
                                 <span data-action="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>

@@ -135,3 +135,28 @@
      border-color:white;
      color:red;
  }
+ /* /transaction */
+
+
+ /**
+  * Products */
+  #productselectionform-product_ids label {
+    display:block;
+}
+.product-result {
+    margin:4px;
+}
+.selected-product-item {
+    float:left;
+    width: 100%;
+    padding:0.5em;
+}
+.selected-product-item:hover {
+    background-color : #eee;
+}
+.selected-product-item .product-remove{
+    float:right;
+    color: red;
+    cursor:pointer;
+}
+/* /products */  
