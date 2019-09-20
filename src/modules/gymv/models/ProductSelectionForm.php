@@ -62,6 +62,4 @@ class ProductSelectionForm extends Model
         return \app\models\Product::find()
             ->where(['in', 'id', $this->getSelectedProductIds($category)]);
     }
-
-
 }

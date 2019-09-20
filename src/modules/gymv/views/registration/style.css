@@ -127,3 +127,11 @@
     font-weight: bold;
 }
 /* / Orders  */
+
+/*
+ * transaction */
+
+ .remove-transaction-line {
+     border-color:white;
+     color:red;
+ }

@@ -8,6 +8,7 @@ use app\models\Product;
 use app\models\Order;
 use app\models\Transaction;
 use app\models\AddressSearch;
+use app\models\Category;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\web\Response;
 use yii\web\NotFoundHttpException;
@@ -38,9 +39,35 @@ class RegistrationController extends \yii\web\Controller
     // they are displayed as a checkbox list in the first col
     private $_firstClassProductIds = [ 1, 2, 3];
 
+    private $_class1Products = [
+        'modelId' => [7, 10],
+        'categoryId' => [1]
+    ];
+
+    private function buildModelIdList($conf)
+    {
+        $result = [];
+        $query = Product::find()
+            ->select('id')
+            ->asArray();
+
+        if (array_key_exists('modelId', $conf) && is_array($conf['modelId'])) {
+            $query->andWhere([ 'in', 'id', $conf['modelId']]);
+        }
+        if (array_key_exists('categoryId', $conf) && is_array($conf['categoryId'])) {
+            $query->orWhere([ 'in', 'category_id', $conf['categoryId']]);
+        }
+        $rows = $query->all();
+        foreach ($rows as $product) {
+            $result[] = $product['id'];
+        }
+    }
+
+
     public function init()
     {
         parent::init();
+        $this->buildModelIdList($this->_class1Products);
     }
 
     /**
@@ -93,10 +120,10 @@ class RegistrationController extends \yii\web\Controller
                 }
                 if ( $foundProduct !== null) {
                     $order['product_name'] = $foundProduct['name'];
-                    return $order;
                 } else {
-                    throw new Exception('missing product');
+                    $order['product_name'] = '??????';
                 }
+                return $order;
             },  $session[self::SESS_ORDERS]);
         }
         
@@ -367,11 +394,13 @@ class RegistrationController extends \yii\web\Controller
                 Yii::$app->session[self::SESS_PRODUCTS] = $model->querySelectedProductModels()
                     ->asArray()
                     ->all();
+                Yii::$app->session->remove(self::SESS_ORDERS);
                 return $this->redirect(['order']);
             }
         }
 
         // prepare to render the view
+        // we need the producrt id => name map only for product rendered as checkbox list
         $rows = \app\models\Product::find()
             ->where(['in', 'id', $this->_firstClassProductIds])
             ->asArray()
@@ -399,8 +428,6 @@ class RegistrationController extends \yii\web\Controller
             return $this->redirect(['product-select']);
         }
 
-        $productModels = new ProductSelectionForm();
-        $productModels->setCategory1ProductIds($this->_firstClassProductIds);
         $orderModels = [];
         $products = []; // for rendering only
 
@@ -458,8 +485,8 @@ class RegistrationController extends \yii\web\Controller
         // render Wizard step
         return $this->renderWizard(
             $this->renderPartial('_order', [
-                'orderModels' => $orderModels,
-                'products' => $products,
+                'orderModels'     => $orderModels,
+                'products'        => $products,
                 'orderTotalValue' => $orderTotalValue
             ])
         );

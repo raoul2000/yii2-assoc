@@ -51,7 +51,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
         <div class="toolbar" style="margin-bottom:1em;">
             <?= Html::button(
                 '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' . \Yii::t('app', 'add transaction'), 
-                ['class' => 'btn btn-success', 'data-action' => 'add-transaction']
+                ['class' => 'btn btn-warning', 'data-action' => 'add-transaction']
             ) ?>
         </div>
 
@@ -79,7 +79,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                                 echo Html::button(
                                     '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>',
                                     [
-                                        'class' => 'btn btn-default btn-sm', 
+                                        'class' => 'btn btn-default btn-sm remove-transaction-line', 
                                         'data-action' => 'remove-transaction', 
                                         'data-index' => $index,
                                         'title' => 'remove'
@@ -101,8 +101,9 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                 ['class' => 'btn btn-primary']
             )?>
             <?= Html::submitButton(
-                \Yii::t('app', 'Next') . ' <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>',
-                ['class' => 'btn btn-primary']
+                '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '
+                    . \Yii::t('app', 'Finish and save') ,
+                ['class' => 'btn btn-success']
             )?>
         </div>
     <?php ActiveForm::end(); ?>
