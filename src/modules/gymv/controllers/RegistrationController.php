@@ -47,6 +47,25 @@ class RegistrationController extends \yii\web\Controller
     private $_class2Products = [
         'categoryId' => [1]
     ];
+
+    private function createDefaultTransaction($attr = null) 
+    {
+        $transaction = new Transaction([
+            'from_account_id'   =>  SessionContact::getBankAccountId(),
+            'to_account_id'     =>  SessionContact::getBankAccountId(),    
+            'value'             =>  0,
+            'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
+            'code'              =>  '',
+            'category_id'       =>  ( !empty(Yii::$app->params['registration.transaction.categoryId'])
+                ? Yii::$app->params['registration.transaction.categoryId']
+                : null),
+            'reference_date'    => date('d/m/Y') // only the first transaction has reference date initialized                    
+        ]);        
+        if (!empty($attr)) {
+            $transaction->setAttributes($attr, false);
+        }
+        return $transaction;
+    }
     private function buildModelIdList($conf)
     {
         $result = [];
@@ -554,16 +573,9 @@ class RegistrationController extends \yii\web\Controller
         if (Yii::$app->request->isGet) {
             // displaying the form : initialize the transaction list with one transaction
             // to cover all order(s) value
-            $transaction = new Transaction([
-                'from_account_id'   =>  SessionContact::getBankAccountId(),
-                'to_account_id'     =>  SessionContact::getBankAccountId(),    
-                'value'             =>  $orderTotalValue,
-                'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
-                'code'              =>  '',
-                'category_id'       =>  self::DEFAULT_TRANSACTION_CATEGORY_ID,                   
-                'reference_date'    => date('d/m/Y') // only the first transaction has reference date initialized
+            $transactionModels[] = $this->createDefaultTransaction([
+                'value' => $orderTotalValue
             ]);
-            $transactionModels[] = $transaction;
         } else {
             // POST request : user submit the form fot save or ad/remove transactions
 
@@ -571,15 +583,7 @@ class RegistrationController extends \yii\web\Controller
             // 1. create all as empty models 
             $trForms = Yii::$app->request->post('Transaction');
             for ($i=0; $i < count($trForms); $i++) { 
-                $transactionModels[] = new Transaction([
-                    'from_account_id'   =>  SessionContact::getBankAccountId(),
-                    'to_account_id'     =>  SessionContact::getBankAccountId(),    
-                    'value'             =>  $orderTotalValue,
-                    'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
-                    'code'              =>  '',
-                    'category_id'       =>  self::DEFAULT_TRANSACTION_CATEGORY_ID,                   
-                    'reference_date'    => date('d/m/Y') // only the first transaction has reference date initialized                    
-                ]);
+                $transactionModels[] = $this->createDefaultTransaction();
             }
             // 2. use "loadMultiple" to assign value to model attributes
             Model::loadMultiple($transactionModels, Yii::$app->request->post());
@@ -596,23 +600,9 @@ class RegistrationController extends \yii\web\Controller
             $action = Yii::$app->request->post('action');
             switch ($action) {
                 case 'add-transaction': ////////////////////////////////////////////////////////
-                    $transaction = new Transaction([
-                        'from_account_id'   =>  SessionContact::getBankAccountId(),
-                        'to_account_id'     =>  SessionContact::getBankAccountId(),    
-                        'value'             =>  $orderTotalValue,
-                        'type'              =>  self::DEFAULT_TRANSACTION_TYPE,
-                        'code'              =>  '',
-                        'category_id'       =>  self::DEFAULT_TRANSACTION_CATEGORY_ID,                        
+                    $transactionModels[] = $this->createDefaultTransaction([
+                        'reference_date' => null
                     ]);
-                    /*
-                    $transaction->from_account_id = SessionContact::getBankAccountId();
-                    $transaction->to_account_id = SessionContact::getBankAccountId();    
-                    $transaction->value = $orderTotalValue;
-                    $transaction->type = 'CHQ';
-                    $transaction->code = '';
-                    $transaction->category_id = '';
-                    */
-                    $transactionModels[] = $transaction;
                     break;
 
                 case 'remove-transaction': ////////////////////////////////////////////////////////

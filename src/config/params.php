@@ -93,11 +93,13 @@ return [
      */
     'registration.product.group' => [
         'group-1' => [
-            'productId' => [1,2, 3, 10],
+            'productId' => [11,12, 13],
             //'categoryId' => [1]
         ],
         'group-2' => [
-            'categoryId' => [1]            
+            'categoryId' => [10]            
         ],
-    ]
+    ],
+    // transaction created during registration are assigned this category Id
+    'registration.transaction.categoryId' => 3
 ];
