@@ -72,6 +72,13 @@
  * Wizard Summary Col
  */
 
+ #wiz-summary .contact > span {
+     display: block;
+ }
+ #wiz-summary .contact .fullname {
+     font-weight: bold;
+ }
+
  #wiz-summary .product-line {
     border-bottom: 1px dotted #a0a0a0;
     height: 1em;
