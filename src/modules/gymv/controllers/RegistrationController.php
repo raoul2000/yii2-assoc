@@ -27,27 +27,34 @@ class RegistrationController extends \yii\web\Controller
     const SESS_ORDERS       = 'registration.orders';
     const SESS_TRANSACTIONS = 'registration.transactions';
 
-
     const DEFAULT_TRANSACTION_CATEGORY_ID = 2;
     const DEFAULT_TRANSACTION_TYPE = 'CHQ';
 
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' =>  \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
 
-    private $_step = ['contact', 'address', 'order', 'transaction'];
-    private $_currentStep = 'contact';
-
-    // This is the configured list of ids for first class products 
-    // they are displayed as a checkbox list in the first col
-    private $_firstClassProductIds = [ 1, 2, 3];
-
-    private $_class1Products = [
-        'modelId' => [7, 10],
-        'categoryId' => [1]
-    ];
-
-    private $_class2Products = [
-        'categoryId' => [1]
-    ];
-
+    /**
+     * Create a default Transaction model suitable for registration
+     * Default attributes can be overloaded with the ones passed as argument
+     * 
+     * @param [type] $attr optional attributes to overload default ones
+     * @return Transaction
+     */
     private function createDefaultTransaction($attr = null) 
     {
         $transaction = new Transaction([
@@ -66,6 +73,16 @@ class RegistrationController extends \yii\web\Controller
         }
         return $transaction;
     }
+
+    /**
+     * Create and returns a list of Products Ids according to configuration
+     * 
+     * This function is used in the product-select step, to group products and display
+     * each group in a differen way (see params.php)
+     *
+     * @param [type] $conf
+     * @return void
+     */
     private function buildModelIdList($conf)
     {
         $result = [];
@@ -87,38 +104,21 @@ class RegistrationController extends \yii\web\Controller
     }
 
 
-    public function init()
-    {
-        parent::init();
-        $this->_firstClassProductIds = $this->buildModelIdList($this->_class1Products);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' =>  \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ]
-                ],
-            ],
-        ];
-    }
-
     private function renderWizard($mainContent)
     {
         return $this->render('index', [
             'wizMain'    => $mainContent,
             'wizSummary' => $this->buildWizSummary(),
         ]);
-
     }
+    /**
+     * Builds and returns the HTML to render the summary area of the wizard
+     * 
+     * The summary area contains information describing already provided data. It
+     * is display on the rigt side of the wizard
+     *
+     * @return string HTML of the summary view
+     */
     private function buildWizSummary()
     {
         $data = [];
@@ -299,9 +299,6 @@ class RegistrationController extends \yii\web\Controller
             ];
         }, $dbRows);
 
-        
-        // building response body
-        
         // done : return response
         return $dbResult + $wsResult;
     }
@@ -389,7 +386,6 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
-
     public function actionAjaxProductSearch()
     {
         if (!Yii::$app->request->isAjax) {
@@ -410,7 +406,6 @@ class RegistrationController extends \yii\web\Controller
             ->where(['LIKE', 'name', $productName])
             ->asArray();
 
-        //$product_category_2 = $this->buildModelIdList($this->_class2Products);
         $product_group_2 = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_2);        
         if ( count($product_group_2) > 0) {
             $query->andWhere(['IN', 'id', $product_group_2 ]);
@@ -490,7 +485,7 @@ class RegistrationController extends \yii\web\Controller
         $fromContactID = \app\components\SessionContact::getContactId();
 
         foreach (Yii::$app->session[self::SESS_PRODUCTS] as $product) {
-            $order = new Order();
+            
             // compute date range values
             $dateStart = SessionDateRange::getStart();
             if (!empty($product['valid_date_start'])) {
@@ -500,8 +495,7 @@ class RegistrationController extends \yii\web\Controller
             if (!empty($product['valid_date_end'])) {
                 $dateEnd = $product['valid_date_end'];
             }
-
-            $order->setAttributes([
+            $order = new Order([
                 'product_id'       => $product['id'],
                 // by CONVENTION : because the contact may be new and so, doesn't have any id,
                 // we temporary set the to_contact_id with the same value as the from_contact_id set the
@@ -511,7 +505,7 @@ class RegistrationController extends \yii\web\Controller
                 'value'            => $product['value'],
                 'valid_date_start' => DateHelper::toDateAppFormat($dateStart),
                 'valid_date_end'   => DateHelper::toDateAppFormat($dateEnd),
-            ], false);
+            ]);
             $orderModels[] = $order;
 
             // we need product name for rendering

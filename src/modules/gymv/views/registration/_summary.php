@@ -20,9 +20,13 @@ use yii\web\View;
             <span class="fullname">
                 <?= Html::encode($data['contact']['name'] . ' ' . $data['contact']['firstname']) ?>
             </span>
-            <span class="birthday">
-                birthday : <?= Html::encode($data['contact']['birthday']) ?>
-            </span>
+
+            <?php if(!empty($data['contact']['birthday'])): ?>
+                <span class="birthday">
+                    birthday : <?= Html::encode($data['contact']['birthday']) ?>
+                </span>
+            <?php endif; ?>
+
             <?php if(!empty($data['contact']['email'])): ?>
                 <span class="email">
                     email : <?= Html::a($data['contact']['email'], null, ['href' => $data['contact']['email']]) ?>
