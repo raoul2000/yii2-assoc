@@ -142,6 +142,41 @@
      border-color:white;
      color:red;
  }
+ #wiz-transaction td.total-label {
+     font-size:1.3em;
+     text-align: right;
+ }
+ #wiz-transaction td.total-value {
+    font-size:1.3em;
+    text-align: right;
+ }
+ 
+ #wiz-transaction .expected-total {
+     color:gray;
+     font-size:0.8em;
+     margin-left:1em;
+ }
+
+#wiz-transaction #diff-marker {
+     float: left;
+ }
+ 
+#wiz-transaction #diff-marker.no-match  span.glyphicon-ok,
+#wiz-transaction #diff-marker .glyphicon-remove {
+     display:none;
+ }
+ 
+#wiz-transaction #diff-marker.no-match .glyphicon-remove {
+    display:block;
+}
+
+#wiz-transaction #diff-marker .glyphicon-ok {
+     color:green;
+}
+
+#wiz-transaction #diff-marker .glyphicon-remove {
+    color:red;
+}
  /* /transaction */
 
 

@@ -89,6 +89,22 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                         </td>
                     </tr>
                 <?php endforeach; ?>
+                <tr>
+                    <td>
+                    </td>
+                    <td class="total-label">
+                        Total
+                    </td>
+                    <td class="total-value">
+                        <span id="diff-marker" class="no-match">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </span>
+                        <span id="transaction-value-sum"></span><span class="expected-total"><?= $orderTotalValue ?></span>
+                        <span id="expected-total-value" data-value="<?= $orderTotalValue ?>" />
+                    </td>
+                </tr>
+
             </tbody>
         </table>
 
