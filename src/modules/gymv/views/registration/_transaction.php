@@ -17,11 +17,10 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
     </h3>
 
     <hr/>
-    <p>
-        Total : <?= $orderTotalValue ?>
-    </p>
-
-
+    <div class="alert alert-info">
+        <b>Total To Pay : <?= $orderTotalValue ?></b><br/>
+        You can use one, two or more transaction to pay this amount. Make sure that total match.
+    </div>
 
     <?php $form = ActiveForm::begin(['options' => [ 'id' => 'transaction-manager-form', 'name' => 'tr-form']]); ?>
 
@@ -100,7 +99,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </span>
-                        <span id="transaction-value-sum"></span><span class="expected-total"><?= $orderTotalValue ?></span>
+                        <span id="transaction-value-sum"></span>
+                        <span class="expected-total" style="display:none"><?= $orderTotalValue ?></span>
                         <span id="expected-total-value" data-value="<?= $orderTotalValue ?>" />
                     </td>
                 </tr>

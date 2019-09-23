@@ -91,6 +91,7 @@ return [
      * - modelId : an array containing a list of product Ids. All products these products will be included in the group
      * - categoryId : list of product category ids. All products belonging to these categories will be included in the group
      */
+    /*
     'registration.product.group' => [
         'group-1' => [
             'productId' => [11,12, 13],
@@ -99,7 +100,18 @@ return [
         'group-2' => [
             'categoryId' => [10]            
         ],
-    ],
+    ],*/
     // transaction created during registration are assigned this category Id
-    'registration.transaction.categoryId' => 3
+    //'registration.transaction.categoryId' => 3
+    'registration.product.group' => [
+        'group-1' => [
+            'productId' => [1,2, 3, 10],
+            //'categoryId' => [1]
+        ],
+        'group-2' => [
+            'categoryId' => [1]            
+        ],    
+    ],
+    'registration.transaction.categoryId' => 2
+
 ];

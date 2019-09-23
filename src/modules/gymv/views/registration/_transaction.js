@@ -5,7 +5,8 @@
         "inputAction": document.getElementById('tr-action'),
         // (optional) : index of the transaction 
         "inputIndex": document.getElementById('tr-index'),
-        "expectedTotalValue" : document.getElementById('expected-total-value')
+        "expectedTotalValue" : document.getElementById('expected-total-value'),
+        "diffMarker" : document.getElementById('diff-marker')
     };
 
     // Handle Add/Remove Transaction /////////////////////////////////////////////////////////
@@ -53,10 +54,10 @@
             orderValueEl.textContent = sumValue == -1 ? '????' : sumValue.toFixed(2);
             orderValueEl.dataset.sumValue = sumValue;
             const expectedTotal = el.expectedTotalValue.dataset.value;
-            if(expectedTotal > sumValue) {
-                
-            } else  if(expectedTotal < sumValue) {
+            if(expectedTotal != sumValue) {
+                el.diffMarker.classList.add('no-match');
             } else {
+                el.diffMarker.classList.remove('no-match');
                 
             }
         }
