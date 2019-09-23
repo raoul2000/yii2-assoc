@@ -27,7 +27,6 @@ class RegistrationController extends \yii\web\Controller
     const SESS_ORDERS       = 'registration.orders';
     const SESS_TRANSACTIONS = 'registration.transactions';
 
-    const DEFAULT_TRANSACTION_CATEGORY_ID = 2;
     const DEFAULT_TRANSACTION_TYPE = 'CHQ';
 
     /**
@@ -683,7 +682,8 @@ class RegistrationController extends \yii\web\Controller
             return $this->redirect(['transaction']);
         }        
 
-        // let's load all models from session
+        // let's load all models from session data ////////////////////////////////////
+
         $contact = new Contact(Yii::$app->session[self::SESS_CONTACT]);
         $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
         $orders = array_map(function($orderAttr){
@@ -697,7 +697,7 @@ class RegistrationController extends \yii\web\Controller
         // save/update /////////////////////////////////////////////////////////////////
 
         if (true) {
-            // address
+            // address ----------
             // begin with address because contact has a col that points to the address record
             $isNewAddress = null;
             if( !empty($address->id)) {
@@ -713,8 +713,7 @@ class RegistrationController extends \yii\web\Controller
                 $isNewAddress = true;
             }
         
-
-            // contact
+            // contact -------------
             $lazyFromAccountId = null;
             $isNewContact = null;
             $contact->address_id = $address->id;
@@ -738,7 +737,16 @@ class RegistrationController extends \yii\web\Controller
                 $lazyFromAccountId = $bankAccount->id;            
             }
 
-            // transactions
+            $transactionValueTotal = 0;
+            foreach ($transactions as  $transaction) {
+                $transactionValueTotal += $transaction->value;
+            }
+            $orderValueTotal = 0;
+            foreach ($orders as $order) {
+                $orderValueTotal += $order->value;
+            }
+
+            // transactions ------------------
             foreach ($transactions as  $transaction) {
                 // set account id
                 // by CONVENTION, in the actionTransaction when a contact is new, the from_account_id is set
@@ -749,18 +757,20 @@ class RegistrationController extends \yii\web\Controller
                     // was not known until  then but now we know it !
                     $transaction->from_account_id = $lazyFromAccountId;
                 }
+                $transaction->orders_value_total = $orderValueTotal;
                 $transaction->save();
             }
 
-            // orders
+            // orders --------------------------
             foreach ($orders as $order) {
                 $order->to_contact_id = $contact->id;
+                $order->transactions_value_total = $transactionValueTotal;
                 $order->save();
 
                 foreach ($transactions as $transaction) {
-                    $order->linkToTransaction($transaction);
+                    $order->link('transactions', $transaction);
                 }
-            }
+            }        
 
             // clean up session data
             $this->cleanSessionData();
