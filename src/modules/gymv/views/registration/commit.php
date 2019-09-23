@@ -9,73 +9,21 @@ use yii\widgets\DetailView;
 //$this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, 'registration-address');
 ?>
 <div>
-    <h1>Commit</h1>
-    <hr/>
-    <h2>Contact</h2>
-    <?= DetailView::widget([
-        'model' => $contact,
-        'attributes' => [
-            'name',
-            'firstname',
-            'email:email',
-            'gender:gender'
-        ],
-    ]) ?>    
+    <div class="alert alert-success">
+        <b>Registration done ! Good job ... </b><br/>
+        Click on the link below to see the information about this contact.
+    </div>
 
-    <h2>Address</h2>
-    <?= DetailView::widget([
-        'model' => $address,
-        'attributes' => [
-            'line_1',
-            'line_2',
-            'line_3',
-            'zip_code',
-            'city',
-            'country',
-            'note',
-        ],
-    ]) ?>    
-
-    <h2>Orders</h2>
-    <?php 
-        $totalOrderValue = 0;
-        foreach ($orders as $order):
-    ?>
-        <h3><?=  Html::encode($order->product->name) ?></h3>
-        <?= DetailView::widget([
-            'model' => $order,
-            'attributes' => [
-                'value',
-                'valid_date_start:appDate',
-                'valid_date_end:appDate',                
-            ],
-        ]) ?>
-        <?php $totalOrderValue += $order->value; ?>
-    <?php endforeach ?>
-    <div class="pull-right">Total : <?= $totalOrderValue ?></div>
-    <div class="clearfix"></div>
-
-
-    <h2>Transactions</h2>
-    <?php $totalTransactionValue = 0; ?>
-    <?php foreach ($transactions as $transaction):?>
-        <h3><?=  Html::encode($order->product->name) ?></h3>
-        <?= DetailView::widget([
-            'model' => $transaction,
-            'attributes' => [
-                'value',
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <?= Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                . html::encode($contact->longName),
+                ['/contact/view', 'id' => $contact->id],
                 [
-                    'attribute' => 'type',
-                    'format'    => 'raw',
-                    'value'     => function ($model) {
-                        return Html::encode(\app\components\Constant::getTransactionType($model->type));
-                    }
-                ],
-                'reference_date:appDate',                
-            ],
-        ]) ?>
-         <?php $totalTransactionValue += $transaction->value; ?>
-    <?php endforeach ?>
-    <div class="pull-right">Total : <?= $totalTransactionValue ?></div>
-    <div class="clearfix"></div>    
+                    "style" => 'font-size: 4em;',
+                    'title' => 'view contact'
+                ])
+            ?>
+        </div>
+    </div>
 </div>
