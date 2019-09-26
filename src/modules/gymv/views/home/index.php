@@ -13,7 +13,7 @@ use yii\helpers\Url;
     <p>
         <?= Html::a(
             \Yii::t('app', 'registration'), 
-            ['registration'], 
+            ['/gymv/registration'], 
             ['class' => 'btn btn-primary']) 
         ?>
         <?php 
