@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `tag_has_transaction` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tag_has_transaction_transaction1`
     FOREIGN KEY (`transaction_id`)
-    REFERENCES `yii2_assoc`.`transaction` (`id`)
+    REFERENCES `transaction` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
