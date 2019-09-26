@@ -15,7 +15,7 @@ use yii\web\NotFoundHttpException;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use \app\components\Helpers\DateHelper;
+use \app\components\helpers\DateHelper;
 use \app\components\SessionDateRange;
 use \app\components\SessionContact;
 
