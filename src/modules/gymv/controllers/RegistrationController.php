@@ -105,7 +105,7 @@ class RegistrationController extends \yii\web\Controller
 
     private function renderWizard($mainContent)
     {
-        return $this->render('index', [
+        return $this->render('wizard', [
             'wizMain'    => $mainContent,
             'wizSummary' => $this->buildWizSummary(),
         ]);
@@ -794,6 +794,7 @@ class RegistrationController extends \yii\web\Controller
         Yii::$app->session->remove(self::SESS_ORDERS);
         Yii::$app->session->remove(self::SESS_TRANSACTIONS);        
     }
+
     public function actionIndex()
     {
         return $this->render('index');

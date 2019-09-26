@@ -70,7 +70,7 @@ AppAsset::register($this);
                         [
                             'label'  => \Yii::t('app', 'Registration'),
                             'encode' => false,
-                            'url'    => ['/gymv/registration/contact-search']
+                            'url'    => ['/gymv/registration']
                         ],
                         SessionContact::getContactId() !== null ? (
                             [

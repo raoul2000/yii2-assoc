@@ -6,17 +6,20 @@ use app\models\Contact;
 use yii\helpers\Url;
 use yii\web\View;
 
-/* @var $this yii\web\View */
-//$this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, 'registration-address');
-$this->registerCss(file_get_contents(__DIR__ . '/style.css'));
 ?>
-<div id="registration-wizard">
-    <div class="row">
-        <div id="wiz-main" class="col-sm-9">
-            <?= $wizMain ?>
-        </div>
-        <div id="wiz-summary" class="col-sm-3">
-            <?= $wizSummary ?>
-        </div>
-    </div>
+<div>
+    <h1>Inscription</h1>
+    <hr/>
+
+    <p>
+        Vous êtes sur le point de commencer une procédure d'inscription d'un nouvel adhérent, ou de re-inscription
+        d'un ancien adhérent déjà présent dans la système.<br/>
+        Cette procédure est simple, elle se découpe en 5 étapes à l'issue desquelles l'adhérent sera enregistré. 
+    </p>
+
+    <?= Html::a(
+        "C'est parti ...",
+        ['registration/contact-search'],
+        ['class' => 'btn btn-primary']) 
+    ?>
 </div>

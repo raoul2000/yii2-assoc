@@ -11,7 +11,11 @@ use yii\helpers\Url;
 <div>
 
     <p>
-        <?= Html::a('Enregistrement', ['cart/check-out'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(
+            \Yii::t('app', 'registration'), 
+            ['registration'], 
+            ['class' => 'btn btn-primary']) 
+        ?>
         <?php 
         // echo  Html::a('Import I-Reseau', ['contact-import/index'], ['class' => 'btn btn-primary']) 
         ?>
