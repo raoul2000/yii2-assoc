@@ -22,6 +22,8 @@ use dosamigos\datepicker\DateRangePicker;
             <div class="col-sm-6">
             
                 <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
+                
+                <?= $form->field($model, 'short_description')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 
                 <?= $form->field($model, 'value')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 

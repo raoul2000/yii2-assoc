@@ -15,7 +15,8 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property string $value
  * @property string $valid_date_start
  * @property string $valid_date_end
- * @property string $description
+ * @property string $description TEXT
+ * @property string $short_description VARCHAR(255)
  * @property int $created_at timestamp of record creation (see TimestampBehavior)
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property int $category_id
@@ -61,6 +62,7 @@ class Product extends \yii\db\ActiveRecord
             [['name', 'value'], 'required'],
             [['value'], 'number', 'min' => 0],
             [['name'], 'string', 'max' => 45],
+            [['short_description'], 'string', 'max' => 255],
             [['description'], 'safe'],
             [['name'], 'unique'],
             [['category_id'], 'integer'],
@@ -98,6 +100,7 @@ class Product extends \yii\db\ActiveRecord
             'name' => \Yii::t('app', 'Name'),
             'value' => \Yii::t('app', 'Value'),
             'description' => \Yii::t('app', 'Description'),
+            'short_description' => \Yii::t('app', 'Short Description'),
             'created_at' => \Yii::t('app', 'Created At'),
             'updated_at' => \Yii::t('app', 'Updated At'),
             'valid_date_start' => \Yii::t('app', 'Valid Date Start'),

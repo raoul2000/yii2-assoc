@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
+            'short_description',
             'value',
             [
                 'label' => \Yii::t('app', 'Category'),

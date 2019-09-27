@@ -18,7 +18,7 @@ class ProductSearch extends Product
     {
         return [
             [['id', 'created_at', 'updated_at', 'category_id'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'short_description'], 'safe'],
             [['value'], 'number'],
             
             [['valid_date_start', 'valid_date_end'], 'safe'] // handled by addSmartDateCondition
@@ -74,6 +74,7 @@ class ProductSearch extends Product
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'short_description', $this->short_description]);
 
         // apply smart filter on date
         $query->addSmartDateCondition('valid_date_start', $this);
