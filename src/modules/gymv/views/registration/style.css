@@ -185,9 +185,23 @@
   #productselectionform-product_ids label {
     display:block;
 }
+
 .product-result {
     margin:4px;
 }
+
+.product-result .product-name, 
+.product-result .product-short-description {
+    display:block;
+}
+.product-result .product-short-description {
+    padding-left:1.7em;
+    font-size:80%;
+    line-height: 120%;
+    color:grey;
+}
+
+
 .selected-product-item {
     float:left;
     width: 100%;
@@ -201,4 +215,16 @@
     color: red;
     cursor:pointer;
 }
+
+.selected-product-item .product-name, 
+.selected-product-item .product-short-description {
+    display:block;
+}
+.selected-product-item .product-short-description {
+    padding-left:1.7em;
+    font-size:80%;
+    line-height: 120%;
+    color:grey;
+}
+
 /* /products */  

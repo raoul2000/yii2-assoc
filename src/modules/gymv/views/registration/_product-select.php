@@ -50,13 +50,20 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                                         this.productItemsData = {};
                                     }
                                     this.productItemsData[item.id] = item;
-                                    return '<div>' 
-                                        + '<span class=\"product-result\">'
+                                    const html ='<div class=\"product-result\">' 
+                                        + '<span class=\"product-name\">'
                                             + '<span class=\"glyphicon glyphicon-gift\" aria-hidden=\"true\"></span> ' 
-                                                + escape(item.name)
-                                            + '</span>'
-                                        + '</span>' 
+                                            + escape(item.name)
+                                        + '</span>'
+                                        + ( item.short_description 
+                                            ? '<span class=\"product-short-description\">'
+                                                + escape(item.short_description)
+                                                + '</span>'
+                                            : ''
+                                        )
+                                        + 
                                     + '</div>';
+                                    return html;
                                 }
                             ")
                         ],
@@ -80,6 +87,13 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                             <span class="product-name">
                                 <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> <?= Html::encode($products_2[$productId]['name']) ?>
                             </span>
+
+                            <?php if (!empty($products_2[$productId]['short_description'])): ?>
+                                <span class="product-short-description">
+                                    <?= Html::encode($products_2[$productId]['short_description']) ?>
+                                </span>
+                            <?php endif; ?>
+
                             <input type="hidden" name="ProductSelectionForm[product_ids][]" value="<?= $productId ?>">
                         </div>
                     <?php endforeach ?>
