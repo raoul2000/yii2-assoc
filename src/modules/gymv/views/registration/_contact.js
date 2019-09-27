@@ -15,6 +15,8 @@
     };
 
     const contactSearchUrl = el.contactSearchUrl.value;
+    
+    const escapeHTML = (txt) => document.createElement('div').appendChild(document.createTextNode(txt)).parentNode.innerHTML; 
 
     const sendSearchContactRequest = (name) => new Promise((resolve, reject) => {
         // @ts-ignore
@@ -42,7 +44,7 @@
             //render result list
             el.contactResultInfo.innerHTML = `${results.length} result(s) found`;
             el.contactSearchResultList.innerHTML = results.map( contact => {
-                return `<a href="#" data-action="select-contact" data-contact-id="${contact.id}">${contact.name}</a>`;
+                return `<a href="#" data-action="select-contact" data-contact-id="${contact.id}">${escapeHTML(contact.name)}</a>`;
             }).join('\n');
 
         }

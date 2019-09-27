@@ -3,6 +3,8 @@
         "selectedProductList" : document.getElementById('selected-product-list'),
     };
     
+    const escapeHTML = (txt) => document.createElement('div').appendChild(document.createTextNode(txt)).parentNode.innerHTML; 
+
     const addToSelectedProducts = (product) => {
         console.log("adding product ", product);
         // prevent multiselection of the same product
@@ -16,11 +18,11 @@
                     <span data-action="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </div>
                 <span class="product-name">
-                    <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> ${product.name}
+                    <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> ${escapeHTML(product.name)}
                 </span>`
                 + ( product.short_description 
                         ? `<span class="product-short-description">
-                                ${product.short_description}
+                                ${escapeHTML(product.short_description)}
                             </span>`
                         : ''
                     )

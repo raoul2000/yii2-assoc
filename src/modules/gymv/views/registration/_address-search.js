@@ -12,6 +12,8 @@
     };
     let addressData = [];
 
+    const escapeHTML = (txt) => document.createElement('div').appendChild(document.createTextNode(txt)).parentNode.innerHTML; 
+
     const sendSearchAddressRequest = (address, city) => new Promise((resolve, reject) => {
         // @ts-ignore
         $.getJSON("?r=gymv/registration/ajax-address-search", { "address": address, "city": city }, function (data) {
@@ -30,7 +32,9 @@
         el.addressSearchResultList.innerHTML = results.map( (result, index) => {
             let extraInfoLine = 'from api-adresse.data.gouv.fr';
             if (result.id) {
-                extraInfoLine = `<a href="${result.urlView}" target="_blank" class="view-address"> view </a>`;
+                extraInfoLine = `
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
+                <a href="${result.urlView}" target="_blank" class="view-address"> view </a>`;
             }
             return `
             <div class="result-address-item" data-item-id="${result.id}" data-index="${index}">
@@ -38,11 +42,18 @@
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> 
                 </div>
                
-                <span class="address-name"> ${result.address}</span>
-                <span class="address-zip">${result.zip_code}</span>
-                <span class="address-city">${result.city}</span>
-                <span class="address-country">${result.country}</span>
-                <span class="extra-info-line">${extraInfoLine}</span>
+                <span class="address-name"> ${escapeHTML(result.address)}</span>
+                <span class="address-zip">${escapeHTML(result.zip_code)}</span>
+                <span class="address-city">${escapeHTML(result.city)}</span>
+                <span class="address-country">${escapeHTML(result.country)}</span>` 
+                + ( result.id 
+                        ? `<span class="extra-info-line">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
+                                <a href="${result.urlView}" target="_blank" class="view-address"> view </a>
+                            </span>`
+                        : ''
+                    )
+                + `
             </div>`;
         }).join('\n');
     };
