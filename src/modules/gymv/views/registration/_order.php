@@ -40,8 +40,18 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
                 <?php foreach ($orderModels as $index => $order):?>
                     <tr>
                         <td width="50%">
-                            <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 
-                            <?= Html::encode($products[$order->product_id]['name']) ?>
+                            <div class="product-result">
+                                <span class="product-name">
+                                    <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 
+                                    <?= Html::encode($products[$order->product_id]['name']) ?>
+                                </span>
+
+                                <?php if (!empty($products[$order->product_id]['short_description'])): ?>
+                                    <span class="product-short-description">
+                                        <?= Html::encode($products[$order->product_id]['short_description']) ?>
+                                    </span>
+                                <?php endif; ?>                            
+                            </div>
                         </td>
                         <td>
                             <?= $form->field($order, "[$index]valid_date_start")
