@@ -292,6 +292,7 @@ class TransactionController extends Controller
             // a new category has been entered by user : we must create a new Category entry
             if (!empty($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
+                $category->setScenario(Category::SCENARIO_INSERT);
                 $category->setAttributes([
                     //'contact_id' => SessionContact::getContactId(),   // categories are not private anymore
                     'type' => ModelRegistry::TRANSACTION,
@@ -361,6 +362,7 @@ class TransactionController extends Controller
             // a new category has been entered by user : we must create a new Category entry
             if (!empty($model->category_id) && !is_numeric($model->category_id)) {
                 $category = new Category();
+                $category->setScenario(Category::SCENARIO_INSERT);
                 $category->setAttributes([
                     //'contact_id' => SessionContact::getContactId(),   // categories are not private anymore
                     'type' => ModelRegistry::TRANSACTION,
