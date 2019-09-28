@@ -17,7 +17,7 @@
             }
         }, 0);
 
-    const computeOrderValueSum = () => computeInputValueSum('.order-value');
+    const computeOrderValueSum = () => computeInputValueSum('#wiz-order .order-value');
     const renderValueSum = (selector, sumValue) => {
         const orderValueEl = document.querySelector(selector);
         if (orderValueEl) {
