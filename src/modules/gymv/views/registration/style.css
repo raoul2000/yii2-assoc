@@ -71,6 +71,10 @@
 /* 
  * Wizard Summary Col
  */
+ #wiz-summary {
+     border-left: 1px dotted grey;
+     height: calc(100vh - 200px);
+ }
 
  #wiz-summary .contact > span {
      display: block;
