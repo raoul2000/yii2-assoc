@@ -629,12 +629,25 @@ class RegistrationController extends \yii\web\Controller
                         $totalTransaction = 0;
                         foreach ($transactionModels as $transaction) {
                             $totalTransaction += $transaction->value;
+                            // null or negative value is forbidden
+                            if ($transaction->value <=0) {
+                                $transaction->addError('value', 'please provide a value');
+                                $isValid = false;
+                            }
                         }
                         // float comparaison
                         // @see https://php.net/manual/en/language.types.float.php
                         if (abs($orderTotalValue-$totalTransaction)>0.01) {
                             Yii::$app->session->setFlash('error', "Order Sum ($orderTotalValue) and Transaction Sum ($totalTransaction) don't match");
                             $isValid = false;
+                        }
+
+                        // each transaction MUST have a reference date
+                        foreach ($transactionModels as $transaction) {
+                            if (empty($transaction->reference_date)) {
+                                $transaction->addError('reference_date', 'please provide a reference date');
+                                $isValid = false;
+                            }
                         }
 
                         // prepare the fromAccountId
