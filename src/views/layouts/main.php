@@ -13,7 +13,7 @@ use app\components\Constant;
 use yii\helpers\Url;
 use \app\components\SessionContact;
 
-
+//raoul2000\bootswatch\BootswatchAsset::$theme = 'flatly';
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>

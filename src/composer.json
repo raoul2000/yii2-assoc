@@ -31,7 +31,8 @@
         "miloschuman/yii2-highcharts-widget": "^7.0",
         "samdark/yii2-webshell": "~2.0",
         "2amigos/yii2-date-picker-widget": "~1.0",
-        "yiisoft/yii2-httpclient": "^2.0"
+        "yiisoft/yii2-httpclient": "^2.0",
+        "raoul2000/yii2-bootswatch-asset": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
