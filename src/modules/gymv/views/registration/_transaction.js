@@ -13,6 +13,9 @@
 
     const handleTransactionAction = (ev) => {
         const actionEl = ev.target.closest("[data-action]");
+        if(!actionEl) {
+            return;
+        }
         let needSubmitForm = false;
         const action = actionEl.dataset.action;
         switch (action) {
@@ -23,8 +26,6 @@
             case 'remove-transaction':
                 el.inputAction.value = action;
                 el.inputIndex.value = actionEl.dataset.index;
-                needSubmitForm = true;
-                break;
                 needSubmitForm = true;
                 break;
         }
@@ -53,8 +54,12 @@
         if (orderValueEl) {
             orderValueEl.textContent = sumValue == -1 ? '????' : sumValue.toFixed(2);
             orderValueEl.dataset.sumValue = sumValue;
-            const expectedTotal = el.expectedTotalValue.dataset.value;
-            if(expectedTotal != sumValue) {
+            // round 2 digit after coma
+            const expectedTotal = Math.round(parseFloat(el.expectedTotalValue.dataset.value) * 100) / 100; 
+            // round 2 digit after coma
+            const sumValueRound = Math.round(sumValue * 100) / 100;
+            // compare floats
+            if(expectedTotal != sumValueRound) {
                 el.diffMarker.classList.add('no-match');
             } else {
                 el.diffMarker.classList.remove('no-match');
