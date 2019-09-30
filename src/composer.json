@@ -41,10 +41,7 @@
 
         "codeception/base": "~2.3.0",
         "codeception/verify": "~0.4.0",
-        "codeception/specify": "~0.4.6",
-
-        "phing/phing": "2.*",
-        "pear/net_ftp": "dev-master"
+        "codeception/specify": "~0.4.6"
 
     },
     "config": {
