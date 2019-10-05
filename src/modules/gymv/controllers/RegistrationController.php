@@ -433,24 +433,8 @@ class RegistrationController extends \yii\web\Controller
         }
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
-        // select products for group 1
-        $productOtherCity = [15];
-        $productSameCity = [14];
         $model = new ProductSelectionForm();
-        $firstClassProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_1); 
-        // remove some product depending on address location (city/zipcode)
-        $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
-        if( $address->zip_code === "94300" || strtoupper($address->city) === "VINCENNES") {
-            $firstClassProductIds = array_filter($firstClassProductIds, function($productId){
-                return ! \in_array($productId, $productOtherCity);
-            });
-        } else {
-            $firstClassProductIds = array_filter($firstClassProductIds, function($productId){
-                return ! \in_array($productId, $productSameCity);
-            });
-        }
-        $model->setCategory1ProductIds($firstClassProductIds);
-
+        
         if (Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS)) {
             foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
                 $model->product_ids[] = $productAttributes['id'];
@@ -466,6 +450,24 @@ class RegistrationController extends \yii\web\Controller
                 return $this->redirect(['order']);
             }
         }
+
+        // select products for group 1
+        $productOtherCity = [15];
+        $productSameCity = [14];
+        
+        $firstClassProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_1); 
+        // remove some product depending on address location (city/zipcode)
+        $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
+        if( $address->zip_code === "94300" || strtoupper($address->city) === "VINCENNES") {
+            $firstClassProductIds = array_filter($firstClassProductIds, function($productId) use($productOtherCity) {
+                return ! \in_array($productId, $productOtherCity);
+            });
+        } else {
+            $firstClassProductIds = array_filter($firstClassProductIds, function($productId) use ($productSameCity) {
+                return ! \in_array($productId, $productSameCity);
+            });
+        }
+        $model->setCategory1ProductIds($firstClassProductIds);
 
         // prepare to render the view
         // we need the producrt id => name map only for product rendered as checkbox list
