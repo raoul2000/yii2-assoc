@@ -385,6 +385,12 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+    /**
+     * Search product given parts on the name.
+     * Only products in group_2 are searched
+     *
+     * @return void
+     */
     public function actionAjaxProductSearch()
     {
         if (!Yii::$app->request->isAjax) {
@@ -400,7 +406,7 @@ class RegistrationController extends \yii\web\Controller
         // preparing the response format
         Yii::$app->response->format = Response::FORMAT_JSON; 
 
-        // searching product in the DB
+        // searching product in the DB : name and belong to group 2
         $query = Product::find()
             ->where(['LIKE', 'name', $productName])
             ->asArray();
@@ -427,9 +433,22 @@ class RegistrationController extends \yii\web\Controller
         }
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
+        // select products for group 1
+        $productOtherCity = [15];
+        $productSameCity = [14];
         $model = new ProductSelectionForm();
-        
         $firstClassProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_1); 
+        // remove some product depending on address location (city/zipcode)
+        $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
+        if( $address->zip_code === "94300" || strtoupper($address->city) === "VINCENNES") {
+            $firstClassProductIds = array_filter($firstClassProductIds, function($productId){
+                return ! \in_array($productId, $productOtherCity);
+            });
+        } else {
+            $firstClassProductIds = array_filter($firstClassProductIds, function($productId){
+                return ! \in_array($productId, $productSameCity);
+            });
+        }
         $model->setCategory1ProductIds($firstClassProductIds);
 
         if (Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS)) {
