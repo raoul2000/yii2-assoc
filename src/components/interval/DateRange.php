@@ -131,7 +131,8 @@ class DateRange {
         ) {
             return true;
         }
-
+// TODO: to continue
+/*
         if ($this->isRightOpened() &&
             (
                 (
@@ -147,7 +148,7 @@ class DateRange {
         ) {
             return true;
         }
-
+*/
 
 
     }
