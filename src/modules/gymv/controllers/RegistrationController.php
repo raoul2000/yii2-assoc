@@ -477,6 +477,8 @@ class RegistrationController extends \yii\web\Controller
         
         $firstClassProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_1); 
         // remove some product depending on address location (city/zipcode)
+        // This feature is disabled 
+        /*
         $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
         if( $address->zip_code === "94300" || strtoupper($address->city) === "VINCENNES") {
             $firstClassProductIds = array_filter($firstClassProductIds, function($productId) use($productOtherCity) {
@@ -487,6 +489,7 @@ class RegistrationController extends \yii\web\Controller
                 return ! \in_array($productId, $productSameCity);
             });
         }
+        */
         $model->setCategory1ProductIds($firstClassProductIds);
 
         // prepare to render the view
