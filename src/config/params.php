@@ -22,6 +22,7 @@ return [
             'start' => '2019-09-01',
             'end'   => '2020-08-30'
         ],
+        // example of dynamic date range 01/09/Y - 31/08/Y+1
         'saison en cours' => [
             'start' => function() {
                 $now = new DateTime('now');

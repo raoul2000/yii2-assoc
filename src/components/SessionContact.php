@@ -15,6 +15,11 @@ class SessionContact
         Yii::$app->session->remove(Constant::SESS_BANK_ACCOUNT);
     }
 
+    /**
+     * Loads configured contact data into current Session
+     *
+     * @return void
+     */
     public static function loadFromConfig()
     {
         $conf = Yii::$app->configManager;

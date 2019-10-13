@@ -102,8 +102,8 @@ class SessionDateRange
     }
 
     /**
-     * Load Default Date Range from config.
-     * Tha configured value must be the same as the configured date range key
+     * Load Default Date Range from config into Session.
+     * The configured value must be the same as the configured date range key
      *
      * @return void
      */
