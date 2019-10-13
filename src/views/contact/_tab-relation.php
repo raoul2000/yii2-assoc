@@ -37,7 +37,7 @@ use yii\helpers\Html;
                             :  Html::a(
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
                                     . Html::encode($relation->sourceContact->longName),
-                                ['contact/view', 'id' => $relation->sourceContact->id],
+                                ['contact/view', 'id' => $relation->sourceContact->id, 'tab' => 'relation'],
                                 ['title' => 'View contact']
                             )
                         )?>
@@ -59,7 +59,7 @@ use yii\helpers\Html;
                             :  Html::a(
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
                                     . Html::encode($relation->targetContact->longName),
-                                ['contact/view', 'id' => $relation->targetContact->id],
+                                ['contact/view', 'id' => $relation->targetContact->id, 'tab' => 'relation'],
                                 ['title' => 'View contact']
                             )
                         )?>

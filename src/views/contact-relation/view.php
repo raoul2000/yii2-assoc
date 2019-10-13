@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(
                         '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
                             Html::encode($model->sourceContact->longName),
-                        ['contact/view','id'=>$model->source_contact_id],
+                        ['contact/view','id'=>$model->source_contact_id, 'tab' => 'relation'],
                         [ 'title' => 'view contact' ]
                     );
                 }
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(
                         '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .
                             Html::encode($model->targetContact->longName),
-                        ['contact/view','id'=>$model->target_contact_id],
+                        ['contact/view','id'=>$model->target_contact_id, 'tab' => 'relation'],
                         [ 'title' => 'view contact' ]
                     );
                 }

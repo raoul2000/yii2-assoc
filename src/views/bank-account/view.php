@@ -45,7 +45,7 @@ $bankAccountModel = $model;
                 'value' => function ($model) {
                     return Html::a(
                         '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' .  Html::encode($model->contact_name),
-                        ['contact/view', 'id' => $model->contact_id],
+                        ['contact/view', 'id' => $model->contact_id, 'tab'=>'account'],
                         ['title' => 'view contact']
                     );
                 }

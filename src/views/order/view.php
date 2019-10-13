@@ -59,7 +59,7 @@ $orderModel = $model;
                         'value' => function ($model) {
                             return Html::a(
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . Html::encode($model->fromContact->name),
-                                ['contact/view','id' => $model->fromContact->id],
+                                ['contact/view','id' => $model->fromContact->id, 'tab' => 'order'],
                                 ['title' => 'view contact']
                             );
                         }
@@ -70,7 +70,7 @@ $orderModel = $model;
                         'value' => function ($model) {
                             return Html::a(
                                 '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> ' . Html::encode($model->toContact->longName),
-                                ['contact/view','id' => $model->toContact->id],
+                                ['contact/view','id' => $model->toContact->id, 'tab' => 'order'],
                                 ['title' => 'view contact']
                             );
                         }

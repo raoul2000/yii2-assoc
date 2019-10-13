@@ -4,7 +4,7 @@ use yii\grid\GridView;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
-
+$currentContactId = $model->id;
 ?>
 
 <div>
@@ -30,13 +30,18 @@ use yii\widgets\Pjax;
                 'attribute' => 'from_contact_id',
                 'filter'    => $contacts,
                 'format'    => 'raw',
-                'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
-                            . Html::encode($contacts[$model->from_contact_id]),
-                        ['contact/view','id'=>$model->from_contact_id],
-                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
-                    );
+                'value'     => function ($model, $key, $index, $column) use ($contacts, $currentContactId) {
+                    if ($model->from_contact_id == $currentContactId) {
+                        return '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($contacts[$model->from_contact_id]);
+                    } else {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                . Html::encode($contacts[$model->from_contact_id]),
+                            ['contact/view','id'=>$model->from_contact_id, 'tab' => 'order'],
+                            [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
+                        );
+                    }
                 }
             ],
             [
@@ -57,13 +62,18 @@ use yii\widgets\Pjax;
                 'attribute' => 'to_contact_id',
                 'filter'    => $contacts,
                 'format'    => 'raw',
-                'value'     => function ($model, $key, $index, $column) use ($contacts) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
-                            . Html::encode($contacts[$model->to_contact_id]),
-                        ['contact/view','id'=>$model->to_contact_id],
-                        [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
-                    );
+                'value'     => function ($model, $key, $index, $column) use ($contacts, $currentContactId) {
+                    if ($model->to_contact_id == $currentContactId) {
+                        return '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                            . Html::encode($contacts[$model->to_contact_id]);
+                    } else {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                . Html::encode($contacts[$model->to_contact_id]),
+                            ['contact/view','id'=>$model->to_contact_id, 'tab' => 'order'],
+                            [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
+                        );
+                    }
                 }
             ],
             'value',

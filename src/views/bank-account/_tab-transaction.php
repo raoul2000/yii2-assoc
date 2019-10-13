@@ -22,7 +22,7 @@ $bankAccountModel = $model;
         <?= \app\components\widgets\DownloadDataGrid::widget() ?>            
     </p>
     <?php 
-        Pjax::begin(); 
+        // Pjax::begin(); 
     ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
@@ -74,7 +74,7 @@ $bankAccountModel = $model;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-euro" aria-hidden="true"></span> '
                                     . Html::encode($transactionModel->toAccount->contact_name),
-                                ['contact/view','id'=>$transactionModel->toAccount->id],
+                                ['bank-account/view','id'=>$transactionModel->toAccount->id],
                                 ['data-pjax' => 0, 'title' => \Yii::t('app', 'view account')]
                             );
                         } else {
@@ -119,6 +119,6 @@ $bankAccountModel = $model;
             ],
         ]); ?>
     <?php 
-        Pjax::end(); 
+       // Pjax::end(); 
     ?>
 </div>
