@@ -6,9 +6,9 @@ use yii\helpers\Html;
 use \yii\helpers\VarDumper;
 
 $this->title = $model->longName;
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Contacts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->longName, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Orders Summary';
+$this->params['breadcrumbs'][] = \Yii::t('app', 'Orders Summary');
 \yii\web\YiiAsset::register($this);
 
 ?>

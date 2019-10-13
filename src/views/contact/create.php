@@ -5,12 +5,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Contact */
 
-$this->title = 'Create Contact';
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
+$this->title = \Yii::t('app', 'Create Contact');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Contacts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $subTitle = '';
 if (isset($person)) {
-    $subTitle = '<small>' . ($person == true ? 'Person' : 'Organization') . '</small>';
+    $subTitle = '<small>' . ($person == true ? \Yii::t('app', 'Person') : \Yii::t('app', 'Organization')) . '</small>';
 } 
 ?>
 <div class="contact-create">
@@ -23,13 +23,13 @@ if (isset($person)) {
     <hr/>
     <?php if ( !isset($person) ) :?>
         <p>
-            Choose the type of contact you want to create :
+            <?= \Yii::t('app', 'Choose the type of contact you want to create :') ?>
             <ul>
                 <li>
-                    <?= Html::a('A Person', ['contact/create', 'person' => true]) ?>
+                    <?= Html::a(\Yii::t('app', 'A Person'), ['contact/create', 'person' => true]) ?>
                 </li>
                 <li>
-                    <?= Html::a('A Company/Organisation', ['contact/create', 'person' => false]) ?>
+                    <?= Html::a(\Yii::t('app', 'A Company/Organisation'), ['contact/create', 'person' => false]) ?>
                 </li>
             </ul>
         </p>

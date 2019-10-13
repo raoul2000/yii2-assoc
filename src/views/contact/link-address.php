@@ -9,24 +9,24 @@ use yii\widgets\Pjax;
 /* @var $model app\models\Contact */
 
 $this->title = $model->longName;
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Contacts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'link Address';
+$this->params['breadcrumbs'][] = \Yii::t('app', 'link Address');
 \yii\web\YiiAsset::register($this);
 $contact = $model;
 ?>
 <div>
     <div class="alert alert-info" role="alert">
         <p>
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Please select an address to link to this contact
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <?= \Yii::t('app', 'Please select an address to link to this contact') ?>
         </p>
     </div>    
     <?php Pjax::begin(); ?>
 
         <?= GridView::widget([
-            'tableOptions'         => ['class' => 'table table-hover table-condensed'],
+            'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $addressDataProvider,
-            'filterModel' => $addressSearchModel,
+            'filterModel'  => $addressSearchModel,
             'columns' => [
                 [
                     'class'     => 'yii\grid\ActionColumn',
@@ -36,7 +36,7 @@ $contact = $model;
                             return Html::a(
                                 '<span class="glyphicon glyphicon-ok"></span>', 
                                 ['contact/link-address', 'id'=> $contact->id, 'address_id' => $address->id],
-                                ['title' => 'select this address', 'data-pjax'=>0]
+                                ['title' => \Yii::t('app', 'select this address'), 'data-pjax'=>0]
                             );
                         },
                     ]

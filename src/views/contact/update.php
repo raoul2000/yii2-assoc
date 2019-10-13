@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $model app\models\Contact */
 
 $this->title = \Yii::t('app', 'Update Contact') . ': ' . $model->longName;
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Contacts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->longName, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = \Yii::t('app', 'Update');
 
 $subTitle = '<small>' . ($model->is_natural_person == true ? \Yii::t('app', 'Person') : \Yii::t('app', 'Organization')) . '</small>';
 

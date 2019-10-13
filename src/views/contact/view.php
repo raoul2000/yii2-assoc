@@ -11,7 +11,7 @@ use yii\helpers\Url;
 /* @var $model app\models\Contact */
 
 $this->title = $model->longName;
-$this->params['breadcrumbs'][] = ['label' => 'Contacts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Contacts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 $contactModel = $model;
