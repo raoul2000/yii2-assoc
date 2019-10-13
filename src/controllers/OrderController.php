@@ -68,6 +68,13 @@ class OrderController extends Controller
             Yii::$app->request->queryParams,
             Order::find()
                 ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+        );
+        $totalValue = $dataProvider->query->sum('value'); // compute total Value
+
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            Order::find()
+                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with('transactions')
         );
 
@@ -110,7 +117,8 @@ class OrderController extends Controller
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'products' => $productIndex,
-                'contacts' => $contactIndex
+                'contacts' => $contactIndex,
+                'totalValue' => $totalValue
             ]);
         }
         

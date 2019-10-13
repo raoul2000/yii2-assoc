@@ -154,12 +154,23 @@ class TransactionController extends Controller
     {
         $searchModel = new TransactionSearch();
         $dataProvider = $searchModel->search(
-            Yii::$app->request->queryParams
+            Yii::$app->request->queryParams,
+            Transaction::find()
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
         );
+        $totalValue = $dataProvider->query->sum('value'); // compute total Value
+
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            Transaction::find()
+                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->with('orders')
+        );
+/*
         $dataProvider
             ->query
                 ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
-                ->with('orders');       
+  */              
 
         // apply tag search condition if tag values have been submitted
         $tagValues = Yii::$app->request->get('tagValues');
@@ -214,7 +225,8 @@ class TransactionController extends Controller
                 'dataProvider' => $dataProvider,
                 'bankAccounts' => $bankAccounts,
                 'tagValues'    => $tagValues,
-                'categories'   => $categories
+                'categories'   => $categories,
+                'totalValue'   => $totalValue
             ]);
         }
 

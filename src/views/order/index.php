@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php 
         Pjax::begin(); 
     ?>
+        <?= \Yii::t('app', 'Total Value') ?> : <b><?= $totalValue ?></b>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
