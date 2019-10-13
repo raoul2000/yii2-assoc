@@ -95,8 +95,8 @@ return [
     
     'registration.product.group' => [
         'group-1' => [
-            //'productId' => [11,12, 13],
-            'categoryId' => [9]
+            'productId' => [14,15,11,12,13],
+            //'categoryId' => [9]
         ],
         'group-2' => [
             'categoryId' => [10]            
