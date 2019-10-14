@@ -1,0 +1,33 @@
+JOUR;LIEUX;COURS_NUM;HEURES;COURS;RESPONSABLES;TELEPHONE;ANIMATEURS;CATEGORY
+LUNDI;Centre Georges Pompidou;1;12h15 - 13h15;Gym Tonique;Gaby SCHINAZI;06 49 07 09 51;ERIKA;cours adulte - salle
+LUNDI;Gymnase Parc du Château;30;09h00 - 10h00;Gym Entretien/Etirements;Jeannine PERUCCA;06 74 61 07 20;SOPHIE;cours adulte - salle
+LUNDI;Gymnase Parc du Château;31;10h00 - 11h00;Gym Pilates;Annick.ENCOIGNARD;06 87 06 21 80;SOPHIE;cours adulte - salle
+LUNDI;Gymnase Parc du Château;32;11h00 - 12h00;Gym Tonique;Muriel BONNET ;06 88 69 31 55;SOPHIE;cours adulte - salle
+LUNDI;Gymnase de Benedetti;40;10h00 - 11h00;Gym Entretien/Etirements;Simone SCHUHMACHER;06 83 99 13 24;ERIKA;cours adulte - salle
+MARDI;Centre Georges Pompidou;2;09h00 - 10h00;Gym Tonique;Nicole BEZIAUD;06 05 12 31 76;CAROLINE;cours adulte - salle
+MARDI;Centre Georges Pompidou;3;10h00 - 11h00;Gym Entretien/Etirements;Véronique TARDY;06 64 09 94 13;CAROLINE;cours adulte - salle
+MARDI;Centre Georges Pompidou;4;11h00 - 12h00;Gym Tonique/Etirements;Nadine AKAB;06 10 27 37 87;CAROLINE;cours adulte - salle
+MARDI;Centre Georges Pompidou;5;14h00 - 15h00;Gym Entretien ;Annie CADET;06 75 39 39 98;ELODIE;cours adulte - salle
+MARDI;Gymnase de Benedetti;41;9h00 - 10h00;GymTonique;Chantal LAFFAY;06 15 12 51 58 ;STEPHANIE;cours adulte - salle
+MARDI;Gymnase de Benedetti;42;10h00 - 11h00;Gym Entretien/Etirements;Simone SCHUHMACHER;06 83 99 13 24;STEPHANIE;cours adulte - salle
+MARDI;Gymnase de Benedetti;43;11h00 - 12h00;Gym Entretien;Michèle BAJOU;06 13 67 39 34;STEPHANIE;cours adulte - salle
+MERCREDI;Centre Georges Pompidou;6;09h00 - 10h00;Gym Tonique;Chantal BOULET;06 62 66 05 74;HELENE;cours adulte - salle
+MERCREDI;Centre Georges Pompidou;7;10h00 - 11h00;Gym Tonique;;;HELENE;cours adulte - salle
+MERCREDI;Centre Georges Pompidou;8;11h00 - 12h00;Gym Douce/Relaxation;Brigitte GERMAIN;06 12 56 65 68;HELENE;cours adulte - salle
+MERCREDI;Gymnase Parc du Château;33;  10h00  -11h00;Gym Entretien/Equilibre Seniors;Françoise POTIER;06 72 20 16 31;SOPHIE;cours adulte - salle
+JEUDI;Centre Georges Pompidou;9;09h00 - 10h00;Gym Tonique;Thérèse PINET;06 13 35 86 31;MARTINE;cours adulte - salle
+JEUDI;Centre Georges Pompidou;10;10h00 - 11h00;Gym Assouplissements/Etirements;Marie Claude HOUCHOT;06 73 79 13 28;MARTINE;cours adulte - salle
+JEUDI;Centre Georges Pompidou;11;11h00 - 12h00;Gym Entretien/Etirements;Sylvette WALLOIS;06 51 16 94 51;ERIKA;cours adulte - salle
+JEUDI;Centre Georges Pompidou;12;12h30 - 13h30;Gym Tonique;Monique DUTRIEUX;06 65 18 32 14;ELODIE;cours adulte - salle
+JEUDI;Centre Georges Pompidou;13;13h45 - 15h00;Jazz/ Danse;Nicole PODOROSKI;06 30 42 62 56;ELODIE;cours adulte - salle
+JEUDI;Gymnase Parc du Château;34;09h00 -10h00;Gym Entretien/Etirements;Denise LAHAYE;06 15 97 54 95;SOPHIE;cours adulte - salle
+JEUDI;Gymnase Parc du Château;35;10h00 -11h00;Gym Tonique;Isabelle FONBONNE;06 11 11 20 28;SOPHIE;cours adulte - salle
+JEUDI;Gymnase Parc du Château;36;11h00 - 12h00;Gym Assouplissements/Etirements;Monique DALAISON ;06 50 19 24 66;SOPHIE;cours adulte - salle
+VENDREDI;Centre Georges Pompidou;14;09h00 - 10h00;Gym Tonique;Marie Claude  MOREAU;06 32 15 20 87;STEPHANIE;cours adulte - salle
+VENDREDI;Centre Georges Pompidou;15;10h00 - 11h00;Gym Tonique;Dominique CHATONNIER;06 51 81 76 63;STEPHANIE;cours adulte - salle
+VENDREDI;Centre Georges Pompidou;16;11h00 - 12h00;Gym Douce/Relaxation;Martine PENASSOU;06 60 84 17 86;STEPHANIE;cours adulte - salle
+VENDREDI;Gymnase Parc du Château;37;11h00 - 12h00;Gym Après Cancer;;;VERONIQUE;cours adulte - salle
+VENDREDI;Gymnase Louis-Georges Serre;80;09h00 - 10h00;Gym Entretien;Annie CADET;06 75 39 39 98;ELODIE;cours adulte - salle
+VENDREDI;Maison des  Associations;20;09h00 - 10h00;Gym Pilates débutants;Nicole PODOROSKI;06 30 42 62 56;SOPHIE;cours adulte - salle
+VENDREDI;Maison des  Associations;21;10h00 - 11h00;Gym Pilates;Michèle BAJOU;06 13 67 39 34;SOPHIE;cours adulte - salle
+VENDREDI;Maison des  Associations;22;11h00 - 12h00;Gym Assouplissements/Etirements;Giuseppa THOMAS ;06 43 01 85 89 ;ERIKA;cours adulte - salle
