@@ -99,7 +99,7 @@ return [
             //'categoryId' => [9]
         ],
         'group-2' => [
-            'categoryId' => [10]            
+            'categoryId' => [9,10,11]            
         ],
     ],
     // transaction created during registration are assigned this category Id

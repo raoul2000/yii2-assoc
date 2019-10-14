@@ -85,6 +85,7 @@ class ContactImportController extends Controller
             $csvRecords = $csv->getRecords(['name', 'woman_name', 'firstname','gender', 'birthday', 'license_num',
             'license_cat','residence','locality','street','zip','city','country','phone', 'mobile', 'email']);
 
+
             foreach ($csvRecords as $offset => $record) {
                 $normalizedRecord = $this->normalizeRecord($record);
 
