@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
         Import a set of products from a CSV file. Following requirements must be completed :
         <ul>
             <li>Encoding is UTF-8</li>
-            <li>columns : <b>'JOUR', 'LIEUX', 'COURS_NUM','HEURES', 'COURS', 'RESPONSABLES','TELEPHONE','ANIMATEURS','CATEGORY'</b></li>
-            <li>No extra columns</li>
+            <li>columns : <b>'JOUR', 'LIEUX', 'COURS_NUM','HEURES', 'COURS', 'RESPONSABLES','TELEPHONE','ANIMATEURS','CATEGORY', 'VALUE'</b>- any other named column is ignored</li>
+            <li>No extra empty columns</li>
         </ul>
     </p>
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>

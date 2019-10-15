@@ -83,13 +83,17 @@ class ProductController extends Controller
             $csv->setDelimiter(';');
             //$csv->setEnclosure('\'');
             $csv->setHeaderOffset(0);
-            $csvRecords = $csv->getRecords(['JOUR', 'LIEUX', 'COURS_NUM','HEURES', 'COURS', 'RESPONSABLES','TELEPHONE','ANIMATEURS','CATEGORY']);
+            $csvRecords = $csv->getRecords(['JOUR', 'LIEUX', 'COURS_NUM','HEURES', 
+                'COURS', 'RESPONSABLES','TELEPHONE','ANIMATEURS','CATEGORY',
+                'VALUE', 'VALUE1', 'VALUE2'
+            ]);
             $input_bom = $csv->getInputBOM();
 
             if ($input_bom === Reader::BOM_UTF16_LE || $input_bom === Reader::BOM_UTF16_BE) {
                 CharsetConverter::addTo($csv, 'utf-16', 'utf-8');
             }
 
+            // loop on all non empty CSV lines
             foreach ($csvRecords as $offset => $record) {
                 $normalizedRecord = $this->normalizeRecord($record);
 
@@ -115,12 +119,12 @@ class ProductController extends Controller
                     continue;
                 }
                 $product = new Product([
-                    'name' => 'cours ' . $normalizedRecord['COURS_NUM'] . ' - ' . $normalizedRecord['COURS'] ,
+                    'name'              => 'cours ' . $normalizedRecord['COURS_NUM'] . ' - ' . $normalizedRecord['COURS'] ,
                     'short_description' =>  $normalizedRecord['JOUR']
-                        . ' ' . $normalizedRecord['HEURES']
-                        . ' - ' . $normalizedRecord['LIEUX'],
-                    'value' => 0,
-                    'category_id' => $category->id
+                                                . ' ' . $normalizedRecord['HEURES']
+                                                . ' - ' . $normalizedRecord['LIEUX'],
+                    'value'             => $normalizedRecord['VALUE'],
+                    'category_id'       => $category->id
                 ]);
                 $product->save();
                 $productInserted[] = $product;
