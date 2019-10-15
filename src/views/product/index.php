@@ -19,8 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
 
     <hr/>
-    
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a(\Yii::t('app', 'Create Product'), ['create'], ['class' => 'btn btn-success']) ?>
@@ -35,20 +33,34 @@ $this->params['breadcrumbs'][] = $this->title;
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => [
-                'name',
-                'short_description',
-                'value',
+                [
+                    'attribute' => 'name',
+                    'contentOptions' => ['nowrap' => 'nowrap']
+                ],                
+                [
+                    'attribute' => 'short_description',
+                    'format'    => 'raw',
+                    'value'     => function ($model, $key, $index, $column){
+                        return '<small>' . Html::encode($model->short_description) . '</small>';
+                    }
+                ],                
+                [
+                    'attribute' => 'value',
+                    'format'    => 'raw',
+                    'value'     => function ($model, $key, $index, $column){
+                        return '<b>' . $model->value . '</b>';
+                    }
+                ],                
                 [
                     'attribute' => 'category_id',
-                    'label' => \Yii::t('app', 'Category'),
-                    'filter' => $categories,
+                    'label'     => \Yii::t('app', 'Category'),
+                    'filter'    => $categories,
                     'value'     => function ($model, $key, $index, $column) use($categories){
                         return $model->category_id != null 
                             ? Html::encode($categories[$model->category_id])
                             : null;  
                     }
                 ],
-
                 'valid_date_start:appDate',
                 'valid_date_end:appDate',
                 /*
