@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'value',
                     'format'    => 'raw',
-                    'value'     => function ($model, $key, $index, $column) use ($bankAccounts) {
+                    'value'     => function ($model, $key, $index, $column) {
                         return '<b>' . $model->value . '</b>';
                     }
                 ],
