@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <li>Encoding is UTF-8</li>
             <li>columns : <b>'JOUR', 'LIEUX', 'COURS_NUM','HEURES', 'COURS', 'RESPONSABLES','TELEPHONE','ANIMATEURS','CATEGORY', 'VALUE'</b>- any other named column is ignored</li>
             <li>No extra empty columns</li>
+            <li>If a product with the same name already exists, it is updated (but its name is not changed</li>
         </ul>
     </p>
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>

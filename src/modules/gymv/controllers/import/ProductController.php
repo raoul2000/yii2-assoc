@@ -73,13 +73,12 @@ class ProductController extends Controller
         $errorMessage = null;
         $records = [];
         $productInserted = [];
+        $productUpdated  = [];
         $categoriesInserted = [];
 
         try {
-            //$csv = Reader::createFromPath('d:\\tmp\\licencies.csv', 'r');
-            //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies-small.csv', 'r'));
+            // define CSV reader properties -------------------------------------------------
             $csv = Reader::createFromStream(fopen($importFile, 'r'));
-            //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies.csv', 'r'));
             $csv->setDelimiter(';');
             //$csv->setEnclosure('\'');
             $csv->setHeaderOffset(0);
@@ -93,49 +92,69 @@ class ProductController extends Controller
                 CharsetConverter::addTo($csv, 'utf-16', 'utf-8');
             }
 
-            // loop on all non empty CSV lines
+            // loop on all non empty CSV lines- ----------------------------------------------
             foreach ($csvRecords as $offset => $record) {
                 $normalizedRecord = $this->normalizeRecord($record);
 
-                $categoryAttributes = [
-                    'name' =>  $normalizedRecord['CATEGORY'],
-                    'type' => \app\components\ModelRegistry::PRODUCT
-                ];
-                $categories = Category::findAll($categoryAttributes);
-                if( count($categories) == 0) {
-                    $category = new Category($categoryAttributes);
-                    $category->setScenario(Category::SCENARIO_INSERT);
-                    $category->save();
-                    $categoriesInserted[] = $category;
-                } elseif (count($categories) == 1 ) {
-                    $category = $categories[0];
+                // first start with categories
+                if (!empty($normalizedRecord['CATEGORY'])) {
+                    $categoryAttributes = [
+                        'name' =>  $normalizedRecord['CATEGORY'],
+                        'type' => \app\components\ModelRegistry::PRODUCT
+                    ];
+                    $categories = Category::findAll($categoryAttributes);
+                    if( count($categories) == 0) {
+                        $category = new Category($categoryAttributes);
+                        $category->setScenario(Category::SCENARIO_INSERT);
+                        $category->save();
+                        $categoriesInserted[] = $category;
+                    } elseif (count($categories) == 1 ) {
+                        $category = $categories[0];
+                    } else {
+                        // we have more than one category that matched for this product
+                        // we don't know which one to choose : skip this product
+                        continue;
+                    }
+    
+                    if (!isset($category->id)) {
+                        continue;
+                    }
                 } else {
-                    // we have more than one category that matched for this product
-                    // we don't know which one to choose : skip this product
-                    continue;
+                    $category = null;
                 }
 
-                if (!isset($category->id)) {
-                    continue;
-                }
-                $product = new Product([
-                    'name'              => 'cours ' . $normalizedRecord['COURS_NUM'] . ' - ' . $normalizedRecord['COURS'] ,
+                // let's process the product now. First check if we must INSERT or UPDATE a product
+                $productName =  'cours ' . $normalizedRecord['COURS_NUM'] . ' - ' . $normalizedRecord['COURS'];
+                $secondaryProductAttributes = [
                     'short_description' =>  $normalizedRecord['JOUR']
                                                 . ' ' . $normalizedRecord['HEURES']
                                                 . ' - ' . $normalizedRecord['LIEUX'],
                     'value'             => $normalizedRecord['VALUE'],
-                    'category_id'       => $category->id
-                ]);
-                $product->save();
-                $productInserted[] = $product;
+                    'category_id'       => ($category !== null ? $category->id : null)                        
+                ];              
+                $existingProduct = Product::findOne(['name' => $productName]);
+                if ($existingProduct != null) {
+                    // UPDATE new product
+                    $existingProduct->setAttributes($secondaryProductAttributes);
+                    $existingProduct->save();
+                    $productUpdated[] = $existingProduct;
+                } else {
+                    // INSERT new product
+                    $product = new Product();                    
+                    $product->setAttributes($secondaryProductAttributes);
+                    $product->name = $productName;
+                    $product->save();
+                    $productInserted[] = $product;
+                }
             }
         } catch (Exception $e) {
             $errorMessage = $e->getMessage();
         }
 
         return $this->render('result', [
-            'errorMessage' => $errorMessage,
-            'productInserted' => $productInserted,
+            'errorMessage'       => $errorMessage,
+            'productInserted'    => $productInserted,
+            'productUpdated'     => $productUpdated,
             'categoriesInserted' => $categoriesInserted
         ]);
     }

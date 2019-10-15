@@ -11,6 +11,11 @@ use yii\helpers\VarDumper;
 
 $this->title = 'Contacts';
 $this->params['breadcrumbs'][] = $this->title;
+
+$countCategories = count($categoriesInserted);
+$countProductInserted = count($productInserted);
+$countProductUpdated = count($productUpdated);
+
 ?>
 <div class="import-csv-result">
     <h1>Import Product <small>result</small></h1>
@@ -24,9 +29,19 @@ $this->params['breadcrumbs'][] = $this->title;
     
 
     <h2>Categories</h2>
+    <hr/>
     <?php if (!empty($categoriesInserted)): ?>
-
-        <table class="table">
+        <p>
+            Total : <b><?= count($categoriesInserted) ?></b>
+        </p>  
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
             <tbody>
                 <?php foreach($categoriesInserted as $category): ?>
                     <tr>
@@ -53,9 +68,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
 
 
-    <h2>Products</h2>
+    <h2>Products Created</h2>
+    <hr/>    
     <?php if (!empty($productInserted)): ?>
-        <table class="table">
+        <p>
+            Total : <b><?= count($productInserted) ?></b>
+        </p>    
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
             <tbody>
                 <?php foreach($productInserted as $product): ?>
                     <tr>
@@ -80,6 +107,48 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php else: ?>
         <div class="alert alert-info">
             No new product created
+        </div>
+    <?php endif; ?>
+
+    <h2>Products Updated</h2>
+    <hr/>
+    <?php if (!empty($productUpdated)): ?>
+        <p>
+            Total : <b><?= count($productUpdated) ?></b>
+        </p>
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($productUpdated as $product): ?>
+                    <tr>
+                        <td><?= Html::encode($product->id) ?></td>
+                        <td><?= Html::encode($product->name) ?></td>
+                        <td><?= $product->value ?></td>
+                        <td>
+                            <?php if($product->hasErrors()): ?>
+                                <div class="alert alert-danger">
+                                    <?= Html::errorSummary($product) ?>
+                                </div>
+                            <?php else: ?>
+                                <div class="alert alert-success">
+                                    Product updated
+                                </div>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <div class="alert alert-info">
+            No new product updated
         </div>
     <?php endif; ?>
 
