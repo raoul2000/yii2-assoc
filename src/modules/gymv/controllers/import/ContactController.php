@@ -174,7 +174,7 @@ class ContactController extends Controller
             $errorMessage = $e->getMessage();
         }
 
-        return $this->render('import-csv', [
+        return $this->render('result', [
             'errorMessage' => $errorMessage,
             'records' => $records
         ]);
