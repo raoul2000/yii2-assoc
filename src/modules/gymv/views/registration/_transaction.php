@@ -63,14 +63,31 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                         </td>
                         <td>
                             <?= $form->field($transaction, "[$index]reference_date")
-                                ->textInput(['class' => 'transaction-reference_date form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
-                                
+                                ->textInput([
+                                    'class' => 'transaction-reference_date form-control', 
+                                    'maxlength' => true, 
+                                    'autocomplete'=> 'off',
+                                    'placeholder'=> \Yii::t('app', 'Ex: 23/01/2001'),
+                                ])
+                            ?>
+                        </td>
+                        <td>
+                            <?= $form->field($transaction, "[$index]code")
+                                ->textInput([
+                                    'class' => 'transaction-code form-control', 
+                                    'maxlength' => true, 
+                                    'autocomplete'=> 'off',
+                                    'placeholder'=> \Yii::t('app', 'enter check number'),
+                                ])
                             ?>
                         </td>
                         <td>
                             <?= $form->field($transaction, "[$index]value")
-                                ->textInput(['class' => 'transaction-value form-control', 'maxlength' => true, 'autocomplete'=> 'off'])
-                                
+                                ->textInput([
+                                    'class' => 'transaction-value form-control', 
+                                    'maxlength' => true, 
+                                    'autocomplete'=> 'off'
+                                ])
                             ?>
                         </td>
                         <td style="vertical-align: middle;">
@@ -89,8 +106,8 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                     </tr>
                 <?php endforeach; ?>
                 <tr>
-                    <td>
-                    </td>
+                    <td></td>
+                    <td></td>
                     <td class="total-label">
                         Total
                     </td>
