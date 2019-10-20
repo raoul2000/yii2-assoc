@@ -16,14 +16,20 @@ use yii\widgets\DetailView;
 
     <div class="row">
         <div class="col-xs-6 col-xs-offset-3">
+            View profile ... 
             <?= Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
                 . html::encode($contact->longName),
                 ['/contact/view', 'id' => $contact->id],
                 [
-                    "style" => 'font-size: 4em;',
+                    "style" => 'font-size: 2em;',
                     'title' => 'view contact'
                 ])
             ?>
+            <br/>
+            or, <b><?= Html::a(
+                'Register other Member', 
+                ['/gymv/registration/contact-search']
+            )?></b>
         </div>
     </div>
 </div>
