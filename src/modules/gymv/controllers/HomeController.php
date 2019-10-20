@@ -115,5 +115,4 @@ class HomeController extends \yii\web\Controller
         // find all phisical person contact  who are beneficiary of a given product that is still valid now and that was provided by my
         return $this->render('index');
     }
-
 }

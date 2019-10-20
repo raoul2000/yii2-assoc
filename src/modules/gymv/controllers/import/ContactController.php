@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\gymv\controllers;
+namespace app\modules\gymv\controllers\import;
 
 use Yii;
 use yii\web\Controller;
@@ -16,7 +16,7 @@ use \app\components\helpers\DateHelper;
 /**
  * Default controller for the `gymv` module
  */
-class ContactImportController extends Controller
+class ContactController extends Controller
 {
     /**
      * {@inheritdoc}

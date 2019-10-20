@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Product Import';
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Import'), 'url' => ['/gymv/import/home']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-index">

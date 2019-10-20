@@ -16,6 +16,11 @@ use yii\helpers\Url;
             ['/gymv/registration'], 
             ['class' => 'btn btn-primary']) 
         ?>
+        <?= Html::a(
+            \Yii::t('app', 'import'), 
+            ['/gymv/import/home'], 
+            ['class' => 'btn btn-primary']) 
+        ?>
         <?php 
         // echo  Html::a('Import I-Reseau', ['contact-import/index'], ['class' => 'btn btn-primary']) 
         ?>
