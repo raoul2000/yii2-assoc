@@ -13,7 +13,7 @@ use yii\web\View;
     <div class="contact">
         <h4>
             <span class="glyphicon glyphicon-user" aria-hidden="true"></span> 
-            Contact
+            <?= \Yii::t('app', 'Contact') ?>
         </h4>
         <span class="fullname">
             <?= Html::encode($data['contact']['name'] . ' ' . $data['contact']['firstname']) ?>
@@ -21,13 +21,13 @@ use yii\web\View;
 
         <?php if(!empty($data['contact']['birthday'])): ?>
             <span class="birthday">
-                birthday : <?= Html::encode($data['contact']['birthday']) ?>
+                <?= \Yii::t('app', 'birthday') ?> : <?= Html::encode($data['contact']['birthday']) ?>
             </span>
         <?php endif; ?>
 
         <?php if(!empty($data['contact']['email'])): ?>
             <span class="email">
-                email : <?= Html::a($data['contact']['email'], null, ['href' => $data['contact']['email']]) ?>
+                <?= \Yii::t('app', 'email') ?> : <?= Html::a($data['contact']['email'], null, ['href' => $data['contact']['email']]) ?>
             </span>
         <?php endif; ?>
     </div>
@@ -37,7 +37,7 @@ use yii\web\View;
     <div class="address" style="margin-top:2em">
         <h4>
             <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-            Address
+            <?= \Yii::t('app', 'Address') ?>
         </h4>
         <span class="line_1">
             <?= Html::encode($data['address']['line_1']) ?>
@@ -53,7 +53,7 @@ use yii\web\View;
     <div class="address" style="margin-top:2em">
         <h4>
             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-            Commandes
+            <?= \Yii::t('app', 'Orders') ?>
         </h4>
         <?php $totalOrderValue = 0; ?>
         <?php foreach ($data['orders'] as $order) :?>

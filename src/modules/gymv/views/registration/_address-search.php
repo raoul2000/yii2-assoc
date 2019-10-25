@@ -15,21 +15,21 @@ $searchAddressUrl = 'url';
     <h3>
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Address') ?>
-        <small class="wizard-step">step 2/5</small>
+        <small class="wizard-step"><?= \Yii::t('app', 'step') ?> 2/5</small>
     </h3>
 
     <hr/>
 
     <form class="row">
         <div class="form-group col-xs-7" style="padding-right:0px">
-            <input type="text" class="form-control" id="address" placeholder="Enter the address ...">
+            <input type="text" class="form-control" id="address" placeholder="<?= \Yii::t('app', 'Enter the address ...') ?>">
         </div>
         <div class="form-group col-xs-3" style="padding-left:0px">
-            <input type="text" class="form-control" id="city" placeholder="City name">
+            <input type="text" class="form-control" id="city" placeholder="<?= \Yii::t('app', 'City name') ?>">
         </div>
         <button id="btn-search-address" type="button" class="btn btn-default">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 
-            Search
+            <?= \Yii::t('app', 'Search') ?>
         </button>
     </form>
     <div id="search-result-container">

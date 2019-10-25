@@ -13,13 +13,13 @@ $this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, '
     <div class="row">
         <div class="col-sm-6">
             <div>
-                <h2>Search</h2>
+                <h2><?= \Yii::t('app', 'Search') ?></h2>
                 <hr/>
                 <div class="input-group">
                     <input id="address-search" type="text" class="form-control" placeholder="Enter Address to search ...">
                     <span class="input-group-btn">
                         <button id="btn-search-address" class="btn btn-default" type="button">
-                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?= \Yii::t('app', 'Search') ?>
                     </button>
                     </span>
                 </div><!-- /input-group -->                

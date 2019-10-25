@@ -737,6 +737,14 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+    /*
+    public function actionCommit()
+    {
+        return $this->render('commit', [
+            'contact'      => Contact::findOne(6)
+        ]);
+    }*/
+
     /**
      * Last step of the registration wizard.
      * Validate and save/update records in DB
@@ -745,9 +753,6 @@ class RegistrationController extends \yii\web\Controller
      */
     public function actionCommit()
     {
-        //return $this->redirect(['transaction']);
-        
-
         if (!Yii::$app->session->has(self::SESS_TRANSACTIONS)) {
             return $this->redirect(['transaction']);
         }        

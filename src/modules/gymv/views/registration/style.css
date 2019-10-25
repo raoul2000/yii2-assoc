@@ -75,7 +75,11 @@
      border-left: 1px dotted grey;
      height: calc(100vh - 200px);
  }
-
+ #wiz-summary h4 {
+    background-color: #d9edf7;
+    padding: 0.3em;
+    padding-left: 0.3em;
+}
  #wiz-summary .contact > span {
      display: block;
  }
@@ -84,11 +88,12 @@
  }
 
  #wiz-summary .product-line {
-    border-bottom: 1px dotted #a0a0a0;
+    border-bottom: 1px dotted #c3c3c3;
     height: 1em;
     float: left;
     margin-bottom: 0.3em;
     width: 100%;     
+    font-size: 0.8em;
 }
 
 #wiz-summary .product-name {

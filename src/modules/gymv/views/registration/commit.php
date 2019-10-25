@@ -3,33 +3,34 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
-use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-//$this->registerJs(file_get_contents(__DIR__ . '/address.js'), View::POS_READY, 'registration-address');
 ?>
-<div>
+<div id="wiz-commit">
     <div class="alert alert-success">
-        <b>Registration done ! Good job ... </b><br/>
-        Click on the link below to see the information about this contact.
+        <?= \Yii::t('app', 'Registration done !') ?> 
     </div>
-
     <div class="row">
-        <div class="col-xs-6 col-xs-offset-3">
-            View profile ... 
-            <?= Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
-                . html::encode($contact->longName),
+        <div class="col-lg-12" style="text-align:center; font-size:1.5em; margin-bottom:1em; margin-top:2em;">
+            <?= \Yii::t('app', 'What do you want to do next ?') ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6" style="text-align:center; font-size:1.5em">
+            <?= Html::a(
+                \Yii::t('app', 'Register other Member'), 
+                ['/gymv/registration/contact-search']
+            )?>
+        </div>    
+        <div class="col-xs-6" style="text-align:center; font-size:1.5em">            
+            <?= Html::a(
+                \Yii::t('app', 'View Contact Info'),
                 ['/contact/view', 'id' => $contact->id],
                 [
-                    "style" => 'font-size: 2em;',
                     'title' => 'view contact'
                 ])
-            ?>
-            <br/>
-            or, <b><?= Html::a(
-                'Register other Member', 
-                ['/gymv/registration/contact-search']
-            )?></b>
+            ?>  
+            for
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?= html::encode($contact->longName) ?>    
         </div>
     </div>
 </div>

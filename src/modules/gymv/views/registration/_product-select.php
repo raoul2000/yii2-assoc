@@ -13,7 +13,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
     <h3>
         <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Product Selection') ?>
-        <small class="wizard-step">step 3/5</small>
+        <small class="wizard-step"><?= \Yii::t('app', 'step') ?> 3/5</small>
     </h3>
 
     <hr/>

@@ -13,7 +13,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
     <h3>
         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Orders') ?>
-        <small class="wizard-step">step 4/5</small>
+        <small class="wizard-step"><?= \Yii::t('app', 'step') ?> 4/5</small>
     </h3>
 
     <hr/>
@@ -55,13 +55,21 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
                         </td>
                         <td>
                             <?= $form->field($order, "[$index]valid_date_start")
-                                ->textInput(['class' => 'order-valid_date_start form-control input-sm', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->textInput([
+                                    'class'         => 'order-valid_date_start form-control input-sm', 
+                                    'maxlength'     => true, 
+                                    'autocomplete'  => 'off'
+                                ])
                                 ->label(false)
                             ?>
                         </td>
                         <td>
                             <?= $form->field($order, "[$index]valid_date_end")
-                                ->textInput(['class' => 'order-valid_date_end form-control input-sm', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->textInput([
+                                    'class'         => 'order-valid_date_end form-control input-sm',
+                                    'maxlength'     => true, 
+                                    'autocomplete'  => 'off'
+                                ])
                                 ->label(false)
                             ?>
                         </td>
@@ -75,7 +83,11 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
                         </td>
                         <td width="10%">
                             <?= $form->field($order, "[$index]value")
-                                ->textInput(['class' => 'order-value form-control input-sm order-value', 'maxlength' => true, 'autocomplete'=> 'off'])
+                                ->textInput([
+                                    'class'         => 'order-value form-control input-sm order-value', 
+                                    'maxlength'     => true,
+                                    'autocomplete'  => 'off'
+                                ])
                                 ->label(false)
                             ?>
                         </td>
@@ -84,7 +96,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
                 <tr class="bottom-row">
                     <td colspan="4">
                         <span class="text-total">
-                            Total
+                            <?= \Yii::t('app', 'Total') ?>
                         </span>
                     </td>
                     <td class="valueSum">

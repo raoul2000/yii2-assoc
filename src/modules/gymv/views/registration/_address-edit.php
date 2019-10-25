@@ -13,14 +13,14 @@ $this->registerJs(file_get_contents(__DIR__ . '/_address-edit.js'), View::POS_RE
     <h3>
         <span class="glyphicon glyphicon-home" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Address') ?>
-        <small class="wizard-step">step 2/5</small>
+        <small class="wizard-step"><?= \Yii::t('app', 'step') ?> 2/5</small>
     </h3>
 
     <hr/>
 
     <?php if (count($contactsSameAddress) != 0): ?>
         <div class="alert alert-warning">
-            This address is also used by 
+            <?= \Yii::t('app', 'This address is also used by') ?> 
             <?php 
                 $contactLink = [];
                 foreach ($contactsSameAddress as $contactPerAdress) {
@@ -33,7 +33,7 @@ $this->registerJs(file_get_contents(__DIR__ . '/_address-edit.js'), View::POS_RE
                 }
                 echo implode(', ', $contactLink);
             ?>.<br/>
-            If you change information below it will affect all other contacts linked to this address.
+            <?= \Yii::t('app', 'If you change information below it will affect all other contacts linked to this address.') ?>
         </div>
     <?php endif; ?>
 

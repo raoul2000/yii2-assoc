@@ -13,13 +13,13 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
     <h3>
         <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> 
         <?= \Yii::t('app', 'Transaction') ?>
-        <small class="wizard-step">step 5/5</small>
+        <small class="wizard-step"><?= \Yii::t('app', 'step') ?> 5/5</small>
     </h3>
 
     <hr/>
     <div class="alert alert-info">
-        <b>Total To Pay : <?= $orderTotalValue ?></b><br/>
-        You can use one, two or more transaction to pay this amount. Make sure that total match.
+        <b><?= \Yii::t('app', 'Total To Pay') ?> : <?= $orderTotalValue ?></b><br/>
+        <?= \Yii::t('app', 'You can use one, two or more transaction to pay this amount. Make sure that total match.') ?>
     </div>
 
     <?php $form = ActiveForm::begin(['options' => [ 'id' => 'transaction-manager-form', 'name' => 'tr-form']]); ?>
@@ -64,29 +64,29 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                         <td>
                             <?= $form->field($transaction, "[$index]reference_date")
                                 ->textInput([
-                                    'class' => 'transaction-reference_date form-control', 
-                                    'maxlength' => true, 
-                                    'autocomplete'=> 'off',
-                                    'placeholder'=> \Yii::t('app', 'Ex: 23/01/2001'),
+                                    'class'         => 'transaction-reference_date form-control', 
+                                    'maxlength'     => true, 
+                                    'autocomplete'  => 'off',
+                                    'placeholder'   => \Yii::t('app', 'Ex: 23/01/2001'),
                                 ])
                             ?>
                         </td>
                         <td>
                             <?= $form->field($transaction, "[$index]code")
                                 ->textInput([
-                                    'class' => 'transaction-code form-control', 
-                                    'maxlength' => true, 
-                                    'autocomplete'=> 'off',
-                                    'placeholder'=> \Yii::t('app', 'enter check number'),
+                                    'class'         => 'transaction-code form-control', 
+                                    'maxlength'     => true, 
+                                    'autocomplete'  => 'off',
+                                    'placeholder'   => \Yii::t('app', 'enter check number'),
                                 ])
                             ?>
                         </td>
                         <td>
                             <?= $form->field($transaction, "[$index]value")
                                 ->textInput([
-                                    'class' => 'transaction-value form-control', 
-                                    'maxlength' => true, 
-                                    'autocomplete'=> 'off'
+                                    'class'         => 'transaction-value form-control', 
+                                    'maxlength'     => true, 
+                                    'autocomplete'  => 'off'
                                 ])
                             ?>
                         </td>
@@ -95,10 +95,10 @@ $this->registerJs(file_get_contents(__DIR__ . '/_transaction.js'), View::POS_REA
                                 echo Html::button(
                                     '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>',
                                     [
-                                        'class' => 'btn btn-default btn-sm remove-transaction-line', 
-                                        'data-action' => 'remove-transaction', 
-                                        'data-index' => $index,
-                                        'title' => 'remove'
+                                        'class'         => 'btn btn-default btn-sm remove-transaction-line', 
+                                        'data-action'   => 'remove-transaction', 
+                                        'data-index'    => $index,
+                                        'title'         => \Yii::t('app', 'remove')
                                     ]
                                 );
                             }?>
