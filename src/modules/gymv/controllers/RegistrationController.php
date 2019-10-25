@@ -321,8 +321,7 @@ class RegistrationController extends \yii\web\Controller
         return $dbResult + $wsResult;
     }
 
-    // TODO: if contact is already in DB, then it may already be linked to an address
-    // so we should check for existing address
+
     public function actionAddressSearch()
     {
         if (!Yii::$app->session->has(self::SESS_CONTACT)) {
@@ -342,6 +341,14 @@ class RegistrationController extends \yii\web\Controller
                 }
             } elseif ($model->load(Yii::$app->request->post()) ) {
                 $model->id = null;
+                // if no line_1 or city has been selected in the address result list, use the searched
+                // values to populate model
+                if(empty($model->line_1)) {
+                    $model->line_1 = Yii::$app->request->post('search_address');
+                } 
+                if(empty($model->city)) {
+                    $model->city = Yii::$app->request->post('search_city');
+                } 
             }  else {
                 throw new NotFoundHttpException('invalid input');
             }

@@ -4,11 +4,15 @@
         "city": document.getElementById('city'),
         "buttonSearchAddress" : document.getElementById('btn-search-address'),
         "addressSearchResultList" : document.getElementById('address-search-result-list'),
+        "addressSearchForm" : document.getElementById('address-search-form'),
         "form_record_id" : document.getElementById("address-record_id"),
         "form_line_1" : document.getElementById("address-line_1"),
         "form_zip_code" : document.getElementById("address-zip_code"),
         "form_city" : document.getElementById("address-city"),
-        "form_country" : document.getElementById("address-country")
+        "form_country" : document.getElementById("address-country"),
+        "search_address" : document.getElementById("search-address"),
+        "search_city" : document.getElementById("search-city"),
+        "buttonAddressSearchNext" : document.getElementById('btn-address-search-next')
     };
     let addressData = [];
 
@@ -30,12 +34,6 @@
 
     const renderSearchResults = (results) => {
         el.addressSearchResultList.innerHTML = results.map( (result, index) => {
-            let extraInfoLine = 'from api-adresse.data.gouv.fr';
-            if (result.id) {
-                extraInfoLine = `
-                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 
-                <a href="${result.urlView}" target="_blank" class="view-address"> view </a>`;
-            }
             return `
             <div class="result-address-item" data-item-id="${result.id}" data-index="${index}">
                 <div class="selected-address">
@@ -92,7 +90,7 @@
         el.form_country.value = record.country;
     };
     // @ts-ignore
-    const clearForm = (record) => {
+    const clearForm = () => {
         // @ts-ignore
         el.form_record_id.value = null;
         // @ts-ignore
@@ -110,7 +108,7 @@
             return;
         }
         const resultItem = ev.target.closest('.result-address-item');
-        if(resultItem) { // user select an address
+        if(resultItem) { // user clicked on an address item
             const isSelected = resultItem.classList.contains('is-selected');
             // @ts-ignore
             el.addressSearchResultList.querySelectorAll('.result-address-item').forEach( item => item.classList.remove('is-selected'));
@@ -124,6 +122,25 @@
             }            
         }
     };
+
+    /**
+     * When submitting the form we want to copy search terms (address and city) into the form
+     * so they are also submitted.
+     * This is because if the user didn't select any result, the server will used search terms
+     * to pre populate a newx address record
+     * 
+     * @param {Event} ev event
+     */
+    const submitForm = (ev) => {
+        ev.stopPropagation();
+        ev.preventDefault();
+
+        el.search_address.value = el.address.value;
+        el.search_city.value = el.city.value;
+        console.log(el.search_address.value);
+        el.addressSearchForm.submit();
+    };
     el.buttonSearchAddress.addEventListener('click', searchAddress);
     el.addressSearchResultList.addEventListener('click', selectResultItem);
+    el.buttonAddressSearchNext.addEventListener('click', submitForm);
 })();
