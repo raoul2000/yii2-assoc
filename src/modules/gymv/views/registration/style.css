@@ -236,4 +236,8 @@
     color:grey;
 }
 
+#wiz-product-select .radio label {
+    display: block;
+    margin-left: 3em;
+}
 /* /products */  

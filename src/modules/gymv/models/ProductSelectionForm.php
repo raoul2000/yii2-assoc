@@ -12,6 +12,13 @@ class ProductSelectionForm extends Model
     const GROUP_1 = 'group-1';
     const GROUP_2 = 'group-2';
 
+    public $adhesion;
+    public $sorano;
+    public $license_federation_option;
+    public $license_federation;
+    public $fed_assurance;
+
+
     public $product_ids = [];
 
     private $_cat1_product_ids = [];

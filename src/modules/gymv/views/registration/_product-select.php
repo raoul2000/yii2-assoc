@@ -26,10 +26,56 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
 
         <div class="row">
             <div class="col-xs-5">
+                <!--
                 <?= $form->field($model, 'product_ids')
                     ->checkboxList($firstClassProductIndex)
                     ->label(false)
                 ?>
+                -->
+
+                <?= $form->field($model, 'adhesion')
+                    ->label('Adhésion Gymv : ')
+                    ->radioList(['1' => 'Vincennois', '2' => 'non Vincennois'],
+                [
+                    'class' => 'radio',
+                    'itemOptions' => [
+                        'style' => 'display: block'
+                    ]
+                ])?> 
+
+                <div class="well">
+                    <?= $form->field($model, 'license_federation_option')
+                        ->label(false)
+                        ->dropdownList([
+                            "1" => "Achat license", 
+                            "2" => "Déjà Licencié", 
+                        ])
+                    ?>
+                    <?= $form->field($model, 'license_federation')
+                        ->label(false)
+                        ->radioList(
+                            ['1' => 'License Adulte', '2' => 'License Enfant'],
+                            [
+                                'class' => 'radio',
+                                'itemOptions' => [
+                                    'style' => 'display: block'
+                                ]
+                        ]
+                    )?> 
+                    <?= $form->field($model, 'fed_assurance')
+                        ->checkbox([
+                            'label' => "Assurance optionnelle"
+                    ])?>
+                </div>
+
+                <?= $form->field($model, 'sorano')
+                    ->checkbox([
+                        'label' => "Inscription Espace Sorano"
+                ])?>
+
+
+
+
             </div>
             <div class="col-xs-7">
                 <?= \dosamigos\selectize\SelectizeDropDownList::widget([
