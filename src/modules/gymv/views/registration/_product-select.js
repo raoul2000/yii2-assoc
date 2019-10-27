@@ -1,6 +1,9 @@
 (function () {
     const el = {
         "selectedProductList" : document.getElementById('selected-product-list'),
+        "radio_achat_licence" : document.getElementById('radio-achat-licence'),
+        "radio_no_achat_licence" : document.getElementById('radio-no-achat-licence'),
+        "container_achat_licence" : document.getElementById('container-achat-licence')
     };
     
     const escapeHTML = (txt) => document.createElement('div').appendChild(document.createTextNode(txt)).parentNode.innerHTML; 
@@ -44,6 +47,8 @@
         }
     };
     el.selectedProductList.addEventListener('click', handleProductAction);
+    el.radio_achat_licence.addEventListener('click', (ev) => el.container_achat_licence.style.display = "block");
+    el.radio_no_achat_licence.addEventListener('click', (ev) => el.container_achat_licence.style.display = 'none');
     // @ts-ignore
     window.gymv = {
         addToSelectedProducts : addToSelectedProducts

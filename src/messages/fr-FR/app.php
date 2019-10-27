@@ -194,6 +194,7 @@ return [
     'no template selected' => 'aucun modèle sélectionné',
     'open in a new window' => 'Ouvrir dans une nouvelle fenêtre',
     'registration' => 'inscription',
+    'Registration' => 'Inscription',
     'report total order value' => 'Reporter le total des commandes',
     'select ...' => 'sélectionnez ...',
     'select a category ...' => 'sélectionnez une catégorie ...',

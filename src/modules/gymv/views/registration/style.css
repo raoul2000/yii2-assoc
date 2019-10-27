@@ -238,6 +238,9 @@
 
 #wiz-product-select .radio label {
     display: block;
+}
+#wiz-product-select .radio {
+    display: block;
     margin-left: 3em;
 }
 /* /products */  

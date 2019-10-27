@@ -42,41 +42,39 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                         'style' => 'display: block'
                     ]
                 ])?> 
-
-                <div class="well">
-                    <?= $form->field($model, 'license_federation_option')
-                        ->label(false)
-                        ->dropdownList([
-                            "1" => "Achat license", 
-                            "2" => "Déjà Licencié", 
-                        ])
-                    ?>
-                    <?= $form->field($model, 'license_federation')
-                        ->label(false)
-                        ->radioList(
-                            ['1' => 'License Adulte', '2' => 'License Enfant'],
-                            [
-                                'class' => 'radio',
-                                'itemOptions' => [
-                                    'style' => 'display: block'
-                                ]
-                        ]
-                    )?> 
-                    <?= $form->field($model, 'fed_assurance')
-                        ->checkbox([
-                            'label' => "Assurance optionnelle"
-                    ])?>
+                
+                <div class="form-group">
+                    <label for="" class="control-label">License Fédération :</label>
+                    <div class="radio">
+                        <label>
+                            <input id="radio-no-achat-licence" type="radio" name="ProductSelectionForm[achat_license]" value="1" style="display: block"> Déjà licencié
+                        </label>
+                        <label>
+                            <input id="radio-achat-licence" type="radio" name="ProductSelectionForm[achat_license]" value="2" style="display: block"> Achat license
+                        </label>
+                        <div id="container-achat-licence" class="radio" style="display:none">
+                            <label>
+                                <input type="radio" name="ProductSelectionForm[license_type]" value="1" style="display: block"> License adulte
+                            </label>
+                            <label>
+                                <input type="radio" name="ProductSelectionForm[license_type]" value="2" style="display: block"> license enfant
+                            </label>
+                            <div class="form-group field-productselectionform-fed_assurance">
+                                <input type="hidden" name="ProductSelectionForm[fed_assurance]" value="0">
+                                <label style="padding-left: 0;padding-top: 1em;">
+                                    <input type="checkbox" id="productselectionform-fed_assurance" name="ProductSelectionForm[fed_assurance]" value="1"> Assurance optionnelle
+                                </label>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
 
                 <?= $form->field($model, 'sorano')
                     ->checkbox([
                         'label' => "Inscription Espace Sorano"
                 ])?>
-
-
-
-
             </div>
+
             <div class="col-xs-7">
                 <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                     'name' => 'productId',
