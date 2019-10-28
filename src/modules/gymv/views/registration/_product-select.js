@@ -1,8 +1,9 @@
 (function () {
     const el = {
         "selectedProductList" : document.getElementById('selected-product-list'),
-        "radio_achat_licence" : document.getElementById('radio-achat-licence'),
-        "radio_no_achat_licence" : document.getElementById('radio-no-achat-licence'),
+
+        "achat_licence" : document.getElementById('achat_licence'),
+        "container_assurance" : document.getElementById('container-assurance'),
         "container_achat_licence" : document.getElementById('container-achat-licence')
     };
     
@@ -46,9 +47,25 @@
                 break;
         }
     };
+    const handlerAssuranceChoice = (ev) => {
+        console.log('handlerAssuranceChoice ' + ev.target.selectedOptions[0].value);
+
+        el.container_assurance.style.visibility = ev.target.selectedOptions[0].dataset.hasOwnProperty('showOnSelect')
+            ? 'visible'
+            : 'hidden';
+/*            
+
+        const selectedOption = ev.target.selectedOptions[0];
+        if( selectedOption.dataset.hasOwnProperty('showOnSelect')) {
+            el.container_assurance.style.visibility = 'visible';
+        } else {
+            el.container_assurance.style.visibility = 'hidden';
+        }
+  */      
+    };
+
     el.selectedProductList.addEventListener('click', handleProductAction);
-    el.radio_achat_licence.addEventListener('click', (ev) => el.container_achat_licence.style.display = "block");
-    el.radio_no_achat_licence.addEventListener('click', (ev) => el.container_achat_licence.style.display = 'none');
+    el.achat_licence.addEventListener('change', handlerAssuranceChoice);
     // @ts-ignore
     window.gymv = {
         addToSelectedProducts : addToSelectedProducts

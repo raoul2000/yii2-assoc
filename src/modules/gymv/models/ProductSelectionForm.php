@@ -12,15 +12,42 @@ class ProductSelectionForm extends Model
     const GROUP_1 = 'group-1';
     const GROUP_2 = 'group-2';
 
+    const ADHESION_VINCENNOIS     = "1";
+    const ADHESION_NON_VINCENNOIS = "2";
+    /**
+     * Defines the type of registration required. Possible values are :
+     *  - ADHESION_VINCENNOIS
+     *  - ADHESION_NON_VINCENNOIS
+     *
+     * @var string
+     */
     public $adhesion;
-    public $sorano;
-    public $license_federation_option;
-    public $license_federation;
-    public $fed_assurance;
 
+    const DEJA_LICENCIE         = "1";
+    const ACHAT_LICENCE_ADULTE  = "2";
+    const ACHAT_LICENCE_ENFANT  = "3";
+    /**
+     * Define if the licence should be bought (ACHAT_LICENCE) or if it has 
+     * already been bought (DEJA_LICENCIE).
+     *
+     * @var [type]
+     */
+    public $achat_licence;
+
+    /**
+     * defines if optional insureance is bought or not
+     *
+     * @var boolean
+     */
+    public $assurance_extra;
+    /**
+     * Defines if registration to Sorano is selected or not
+     *
+     * @var boolean
+     */
+    public $inscription_sorano;
 
     public $product_ids = [];
-
     private $_cat1_product_ids = [];
 
     public function rules()

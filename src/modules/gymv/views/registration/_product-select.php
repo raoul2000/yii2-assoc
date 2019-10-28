@@ -35,41 +35,43 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
 
                 <?= $form->field($model, 'adhesion')
                     ->label('Adhésion Gymv : ')
-                    ->radioList(['1' => 'Vincennois', '2' => 'non Vincennois'],
-                [
-                    'class' => 'radio',
-                    'itemOptions' => [
-                        'style' => 'display: block'
-                    ]
-                ])?> 
-                
-                <div class="form-group">
-                    <label for="" class="control-label">License Fédération :</label>
-                    <div class="radio">
-                        <label>
-                            <input id="radio-no-achat-licence" type="radio" name="ProductSelectionForm[achat_license]" value="1" style="display: block"> Déjà licencié
-                        </label>
-                        <label>
-                            <input id="radio-achat-licence" type="radio" name="ProductSelectionForm[achat_license]" value="2" style="display: block"> Achat license
-                        </label>
-                        <div id="container-achat-licence" class="radio" style="display:none">
-                            <label>
-                                <input type="radio" name="ProductSelectionForm[license_type]" value="1" style="display: block"> License adulte
-                            </label>
-                            <label>
-                                <input type="radio" name="ProductSelectionForm[license_type]" value="2" style="display: block"> license enfant
-                            </label>
-                            <div class="form-group field-productselectionform-fed_assurance">
-                                <input type="hidden" name="ProductSelectionForm[fed_assurance]" value="0">
-                                <label style="padding-left: 0;padding-top: 1em;">
-                                    <input type="checkbox" id="productselectionform-fed_assurance" name="ProductSelectionForm[fed_assurance]" value="1"> Assurance optionnelle
-                                </label>
-                            </div>
-                        </div> 
-                    </div>
+                    ->radioList([
+                        ProductSelectionForm::ADHESION_VINCENNOIS => 'Vincennois', 
+                        ProductSelectionForm::ADHESION_NON_VINCENNOIS => 'non Vincennois'],
+                        [
+                            'class' => 'radio',
+                            'itemOptions' => [
+                                'style' => 'display: block'
+                            ]
+                        ]
+                    )
+                ?> 
+
+                <?= $form->field($model, 'achat_licence')
+                    ->label('Licence Fédération :')
+                    ->dropDownList(
+                        [
+                            ProductSelectionForm::DEJA_LICENCIE        => 'déjà licencié', 
+                            ProductSelectionForm::ACHAT_LICENCE_ADULTE => 'licence ADULTE',
+                            ProductSelectionForm::ACHAT_LICENCE_ENFANT => 'licence ENFANT',
+                        ],[
+                            'id'        => 'achat_licence',
+                            'prompt'    => \Yii::t('app', 'make your choice ...'),
+                            'options'   => [
+                                ProductSelectionForm::ACHAT_LICENCE_ADULTE => ['data-show-on-select' => true],
+                                ProductSelectionForm::ACHAT_LICENCE_ENFANT => ['data-show-on-select' => true]
+                            ]
+                        ]
+                    )
+                ?>
+                <div id="container-assurance" style="margin-left: 3em;">
+                    <?= $form->field($model, 'assurance_extra')
+                        ->checkbox([
+                            'label' => "Assurance optionnelle"
+                    ])?>
                 </div>
 
-                <?= $form->field($model, 'sorano')
+                <?= $form->field($model, 'inscription_sorano')
                     ->checkbox([
                         'label' => "Inscription Espace Sorano"
                 ])?>

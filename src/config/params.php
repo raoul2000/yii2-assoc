@@ -95,7 +95,7 @@ return [
     
     'registration.product.group' => [
         'group-1' => [
-            'productId' => [14,15,11,12,13],
+            'productId' => [14,15,16,12,13],
             //'categoryId' => [9]
         ],
         'group-2' => [
@@ -103,7 +103,7 @@ return [
         ],
     ],
     // transaction created during registration are assigned this category Id
-    'registration.transaction.categoryId' => 3
+    'registration.transaction.categoryId' => 17
     /*
     'registration.product.group' => [
         'group-1' => [
