@@ -46,6 +46,12 @@ class ProductSelectionForm extends Model
      * @var boolean
      */
     public $inscription_sorano;
+    /**
+     * List of product ids matching selected classes
+     *
+     * @var array
+     */
+    public $cours_ids = [];
 
     public $product_ids = [];
     private $_cat1_product_ids = [];
@@ -53,10 +59,36 @@ class ProductSelectionForm extends Model
     public function rules()
     {
         return [
+            [['adhesion', 'achat_licence'], 'required'],
+            ['adhesion', 'in', 'range' => [
+                self::ADHESION_VINCENNOIS,
+                self::ADHESION_NON_VINCENNOIS
+            ]],
+            ['achat_licence', 'in', 'range' => [
+                self::DEJA_LICENCIE,
+                self::ACHAT_LICENCE_ADULTE,
+                self::ACHAT_LICENCE_ENFANT
+            ]],
+            [['assurance_extra', 'inscription_sorano'], 'boolean'],
+            // checks if every cours ID is an integer
+            ['cours_ids', 'each', 'rule' => ['integer']],     
+
             [['product_ids'], 'safe'], 
             ['product_ids', 'default', 'value' => []],
         ];
     }    
+
+    /**
+     * Returns a list of all courses models selected by the user
+     *
+     * @return array[Product]
+     */
+    public function getCoursProductModels() {
+        return \app\models\Product::find()
+            ->where(['in', 'id', $this->cours_ids] )
+            ->indexBy('id')
+            ->all();
+    }
 
     public function setCategory1ProductIds($ids)
     {

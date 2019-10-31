@@ -461,63 +461,22 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         $model = new ProductSelectionForm();
-        
-        if (Yii::$app->request->isGet && Yii::$app->session->has(self::SESS_PRODUCTS)) {
-            foreach (Yii::$app->session[self::SESS_PRODUCTS] as $productAttributes) {
-                $model->product_ids[] = $productAttributes['id'];
-            }
-        } else if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ( empty($model->product_ids)) {
-                Yii::$app->session->remove(self::SESS_PRODUCTS);
-            } else {
-                Yii::$app->session[self::SESS_PRODUCTS] = $model->querySelectedProductModels()
-                    ->asArray()
-                    ->all();
-                Yii::$app->session->remove(self::SESS_ORDERS);
-                return $this->redirect(['order']);
-            }
+        if (Yii::$app->session->has(self::SESS_PRODUCTS)) {
+            $model->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
         }
-
-        // select products for group 1
-        $productOtherCity = [15];
-        $productSameCity = [14];
         
-        $firstClassProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_1); 
-        // remove some product depending on address location (city/zipcode)
-        // This feature is disabled 
-        /*
-        $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
-        if( $address->zip_code === "94300" || strtoupper($address->city) === "VINCENNES") {
-            $firstClassProductIds = array_filter($firstClassProductIds, function($productId) use($productOtherCity) {
-                return ! \in_array($productId, $productOtherCity);
-            });
-        } else {
-            $firstClassProductIds = array_filter($firstClassProductIds, function($productId) use ($productSameCity) {
-                return ! \in_array($productId, $productSameCity);
-            });
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->session[self::SESS_PRODUCTS] = $model->getAttributes();
+            // ensure that orders and selected products are in synch
+            Yii::$app->session->remove(self::SESS_ORDERS);
+
+            // process to next step
+            return $this->redirect(['order']);
         }
-        */
-        $model->setCategory1ProductIds($firstClassProductIds);
-
-        // prepare to render the view
-        // we need the producrt id => name map only for product rendered as checkbox list
-        $rows = \app\models\Product::find()
-            ->where(['in', 'id', $firstClassProductIds])
-            ->asArray()
-            ->all();        
-        $firstClassProductIndex = ArrayHelper::map($rows, 'id', 'name'); // [ productId => productName]
-
-        $products_2 = $model
-            ->querySelectedProductModels(ProductSelectionForm::GROUP_2)
-            ->indexBy('id')
-            ->asArray()
-            ->all();
 
         return $this->renderWizard(
             $this->renderPartial('_product-select', [
                 'model' => $model,
-                'firstClassProductIndex' => $firstClassProductIndex,
-                'products_2' => $products_2
             ])
         );
     }
@@ -528,31 +487,36 @@ class RegistrationController extends \yii\web\Controller
             return $this->redirect(['product-select']);
         }
 
+        $selectedProductsForm = new ProductSelectionForm();
+        $selectedProductsForm->setAttributes(Yii::$app->session[self::SESS_PRODUCTS] , false);
+
         $orderModels = [];
         $products = []; // for rendering only
 
         // load orders from products selected in the previous step
         $fromContactID = \app\components\SessionContact::getContactId();
 
-        foreach (Yii::$app->session[self::SESS_PRODUCTS] as $product) {
+        $selectedCourseModels = $selectedProductsForm->getCoursProductModels();
+
+        foreach ($selectedCourseModels as $product) {
             
             // compute date range values
             $dateStart = SessionDateRange::getStart();
-            if (!empty($product['valid_date_start'])) {
-                $dateStart = $product['valid_date_start'];
+            if (!empty($product->valid_date_start)) {
+                $dateStart = $product->valid_date_start;
             }
             $dateEnd = SessionDateRange::getEnd();
-            if (!empty($product['valid_date_end'])) {
-                $dateEnd = $product['valid_date_end'];
+            if (!empty($product->valid_date_end)) {
+                $dateEnd = $product->valid_date_end;
             }
             $order = new Order([
-                'product_id'       => $product['id'],
+                'product_id'       => $product->id,
                 // by CONVENTION : because the contact may be new and so, doesn't have any id,
                 // we temporary set the to_contact_id with the same value as the from_contact_id set the
                 // This WILL NEED TO BE UPDATED when registration is submited
                 'to_contact_id'    => $fromContactID,
                 'from_contact_id'  => $fromContactID,
-                'value'            => $product['value'],
+                'value'            => $product->value,
                 'valid_date_start' => DateHelper::toDateAppFormat($dateStart),
                 'valid_date_end'   => DateHelper::toDateAppFormat($dateEnd),
             ]);

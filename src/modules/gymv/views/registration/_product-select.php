@@ -26,12 +26,6 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
 
         <div class="row">
             <div class="col-xs-5">
-                <!--
-                <?= $form->field($model, 'product_ids')
-                    ->checkboxList($firstClassProductIndex)
-                    ->label(false)
-                ?>
-                -->
 
                 <?= $form->field($model, 'adhesion')
                     ->label('Adhésion Gymv : ')
@@ -124,26 +118,26 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                     ],
                 ]); ?>   
                 <div id="selected-product-list">
-                    <?php foreach ($model->getSelectedProductIdsByGroup(ProductSelectionForm::GROUP_2) as $productId) :?>
-                        <div class="selected-product-item" data-item-id="<?= $productId ?>">
+                    <?php foreach ($model->getCoursProductModels() as $coursId => $cours) :?>
+                        <div class="selected-product-item" data-item-id="<?= $coursId ?>">
                             <div class="product-remove" title="remove">
                                 <span data-action="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </div>
 
                             <span class="product-name">
-                                <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> <?= Html::encode($products_2[$productId]['name']) ?>
+                                <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> <?= Html::encode($cours->name) ?>
                             </span>
 
-                            <?php if (!empty($products_2[$productId]['short_description'])): ?>
+                            <?php if (!empty($cours->short_description)): ?>
                                 <span class="product-short-description">
-                                    <?= Html::encode($products_2[$productId]['short_description']) ?>
+                                    <?= Html::encode($cours->short_description) ?>
                                 </span>
                             <?php endif; ?>
 
-                            <input type="hidden" name="ProductSelectionForm[product_ids][]" value="<?= $productId ?>">
+                            <input type="hidden" name="ProductSelectionForm[cours_ids][]" value="<?= $coursId ?>">
                         </div>
-                    <?php endforeach ?>
-                </div>     
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
         <hr/>

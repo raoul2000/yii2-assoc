@@ -30,6 +30,7 @@
                             </span>`
                         : ''
                     )
+                + ` <input type="hidden" name="ProductSelectionForm[cours_ids][]" value="${product.id}"/>`
                 + ` <input type="hidden" name="ProductSelectionForm[product_ids][]" value="${product.id}"/>
             </div>`;
             el.selectedProductList.insertAdjacentHTML('afterbegin',html);
