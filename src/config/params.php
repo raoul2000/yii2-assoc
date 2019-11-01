@@ -94,7 +94,7 @@ return [
      */
     
     'registration.product.group' => [
-        'group-1' => [
+        'courses' => [
             'productId' => [14,15,16,12,13],
             //'categoryId' => [9]
         ],

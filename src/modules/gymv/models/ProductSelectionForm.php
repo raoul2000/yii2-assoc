@@ -9,8 +9,7 @@ use \app\models\Product;
 
 class ProductSelectionForm extends Model
 {
-    const GROUP_1 = 'group-1';
-    const GROUP_2 = 'group-2';
+    const GROUP_COURSE = 'courses';
 
     const ADHESION_VINCENNOIS     = "1";
     const ADHESION_NON_VINCENNOIS = "2";
@@ -181,34 +180,6 @@ class ProductSelectionForm extends Model
             + ( $soranoModel === null ?    [] : [ $soranoModel->id => $soranoModel])
             + $selectedCourseModels;
     }
-
-    /**
-     * Returns the ids of all selectd products for a given categorey or if not
-     * group is provided, returns all currently selected product ids
-     *
-     * @param string $group
-     * @return [string] a list of product ids
-     */
-    public function getSelectedProductIds($group = null)
-    {
-        $result = [];
-        if ($group === null) {
-            return $this->product_ids;
-        }
-        foreach ($this->product_ids as  $id) {
-            if (\in_array($id, $this->_cat1_product_ids)) {
-                if ($group == self::GROUP_1) {
-                    $result[] = $id;
-                }
-            } else {
-                if ($group == self::GROUP_2) {
-                    $result[] = $id;
-                }
-            }
-        }
-        return $result;
-    }
-
     /**
      * Returns the list of product id that have been configured fro the given group.
      * 
@@ -222,8 +193,7 @@ class ProductSelectionForm extends Model
      */
     static public function getProductIdsByGroup($groupName) 
     {
-        // TODO: change that to return courses products
-        
+        //FIXME: doesn't return correct prodicts
         // is there a configuration for product groups ? 
         if( !array_key_exists('registration.product.group', Yii::$app->params)) {
             return [];
@@ -246,7 +216,7 @@ class ProductSelectionForm extends Model
         $productIdKey =  $categoryIdKey = false;
 
         if (array_key_exists('productId', $conf) && is_array($conf['productId'])) {
-            $query->andWhere([ 'in', 'id', $conf['productId']]);
+            $query->where([ 'in', 'id', $conf['productId']]);
             $productIdKey = true;
         }
         if (array_key_exists('categoryId', $conf) && is_array($conf['categoryId'])) {
