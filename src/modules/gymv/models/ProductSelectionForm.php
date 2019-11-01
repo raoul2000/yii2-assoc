@@ -90,6 +90,11 @@ class ProductSelectionForm extends Model
             ->all();
     }
 
+    /**
+     * Returns the product for the select type of "adhésion" 
+     *
+     * @return Product|NULL
+     */
     public function getAdhesionModel() 
     {
         $result = null;
@@ -107,17 +112,76 @@ class ProductSelectionForm extends Model
         } 
         return $result;
     }
-    
 
-    public function setCategory1ProductIds($ids)
+    /**
+     * Returns the product depending on the type of license selected or NULL if
+     * no license is selected (Ie. DEJA_LICENCIE)
+     *
+     * @return Product|NULL
+     */
+    public function getLicenceModel() 
     {
-        $this->_cat1_product_ids = $ids;
+        $result = null;
+        $productId = null;
+        switch ($this->achat_licence) {
+            case self::ACHAT_LICENCE_ADULTE:
+                $productId = Yii::$app->params['registration.product.license_adulte'];
+                break;
+                case self::ACHAT_LICENCE_ENFANT:
+                $productId = Yii::$app->params['registration.product.license_enfant'];
+                break;
+        }
+        if (!empty($productId)) {
+            $result = Product::findOne($productId);
+        } 
+        return $result;
+    }
+    /**
+     * Returns the product model for "Assurance Federation" or NULL if this product 
+     * has not been selected
+     *
+     * @return Product|NULL
+     */
+    public function getFederationAssuranceModel()
+    {
+        return empty($this->assurance_extra) || $this->achat_licence === self::DEJA_LICENCIE
+            ? null
+            : Product::findOne(Yii::$app->params['registration.product.license_assurance']);
     }
 
-    public function getSelectedProductIdsByGroup($group) 
+    /**
+     * Returns the product model for "Inscription Sorano" or NULL if this
+     * product has not been selected
+     *
+     * @return Product|NULL
+     */
+    public function getSoranoModel()
     {
-        return $this->getSelectedProductIds($group);
+        return !$this->inscription_sorano
+            ? null
+            : Product::findOne(Yii::$app->params['registration.product.adhesion_sorano']);
     }
+    /**
+     * Returns a list of product models depending on the current selected items
+     *
+     * @return [Products]
+     */
+    public function getModels()
+    {
+        $selectedCourseModels = $this->getCoursProductModels();
+        $adhesionModel = $this->getAdhesionModel();
+        $licenceModel = $this->getLicenceModel();
+        $assuranceModel = $this->getFederationAssuranceModel();
+        $soranoModel = $this->getSoranoModel();
+
+        // use '+' to concat arrays in order to preserve keys (index)
+        return [ $adhesionModel->id => $adhesionModel ] 
+            + ( $licenceModel === null ?   [] : [ $licenceModel->id => $licenceModel])
+            + ( $assuranceModel === null ? [] : [ $assuranceModel->id => $assuranceModel])
+            + ( $soranoModel === null ?    [] : [ $soranoModel->id => $soranoModel])
+            + $selectedCourseModels;
+    }
+
     /**
      * Returns the ids of all selectd products for a given categorey or if not
      * group is provided, returns all currently selected product ids
@@ -145,12 +209,6 @@ class ProductSelectionForm extends Model
         return $result;
     }
 
-    public function querySelectedProductModels($group = null)
-    {
-        return \app\models\Product::find()
-            ->where(['in', 'id', $this->getSelectedProductIds($group)]);
-    }  
-
     /**
      * Returns the list of product id that have been configured fro the given group.
      * 
@@ -164,6 +222,8 @@ class ProductSelectionForm extends Model
      */
     static public function getProductIdsByGroup($groupName) 
     {
+        // TODO: change that to return courses products
+        
         // is there a configuration for product groups ? 
         if( !array_key_exists('registration.product.group', Yii::$app->params)) {
             return [];

@@ -137,8 +137,11 @@ class RegistrationController extends \yii\web\Controller
             $data['address'] = $session[self::SESS_ADDRESS];
         }
 
-        if ($session->has(self::SESS_PRODUCTS) && $session->has(self::SESS_ORDERS)) {            
-            $products = $session[self::SESS_PRODUCTS];
+        if ($session->has(self::SESS_PRODUCTS) && $session->has(self::SESS_ORDERS)) {        
+            $selectedProducts = new ProductSelectionForm($session[self::SESS_PRODUCTS]);
+            
+            //$products = $session[self::SESS_PRODUCTS];
+            $products = $selectedProducts->getModels();
             $data['orders'] = array_map(function($order) use ($products) {
                 $foundProduct = null;
                 foreach ($products as $product) {
@@ -462,12 +465,13 @@ class RegistrationController extends \yii\web\Controller
 
         $model = new ProductSelectionForm();
         if (Yii::$app->session->has(self::SESS_PRODUCTS)) {
-            $model->setAttributes(Yii::$app->session[self::SESS_PRODUCTS]);
+            $model->setAttributes(Yii::$app->session[self::SESS_PRODUCTS], false);
         }
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session[self::SESS_PRODUCTS] = $model->getAttributes();
-            // ensure that orders and selected products are in synch
+
+            // ensure that orders and selected products are in synch : clear oders stored in session
             Yii::$app->session->remove(self::SESS_ORDERS);
 
             // process to next step
@@ -481,26 +485,32 @@ class RegistrationController extends \yii\web\Controller
         );
     }
 
+    /**
+     * Based on the selected product, display a form to update attributes for each order
+     * Selected product must be available in the current session. 
+     *
+     * @return void
+     */
     public function actionOrder()
     {
         if (!Yii::$app->session->has(self::SESS_PRODUCTS)) {
             return $this->redirect(['product-select']);
         }
 
-        $selectedProductsForm = new ProductSelectionForm();
-        $selectedProductsForm->setAttributes(Yii::$app->session[self::SESS_PRODUCTS] , false);
-
+        $selectedProductsForm = new ProductSelectionForm(Yii::$app->session[self::SESS_PRODUCTS]);
+        // list of orders created for each products
         $orderModels = [];
-        $products = []; // for rendering only
 
-        // load orders from products selected in the previous step
+        // get all models for selected products
+        $selectedProductModels = $selectedProductsForm->getModels();
+        // read current contact info
         $fromContactID = \app\components\SessionContact::getContactId();
 
-        $selectedCourseModels = $selectedProductsForm->getCoursProductModels();
-
-        foreach ($selectedCourseModels as $product) {
+        // create one order for each selected product
+        foreach ($selectedProductModels as $product) {
             
-            // compute date range values
+            // compute date range values : if product doesn't have a validity date range
+            // use the current (session) one
             $dateStart = SessionDateRange::getStart();
             if (!empty($product->valid_date_start)) {
                 $dateStart = $product->valid_date_start;
@@ -509,7 +519,8 @@ class RegistrationController extends \yii\web\Controller
             if (!empty($product->valid_date_end)) {
                 $dateEnd = $product->valid_date_end;
             }
-            $order = new Order([
+            // create the order model and store it in the list
+            $orderModels[]  = new Order([
                 'product_id'       => $product->id,
                 // by CONVENTION : because the contact may be new and so, doesn't have any id,
                 // we temporary set the to_contact_id with the same value as the from_contact_id set the
@@ -520,15 +531,14 @@ class RegistrationController extends \yii\web\Controller
                 'valid_date_start' => DateHelper::toDateAppFormat($dateStart),
                 'valid_date_end'   => DateHelper::toDateAppFormat($dateEnd),
             ]);
-            $orderModels[] = $order;
-
-            // we need product name for rendering
-            $products[$product['id']] = $product;
         }
 
         // load validate and save user updates
         if (\Yii::$app->request->isPost) {
+            // replace default values with the ones retrieved from form submition
             Model::loadMultiple($orderModels, Yii::$app->request->post());
+
+            // validate all order models
             if (Model::validateMultiple($orderModels)) {
                 $ordersToSave = array_map(function($order) {
                     return $order->getAttributes();
@@ -549,7 +559,7 @@ class RegistrationController extends \yii\web\Controller
         return $this->renderWizard(
             $this->renderPartial('_order', [
                 'orderModels'     => $orderModels,
-                'products'        => $products,
+                'products'        => $selectedProductModels,
                 'orderTotalValue' => $orderTotalValue
             ])
         );

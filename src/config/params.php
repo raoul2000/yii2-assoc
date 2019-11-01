@@ -105,10 +105,10 @@ return [
     // transaction created during registration are assigned this category Id
     'registration.product.adhesion_vincennois' => 132,
     'registration.product.adhesion_non_vincennois' => 133,
-    'registration.product.adhesion_sorano' => 17,
-    'registration.product.license_adulte' => 17,
-    'registration.product.license_enfant' => 17,
-    'registration.product.license_assurance' => 17,
+    'registration.product.license_adulte' => 134,
+    'registration.product.license_enfant' => 135,
+    'registration.product.license_assurance' => 136,
+    'registration.product.adhesion_sorano' => 137,
 
     'registration.transaction.categoryId' => 17,
     /*
