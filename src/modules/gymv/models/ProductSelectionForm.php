@@ -90,6 +90,25 @@ class ProductSelectionForm extends Model
             ->all();
     }
 
+    public function getAdhesionModel() 
+    {
+        $result = null;
+        $productId = null;
+        switch ($this->adhesion) {
+            case self::ADHESION_VINCENNOIS:
+                $productId = Yii::$app->params['registration.product.adhesion_vincennois'];
+                break;
+                case self::ADHESION_NON_VINCENNOIS:
+                $productId = Yii::$app->params['registration.product.adhesion_non_vincennois'];
+                break;
+        }
+        if (!empty($productId)) {
+            $result = Product::findOne($productId);
+        } 
+        return $result;
+    }
+    
+
     public function setCategory1ProductIds($ids)
     {
         $this->_cat1_product_ids = $ids;
