@@ -75,6 +75,9 @@ class Contact extends \yii\db\ActiveRecord
                     'birthday',
                 ],
             ],
+            'taggable' => [
+                'class' => \app\components\behaviors\TaggableBehavior::className(),
+            ],    
             // disable soft delete
             /*
             'softDeleteBehavior' => [
@@ -116,6 +119,8 @@ class Contact extends \yii\db\ActiveRecord
             ['email', 'email'],
 
             [['birthday', 'date_1'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
+            // tags
+            ['tagValues', 'safe'],
         ];
     }
     /**
@@ -280,6 +285,11 @@ class Contact extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ContactRelation::className(), ['target_contact_id' => 'id']);
     }
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])
+            ->viaTable('{{%tag_has_contact}}', ['contact_id' => 'id']);
+    }    
     /**
      * Returns an array containing all contact long names indexed by contact Id.
      *
@@ -317,4 +327,5 @@ class Contact extends \yii\db\ActiveRecord
     {
         return $this->getLongName();
     }
+
 }

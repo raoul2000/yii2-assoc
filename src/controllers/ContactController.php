@@ -68,7 +68,12 @@ class ContactController extends Controller
             ],
             'stat-data' => [
                 'class' => 'app\components\actions\contacts\stat\AjaxStatAction'
-            ]
+            ],
+            // tags Actions /////////////////////////////////////////
+
+            'query-tags' => [
+                'class' => 'app\components\actions\TagListAction',
+            ],
         ];
     }
     /**

@@ -11,6 +11,12 @@ class ContactQuery extends \yii\db\ActiveQuery
 {
     use \app\components\SmartDateConditionTrait;
 
+    public function behaviors()
+    {
+        return [
+            \app\components\behaviors\TaggableQueryBehavior::className(),
+        ];
+    }
     /**
      * {@inheritdoc}
      * @return Transaction[]|array
