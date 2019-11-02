@@ -81,11 +81,7 @@ return [
     /**
      * Product Group For Registration
      * 
-     * During registration wizard, the product selection panel displays product in two ways depending the group 
-     * they belong to : 
-     * 
-     * - group-1 : products are displayed as a checkbox list
-     * - group-2 : products are searchable through a auto completion input control
+     * During registration wizard, products are grouped for different purposes.
      * 
      * To configure a group, assign an map with 2 keys : 
      * 
@@ -95,32 +91,28 @@ return [
     
     'registration.product.group' => [
         'courses' => [
-            'productId' => [14,15,16,12,13],
-            //'categoryId' => [9]
+            //'productId' => [95,94],
+            'categoryId' => [14,15,16]
         ],
+        // not used anymore
         'group-2' => [
             'categoryId' => [9,10,11]            
         ],
     ],
-    // transaction created during registration are assigned this category Id
+    /**
+     * Below is a definition of specific products used during the registration wizard process.
+     * Each value must be a valid product Id.
+     */
+
     'registration.product.adhesion_vincennois' => 132,
+
     'registration.product.adhesion_non_vincennois' => 133,
     'registration.product.license_adulte' => 134,
     'registration.product.license_enfant' => 135,
     'registration.product.license_assurance' => 136,
     'registration.product.adhesion_sorano' => 137,
-
+    /**
+     * ID of the category assigned to transactions created during the registration wizard
+     */
     'registration.transaction.categoryId' => 17,
-    /*
-    'registration.product.group' => [
-        'group-1' => [
-            'productId' => [1,2, 3, 10],
-            //'categoryId' => [1]
-        ],
-        'group-2' => [
-            'categoryId' => [1]            
-        ],    
-    ],
-    'registration.transaction.categoryId' => 2*/
-
 ];

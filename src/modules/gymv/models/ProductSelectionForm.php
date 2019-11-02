@@ -181,7 +181,7 @@ class ProductSelectionForm extends Model
             + $selectedCourseModels;
     }
     /**
-     * Returns the list of product id that have been configured fro the given group.
+     * Returns the list of product id that have been configured for the given group.
      * 
      * This function is used during the registration wizard, at the product selection step.
      * Depending on group configuration, products are displayed in a different way. 
@@ -193,27 +193,26 @@ class ProductSelectionForm extends Model
      */
     static public function getProductIdsByGroup($groupName) 
     {
-        //FIXME: doesn't return correct prodicts
+        $result = [];
         // is there a configuration for product groups ? 
         if( !array_key_exists('registration.product.group', Yii::$app->params)) {
-            return [];
+            return $result;
         }
         $groupConf = \Yii::$app->params['registration.product.group'];
 
         // is there a configuration for this particlar group $groupName ?
         if (!array_key_exists($groupName, $groupConf)) {
-            return [];
+            return $result;
         }
 
         // find what are the product that match this group configuration
-        $conf = $groupConf[$groupName];
+        $conf = $groupConf[$groupName]; //shortcut
 
-        $result = [];
         $query = Product::find()
             ->select('id')
             ->asArray();
 
-        $productIdKey =  $categoryIdKey = false;
+        $productIdKey = $categoryIdKey = false;
 
         if (array_key_exists('productId', $conf) && is_array($conf['productId'])) {
             $query->where([ 'in', 'id', $conf['productId']]);
@@ -224,10 +223,11 @@ class ProductSelectionForm extends Model
             $categoryIdKey = true;
         }
 
-        // if neither productId nor categoryId is configured, return an empty array
+        // if neither productId nor categoryId condition is configured, return an empty array
         if ( $productIdKey || $categoryIdKey) {
-            foreach ($query->all() as $product) {
-                $result[] = $product['id'];
+            $rows = $query->all();
+            foreach ($rows as $product) {
+                $result[] = $product['id']; // assign product Id to result list
             }
         } 
         return $result;

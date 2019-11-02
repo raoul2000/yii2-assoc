@@ -441,13 +441,12 @@ class RegistrationController extends \yii\web\Controller
             ->where(['LIKE', 'name', $productName])
             ->asArray();
 
-        $product_group_2 = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);        
-        if ( count($product_group_2) > 0) {
-            $query->andWhere(['IN', 'id', $product_group_2 ]);
+        $courseProducts = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);        
+        if ( count($courseProducts) > 0) {
+            return $query->andWhere(['IN', 'id', $courseProducts ])->all();
+        } else {
+            return [];
         }
-
-        // done : return response
-        return $query->all();
     }
     /**
      * Ask the user to select products.
