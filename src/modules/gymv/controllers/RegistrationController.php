@@ -463,6 +463,9 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         $model = new ProductSelectionForm();
+        // set default 
+        $model->achat_licence = ProductSelectionForm::ACHAT_LICENCE_ADULTE;
+
         if (Yii::$app->session->has(self::SESS_PRODUCTS)) {
             $model->setAttributes(Yii::$app->session[self::SESS_PRODUCTS], false);
         }
