@@ -55,6 +55,12 @@ class ProductSelectionForm extends Model
     public $product_ids = [];
     private $_cat1_product_ids = [];
 
+    public function init()
+    {
+        parent::init();
+        // set default values
+        $this->achat_licence = self::ACHAT_LICENCE_ADULTE;
+    }
     public function rules()
     {
         return [

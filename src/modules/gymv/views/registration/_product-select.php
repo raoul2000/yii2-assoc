@@ -50,7 +50,6 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                             ProductSelectionForm::ACHAT_LICENCE_ENFANT => 'licence ENFANT',
                         ],[
                             'id'        => 'achat_licence',
-                            'prompt'    => \Yii::t('app', 'make your choice ...'),
                             'options'   => [
                                 ProductSelectionForm::ACHAT_LICENCE_ADULTE => ['data-show-on-select' => true],
                                 ProductSelectionForm::ACHAT_LICENCE_ENFANT => ['data-show-on-select' => true]
