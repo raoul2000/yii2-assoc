@@ -154,6 +154,7 @@ class ContactController extends Controller
                 $bankAccountDataProvider = $bankAccountSearchModel->search(
                     Yii::$app->request->queryParams
                 );
+                
                 $bankAccountDataProvider
                     ->query
                     ->andWhere(['contact_id' => $id]);
@@ -163,7 +164,7 @@ class ContactController extends Controller
                     'tab' => $tab,
                     'tabContent' => $this->renderPartial('_tab-account', [
                         'bankAccountDataProvider' => $bankAccountDataProvider,
-                        'model' => $model,
+                        'model' => $model
                     ])
                 ]);
                 break;
@@ -225,6 +226,9 @@ class ContactController extends Controller
                             ['from_contact_id' => $id]
                     ])
                     ->with('transactions');
+                    
+                // compute total Value on the current grid rows
+                $totalValue = $orderDataProvider->query->sum('value');                     
 
                 return $this->render('view', [
                     'model' => $model,
@@ -234,7 +238,8 @@ class ContactController extends Controller
                         'orderSearchModel' => $orderSearchModel,
                         'orderDataProvider' => $orderDataProvider,
                         'products' => \app\models\Product::getNameIndex(),
-                        'contacts' => \app\models\Contact::getNameIndex()
+                        'contacts' => \app\models\Contact::getNameIndex(),
+                        'totalValue' => $totalValue
                     ])
                 ]);
                 break;

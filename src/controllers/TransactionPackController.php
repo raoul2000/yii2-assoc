@@ -108,12 +108,15 @@ class TransactionPackController extends Controller
                 ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->andWhere(['transaction_pack_id' => null])
         );
-        
+        // compute total Value on the current grid rows
+        $totalValue = $transactionDataProvider->query->sum('value');
+
         return $this->render('link-transaction', [
             'transactionPack' => $transactionPack,
             'transactionSearchModel' => $transactionSearchModel,
             'transactionDataProvider' => $transactionDataProvider,
-            'bankAccounts' => BankAccount::getNameIndex()
+            'bankAccounts' => BankAccount::getNameIndex(),
+            'totalValue' => $totalValue
         ]);
     }
     /**
@@ -152,6 +155,9 @@ class TransactionPackController extends Controller
                 $transactionDataProvider = $transactionSearchModel->search(Yii::$app->request->queryParams);
                 $transactionDataProvider->query->andWhere(['transaction_pack_id' => $model->id]);
         
+                // compute total Value on the current grid rows
+                $totalValue = $transactionDataProvider->query->sum('value');
+
                 return $this->render('view', [
                     'model' => $model,
                     'tab' => $tab,
@@ -159,7 +165,8 @@ class TransactionPackController extends Controller
                         'model' => $model,
                         'transactionSearchModel' => $transactionSearchModel,
                         'transactionDataProvider' => $transactionDataProvider,
-                        'bankAccounts' => BankAccount::getNameIndex()
+                        'bankAccounts' => BankAccount::getNameIndex(),
+                        'totalValue' => $totalValue
                     ])
                 ]);
                 break;

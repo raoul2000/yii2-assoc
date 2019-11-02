@@ -66,6 +66,7 @@ $this->registerJs($jsScript, View::POS_READY, 'transaction-pack-link-handler');
 
 
     <?php Pjax::begin(['id' => 'pjax_' . $gridViewElementId]); ?>
+        <?= \Yii::t('app', 'Total Value') ?> : <b><?= $totalValue ?></b>
         <?= GridView::widget([
             'id'            => $gridViewElementId,
             'tableOptions' 	=> ['class' => 'table table-hover table-condensed'],

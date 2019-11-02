@@ -158,7 +158,9 @@ class TransactionController extends Controller
             Transaction::find()
                 ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
         );
-        $totalValue = $dataProvider->query->sum('value'); // compute total Value
+        
+        // compute total Value on the current grid rows
+        $totalValue = $dataProvider->query->sum('value');
 
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,

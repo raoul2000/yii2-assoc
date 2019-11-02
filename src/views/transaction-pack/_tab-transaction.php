@@ -16,6 +16,7 @@ $transactionPackModel = $model;
 </p>    
 
 <?php Pjax::begin(); ?>
+    <?= \Yii::t('app', 'Total Value') ?> : <b><?= $totalValue ?></b>
     <?= GridView::widget([
         'tableOptions' => ['class' => 'table table-hover table-condensed'],
         'dataProvider' => $transactionDataProvider,
