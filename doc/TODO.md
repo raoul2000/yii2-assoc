@@ -1,3 +1,9 @@
+## Add Error monitoring service
+
+- see https://free-for.dev/#/?id=crash-and-exception-handling
+    - https://www.honeybadger.io/plans/#feature-grid
+    - https://sentry.io/pricing/
+
 ## Escape Registration text
 
 In registration wizards, several HTML are inserted by js but content is not escaped
