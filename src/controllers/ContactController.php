@@ -92,7 +92,14 @@ class ContactController extends Controller
         );
         $dataProvider->query->andWhere(['is_natural_person' => ($tab == 'person')]);
 
-        
+        // apply tag search condition if tag values have been submitted
+        $tagValues = Yii::$app->request->get('tagValues');
+        if (!empty($tagValues)) {
+            $dataProvider
+                ->query
+                ->anyTagValues($tagValues);      
+        }
+
         if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
             // request for downloading report
 
@@ -136,9 +143,10 @@ class ContactController extends Controller
         } else {
             // request to render
             return $this->render('index', [
-                'searchModel' => $searchModel,
+                'searchModel'  => $searchModel,
                 'dataProvider' => $dataProvider,
-                'tab' => $tab
+                'tagValues'    => $tagValues,
+                'tab'          => $tab
             ]);
         }
     }

@@ -40,6 +40,15 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </p>
 
+    <?php  echo $this->render(
+        '_search', 
+        [
+            'model' => $searchModel, 
+            'tagValues' => $tagValues,
+            'tab' => $tab
+        ]
+    ); ?>
+    
     <?= yii\bootstrap\Nav::widget([
         'options' => ['class' =>'nav-tabs'],
         'items' => [

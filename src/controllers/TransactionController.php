@@ -168,11 +168,6 @@ class TransactionController extends Controller
                 ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with('orders')
         );
-/*
-        $dataProvider
-            ->query
-                ->dateInRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
-  */              
 
         // apply tag search condition if tag values have been submitted
         $tagValues = Yii::$app->request->get('tagValues');

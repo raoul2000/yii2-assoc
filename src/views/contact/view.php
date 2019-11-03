@@ -71,6 +71,7 @@ $contactModel = $model;
                                 }
                             }
                         ],
+                        'tagValues:tagsList',
                     ],
                 ]) ?>
             </div>

@@ -42,6 +42,26 @@ $uploadForm = new \app\models\forms\UploadForm();
                 <?= $form->field($model, 'note')->textInput(['maxlength' => true, 'autocomplete'=> 'off' ]) ?>
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <?= $form->field($model, 'tagValues')
+                    ->widget(\dosamigos\selectize\SelectizeTextInput::className(), [
+                        // calls an action that returns a JSON object with matched tags
+                        'loadUrl' => ['query-tags'],
+                        'options' => ['class' => 'form-control'],
+                        'clientOptions' => [
+                            'plugins' => ['remove_button'],
+                            'valueField' => 'name',
+                            'labelField' => 'name',
+                            'searchField' => ['name'],
+                            'create' => true,
+                        ],
+                    ]
+                    )->hint(\Yii::t('app', 'Use commas to separate tags'))
+                ?>            
+            </div>
+        </div>
 
         <hr/>
 
