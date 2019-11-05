@@ -243,4 +243,10 @@
     display: block;
     margin-left: 3em;
 }
+#wiz-product-select .justif-wrapper .form-group {
+    margin-bottom: 0;
+}
+#wiz-product-select label.light-font {
+    font-weight: 100;
+}
 /* /products */  

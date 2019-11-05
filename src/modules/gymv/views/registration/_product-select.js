@@ -3,7 +3,9 @@
         "selectedProductList"     : document.getElementById('selected-product-list'),
         "achat_licence"           : document.getElementById('achat_licence'),
         "container_assurance"     : document.getElementById('container-assurance'),
-        "container_achat_licence" : document.getElementById('container-achat-licence')
+        "container_achat_licence" : document.getElementById('container-achat-licence'),
+        "chk_justif_certificate"  : document.getElementById('chk_justif_certificate'),
+        "certif_validity_date"    : document.getElementById('certif_validity_date'),
     };
     
     const escapeHTML = (txt) => document.createElement('div').appendChild(document.createTextNode(txt)).parentNode.innerHTML; 
@@ -65,14 +67,23 @@
             ? 'visible'
             : 'hidden';
     };
-
+    /**
+     * When the user check/uncheck the 'a fourni un certificat' the valid date range input bowes is enabled/disabled
+     * 
+     * @param {Event} ev checkbox change event
+     */
+    const onChkCertificateChange = (ev) => {
+        el.certif_validity_date.querySelectorAll('input').forEach(input => input.disabled = ! el.chk_justif_certificate.checked);
+    }
     // main //////////////////////////////////////////////////////////////////
 
     el.selectedProductList.addEventListener('click', handleProductAction);
     el.achat_licence.addEventListener('change', handlerAssuranceChoice);
+    el.chk_justif_certificate.addEventListener('change', onChkCertificateChange);
+
     handlerAssuranceChoice(); // force render update
 
-    // add function "addToSelectedProducts" to the global scop so it can be used by selectizejs 
+    // add function "addToSelectedProducts" to the global scope so it can be used by selectizejs 
     // when user selects a product item 
     // @ts-ignore
     window.gymv = {

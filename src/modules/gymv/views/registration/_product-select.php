@@ -68,6 +68,42 @@ $this->registerJs(file_get_contents(__DIR__ . '/_product-select.js'), View::POS_
                     ->checkbox([
                         'label' => "Inscription Espace Sorano"
                 ])?>
+
+
+                <div class="well justif-wrapper">
+                    <?= $form->field($model, 'justif_attestation')
+                        ->checkbox([
+                            'label' => "A fourni une attestation",
+                            'labelOptions' => [ 'class' => 'light-font']
+                    ])?>
+                    <?= $form->field($model, 'justif_certificat')
+                        ->checkbox([
+                            'id'            => 'chk_justif_certificate',
+                            'label' => "A fourni un certificat médical",
+                            'labelOptions' => [ 'class' => 'light-font'],
+                            'data-target-id' => 'certif_validity_date'
+                    ])?>
+                    <div id="certif_validity_date">
+                        <?= $form->field($model, "certif_valid_date_start")
+                            ->label('valid from', ['class' => 'light-font'])
+                            ->textInput([
+                                'class'         => 'transaction-reference_date form-control', 
+                                'maxlength'     => true, 
+                                'autocomplete'  => 'off',
+                                'placeholder'   => \Yii::t('app', 'Ex: 23/01/2001')
+                            ])
+                        ?>                    
+                        <?= $form->field($model, "certif_valid_date_end")
+                            ->label('valid until', ['class' => 'light-font'])
+                            ->textInput([
+                                'class'         => 'transaction-reference_date form-control', 
+                                'maxlength'     => true, 
+                                'autocomplete'  => 'off',
+                                'placeholder'   => \Yii::t('app', 'Ex: 23/01/2001'),
+                            ])
+                        ?>                    
+                    </div>
+                </div>
             </div>
 
             <div class="col-xs-7">

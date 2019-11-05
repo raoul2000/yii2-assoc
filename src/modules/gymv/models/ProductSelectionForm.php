@@ -51,6 +51,31 @@ class ProductSelectionForm extends Model
      * @var array
      */
     public $cours_ids = [];
+    /**
+     * When TRUE, the future member did provide a ceritifcate, otherwise FALSE
+     *
+     * @var boolean
+     */
+    public $justif_certificat;
+    /**
+     * When TRUE, the future member did provide a attestation, otherwise FALSE
+     *
+     * @var boolean
+     */
+    public $justif_attestation;
+    /**
+     * In case a certificate is provided (justif_certificat = TRUE) enter the validity start date
+     *
+     * @var string
+     */
+    public $certif_valid_date_start;
+    /**
+     * In case a certificate is provided (justif_certificat = TRUE) enter the validity end date
+     *
+     * @var string
+     */
+    public $certif_valid_date_end;
+    
 
     public $product_ids = [];
     private $_cat1_product_ids = [];
@@ -68,7 +93,13 @@ class ProductSelectionForm extends Model
                 self::ACHAT_LICENCE_ADULTE,
                 self::ACHAT_LICENCE_ENFANT
             ]],
-            [['assurance_extra', 'inscription_sorano'], 'boolean'],
+            [['assurance_extra', 'inscription_sorano', 'justif_certificat', 'justif_attestation'], 'boolean'],
+
+            // Validity Date Range ///////////////////////////////////////////////////
+            
+            [['certif_valid_date_start', 'certif_valid_date_end'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
+            ['certif_valid_date_start', \app\components\validators\DateRangeValidator::className()],
+
             // checks if every cours ID is an integer
             ['cours_ids', 'each', 'rule' => ['integer']],     
 

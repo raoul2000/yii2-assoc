@@ -112,6 +112,7 @@ class RegistrationController extends \yii\web\Controller
      */
     private function renderWizard($mainContent)
     {
+        Yii::$app->params[\app\components\Constant::PARAM_FLUID_LAYOUT] = false;
         return $this->render('wizard', [
             'wizMain'    => $mainContent,
             'wizSummary' => $this->buildWizSummary(),
