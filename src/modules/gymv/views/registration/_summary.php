@@ -50,22 +50,52 @@ use yii\web\View;
 <?php endif; ?>
 
 <?php if (isset($data['orders'])) :?>
-    <div class="address" style="margin-top:2em">
+    <div class="orders" style="margin-top:2em">
         <h4>
             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
             <?= \Yii::t('app', 'Orders') ?>
         </h4>
-        <?php $totalOrderValue = 0; ?>
-        <?php foreach ($data['orders'] as $order) :?>
-            <?php $totalOrderValue += $order['value']; ?>
-            <div class="product-line">
-                <span class="product-name"><?= Html::encode($order['product_name'])?></span>
-                <span class="order-value"><?= $order['value']?></span>
-            </div>
-        <?php endforeach;?>
-        <div class="product-line total-order-value" >
+
+        <div>
+            <?php 
+                // product with a price
+                $totalOrderValue = 0;
+            ?>
+
+            <?php foreach ($data['orders'] as $order) :?>
+                <?php $totalOrderValue += $order['value']; ?>
+                <div class="product-line">
+                    <span class="product-name"><?= Html::encode($order['product_name'])?></span>
+                    <span class="order-value"><?= $order['value']?></span>
+                </div>
+            <?php endforeach;?>
+
+            <div class="product-line total-order-value" >
                 <span class="product-name"><em>Total</em></span>
                 <span class="order-value"><b><?= $totalOrderValue?></b></span>
-            </div>            
+            </div>   
+        </div>
+
+        <div class="product-justif-container">
+            <i>justificatifs</i> : 
+            <?php if (isset($data['justifs']) && count($data['justifs']) != 0) :?>  
+                <ul>
+                    <?php foreach ($data['justifs'] as $justif) :?>
+                        <li>
+                            <span class="justif-product-name">
+                                <?= Html::encode($justif['product_name'])?>
+                                <?php if ( isset($justif['valid_date_start'])): ?>
+                                    (<?= $justif['valid_date_start']?> - <?= $justif['valid_date_end']?>)
+                                <?php endif;?>
+                            </span>
+                        </li>
+                    <?php endforeach;?> 
+                </ul>
+            <?php else: ?>
+                aucun
+            <?php endif; ?>                
+        </div>
+
     </div>
 <?php endif; ?>
+

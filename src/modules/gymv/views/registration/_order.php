@@ -22,9 +22,9 @@ $this->registerJs(file_get_contents(__DIR__ . '/_order.js'), View::POS_READY, 'r
         <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> You can now adjust the price of each product
         and the validation date too.
     </div -->
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>   
         <?php 
-            // echo $form->errorSummary($orderModels);
+            echo $form->errorSummary($orderModels);
          ?>
         <table id="orders" class="table table-condensed table-hover orders">
             <thead>

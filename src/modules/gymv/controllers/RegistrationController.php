@@ -141,7 +141,7 @@ class RegistrationController extends \yii\web\Controller
         if ($session->has(self::SESS_PRODUCTS) && $session->has(self::SESS_ORDERS)) {        
             $selectedProducts = new ProductSelectionForm($session[self::SESS_PRODUCTS]);
             
-            //$products = $session[self::SESS_PRODUCTS];
+            // paid products
             $products = $selectedProducts->getModels();
             $data['orders'] = array_map(function($order) use ($products) {
                 $foundProduct = null;
@@ -158,6 +158,28 @@ class RegistrationController extends \yii\web\Controller
                 }
                 return $order;
             },  $session[self::SESS_ORDERS]);
+
+            // special product : justif (they are free)
+            $justifs = [];
+            $certificateProductModel = $selectedProducts->getCertificatMedicalModel();
+            if($certificateProductModel !== null) {
+                // only this product (certificate) can have a specific validity date range
+                $justifs[] = [
+                    'product_name'     => $certificateProductModel->name,
+                    'valid_date_start' => $selectedProducts->certif_valid_date_start,
+                    'valid_date_end'   => $selectedProducts->certif_valid_date_end,
+                ];
+            }
+            $attestationProductModel = $selectedProducts->getAttestationModel();
+            if($attestationProductModel !== null) {
+                // the validity date range of this special product is the same as the current date range
+                $justifs[] = [
+                    'product_name' => $attestationProductModel->name
+                ];                
+            }
+
+            // final data set
+            $data['justifs'] = $justifs;
         }
         
         return $this->renderPartial('_summary', [
@@ -464,6 +486,7 @@ class RegistrationController extends \yii\web\Controller
         //Yii::$app->session->remove(self::SESS_PRODUCTS);
 
         $model = new ProductSelectionForm();
+
         // set default 
         $model->achat_licence = ProductSelectionForm::ACHAT_LICENCE_ADULTE;
 
@@ -536,7 +559,42 @@ class RegistrationController extends \yii\web\Controller
             ]);
         }
 
-        // load validate and save user updates
+        // deal with special producst : justificatifs --------------------------------------------
+/*
+        $specialOrders = [];
+        $attestationProductModel = $selectedProductsForm->getAttestationModel();
+        if ($attestationProductModel !== null) {
+            $specialOrders[]  = new Order([
+                'product_id'       => $attestationProductModel->id,
+                // by CONVENTION : because the contact may be new and so, doesn't have any id,
+                // we temporary set the to_contact_id with the same value as the from_contact_id set the
+                // This WILL NEED TO BE UPDATED when registration is submited
+                'to_contact_id'    => $fromContactID,
+                'from_contact_id'  => $fromContactID,
+                'value'            => 0,    // force to zero
+                // attestation is only valid for current date range
+                'valid_date_start' => DateHelper::toDateAppFormat(SessionDateRange::getStart()),
+                'valid_date_end'   => DateHelper::toDateAppFormat(SessionDateRange::getEnd()),
+            ]);
+        }
+
+        $certificateProductModel = $selectedProductsForm->getAttestationModel();
+        if ($certificateProductModel !== null) {
+            $specialOrders[]  = new Order([
+                'product_id'       => $certificateProductModel->id,
+                // by CONVENTION : because the contact may be new and so, doesn't have any id,
+                // we temporary set the to_contact_id with the same value as the from_contact_id set the
+                // This WILL NEED TO BE UPDATED when registration is submited
+                'to_contact_id'    => $fromContactID,
+                'from_contact_id'  => $fromContactID,
+                'value'            => 0,
+                // attestation is only valid for current date range
+                'valid_date_start' => $selectedProductsForm->certif_valid_date_start,
+                'valid_date_end'   => $selectedProductsForm->certif_valid_date_end
+            ]);
+        }
+*/
+        // load validate and save user updates ----------------------------------------------
         if (\Yii::$app->request->isPost) {
             // replace default values with the ones retrieved from form submition
             Model::loadMultiple($orderModels, Yii::$app->request->post());

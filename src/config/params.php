@@ -111,6 +111,8 @@ return [
     'registration.product.license_enfant' => 135,
     'registration.product.license_assurance' => 136,
     'registration.product.adhesion_sorano' => 137,
+    'registration.product.certificat_medical' => 138,
+    'registration.product.attestation' => 139,
     /**
      * ID of the category assigned to transactions created during the registration wizard
      */

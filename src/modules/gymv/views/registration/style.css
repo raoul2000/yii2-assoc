@@ -115,6 +115,15 @@
     border-top: 1px solid grey;
     margin-top: 1em;    
 }
+#wiz-summary .product-justif-container {
+    font-size: 0.8em;
+    margin-top:1.8em;
+    float:left;
+}
+#wiz-summary .product-justif-container ul {
+    padding-inline-start: 2.3em;
+}
+
 /* / Wizard Summary Col */
 
 

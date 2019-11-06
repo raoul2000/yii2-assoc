@@ -96,9 +96,16 @@ class ProductSelectionForm extends Model
             [['assurance_extra', 'inscription_sorano', 'justif_certificat', 'justif_attestation'], 'boolean'],
 
             // Validity Date Range ///////////////////////////////////////////////////
-            
+            [['certif_valid_date_start', 'certif_valid_date_end'], 'required', 'when' => function($model) {
+                return $model->justif_certificat;
+            }],
             [['certif_valid_date_start', 'certif_valid_date_end'], 'date', 'format' => Yii::$app->params['dateValidatorFormat']],
-            ['certif_valid_date_start', \app\components\validators\DateRangeValidator::className()],
+            ['certif_valid_date_start', 
+                \app\components\validators\DateRangeValidator::className(), 
+                'startDateAttributeName' => 'certif_valid_date_start',
+                'endDateAttributeName'   => 'certif_valid_date_end'
+
+            ],
 
             // checks if every cours ID is an integer
             ['cours_ids', 'each', 'rule' => ['integer']],     
@@ -190,6 +197,20 @@ class ProductSelectionForm extends Model
         return !$this->inscription_sorano
             ? null
             : Product::findOne(Yii::$app->params['registration.product.adhesion_sorano']);
+    }
+
+    public function getCertificatMedicalModel()
+    {
+        return !$this->justif_certificat
+            ? null
+            : Product::findOne(Yii::$app->params['registration.product.certificat_medical']);
+    }
+
+    public function getAttestationModel()
+    {
+        return !$this->justif_attestation
+            ? null
+            : Product::findOne(Yii::$app->params['registration.product.attestation']);
     }
     /**
      * Returns a list of product models depending on the current selected items
