@@ -82,6 +82,7 @@
     el.chk_justif_certificate.addEventListener('change', onChkCertificateChange);
 
     handlerAssuranceChoice(); // force render update
+    onChkCertificateChange(); // force render update
 
     // add function "addToSelectedProducts" to the global scope so it can be used by selectizejs 
     // when user selects a product item 
