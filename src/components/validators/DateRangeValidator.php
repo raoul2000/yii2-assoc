@@ -12,6 +12,12 @@ class DateRangeValidator extends Validator
 
     public function validateAttribute($model, $attribute)
     {
+        if(!$model->hasProperty($this->startDateAttributeName)) {
+            throw new \yii\base\UnknownPropertyException('invalid property ' . $this->startDateAttributeName);
+        }
+        if(!$model->hasProperty($this->endDateAttributeName)) {
+            throw new \yii\base\UnknownPropertyException('invalid property ' . $this->endDateAttributeName);
+        }
         if ($model->hasErrors($this->startDateAttributeName) || $model->hasErrors($this->endDateAttributeName)) {
             return;
         }
