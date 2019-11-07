@@ -559,41 +559,6 @@ class RegistrationController extends \yii\web\Controller
             ]);
         }
 
-        // deal with special producst : justificatifs --------------------------------------------
-/*
-        $specialOrders = [];
-        $attestationProductModel = $selectedProductsForm->getAttestationModel();
-        if ($attestationProductModel !== null) {
-            $specialOrders[]  = new Order([
-                'product_id'       => $attestationProductModel->id,
-                // by CONVENTION : because the contact may be new and so, doesn't have any id,
-                // we temporary set the to_contact_id with the same value as the from_contact_id set the
-                // This WILL NEED TO BE UPDATED when registration is submited
-                'to_contact_id'    => $fromContactID,
-                'from_contact_id'  => $fromContactID,
-                'value'            => 0,    // force to zero
-                // attestation is only valid for current date range
-                'valid_date_start' => DateHelper::toDateAppFormat(SessionDateRange::getStart()),
-                'valid_date_end'   => DateHelper::toDateAppFormat(SessionDateRange::getEnd()),
-            ]);
-        }
-
-        $certificateProductModel = $selectedProductsForm->getAttestationModel();
-        if ($certificateProductModel !== null) {
-            $specialOrders[]  = new Order([
-                'product_id'       => $certificateProductModel->id,
-                // by CONVENTION : because the contact may be new and so, doesn't have any id,
-                // we temporary set the to_contact_id with the same value as the from_contact_id set the
-                // This WILL NEED TO BE UPDATED when registration is submited
-                'to_contact_id'    => $fromContactID,
-                'from_contact_id'  => $fromContactID,
-                'value'            => 0,
-                // attestation is only valid for current date range
-                'valid_date_start' => $selectedProductsForm->certif_valid_date_start,
-                'valid_date_end'   => $selectedProductsForm->certif_valid_date_end
-            ]);
-        }
-*/
         // load validate and save user updates ----------------------------------------------
         if (\Yii::$app->request->isPost) {
             // replace default values with the ones retrieved from form submition
@@ -803,14 +768,53 @@ class RegistrationController extends \yii\web\Controller
 
         $contact = new Contact(Yii::$app->session[self::SESS_CONTACT]);
         $address = new Address(Yii::$app->session[self::SESS_ADDRESS]);
+
         $orders = array_map(function($orderAttr){
             return new Order($orderAttr);
         },Yii::$app->session[self::SESS_ORDERS]);
+
         $transactions = array_map(function($transactionAttr){
             return new Transaction($transactionAttr);
         },Yii::$app->session[self::SESS_TRANSACTIONS]);
 
-        
+        // deal with special products : justificatifs 
+        // for these one, no order has been created yet, because they don't need user input (value is zero)
+
+        $selectedProductsForm = new ProductSelectionForm(Yii::$app->session[self::SESS_PRODUCTS]);
+        $attestationOrder = $certificateOrder = null;    // special orders
+        $myContactID = \app\components\SessionContact::getContactId();
+
+        $attestationProductModel = $selectedProductsForm->getAttestationModel();
+        if ($attestationProductModel !== null) {
+            $attestationOrder = new Order([
+                'product_id'       => $attestationProductModel->id,
+                // by CONVENTION : because the contact may be new and so, doesn't have any id,
+                // we temporary set the to_contact_id with the same value as the from_contact_id set the
+                // This WILL NEED TO BE UPDATED when registration is submited
+                'to_contact_id'    => $myContactID,
+                'from_contact_id'  => null,
+                'value'            => 0,    // force to zero
+                // attestation is only valid for current date range
+                'valid_date_start' => DateHelper::toDateAppFormat(SessionDateRange::getStart()),
+                'valid_date_end'   => DateHelper::toDateAppFormat(SessionDateRange::getEnd()),
+            ]);
+        }
+
+        $certificateProductModel = $selectedProductsForm->getCertificatMedicalModel();
+        if ($certificateProductModel !== null) {
+            $certificateOrder  = new Order([
+                'product_id'       => $certificateProductModel->id,
+                // by CONVENTION : because the contact may be new and so, doesn't have any id,
+                // we temporary set the to_contact_id with the same value as the from_contact_id set the
+                // This WILL NEED TO BE UPDATED when registration is submited
+                'to_contact_id'    => $myContactID,
+                'from_contact_id'  => null,
+                'value'            => 0,
+                'valid_date_start' => $selectedProductsForm->certif_valid_date_start,
+                'valid_date_end'   => $selectedProductsForm->certif_valid_date_end
+            ]);
+        }
+
         // save/update /////////////////////////////////////////////////////////////////
 
         if (true) {
@@ -854,6 +858,7 @@ class RegistrationController extends \yii\web\Controller
                 $lazyFromAccountId = $bankAccount->id;            
             }
 
+            // compute total values for transactions and orders
             $transactionValueTotal = 0;
             foreach ($transactions as  $transaction) {
                 $transactionValueTotal += $transaction->value;
@@ -887,7 +892,18 @@ class RegistrationController extends \yii\web\Controller
                 foreach ($transactions as $transaction) {
                     $order->link('transactions', $transaction);
                 }
-            }        
+            }   
+
+            // special orders (justificatifs) -----
+            if($certificateOrder) {
+                $certificateOrder->from_contact_id = $contact->id;
+                $certificateOrder->save();
+            }     
+
+            if($attestationOrder) {
+                $attestationOrder->from_contact_id = $contact->id;
+                $attestationOrder->save();
+            }     
 
             // clean up session data
             $this->cleanSessionData();
