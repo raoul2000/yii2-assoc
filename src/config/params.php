@@ -92,7 +92,7 @@ return [
     'registration.product.group' => [
         'courses' => [
             //'productId' => [95,94],
-            'categoryId' => [14,15,16]
+            'categoryId' => [1,2,3]
         ],
         // not used anymore
         'group-2' => [
@@ -104,17 +104,16 @@ return [
      * Each value must be a valid product Id.
      */
 
-    'registration.product.adhesion_vincennois' => 132,
-
-    'registration.product.adhesion_non_vincennois' => 133,
-    'registration.product.license_adulte' => 134,
-    'registration.product.license_enfant' => 135,
-    'registration.product.license_assurance' => 136,
-    'registration.product.adhesion_sorano' => 137,
-    'registration.product.certificat_medical' => 138,
-    'registration.product.attestation' => 139,
+    'registration.product.adhesion_vincennois' => 52,
+    'registration.product.adhesion_non_vincennois' => 53,
+    'registration.product.license_adulte' => 54,
+    'registration.product.license_enfant' => 55,
+    'registration.product.license_assurance' => 56,
+    'registration.product.adhesion_sorano' => 57,
+    'registration.product.certificat_medical' => 58,
+    'registration.product.attestation' => 59,
     /**
      * ID of the category assigned to transactions created during the registration wizard
      */
-    'registration.transaction.categoryId' => 17,
+    'registration.transaction.categoryId' => 5,
 ];
