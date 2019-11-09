@@ -77,6 +77,8 @@ class ProductController extends Controller
                                 ? $categories[$model->category_id]
                                 : null;          
                             }],
+                        ['attribute' => 'short_description'],
+                        ['attribute' => 'description'],
                         ['attribute' => 'valid_date_start'],
                         ['attribute' => 'valid_date_end'],
                     ]
