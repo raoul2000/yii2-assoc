@@ -1,0 +1,6 @@
+id;contact_id;type;name
+1;NULL;product;"cours adulte - extérieur"
+2;NULL;product;"cours adulte - salle"
+3;NULL;product;"cours bébé/enfant"
+4;NULL;product;inscription
+5;NULL;transaction;inscription
