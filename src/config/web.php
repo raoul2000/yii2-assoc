@@ -56,6 +56,7 @@ $config = [
         'configManager' => $configManager,
         'session' => [
             'class' => 'yii\web\DbSession',
+            'timeout' => 3600, // session expire after 1 hour
             'writeCallback' => function ($session) {
                 return [
                    'user_id' => Yii::$app->user->id,
