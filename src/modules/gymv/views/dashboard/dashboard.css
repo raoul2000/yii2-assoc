@@ -32,13 +32,13 @@
 
 .cardboard {
     display: flex;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     margin: 0;
     padding: 0;
 }
 
 .cardboard li {
-    border: 1px solid green;
+    /*border: 1px solid green;*/
     list-style-type: none;
     padding:0.5em;
     margin:0.5em;
