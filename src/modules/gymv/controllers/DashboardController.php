@@ -13,6 +13,7 @@ use \app\models\BankAccount;
 use \app\components\SessionDateRange;
 use \app\components\SessionContact;
 use app\modules\gymv\models\ProductSelectionForm;
+use yii\helpers\Url;
 
 class DashboardController extends \yii\web\Controller
 {
@@ -50,11 +51,13 @@ class DashboardController extends \yii\web\Controller
             ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->where(['in', 'product_id', [51,52]])
             ->distinct()
+            ->asArray()
             ->all();
         */
-
+/*
         $members = Contact::find()
             ->select('id')
+            ->asArray()
             ->where(['is_natural_person' => true])
             ->with([
                 'toOrders' => function ($query) {
@@ -67,8 +70,17 @@ class DashboardController extends \yii\web\Controller
                 },
             ])
             ->all();
+*/
+        $members = Contact::find()
+            ->select('contact.id')
+            ->where(['is_natural_person' => true])
+            ->joinWith('toOrders o')
+            ->andWhere(['in', 'o.product_id', [52,53]])
+            ->asArray()
+            ->all();
+
         $memberIds = array_map(function($contact) {
-            return $contact->id;
+            return $contact['id']; //return $contact->id;
         }, $members);
 
         $membersCount = count($memberIds);
@@ -76,10 +88,11 @@ class DashboardController extends \yii\web\Controller
         // bank account balance info
         $bankAccount = BankAccount::findOne(SessionContact::getBankAccountId());
         $balanceInfo = $bankAccount->getBalanceInfo();
-        
 
         // Order consmued belonging to 
         $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
+        // TODO: query below does not take into account refund. If a course has been refunded to the
+        // contact, then it will still appear as owned by the contact
         $countCourses = Order::find()
             ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->where(['in', 'product_id', $courseProductIds] )
@@ -92,7 +105,10 @@ class DashboardController extends \yii\web\Controller
             'solde' => $balanceInfo['value'],
             'totalDeb' => $balanceInfo['totalDeb'],
             'totalCred' => $balanceInfo['totalCred'],
-            'countCourses' => $countCourses
+            'countCourses' => $countCourses,
+            'urlMember' => Url::toRoute(['/gymv/member']),
+            'urlBankAccount' => Url::toRoute(['/bank-account/view', 'id' => SessionContact::getBankAccountId()]),
+            'urlCourseOrders' => Url::toRoute(['/gymv/course']),
         ]);
     }
 

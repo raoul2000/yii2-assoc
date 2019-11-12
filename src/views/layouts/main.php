@@ -65,7 +65,7 @@ AppAsset::register($this);
                         [
                             'label'  => \Yii::t('app', 'Home'),
                             'encode' => false,
-                            'url'    => ['/gymv']
+                            'url'    => ['/gymv/dashboard']
                         ],
                         [
                             'label'  => \Yii::t('app', 'Registration'),
