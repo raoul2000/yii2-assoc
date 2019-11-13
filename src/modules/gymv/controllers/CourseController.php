@@ -11,6 +11,8 @@ use \app\models\Product;
 use \app\models\Order;
 use \app\components\SessionDateRange;
 use app\modules\gymv\models\ProductSelectionForm;
+use yii\helpers\ArrayHelper;
+
 
 class CourseController extends \yii\web\Controller
 {
@@ -57,23 +59,30 @@ class CourseController extends \yii\web\Controller
 
         // Order consmued belonging to 
         $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
+        $productRows = Product::find()
+            ->select(['id','name'])
+            ->where(['in' , 'id', $courseProductIds])
+            ->all();
 
-        $searchModel = new OrderSearch();
+        $products = ArrayHelper::map($productRows, 'id', 'name');
 
         // TODO: query below does not take into account refund. If a course has been refunded to the
         // contact, then it will still appear as owned by the contact
-
+        $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             Order::find()
                 ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->with(['product', 'toContact'])
                 ->where(['in', 'product_id', $courseProductIds] )
                 ->andWhere(['in', 'to_contact_id', $memberIds])
+                ->orderBy('product_id')
         );
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'products' => $products
         ]);
     }
 }
