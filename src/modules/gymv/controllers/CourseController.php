@@ -85,4 +85,21 @@ class CourseController extends \yii\web\Controller
             'products' => $products
         ]);
     }
+
+    public function actionOverview()
+    {
+        $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
+        $orders = Order::find()
+            ->select(['product_id', 'COUNT(*) as count_total'])
+            ->with('product')
+            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->where(['in', 'product_id', $courseProductIds])
+            ->groupBy('product_id')
+            ->asArray()
+            ->all();
+
+        return $this->render('overview', [
+            'orders' => $orders
+        ]);            
+    }
 }
