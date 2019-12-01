@@ -77,13 +77,15 @@ class ExerciceController extends Controller
         $errorMessage = null;
         $records = [];
         try {
+            // load CSV file ----------------------------------------
+            
             $csv = Reader::createFromStream(fopen($importFile, 'r'));
             $csv->setDelimiter(',');
             $csv->setEnclosure('"');
             $csv->setHeaderOffset(0);
             $csvRecords = $csv->getRecords(['date', 'Num', 'Designation','RECETTES', 'DEPENSES']);
 
-            $action = null;
+            // get default contact and account
             $defaultContact = $this->findOrCreateContact([
                 'name' => 'autre',
                 'is_natural_person' => false
@@ -91,7 +93,7 @@ class ExerciceController extends Controller
             $defaultAccount = $defaultContact->bankAccounts[0];
             
             $cpContact = $cpAccount = $cpCategory = null;
-            foreach ($csvRecords as $offset => $record) {
+            foreach ($csvRecords as $offset => $record) {   // process each line from imported file
                 $message = [];
                 $nRecord = $this->normalizeRecord($record);
 
@@ -167,8 +169,7 @@ class ExerciceController extends Controller
                             'category' => $cpCategory ? [$cpCategory->getAttributes(), $cpCategory->getErrors()] : null
                         ],
                         'validation' => $transaction->getErrors()
-                    ],
-                    'action' => $action
+                    ]
                 ];
             }
         } catch (Exception $e) {
@@ -202,7 +203,9 @@ class ExerciceController extends Controller
     /**
      * Based on the imported record, compute and returns the Contact and Category models.
      * 
-     * The actual model creation is delegated to sub methods depending on the DESCRIPTION string value
+     * If a model can't be defined, NULL is returned. The actual model creation is delegated 
+     * to private methods depending on the DESCRIPTION string value and additional parameter if
+     * needed.
      *
      * @param [type] $record [$contact, $category]
      * @return void
@@ -228,6 +231,14 @@ class ExerciceController extends Controller
         }       
     }
     
+    /**
+     * For a remboursement returns only the contact model and NULL for 
+     * the category model
+     *
+     * @param [type] $record
+     * @param [type] $name name of the person receveing the refund
+     * @return void
+     */
     private function buildRemboursement($record, $name)
     {
         $contact = $this->findOrCreateContact([
@@ -253,13 +264,13 @@ class ExerciceController extends Controller
         ]);
 
         // category 
-        $category = $this->getCategoryModel('salaire');
+        $category = $this->finrOrCreateCategory('salaire');
 
         return [$contact, $category];
     }
 
     /**
-     * Build and return Contact Category models for
+     * Build and return Contact and Category models for
      * transaction to CODEP
      *
      * @param [type] $record
@@ -273,7 +284,7 @@ class ExerciceController extends Controller
         ]);
 
         // category 
-        $category = $this->getCategoryModel('License');
+        $category = $this->finrOrCreateCategory('License');
 
         return [$contact, $category];
     }
@@ -286,7 +297,7 @@ class ExerciceController extends Controller
     private function buildRemiseAdhesion($record)
     {
         // category 
-        $category = $this->getCategoryModel('Adhésion');
+        $category = $this->finrOrCreateCategory('Adhésion');
 
         return [null, $category];
     }
@@ -306,7 +317,7 @@ class ExerciceController extends Controller
         return $contact;
     }
 
-    private function getCategoryModel($name)
+    private function finrOrCreateCategory($name)
     {
         $attributes = [
             'name' => $name,

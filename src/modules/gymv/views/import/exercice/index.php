@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-6">
             <p>
-                Import des transactions Compte Courant. Colonnes
+                Import des transactions Compte Courant. <br/>Liste des Colonnes :
                 <ul>
                     <li><b>Date</b> : format jj/mm/AA</li>
                     <li><b>Num</b> : format integer|String</li>
@@ -43,10 +43,12 @@ etc ...
             </p>
         </div>
         <div class="col-lg-6">
-            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-            <?= $form->field($model, 'dataFile')->fileInput() ?>
-            <?= Html::submitButton(\Yii::t('app', 'Import'), ['class' => 'btn btn-primary']) ?>
-            <?php ActiveForm::end() ?>
+            <div class="well">
+                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+                    <?= $form->field($model, 'dataFile')->fileInput() ?>
+                    <?= Html::submitButton(\Yii::t('app', 'Import'), ['class' => 'btn btn-primary']) ?>
+                <?php ActiveForm::end() ?>
+            </div>
         </div>
     </div>
 </div>
