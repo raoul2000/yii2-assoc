@@ -13,25 +13,19 @@ $this->title = 'Exercice';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="import-csv">
+    <h1>Import Result</h1>
+    <hr />
     <?= $errorMessage ?>
-    <?php if (!empty($records)): ?>
-    <!--
-    <?= VarDumper::dumpAsString($records) ?></td>
-    -->
-        <h2>Records</h2>
-        <hr/>
-        <table class="table">
-            <tbody>
-                <?php foreach($records as $offset => $record): ?>
-                    <tr>
-                        <td><?= $offset ?></td>
-                        <td><?= $record['action'] ?></td>
-                        <td><pre><?php
-                            echo VarDumper::export($record['data']);
-                        ?></pre></td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php endif; ?>
+    <?php foreach($records as $offset => $record): ?>
+        <details>
+            <summary><?php 
+                echo $offset . ' : ' . implode('. ',$record['data']['message'])
+            ?></summary>
+            <p>
+                <pre><?php
+                echo VarDumper::export($record['data']);
+                ?></pre>                        
+            </p>
+        </details>
+    <?php endforeach; ?>
 </div>

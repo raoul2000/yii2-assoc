@@ -84,10 +84,10 @@ class ExerciceController extends Controller
             $csvRecords = $csv->getRecords(['date', 'Num', 'Designation','RECETTES', 'DEPENSES']);
 
             $action = null;
-
-            //$defaultContact = Contact::findOne(57);
-            //$defaultAccount = BankAccount::findOne(56);
-            $defaultContact = $this->buidDefaultContact();
+            $defaultContact = $this->findOrCreateContact([
+                'name' => 'autre',
+                'is_natural_person' => false
+            ]);
             $defaultAccount = $defaultContact->bankAccounts[0];
             
             $cpContact = $cpAccount = $cpCategory = null;
@@ -120,21 +120,21 @@ class ExerciceController extends Controller
                 } else {
                     $message[] = 'building transaction';
 
-                    // find entities contact/account counter parts --------------------
+                    // find entities contact/category counter parts --------------------
 
-                    list($cpContact, $cpAccount, $cpCategory) = $this->getCounterpartAccount($nRecord);
+                    list($cpContact, $cpCategory) = $this->getContactAndCategory($nRecord);
 
-                    $cpContact = $cpContact != null ? $cpContact : $defaultContact;
-                    $cpAccount = $cpAccount != null ? $cpAccount : $defaultAccount;
+                    $cpContact = $cpContact === null ? $defaultContact : $cpContact;
+                    $cpAccount = $cpContact->bankAccounts[0];
 
                     // debit/crédit and source/destination account ----------------------
     
                     if(is_numeric($nRecord['RECETTES']) && $nRecord['RECETTES'] > 0) {
                         $transaction->to_account_id = SessionContact::getBankAccountId();
-                        $transaction->from_account_id = null;
+                        $transaction->from_account_id = $cpAccount->id;
                         $transaction->value = $nRecord['RECETTES'];
                     } elseif( is_numeric($nRecord['DEPENSES']) && $nRecord['DEPENSES'] > 0 ) {
-                        $transaction->to_account_id =  null;
+                        $transaction->to_account_id =  $cpAccount->id;
                         $transaction->from_account_id = SessionContact::getBankAccountId();
                         $transaction->value = $nRecord['DEPENSES'];
                     } else {
@@ -142,27 +142,10 @@ class ExerciceController extends Controller
                         $message[] = 'invalid line';
                     }
     
-                    // save -------------------------------------------------------------
+                    // save category and transaction --------------------------------------------------
 
                     if ($cpCategory != null) {
-                        if ($cpCategory->id == null) {
-                            $cpCategory->setScenario(Category::SCENARIO_INSERT);
-                            $cpCategory->save();
-                        }
                         $transaction->category_id = $cpCategory->id;
-                    }
-
-                    if($cpContact->id == null) {
-                        $cpContact->save();
-                    }
-                    if($cpAccount->id == null) {
-                        $cpAccount->contact_id = $cpContact->id;
-                        $cpAccount->save(false);
-                    }
-                    if($transaction->to_account_id == null) {
-                        $transaction->to_account_id = $cpAccount->id;
-                    }else if ($transaction->from_account_id == null) {
-                        $transaction->from_account_id = $cpAccount->id;
                     }
 
                     if($transaction->validate()) {
@@ -198,19 +181,8 @@ class ExerciceController extends Controller
         ]);
     }
 
-    private function buidDefaultContact()
-    {
-        $contact = Contact::find([
-            'name' => 'autre',
-            'is_natural_person' => false
-        ])->one();
-        if($contact === null) {
-            $contact->save();
-        }
-        return $contact;
-    }
     /**
-     * Compoute and return the CODE and TYPE properties from the NUM column
+     * Compute and return the CODE and TYPE properties from the NUM column
      * 
      * @param string $value the value of the NUM column
      * @return string the actual CODE value 
@@ -228,67 +200,66 @@ class ExerciceController extends Controller
     }
 
     /**
-     * Based on the imported record, compute and returns the Contact, BankAccount and
-     * Category models.
+     * Based on the imported record, compute and returns the Contact and Category models.
+     * 
      * The actual model creation is delegated to sub methods depending on the DESCRIPTION string value
      *
-     * @param [type] $record [$contact, $bankAccount, $category]
+     * @param [type] $record [$contact, $category]
      * @return void
      */
-    private function getCounterpartAccount($record)
+    private function getContactAndCategory($record)
     {
         $reSalaire = '/(.*) *- *salaire (\d\d\/\d\d\d\d)/';
         $reCODEP = '/^CODEP *- *[Rr](e|è)glement.*$/';
-        $reRemiseAdhesion = '/^Remise .* adhésions$/';
+        $reRemiseAdhesion = '/^Remise .* adhésions.*$/';
+        
+        $reRembours = '/(.*) *- *rembours.*$/';
 
         if( preg_match($reSalaire, $record['Designation'], $matches, PREG_OFFSET_CAPTURE, 0) && $record['DEPENSES'] > 0) {
             return $this->buildSalaire($record, $matches[1][0]);
         } else if( preg_match($reCODEP, $record['Designation']) && $record['DEPENSES'] > 0) {
             return $this->buildCODEP($record);
-        } else if( preg_match($reRemiseAdhesion, $record['Designation']) && $record['RECETTE'] > 0) {
+        } else if( preg_match($reRemiseAdhesion, $record['Designation']) && $record['RECETTES'] > 0) {
             return $this->buildRemiseAdhesion($record);
+        } else if( preg_match($reRembours, $record['Designation'], $matches, PREG_OFFSET_CAPTURE, 0) && $record['DEPENSES'] > 0) {
+            return $this->buildRemboursement($record, $matches[1][0]);
         } else {
-            return [null, null, null];
+            return [null, null];
         }       
+    }
+    
+    private function buildRemboursement($record, $name)
+    {
+        $contact = $this->findOrCreateContact([
+            'name' => \strtolower($name),
+            'is_natural_person' => true
+        ]);
+
+        return [$contact, null];
     }
 
     /**
-     * Build and return Contact, BankAccount a,d Categpry models for record "Salaire"
+     * Build and return Contact and Categpry models for record "Salaire"
      *
      * @param [type] $record current imported record
      * @param [type] $name Name for the Salary beneficiary
-     * @param [type] $record [$contact, $bankAccount, $category]
+     * @param [type] $record [$contact, $category]
      */
     private function buildSalaire($record, $name)
     {
-        $name = \strtolower($name);
-        $bankAccount = null;
-        $contact = Contact::findOne(['name' => $name]);
-        if( $contact == null) {
-            $contact = new Contact([
-                'name' => $name,
-                'is_natural_person' => true
-            ]);
-        } else {
-            $bankAccount = BankAccount::findOne([
-                'contact_id' => $contact->id,
-                'name' => ''
-            ]);
-        }
-        if($bankAccount == null) {
-            $bankAccount = new BankAccount();
-            $bankAccount->name = '';
-            $bankAccount->contact_id = $contact->id;    
-        }
+        $contact = $this->findOrCreateContact([
+            'name' => \strtolower($name),
+            'is_natural_person' => true
+        ]);
 
         // category 
         $category = $this->getCategoryModel('salaire');
 
-        return [$contact, $bankAccount, $category];
+        return [$contact, $category];
     }
 
     /**
-     * Build and return Contact BankAccount and Category models for
+     * Build and return Contact Category models for
      * transaction to CODEP
      *
      * @param [type] $record
@@ -296,52 +267,59 @@ class ExerciceController extends Controller
      */
     private function buildCODEP($record)
     {
-        $name = 'CODEP';
-        $bankAccount = null;
-        $contact = Contact::findOne(['name' => $name]);
-        if( $contact == null) {
-            $contact = new Contact([
-                'name' => $name,
-                'is_natural_person' => false
-            ]);
-        } else {
-            $bankAccount = BankAccount::findOne([
-                'contact_id' => $contact->id,
-                'name' => ''
-            ]);
-        }
-        if($bankAccount == null) {
-            $bankAccount = new BankAccount();
-            $bankAccount->name = '';
-            $bankAccount->contact_id = $contact->id;    
-        }
+        $contact = $this->findOrCreateContact([
+            'name' => 'CODEP',
+            'is_natural_person' => false
+        ]);
 
         // category 
         $category = $this->getCategoryModel('License');
 
-        return [$contact, $bankAccount, $category];
+        return [$contact, $category];
     }
-
+    /**
+     * Create Contact and Category for record type Adhésion
+     *
+     * @param [type] $record
+     * @return void
+     */
     private function buildRemiseAdhesion($record)
     {
         // category 
         $category = $this->getCategoryModel('Adhésion');
 
-        return [null, null, $category];
+        return [null, $category];
+    }
+
+    private function findOrCreateContact($attributes)
+    {
+        $contact = Contact::findOne($attributes);
+        if( $contact == null) {
+            $contact = new Contact($attributes);
+            $contact->save();
+            $bankAccount = new BankAccount([
+                'contact_id' => $contact->id,
+                'name' => ''
+            ]);
+            $bankAccount->save();
+        }         
+        return $contact;
     }
 
     private function getCategoryModel($name)
     {
-        $category = Category::findOne(['name' => $name]);
+        $attributes = [
+            'name' => $name,
+            'type' => \app\components\ModelRegistry::TRANSACTION
+        ];
+        $category = Category::findOne($attributes);
         if($category == null) {
-            $category = new Category([
-                'name' => $name,
-                'type' => \app\components\ModelRegistry::TRANSACTION
-            ]);
+            $category = new Category($attributes);
+            $category->save();
         }
         return $category;
-
     }
+
     private function normalizeRecord($record)
     {
         $record['RECETTES'] = \floatval(str_replace(',', '.' ,$record['RECETTES']));
