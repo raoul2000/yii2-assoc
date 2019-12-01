@@ -52,6 +52,16 @@ $bankAccountModel = $model;
                 'description',
                 'code',
                 [
+                    'attribute' => 'category_id',
+                    'label' => \Yii::t('app', 'Category'),
+                    'filter' => $categories,
+                    'value'     => function ($model, $key, $index, $column) use($categories){
+                        return $model->category_id != null 
+                            ? Html::encode($categories[$model->category_id])
+                            : null;  
+                    }
+                ],                   
+                [
                     'attribute' => 'type',
                     'filter'    => \app\components\Constant::getTransactionTypes(),
                     'format'    => 'raw',

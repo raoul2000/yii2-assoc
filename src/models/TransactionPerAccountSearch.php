@@ -22,7 +22,7 @@ class TransactionPerAccountSearch extends Transaction
     public function rules()
     {
         return [
-            [['id', 'from_account_id', 'to_account_id', 'created_at', 'updated_at', 'transaction_pack_id', 'debit', 'credit', 'account_id'], 'integer'],
+            [['id', 'from_account_id', 'to_account_id', 'created_at', 'category_id', 'updated_at', 'transaction_pack_id', 'debit', 'credit', 'account_id'], 'integer'],
             [['is_verified'], 'boolean'],
             [['value'], 'number'],
             [['description', 'code', 'type', 'reference_date'], 'safe'],
@@ -77,6 +77,7 @@ class TransactionPerAccountSearch extends Transaction
             ]);
         }
         
+        // only transactions to or from the provided account_id
         if (!empty($this->account_id)) {
             $query->andWhere([
                 'or' ,  'from_account_id=' .  $this->account_id , 'to_account_id=' .$this->account_id
@@ -84,7 +85,8 @@ class TransactionPerAccountSearch extends Transaction
         }
         $query->andFilterWhere([
             'id' => $this->id,
-            'type' => $this->type
+            'type' => $this->type,
+            'category_id' => $this->category_id,
         ]);
         // grid filtering conditions
         /*

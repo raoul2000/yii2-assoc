@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Contact;
+use app\models\Category;
 use app\models\BankAccount;
 use app\models\BankAccountSearch;
 use app\models\TransactionPackSearch;
@@ -14,6 +15,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\SessionDateRange;
 use yii\helpers\Url;
+use app\components\ModelRegistry;
 
 /**
  * BankAccountController implements the CRUD actions for BankAccount model.
@@ -92,6 +94,10 @@ class BankAccountController extends Controller
                     return $accountId != $bankAccount->id;
                 }, ARRAY_FILTER_USE_KEY);
 
+                $categories = Category::getCategories(
+                    ModelRegistry::TRANSACTION 
+                );        
+
                 if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
                     // request for downloading data grid
                     $exporter = new \yii2tech\csvgrid\CsvGrid(
@@ -156,7 +162,8 @@ class BankAccountController extends Controller
                             'model' => $bankAccount,
                             'transactionDataProvider' => $transactionDataProvider,
                             'transactionSearchModel' => $transactionSearchModel,
-                            'bankAccounts' => $bankAccounts
+                            'bankAccounts' => $bankAccounts,
+                            'categories' => $categories
                         ])
                     ]);
                 }
