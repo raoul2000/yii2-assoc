@@ -85,10 +85,11 @@ class IReseauController extends Controller
             $csvRecords = $csv->getRecords(['name', 'woman_name', 'firstname','gender', 'birthday', 'license_num',
             'license_cat','residence','locality','street','zip','city','country','phone', 'mobile', 'email']);
 
-
             foreach ($csvRecords as $offset => $record) {
                 $message = [];
+                $contact = $address = null;
                 $contactAvailable = false;
+
                 $normalizedRecord = $this->normalizeRecord($record);
 
                 $contactAttributes = [
@@ -103,19 +104,17 @@ class IReseauController extends Controller
                     ->where($contactAttributes)
                     ->one();
 
-                if ( $contact !== null) {
+                if ( $contact ) {
                     // contact found : skip this contact
-                    $message[] = 'contact exist (skip) : ' 
-                        . $normalizedRecord['name']
-                        . ' '
-                        .  $normalizedRecord['firstname'];
-                    $contact = null;
+                    $message[] = 'contact exist  : ' . $contact->fullname;
                 } else {
+                    $message[] = 'insert contact';
                     // contact does not exist in DB : insert it and create
                     // its default bank account
                     $contact = new Contact($contactAttributes);
                     $contact->setAttributes([
-                        'email' => $normalizedRecord['email'],
+                        'email'    => $normalizedRecord['email'],
+                        'birthday' => DateHelper::toDateAppFormat($record['birthday'])
                     ]);
                     
                     if ($contact->save()) {
@@ -127,41 +126,32 @@ class IReseauController extends Controller
                     } 
                 }
 
-                if ($contactAvailable) {
+                if ($contact) {
                     // We have a contact record saved in DB, now let's work on the related address
                     // for this contact
-                    $address = new Address([
+                    $addressAttributes = [
                         'line_1'   => $normalizedRecord['street'],
                         'line_2'   => $normalizedRecord['residence'],
                         'zip_code' => $normalizedRecord['zip'],
                         'city'     => $normalizedRecord['city'],
                         'country'  => $normalizedRecord['country']
-                    ]);
+                    ];
+                    // first : is this address already exists in DB ? 
+                    $existingAddress = Address::find()
+                        ->where($addressAttributes)
+                        ->one();
 
-                    $insertAddress = false;
-                    if ($contact->hasAddress) {
-
-                        // the contact is already linked to an address : let's check
-                        // if that's the same address as the one defined in the imported record
-
-                        $existingAddress = $contact->address;
-                        if( 
-                            $existingAddress->line_1   !=  $address->line_1   ||
-                            $existingAddress->line_2   !=  $address->line_2   ||
-                            $existingAddress->zip_code !=  $address->zip_code ||
-                            $existingAddress->city     !=  $address->city     ||
-                            $existingAddress->country  !=  $address->country
-                        ) {
-                            $insertAddress = true;
-                        }
+                    if ($existingAddress !== null) {
+                        // the same address exists : link contact to this address
+                        $contact->link('address', $existingAddress);    
+                        $message[] = 'link with existing address (id=' . $existingAddress->id . ')';
                     } else {
-                        // the contact has no address : create a new one and link the contact
-                        // to it
-                        $insertAddress = true;
-                    }
-
-                    if($insertAddress && $address->save()) {
-                        $contact->link('address', $address);    
+                        // we have no such address in DB : insert it and link contact to it
+                        $address = new Address($addressAttributes);
+                        if($address->save()) {
+                            $contact->link('address', $address);    
+                            $message[] = 'insert address';
+                        }        
                     }
                 }
 
@@ -196,11 +186,21 @@ class IReseauController extends Controller
         unset($record['license_num']);
         unset($record['license_cat']);
         unset($record['locality']);
-        // normlize gender
+
+        // all strings are converted to lower case
+        $record = array_map(function($colValue) {
+            if(is_string($colValue)) {
+                return \strtolower($colValue);
+            } else {
+                return $colValue;
+            }
+        }, $record);
+
+        // normlize gender (Homme => 1, Femme => 2)
         $record['gender'] = ($record['gender'] == 'Femme' ? '2' : '1');
 
         // input date is yyyy-mm-dd but contact attribute 'birthday' expects app format (dd/mm/yyyy)
-        $record['birthday'] = DateHelper::toDateAppFormat($record['birthday']);
+        //$record['birthday'] = DateHelper::toDateAppFormat($record['birthday']);
         return $record;
     }
 }
