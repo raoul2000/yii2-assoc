@@ -53,6 +53,8 @@ use yii\helpers\ArrayHelper;
 
             </div>
         </div>
+        
+        <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'autocomplete'=> 'off']) ?>
 
         <hr/>
         

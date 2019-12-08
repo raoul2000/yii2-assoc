@@ -84,6 +84,7 @@ $orderModel = $model;
             <?= DetailView::widget([
                 'model' => $model,
                 'attributes' => [
+                    'description',
                     'valid_date_start:appDate',
                     'valid_date_end:appDate',
                     'transactionValuesDiff:transactionValuesDiff',

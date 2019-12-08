@@ -19,6 +19,7 @@ use bupy7\activerecord\history\behaviors\History as HistoryBehavior;
  * @property int $updated_at timestamp of record last update (see TimestampBehavior)
  * @property string $valid_date_start
  * @property string $valid_date_end
+ * @property string $description
  *
  * @property Contact $contact
  * @property Product $product
@@ -76,6 +77,8 @@ class Order extends \yii\db\ActiveRecord
             // Value
             [['value'], 'default', 'value' => 0],
             [['value'], 'number', 'min' => 0],
+
+            [['description'], 'string', 'max' => 128],
         ];
     }
 
@@ -94,6 +97,7 @@ class Order extends \yii\db\ActiveRecord
             'updated_at' => \Yii::t('app', 'Updated At'),
             'valid_date_start' => \Yii::t('app', 'Valid Date Start'),
             'valid_date_end' => \Yii::t('app', 'Valid Date End'),
+            'description' => \Yii::t('app', 'Description'),
         ];
     }
 
