@@ -16,7 +16,7 @@ use \app\components\helpers\DateHelper;
 /**
  * Default controller for the `gymv` module
  */
-class ContactController extends Controller
+class IReseauController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -87,87 +87,97 @@ class ContactController extends Controller
 
 
             foreach ($csvRecords as $offset => $record) {
+                $message = [];
+                $contactAvailable = false;
                 $normalizedRecord = $this->normalizeRecord($record);
 
+                $contactAttributes = [
+                    'name'      => $normalizedRecord['name'],
+                    'firstname' => $normalizedRecord['firstname'],
+                    'gender'    => $normalizedRecord['gender'],
+                    'birthday'  => $normalizedRecord['birthday'],
+                    'is_natural_person' => true
+                ];
+
                 $contact = Contact::find()
-                    ->where([
-                        'name' => $normalizedRecord['name'],
-                        'firstname' => $normalizedRecord['firstname'],
-                        'gender' => $normalizedRecord['gender']
-                    ])
+                    ->where($contactAttributes)
                     ->one();
 
-                $action = null;
-                if ( $contact === null) {
-                    $action = 'insert';
-                    $contact = new Contact();
+                if ( $contact !== null) {
+                    // contact found : skip this contact
+                    $message[] = 'contact exist (skip) : ' 
+                        . $normalizedRecord['name']
+                        . ' '
+                        .  $normalizedRecord['firstname'];
+                    $contact = null;
+                } else {
+                    // contact does not exist in DB : insert it and create
+                    // its default bank account
+                    $contact = new Contact($contactAttributes);
                     $contact->setAttributes([
-                        'name' => $normalizedRecord['name'],
-                        'firstname' => $normalizedRecord['firstname'],
-                        'gender' => $normalizedRecord['gender'],
-                        'is_natural_person' => true,
-                        'birthday' => $normalizedRecord['birthday'],
                         'email' => $normalizedRecord['email'],
                     ]);
                     
-                    if (!$contact->save()) {
-                        $action .= '-error';
-                        $contact = null;
-                    } else {
-                        $action .= '-success';
-                        // create related bank account
+                    if ($contact->save()) {
                         $bankAccount = new BankAccount();
                         $bankAccount->contact_id = $contact->id;
                         $bankAccount->name = '';
                         $bankAccount->save(false);
-                    }
+                        $contactAvailable = true;
+                    } 
                 }
 
-                if ($contact != null) {
-                    // work on address
-                    // map CSV columns to Address attributes
-                    $address = new Address();
-                    $address->setAttributes([
-                        'line_1' => $normalizedRecord['street'],
-                        'line_2' => $normalizedRecord['residence'],
+                if ($contactAvailable) {
+                    // We have a contact record saved in DB, now let's work on the related address
+                    // for this contact
+                    $address = new Address([
+                        'line_1'   => $normalizedRecord['street'],
+                        'line_2'   => $normalizedRecord['residence'],
                         'zip_code' => $normalizedRecord['zip'],
-                        'city' => $normalizedRecord['city'],
-                        'country' => $normalizedRecord['country']
+                        'city'     => $normalizedRecord['city'],
+                        'country'  => $normalizedRecord['country']
                     ]);
 
-                    $needSave = true;
+                    $insertAddress = false;
                     if ($contact->hasAddress) {
-                        // may need update address
-                        $action .= 'update_address';
+
+                        // the contact is already linked to an address : let's check
+                        // if that's the same address as the one defined in the imported record
 
                         $existingAddress = $contact->address;
                         if( 
-                            $existingAddress->line_1 !=  $address->line_1       ||
-                            $existingAddress->line_2 !=  $address->line_2       ||
-                            $existingAddress->zip_code !=  $address->zip_code   ||
-                            $existingAddress->city !=  $address->city           ||
-                            $existingAddress->country !=  $address->country
-                            ) {
-                                $needSave = true;
-                            } else {
-                                $needSave = false;
-                            }
-                    } 
-                    if ($needSave) {
-                        // insert address
-                        $action .= 'insert_address';
-                        if ($address->save()) {
-                            $action .= ':ok';
-                            $contact->link('address', $address);
-                        } else {
-                            $action .= ':error';
+                            $existingAddress->line_1   !=  $address->line_1   ||
+                            $existingAddress->line_2   !=  $address->line_2   ||
+                            $existingAddress->zip_code !=  $address->zip_code ||
+                            $existingAddress->city     !=  $address->city     ||
+                            $existingAddress->country  !=  $address->country
+                        ) {
+                            $insertAddress = true;
                         }
+                    } else {
+                        // the contact has no address : create a new one and link the contact
+                        // to it
+                        $insertAddress = true;
+                    }
+
+                    if($insertAddress && $address->save()) {
+                        $contact->link('address', $address);    
                     }
                 }
 
                 $records['L' . $offset] = [
-                    'data' => $normalizedRecord,
-                    'action' => $action
+                    'data' => [
+                        'message' => $message,
+                        'record' => $normalizedRecord,
+                        'contact' => [
+                            'model' => $contact,
+                            'validation' => $contact === null ? '(no model)' : $contact->getErrors()
+                        ],
+                        'address' => [
+                            'model' => $address,
+                            'validation' => $address === null ? '(no model)' :  $address->getErrors() 
+                        ]
+                    ]
                 ];
             }
         } catch (Exception $e) {
@@ -176,7 +186,7 @@ class ContactController extends Controller
 
         return $this->render('result', [
             'errorMessage' => $errorMessage,
-            'records' => $records
+            'records'      => $records
         ]);
     }
 
