@@ -298,13 +298,20 @@ class Contact extends \yii\db\ActiveRecord
     public static function getNameIndex()
     {
         $contacts = parent::find()
-            ->select(['id', "CONCAT(name, ' ', firstname) as longName"])
+            ->select(['id', 'name', 'firstname'])
             ->asArray()
             ->all();
 
+        // sql:CONCAT cannot be used in the query because when firstnale is NULL, it returns NULL
+        // so we build the long name below
+
+        $contacts = array_map(function($row){
+            $row['longName'] = $row['name'] . ( empty($row['firstname']) ? '' : ' ' . $row['firstname']);
+            return $row;
+        },$contacts);
+
         return ArrayHelper::map($contacts, 'id', 'longName');
     }
-
     /**
      * Returns the read-only attribute 'longName'
      *
@@ -313,7 +320,7 @@ class Contact extends \yii\db\ActiveRecord
     public function getLongName()
     {
         if ($this->is_natural_person == true) {
-            return $this->name . ( !empty($this->firstname) ? ', ' . $this->firstname : '');
+            return $this->name . ( !empty($this->firstname) ? ' ' . $this->firstname : '');
         } else {
             return $this->name;
         }
