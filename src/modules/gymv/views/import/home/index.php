@@ -19,13 +19,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(
             \Yii::t('app', 'I Réseau'), 
-            ['/gymv/import/contact'], 
+            ['/gymv/import/i-reseau'], 
             ['class' => 'btn btn-primary']) 
         ?>    
 
         <?= Html::a(
             \Yii::t('app', 'Products'), 
             ['/gymv/import/product'], 
+            ['class' => 'btn btn-primary']) 
+        ?>    
+
+        <?= Html::a(
+            \Yii::t('app', 'Exercice'), 
+            ['/gymv/import/exercice'], 
             ['class' => 'btn btn-primary']) 
         ?>    
     </p>

@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-sm-6">
             <p>
-                Import des contacts licensiés depuis le systèle I-Réseau. Cet import permet de créer ou de mettre à jour
-                les informations concernant les personnes licenciées.<br/>
+                Import des contacts licensiés depuis le système I-Réseau. Cet import permet de créer ou de mettre à jour
+                les informations concernant les personnes licenciées : contact, addresse<br/>
                 Colonnes : 
                 <ul>
                     <li><b>name</b> : nom de famille</li>

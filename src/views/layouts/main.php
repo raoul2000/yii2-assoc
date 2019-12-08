@@ -67,11 +67,6 @@ AppAsset::register($this);
                             'encode' => false,
                             'url'    => ['/gymv/dashboard']
                         ],
-                        [
-                            'label'  => \Yii::t('app', 'Registration'),
-                            'encode' => false,
-                            'url'    => ['/gymv/registration']
-                        ],
                         SessionContact::getContactId() !== null ? (
                             [
                                 'label'  => \Yii::t('app', 'Contact'),
@@ -86,6 +81,18 @@ AppAsset::register($this);
                                 'url'    => ['/bank-account/view', 'id' => SessionContact::getBankAccountId()]
                             ]
                         ) : (''),
+                        '<li class="divider"></li>',
+                        [
+                            'label'  => \Yii::t('app', 'Registration'),
+                            'encode' => false,
+                            'url'    => ['/gymv/registration']
+                        ],
+                        [
+                            'label'  => \Yii::t('app', 'Import'),
+                            'encode' => false,
+                            'url'    => ['/gymv/import/home']
+                        ],
+
                     ],
                 ]
             ) : (''),
