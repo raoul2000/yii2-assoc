@@ -155,6 +155,17 @@ class IReseauController extends Controller
                     }
                 }
 
+                if ($contact) {
+                    // does this contact already has a license ?
+                    // TODO: continue ...
+                    $orderAttribute = [
+                        'to_contact_id' => $contact->id,
+                        'from_contact_id' => null
+                    ];
+                    //'product_id' => Yii::$app->params['']
+
+                }
+
                 $records['L' . $offset] = [
                     'data' => [
                         'message' => $message,
