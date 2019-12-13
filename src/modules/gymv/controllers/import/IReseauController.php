@@ -9,9 +9,12 @@ use League\Csv\Reader;
 use app\models\Contact;
 use app\models\BankAccount;
 use app\models\Address;
+use app\models\Order;
 use app\modules\gymv\models\UploadForm;
 use yii\web\UploadedFile;
 use \app\components\helpers\DateHelper;
+use \app\components\SessionDateRange;
+
 
 /**
  * Default controller for the `gymv` module
@@ -163,7 +166,7 @@ class IReseauController extends Controller
                     $orderAttribute = [
                         'from_contact_id' => Yii::$app->params['contact.licence.provider'],
                         'to_contact_id'   => $contact->id,
-                        'product_id'      => $normalizedRecord['license_cat'] === 'Adulte avec Assurance'
+                        'product_id'      => $normalizedRecord['license_cat'] === 'adulte avec assurance'
                             ? Yii::$app->params['registration.product.license_adulte']
                             : Yii::$app->params['registration.product.license_enfant']
                     ];
@@ -180,7 +183,10 @@ class IReseauController extends Controller
                         
                         if( $licenseOrder->validate()) {
                             $licenseOrder->save();
+                            $message[] = 'Insert License order';
                         }
+                    } else {
+                        $message[] = 'License order already exists in this period';
                     }
                 }
 
@@ -218,8 +224,8 @@ class IReseauController extends Controller
     private function normalizeRecord($record)
     {
         unset($record['woman_name']);
-        unset($record['license_num']);
-        unset($record['license_cat']);
+        //unset($record['license_num']);
+        //unset($record['license_cat']);
         unset($record['locality']);
 
         // all strings are converted to lower case
