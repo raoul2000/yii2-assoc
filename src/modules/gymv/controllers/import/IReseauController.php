@@ -75,8 +75,6 @@ class IReseauController extends Controller
         $errorMessage = null;
         $records = [];
         try {
-            //$csv = Reader::createFromPath('d:\\tmp\\licencies.csv', 'r');
-            //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies-small.csv', 'r'));
             $csv = Reader::createFromStream(fopen($importFile, 'r'));
             //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies.csv', 'r'));
             $csv->setDelimiter(',');
@@ -87,7 +85,7 @@ class IReseauController extends Controller
 
             foreach ($csvRecords as $offset => $record) {
                 $message = [];
-                $contact = $address = null;
+                $contact = $address = $licenseOrder = null;
                 $contactAvailable = false;
 
                 $normalizedRecord = $this->normalizeRecord($record);
@@ -99,7 +97,7 @@ class IReseauController extends Controller
                     'birthday'  => $normalizedRecord['birthday'],
                     'is_natural_person' => true
                 ];
-
+                ///////////////////////////// contact //////////////////////////////////////////
                 $contact = Contact::find()
                     ->where($contactAttributes)
                     ->one();
@@ -126,7 +124,8 @@ class IReseauController extends Controller
                     } 
                 }
 
-                if ($contact) {
+                if ($contact) { /////////////////// address /////////////////////////////////////////////////
+
                     // We have a contact record saved in DB, now let's work on the related address
                     // for this contact
                     $addressAttributes = [
@@ -155,16 +154,37 @@ class IReseauController extends Controller
                     }
                 }
 
-                if ($contact) {
-                    // does this contact already has a license ?
-                    // TODO: continue ...
-                    $orderAttribute = [
-                        'to_contact_id' => $contact->id,
-                        'from_contact_id' => null
-                    ];
-                    //'product_id' => Yii::$app->params['']
+                if ($contact) { ///////////////////////// license ////////////////////////////////////////////
 
+                    // license : The license is represented as an order from the license provider
+                    // and to the contact.
+
+                    // does this contact already has a license ?
+                    $orderAttribute = [
+                        'from_contact_id' => Yii::$app->params['contact.licence.provider'],
+                        'to_contact_id'   => $contact->id,
+                        'product_id'      => $normalizedRecord['license_cat'] === 'Adulte avec Assurance'
+                            ? Yii::$app->params['registration.product.license_adulte']
+                            : Yii::$app->params['registration.product.license_enfant']
+                    ];
+                    $hasLicenceOrder = Order::find()
+                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                        ->where($orderAttribute)
+                        ->exists();
+
+                    if(! $hasLicenceOrder) {
+                        // this contact has no registered licence : create the order now
+                        $licenseOrder = new Order($orderAttribute);
+                        $licenseOrder->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
+                        $licenseOrder->valid_date_end  =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
+                        
+                        if( $licenseOrder->validate()) {
+                            $licenseOrder->save();
+                        }
+                    }
                 }
+
+                //////////////////////// final report //////////////////////////////////////////////////////
 
                 $records['L' . $offset] = [
                     'data' => [
@@ -177,6 +197,10 @@ class IReseauController extends Controller
                         'address' => [
                             'model' => $address,
                             'validation' => $address === null ? '(no model)' :  $address->getErrors() 
+                        ],
+                        'licenseOrder' => [
+                            'model' => $licenseOrder,
+                            'validation' => $licenseOrder === null ? '(no model)' :  $licenseOrder->getErrors() 
                         ]
                     ]
                 ];

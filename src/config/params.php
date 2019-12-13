@@ -105,8 +105,8 @@ return [
      */
 
     'registration.product.adhesion_vincennois' => 52,
-    'registration.product.adhesion_non_vincennois' => 53,
-    'registration.product.license_adulte' => 54,
+    'registration.product.adhesion_non_vincennois' => 53, 
+    'registration.product.license_adulte' => 54,  // TODO: change prop name as license is also used during import so the prefix registration is not suitable
     'registration.product.license_enfant' => 55,
     'registration.product.license_assurance' => 56,
     'registration.product.adhesion_sorano' => 57,
@@ -116,4 +116,6 @@ return [
      * ID of the category assigned to transactions created during the registration wizard
      */
     'registration.transaction.categoryId' => 5,
+
+    'contact.licence.provider' => 89,
 ];
