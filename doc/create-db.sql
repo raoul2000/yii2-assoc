@@ -434,6 +434,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `value` DECIMAL(13,2) UNSIGNED NULL DEFAULT '0.00',
   `valid_date_start` DATE NULL DEFAULT NULL,
   `valid_date_end` DATE NULL DEFAULT NULL,
+  `description` VARCHAR(128) NULL,
   `transactions_value_total` DECIMAL(13,2) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_order_product1_idx` (`product_id` ASC),
