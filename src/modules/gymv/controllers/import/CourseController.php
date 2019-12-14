@@ -6,10 +6,14 @@ use Yii;
 use yii\web\Controller;
 use League\Csv\Exception;
 use League\Csv\Reader;
-use app\models\Category;
+use app\models\Contact;
+use app\models\Order;
 use app\models\Product;
 use app\modules\gymv\models\UploadForm;
 use yii\web\UploadedFile;
+use \app\components\SessionContact;
+use \app\components\SessionDateRange;
+use \app\components\helpers\DateHelper;
 
 class CourseController extends Controller
 {
@@ -70,13 +74,14 @@ class CourseController extends Controller
         $records = [];
         $courseNumber = null;
         // Product for the current Course 
+        $products = []; 
         $courseProduct = null; 
         try {
             $csv = Reader::createFromStream(fopen($importFile, 'r'));
             $csv->setDelimiter(',');
             $csv->setEnclosure('\'');
             $csv->setHeaderOffset(0);
-            $csvRecords = $csv->getRecords(['name', 'firstname']);
+            $csvRecords = $csv->getRecords(['name', 'firstname', 'cour_num']);
 
             foreach ($csvRecords as $offset => $record) {
                 $message = [];
@@ -86,102 +91,72 @@ class CourseController extends Controller
                 $normalizedRecord = $this->normalizeRecord($record);
 
                 // identify the course number and load the corresponding product
-                if (
-                    $courseProduct === null 
-                    && \strlen($normalizedRecord['name']) === 0 
-                    && preg_match('/^cours ([0-9]+)$/',$normalizedRecord['firstname'], $matches) === 1 
-                ) {
-                    $courseNumber = $matches[1];
-                    $message[] = 'cours n° ' . $courseNumber;
 
-                    // load the corresponding product model
+                $courseNumber = $normalizedRecord['cour_num'];
+
+                if ( ! array_key_exists($courseNumber, $products) ) { // product ////////////////////////////////
                     $results = Product::find()
-                        ->where(['LIKE', 'name', "%cours $courseNumber "])
+                        ->where(['LIKE', 'name', "cours $courseNumber -"])
                         ->all();
                     if( count($results) === 1) {
-                        $courseProduct = $results[0];
-                    }
-                    continue;
-                } else {
-                    continue;
-                }
-                
-                continue;
-
-                $contactAttributes = [
-                    'is_natural_person' => true,
-                    'name'      => $normalizedRecord['name'],
-                    'firstname' => $normalizedRecord['firstname'],
-                    'gender'    => $normalizedRecord['gender'],
-                    'birthday'  => $normalizedRecord['birthday'],
-                ];
-
-                ///////////////////////////// contact //////////////////////////////////////////
-
-                $contact = Contact::find()
-                    ->where($contactAttributes)
-                    ->one();
-
-                if ( $contact ) {
-                    // contact found : skip this contact
-                    $message[] = 'contact exist (skip) : ' . $contact->fullname;
-                } else {
-                    
-                    // contact does not exist in DB : insert it and create
-                    // its default bank account
-                    $contact = new Contact($contactAttributes);
-                    $contact->setAttributes([
-                        'email'    => $normalizedRecord['email'],
-                        'birthday' => DateHelper::toDateAppFormat($record['birthday']),
-                        'phone_1'  => $normalizedRecord['phone'],
-                        'phone_2'  => $normalizedRecord['mobile']
-                    ]);
-                    
-                    if ($contact->save()) {
-                        $bankAccount = new BankAccount();
-                        $bankAccount->contact_id = $contact->id;
-                        $bankAccount->name = '';
-                        $bankAccount->save(false);
-                        $contactAvailable = true;
-                        $message[] = 'contact inserted';
+                        $products[$courseNumber] = $results[0];
                     } else {
-                        $message[] = '❌ contact validation failed';
+                        $products[$courseNumber] = false;
+                        $message[] = '❌ product not found for course ' . $courseNumber;
                     }
                 }
-                if ($contact) { ///////////////////////// license ////////////////////////////////////////////
+                if( $products[$courseNumber] !== false) {
+                    $courseProduct = $products[$courseNumber];
+                } else {
+                    $message[] = '❌ product stil missing course = ' . $courseNumber;
+                    $courseProduct = null;
+                }
 
-                    // license : The license is represented as an order from the license provider
-                    // and to the contact.
+                if($courseProduct) { // contact //////////////////////////////////////////////////
+                    $results = Contact::find()
+                        ->andWhere(['LIKE', 'name', $normalizedRecord['name']])
+                        ->andWhere(['LIKE', 'firstname', $normalizedRecord['firstname']])
+                        ->all();
+                    if (count($results) === 1) {
+                        $contact = $results[0];
+                    } else {
+                        $message[] = '❌ contact not found : ' . $normalizedRecord['name'] . ', ' . $normalizedRecord['firstname'];
+                        $contact = null;
+                    }
+                }
 
-                    // does this contact already has a license ?
+
+                if ($courseProduct && $contact) { ///////////////////////// order /////////////////
+
+                    // course is represented as an order for the course product, between the configured
+                    // contact (current session contact) and the imported contact
+
+                    // does this order already exists ?
                     $orderAttribute = [
-                        'from_contact_id' => Yii::$app->params['contact.licence.provider'],
+                        'from_contact_id' => SessionContact::getContactId(),
                         'to_contact_id'   => $contact->id,
-                        'product_id'      => $normalizedRecord['license_cat'] === 'adulte avec assurance'
-                            ? Yii::$app->params['registration.product.license_adulte']
-                            : Yii::$app->params['registration.product.license_enfant']
+                        'product_id'      => $courseProduct->id
                     ];
 
-                    $hasLicenceOrder = Order::find()
+                    $hasOrder = Order::find()
                         ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->where($orderAttribute)
                         ->exists();
 
-                    if(! $hasLicenceOrder) {
-                        // this contact has no registered licence : create the order now
-                        $licenseOrder = new Order($orderAttribute);
-                        $licenseOrder->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
-                        $licenseOrder->valid_date_end   =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
-                        $licenseOrder->description      = 'license n° ' . $normalizedRecord['license_num'];
+                    if(! $hasOrder) {
+                        // create order for this course and this contatc
+                        $order = new Order($orderAttribute);
+                        $order->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
+                        $order->valid_date_end   =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
                         
-                        if( $licenseOrder->validate()) {
-                            $licenseOrder->save();
-                            $message[] = 'Insert License order';
+                        if( $order->validate()) {
+                            $order->save();
+                            $message[] = '✔️ Insert course order';
                         } else {
                             $message[] = '❌ order validation failed';
                         }
                     } else {
-                        $message[] = 'License order already exists in this period';
+                        $message[] = 'ℹ️ course order already exists in this period';
                     }
                 }
 
@@ -196,8 +171,8 @@ class CourseController extends Controller
                             'validation' => $contact === null ? '(no model)' : $contact->getErrors()
                         ],
                         'courseOrder' => [
-                            'model' => $licenseOrder,
-                            'validation' => $licenseOrder === null ? '(no model)' :  $licenseOrder->getErrors() 
+                            'model' => $order,
+                            'validation' => $order === null ? '(no model)' :  $order->getErrors() 
                         ]
                     ]
                 ];
@@ -216,7 +191,7 @@ class CourseController extends Controller
     {
         $record = array_map(function($colValue) {
             if(is_string($colValue)) {
-                return \strtolower(trim($colValue));
+                return \mb_strtolower(trim($colValue));
             } else {
                 return $colValue;
             }
