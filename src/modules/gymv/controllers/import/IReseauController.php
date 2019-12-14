@@ -79,7 +79,6 @@ class IReseauController extends Controller
         $records = [];
         try {
             $csv = Reader::createFromStream(fopen($importFile, 'r'));
-            //$csv = Reader::createFromStream(fopen('d:\\tmp\\licencies.csv', 'r'));
             $csv->setDelimiter(',');
             $csv->setEnclosure('\'');
             $csv->setHeaderOffset(0);
@@ -94,28 +93,32 @@ class IReseauController extends Controller
                 $normalizedRecord = $this->normalizeRecord($record);
 
                 $contactAttributes = [
+                    'is_natural_person' => true,
                     'name'      => $normalizedRecord['name'],
                     'firstname' => $normalizedRecord['firstname'],
                     'gender'    => $normalizedRecord['gender'],
                     'birthday'  => $normalizedRecord['birthday'],
-                    'is_natural_person' => true
                 ];
+
                 ///////////////////////////// contact //////////////////////////////////////////
+
                 $contact = Contact::find()
                     ->where($contactAttributes)
                     ->one();
 
                 if ( $contact ) {
                     // contact found : skip this contact
-                    $message[] = 'contact exist  : ' . $contact->fullname;
+                    $message[] = 'contact exist (skip) : ' . $contact->fullname;
                 } else {
-                    $message[] = 'insert contact';
+                    
                     // contact does not exist in DB : insert it and create
                     // its default bank account
                     $contact = new Contact($contactAttributes);
                     $contact->setAttributes([
                         'email'    => $normalizedRecord['email'],
-                        'birthday' => DateHelper::toDateAppFormat($record['birthday'])
+                        'birthday' => DateHelper::toDateAppFormat($record['birthday']),
+                        'phone_1'  => $normalizedRecord['phone'],
+                        'phone_2'  => $normalizedRecord['mobile']
                     ]);
                     
                     if ($contact->save()) {
@@ -124,7 +127,10 @@ class IReseauController extends Controller
                         $bankAccount->name = '';
                         $bankAccount->save(false);
                         $contactAvailable = true;
-                    } 
+                        $message[] = 'contact inserted';
+                    } else {
+                        $message[] = '❌ contact validation failed';
+                    }
                 }
 
                 if ($contact) { /////////////////// address /////////////////////////////////////////////////
@@ -153,7 +159,9 @@ class IReseauController extends Controller
                         if($address->save()) {
                             $contact->link('address', $address);    
                             $message[] = 'insert address';
-                        }        
+                        } else {
+                            $message[] = '❌ address validation failed';
+                        }
                     }
                 }
 
@@ -170,6 +178,7 @@ class IReseauController extends Controller
                             ? Yii::$app->params['registration.product.license_adulte']
                             : Yii::$app->params['registration.product.license_enfant']
                     ];
+
                     $hasLicenceOrder = Order::find()
                         ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->where($orderAttribute)
@@ -179,11 +188,14 @@ class IReseauController extends Controller
                         // this contact has no registered licence : create the order now
                         $licenseOrder = new Order($orderAttribute);
                         $licenseOrder->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
-                        $licenseOrder->valid_date_end  =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
+                        $licenseOrder->valid_date_end   =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
+                        $licenseOrder->description      = 'license n° ' . $normalizedRecord['license_num'];
                         
                         if( $licenseOrder->validate()) {
                             $licenseOrder->save();
                             $message[] = 'Insert License order';
+                        } else {
+                            $message[] = '❌ order validation failed';
                         }
                     } else {
                         $message[] = 'License order already exists in this period';
@@ -240,8 +252,20 @@ class IReseauController extends Controller
         // normlize gender (Homme => 1, Femme => 2)
         $record['gender'] = ($record['gender'] == 'Femme' ? '2' : '1');
 
+        //$record['phone'] = $this->normalizePhone($record['phone']);
+        //$record['mobile'] = $this->normalizePhone($record['mobile']);
+
+
         // input date is yyyy-mm-dd but contact attribute 'birthday' expects app format (dd/mm/yyyy)
         //$record['birthday'] = DateHelper::toDateAppFormat($record['birthday']);
         return $record;
+    }
+    private function normalizePhone($input)
+    {
+        if( \preg_match('/^\'(.*)\'$/m', $input, $matches) === 1) {
+            return $matches[1];
+        } else {
+            return null;
+        }
     }
 }
