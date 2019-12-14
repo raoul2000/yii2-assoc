@@ -9,7 +9,10 @@ use yii\helpers\VarDumper;
 /* @var $searchModel app\models\ContactSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Contacts';
+$this->title = 'Résultat';
+$this->params['breadcrumbs'][] = ['label' => 'Gymv', 'url' => ['/gymv']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Import'), 'url' => ['/gymv/import/home']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Contact - cours'), 'url' => ['/gymv/import/course']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="import-csv">

@@ -9,13 +9,13 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\ContactSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Product';
+$this->title = 'Contact - Cours';
 $this->params['breadcrumbs'][] = ['label' => 'Gymv', 'url' => ['/gymv']];
 $this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Import'), 'url' => ['/gymv/import/home']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-index">
-    <h1>Product Cours</h1>
+    <h1>Contact - Cours <small>import</small></h1>
     <hr/>
     <div class="row">
         <div class="col-sm-6">
@@ -25,8 +25,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     <li>Encoding is UTF-8</li>
                     <li>col 1 : Nom</li>
                     <li>col 2 : Prénom</li>
+                    <li>col 3 : Numéro du cours</li>
                 </ul>
             </p>
+            <p>Exemple : <br/>
+            <pre>
+nom,prenom,cours
+BEERT,Nathalie,1
+TEHUET,Françoise,1
+TIIFROY,Céline,1
+ERRENT,Clélia,1
+EERIERE,Véronique,2
+ITORES,Françoise,2            
+            </pre></p>
         </div>
         <div class="col-sm-6">
             <div class="well">
