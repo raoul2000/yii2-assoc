@@ -34,5 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['/gymv/import/exercice'], 
             ['class' => 'btn btn-primary']) 
         ?>    
+
+        <?= Html::a(
+            \Yii::t('app', 'Cours'), 
+            ['/gymv/import/course'], 
+            ['class' => 'btn btn-primary']) 
+        ?>    
     </p>
 </div>
