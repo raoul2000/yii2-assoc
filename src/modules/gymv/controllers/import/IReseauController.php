@@ -79,11 +79,12 @@ class IReseauController extends Controller
         $records = [];
         try {
             $csv = Reader::createFromStream(fopen($importFile, 'r'));
-            $csv->setDelimiter(',');
-            $csv->setEnclosure('\'');
+            $csv->setDelimiter(';');
+            $csv->setEnclosure('"');
             $csv->setHeaderOffset(0);
             $csvRecords = $csv->getRecords(['name', 'woman_name', 'firstname','gender', 'birthday', 'license_num',
-            'license_cat','residence','locality','street','zip','city','country','phone', 'mobile', 'email']);
+            'license_cat','residence','locality','street','zip','city','country','phone', 'mobile', 'email',
+            'certificate','type_adhesion', 'num_bdc']);
 
             foreach ($csvRecords as $offset => $record) {
                 $message = [];
@@ -189,7 +190,11 @@ class IReseauController extends Controller
                         $licenseOrder = new Order($orderAttribute);
                         $licenseOrder->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
                         $licenseOrder->valid_date_end   =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
-                        $licenseOrder->description      = 'license n° ' . $normalizedRecord['license_num'];
+                        $licenseOrder->description      = 'license n° ' . $normalizedRecord['license_num']
+                            . ( \strlen($normalizedRecord['num_bdc']) !== 0 
+                                ? '- BDC N° ' . $normalizedRecord['num_bdc']
+                                : ''
+                            );
                         
                         if( $licenseOrder->validate()) {
                             $licenseOrder->save();
@@ -209,15 +214,15 @@ class IReseauController extends Controller
                         'message' => $message,
                         'record' => $normalizedRecord,
                         'contact' => [
-                            'model' => $contact,
+                            //'model' => $contact,
                             'validation' => $contact === null ? '(no model)' : $contact->getErrors()
                         ],
                         'address' => [
-                            'model' => $address,
+                            //'model' => $address,
                             'validation' => $address === null ? '(no model)' :  $address->getErrors() 
                         ],
                         'licenseOrder' => [
-                            'model' => $licenseOrder,
+                            //'model' => $licenseOrder,
                             'validation' => $licenseOrder === null ? '(no model)' :  $licenseOrder->getErrors() 
                         ]
                     ]
@@ -245,12 +250,12 @@ class IReseauController extends Controller
             if(is_string($colValue)) {
                 return \mb_strtolower(trim($colValue));
             } else {
-                return $colValue;
+                return trim($colValue);
             }
         }, $record);
 
         // normlize gender (Homme => 1, Femme => 2)
-        $record['gender'] = ($record['gender'] == 'Femme' ? '2' : '1');
+        $record['gender'] = ($record['gender'] == 'femme' ? '2' : '1');
 
         //$record['phone'] = $this->normalizePhone($record['phone']);
         //$record['mobile'] = $this->normalizePhone($record['mobile']);
