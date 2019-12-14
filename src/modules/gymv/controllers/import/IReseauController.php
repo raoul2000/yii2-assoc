@@ -243,7 +243,7 @@ class IReseauController extends Controller
         // all strings are converted to lower case
         $record = array_map(function($colValue) {
             if(is_string($colValue)) {
-                return \strtolower($colValue);
+                return \mb_strtolower(trim($colValue));
             } else {
                 return $colValue;
             }
