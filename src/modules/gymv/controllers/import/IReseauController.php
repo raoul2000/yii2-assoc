@@ -14,6 +14,7 @@ use app\modules\gymv\models\UploadForm;
 use yii\web\UploadedFile;
 use \app\components\helpers\DateHelper;
 use \app\components\SessionDateRange;
+use \app\components\SessionContact;
 
 
 /**
@@ -207,6 +208,50 @@ class IReseauController extends Controller
                     }
                 }
 
+                if ($contact ///////////////////////// order - certificate ////////////////////////////////////////
+                    && strlen($normalizedRecord['certificate']) !== 0 
+                ) { 
+                    // certificate is represented as an order for the certificate product, between the configured
+                    // contact (current session contact) and the imported contact
+                   
+                    // does this order already exists ?
+                    $orderAttribute = [
+                        'from_contact_id'  => $contact->id,
+                        'to_contact_id'    => SessionContact::getContactId(),
+                        'product_id'       => Yii::$app->params['registration.product.certificat_medical'],
+                        // search on the yyyy-mm-dd format
+                        'valid_date_start' => DateHelper::toDateDbFormat($normalizedRecord['certificate'])
+                    ];
+
+                    $hasOrder = Order::find()
+                        ->where($orderAttribute)
+                        ->exists();
+
+                    if(! $hasOrder) {
+                        // create order for this certificate and this contact
+
+                        $order = new Order($orderAttribute);
+                        $order->valid_date_start =  $normalizedRecord['certificate']; // dd/mm/yyyy
+
+                        $start = new \DateTime(DateHelper::toDateDbFormat($order->valid_date_start));
+                        $threeYears = new \DateInterval('P3Y');
+                        $end = $start->add($threeYears);
+
+                        $order->valid_date_end   =  $end->format('d/m/Y');
+                        
+                        if( $order->validate()) {
+                            $order->save();
+                            $message[] = '✔️ Insert certificate order';
+                        } else {
+                            $message[] = '❌ certificate order validation failed';
+                        }
+                    } else {
+                        $message[] = 'ℹ️ certificate order already exists in this period';
+                    }
+                } else {
+                    $message[] = '❌ no certificate ';
+                }
+
                 //////////////////////// final report //////////////////////////////////////////////////////
 
                 $records['L' . $offset] = [
@@ -260,7 +305,12 @@ class IReseauController extends Controller
         //$record['phone'] = $this->normalizePhone($record['phone']);
         //$record['mobile'] = $this->normalizePhone($record['mobile']);
 
-
+        if (\strlen($record['certificate']) !== 0) {
+            // By CONVENTION if only year is provided, turn it into 01/09/YYYYY 
+            if ( preg_match('/^(\d\d\d\d)$/', $record['certificate'], $matches ) === 1) {
+                $record['certificate'] = '01/09/' . $matches[1];
+            }
+        }
         // input date is yyyy-mm-dd but contact attribute 'birthday' expects app format (dd/mm/yyyy)
         //$record['birthday'] = DateHelper::toDateAppFormat($record['birthday']);
         return $record;
