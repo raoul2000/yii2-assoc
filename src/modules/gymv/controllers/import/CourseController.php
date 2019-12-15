@@ -73,7 +73,7 @@ class CourseController extends Controller
         $errorMessage = null;
         $records = [];
         $courseNumber = null;
-        // Product for the current Course 
+        // Product for the current Course Map<course number, Product Model>
         $products = []; 
         $courseProduct = null; 
         try {
@@ -95,16 +95,20 @@ class CourseController extends Controller
                 $courseNumber = $normalizedRecord['cour_num'];
 
                 if ( ! array_key_exists($courseNumber, $products) ) { // product ////////////////////////////////
+                    // course product not store in cache : find it
                     $results = Product::find()
                         ->where(['LIKE', 'name', "cours $courseNumber -"])
                         ->all();
                     if( count($results) === 1) {
+                        // found ! cache for later use
                         $products[$courseNumber] = $results[0];
                     } else {
+                        // mark as not found in the cache entry
                         $products[$courseNumber] = false;
                         $message[] = '❌ product not found for course ' . $courseNumber;
                     }
                 }
+
                 if( $products[$courseNumber] !== false) {
                     $courseProduct = $products[$courseNumber];
                 } else {
@@ -124,7 +128,6 @@ class CourseController extends Controller
                         $contact = null;
                     }
                 }
-
 
                 if ($courseProduct && $contact) { ///////////////////////// order - course /////////////////
 
