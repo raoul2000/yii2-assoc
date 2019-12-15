@@ -126,7 +126,7 @@ class CourseController extends Controller
                 }
 
 
-                if ($courseProduct && $contact) { ///////////////////////// order /////////////////
+                if ($courseProduct && $contact) { ///////////////////////// order - course /////////////////
 
                     // course is represented as an order for the course product, between the configured
                     // contact (current session contact) and the imported contact
