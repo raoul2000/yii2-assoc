@@ -326,6 +326,7 @@ class ExerciceController extends Controller
         $category = Category::findOne($attributes);
         if($category == null) {
             $category = new Category($attributes);
+            $category->setScenario(Category::SCENARIO_INSERT);
             $category->save();
         }
         return $category;
