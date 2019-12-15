@@ -117,5 +117,5 @@ return [
      */
     'registration.transaction.categoryId' => 5,
 
-    'contact.licence.provider' => 89,
+    'contact.licence.provider' => 527,
 ];
