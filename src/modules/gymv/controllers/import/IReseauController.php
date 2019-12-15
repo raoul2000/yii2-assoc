@@ -90,6 +90,7 @@ class IReseauController extends Controller
             foreach ($csvRecords as $offset => $record) {
                 $message = [];
                 $contact = $address = $licenseOrder = null;
+                $membershipOrder = $certificateOrder = null;
                 $contactAvailable = false;
 
                 $normalizedRecord = $this->normalizeRecord($record);
@@ -129,7 +130,7 @@ class IReseauController extends Controller
                         $bankAccount->name = '';
                         $bankAccount->save(false);
                         $contactAvailable = true;
-                        $message[] = 'contact inserted';
+                        $message[] = '✔️ contact';
                     } else {
                         $message[] = '❌ contact validation failed';
                     }
@@ -160,10 +161,46 @@ class IReseauController extends Controller
                         $address = new Address($addressAttributes);
                         if($address->save()) {
                             $contact->link('address', $address);    
-                            $message[] = 'insert address';
+                            $message[] = '✔️ address';
                         } else {
                             $message[] = '❌ address validation failed';
                         }
+                    }
+                }
+
+                if ($contact) { ///////////////////////// adhésion Assoc ////////////////////////////////////////////
+
+                    // The membership is represented as an order from the current session contact
+                    // and to the contact.
+
+                    // does this contact already has a license ?
+                    $orderAttribute = [
+                        'from_contact_id' => $contact->id,
+                        'to_contact_id'   => SessionContact::getContactId(),
+                        'product_id'      => $normalizedRecord['zip'] === '94300'
+                            ? Yii::$app->params['registration.product.adhesion_vincennois']
+                            : Yii::$app->params['registration.product.adhesion_non_vincennois']
+                    ];
+
+                    $hasOrder = Order::find()
+                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                        ->where($orderAttribute)
+                        ->exists();
+
+                    if(! $hasOrder) {
+                        
+                        $membershipOrder = new Order($orderAttribute);
+                        $membershipOrder->valid_date_start =  DateHelper::toDateAppFormat(SessionDateRange::getStart());
+                        $membershipOrder->valid_date_end   =  DateHelper::toDateAppFormat(SessionDateRange::getEnd());
+                        
+                        if( $membershipOrder->validate()) {
+                            $membershipOrder->save();
+                            $message[] = ' ✔️ membership';
+                        } else {
+                            $message[] = '❌ membership validation failed';
+                        }
+                    } else {
+                        $message[] = 'License order already exists in this period';
                     }
                 }
 
@@ -199,7 +236,7 @@ class IReseauController extends Controller
                         
                         if( $licenseOrder->validate()) {
                             $licenseOrder->save();
-                            $message[] = 'Insert License order';
+                            $message[] = '✔️ License order';
                         } else {
                             $message[] = '❌ order validation failed';
                         }
@@ -230,20 +267,21 @@ class IReseauController extends Controller
                     if(! $hasOrder) {
                         // create order for this certificate and this contact
 
-                        $order = new Order($orderAttribute);
-                        $order->valid_date_start =  $normalizedRecord['certificate']; // dd/mm/yyyy
+                        $certificateOrder = new Order($orderAttribute);
+                        $certificateOrder->valid_date_start =  $normalizedRecord['certificate']; // dd/mm/yyyy
 
-                        $start = new \DateTime(DateHelper::toDateDbFormat($order->valid_date_start));
+                        // calculate start and end validation date : start + 3 years
+                        $start = new \DateTime(DateHelper::toDateDbFormat($certificateOrder->valid_date_start));
                         $threeYears = new \DateInterval('P3Y');
                         $end = $start->add($threeYears);
 
-                        $order->valid_date_end   =  $end->format('d/m/Y');
+                        $certificateOrder->valid_date_end   =  $end->format('d/m/Y');
                         
-                        if( $order->validate()) {
-                            $order->save();
-                            $message[] = '✔️ Insert certificate order';
+                        if( $certificateOrder->validate()) {
+                            $certificateOrder->save();
+                            $message[] = '✔️ certificate';
                         } else {
-                            $message[] = '❌ certificate order validation failed';
+                            $message[] = '❌ certificate validation failed';
                         }
                     } else {
                         $message[] = 'ℹ️ certificate order already exists in this period';
@@ -269,6 +307,12 @@ class IReseauController extends Controller
                         'licenseOrder' => [
                             //'model' => $licenseOrder,
                             'validation' => $licenseOrder === null ? '(no model)' :  $licenseOrder->getErrors() 
+                        ],
+                        'membershipOrder' => [
+                            'validation' => $membershipOrder === null ? '(no model)' :  $membershipOrder->getErrors() 
+                        ],
+                        'certificateOrder' => [
+                            'validation' => $certificateOrder === null ? '(no model)' :  $certificateOrder->getErrors() 
                         ]
                     ]
                 ];
@@ -309,6 +353,8 @@ class IReseauController extends Controller
             // By CONVENTION if only year is provided, turn it into 01/09/YYYYY 
             if ( preg_match('/^(\d\d\d\d)$/', $record['certificate'], $matches ) === 1) {
                 $record['certificate'] = '01/09/' . $matches[1];
+            } else if (preg_match('/^(\d\d\/\d\d\d\d)$/', $record['certificate'], $matches ) === 1) {
+                $record['certificate'] = '01/' . $matches[1];
             }
         }
         // input date is yyyy-mm-dd but contact attribute 'birthday' expects app format (dd/mm/yyyy)
@@ -317,10 +363,13 @@ class IReseauController extends Controller
     }
     private function normalizePhone($input)
     {
+        return str_replace(['\'', '"'], '', $input);
+        /*
         if( \preg_match('/^\'(.*)\'$/m', $input, $matches) === 1) {
             return $matches[1];
         } else {
             return null;
         }
+        */
     }
 }
