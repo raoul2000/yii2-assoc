@@ -117,10 +117,25 @@ class CourseController extends Controller
                 }
 
                 if($courseProduct) { // contact //////////////////////////////////////////////////
+
+                    // exact match
+                    /*
                     $results = Contact::find()
                         ->andWhere(['LIKE', 'name', $normalizedRecord['name']])
                         ->andWhere(['LIKE', 'firstname', $normalizedRecord['firstname']])
                         ->all();
+                    */
+
+                    // fuzzy search
+                    $results = Contact::find()
+                        ->andWhere(['LIKE', 'name', $normalizedRecord['name']])
+                        ->andWhere([
+                            'or like', 
+                            'firstname', 
+                            $this->createVariant($normalizedRecord['firstname'])
+                        ])
+                        ->all();
+
                     if (count($results) === 1) {
                         $contact = $results[0];
                     } else {
@@ -200,7 +215,28 @@ class CourseController extends Controller
             }
         }, $record);
 
-        // nothing to normalize
         return $record;
+    }
+
+    /**
+     * Helper method that returns string variants from a given string
+     *
+     * @param string $value
+     * @param boolean $insert when TRUE, the given value is added as the first item in the returned variants
+     * When FALSE, only variants are returned
+     * @return [string]
+     */
+    private function createVariant($value, $insert = true)
+    {
+        $variant = $insert ? [$value] : [];
+        if(preg_match('/[ -]/',  $value) === 1) {
+            // the value contains a separator : we must provide vazriant
+            $rootStr = preg_replace('/[ -]+/', ' ', $value);
+            $tokens = explode(' ', $rootStr);
+
+            $variant[] = implode(' ',$tokens);
+            $variant[] = implode('-',$tokens);
+        } 
+        return $variant;
     }
 }
