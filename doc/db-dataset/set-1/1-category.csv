@@ -3,3 +3,6 @@
 "3",NULL,"product","cours bébé/enfant"
 "4",NULL,"product","inscription"
 "5",NULL,"transaction","inscription"
+"6",NULL,"transaction","Adhésion"
+"7",NULL,"transaction","salaire"
+"8",NULL,"transaction","License"
