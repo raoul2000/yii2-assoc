@@ -264,7 +264,7 @@ class ContactController extends Controller
     }
 
     /**
-     * 
+     * NOT USED
      */
     public function actionOrderSummary($id)
     {

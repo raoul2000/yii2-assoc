@@ -14,11 +14,6 @@ $currentContactId = $model->id;
             ['order/create', 'to_contact_id' => $model->id, 'redirect_url' => Url::current()], 
             ['class' => 'btn btn-success']) 
         ?>
-        <?= Html::a(
-            \Yii::t('app', 'View Order Summary'), 
-            ['contact/order-summary', 'id' => $model->id], 
-            ['class' => 'btn btn-default']) 
-        ?>
     </p>
     <?php Pjax::begin(); ?>
     <?= \Yii::t('app', 'Total Value') ?> : <b><?= $totalValue ?></b>
