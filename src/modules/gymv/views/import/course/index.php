@@ -30,7 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <ul>
                     <li>col 1 : Nom</li>
                     <li>col 2 : Prénom</li>
-                    <li>col 3 : Numéro du cours</li>
+                    <li>col 3 : Numéro du cours ou nom du cours. Doit correspondre au motif suivant : "cours ID -" 
+                    où ID est le numéro ou le code du cours. Exemple : "cours 501 -", 
+                    "cours BRED -" </li>
                 </ul>
             </ul>
             <p>Exemple : <br/>
