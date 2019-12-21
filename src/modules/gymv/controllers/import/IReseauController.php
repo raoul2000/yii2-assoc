@@ -175,8 +175,8 @@ class IReseauController extends Controller
 
                     // does this contact already has a license ?
                     $orderAttribute = [
-                        'from_contact_id' => $contact->id,
-                        'to_contact_id'   => SessionContact::getContactId(),
+                        'from_contact_id' => SessionContact::getContactId(),
+                        'to_contact_id'   => $contact->id,
                         'product_id'      => $normalizedRecord['zip'] === '94300'
                             ? Yii::$app->params['registration.product.adhesion_vincennois']
                             : Yii::$app->params['registration.product.adhesion_non_vincennois']
