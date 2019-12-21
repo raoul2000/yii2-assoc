@@ -44,6 +44,13 @@ $contactModel = $model;
             ['contact/unlink-address', 'id' => $model->id],
             ['class' => 'btn btn-danger', 'data-pjax' => 0]
         ) ?>
+        <?php if($searchUrl) : ?>
+            <?= Html::a(
+                'Search',
+                $searchUrl,
+                ['class' => 'btn btn-default', 'data-pjax' => 0, 'target' => 'blank']
+            ) ?>
+        <?php endif; ?>
     </p>
     
     <?= Yii::$app->formatter->asNoteBox($model->address->note) ?>

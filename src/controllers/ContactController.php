@@ -215,11 +215,22 @@ class ContactController extends Controller
                 break;
 
             case 'address':
+                // search 
+                $address = $model->address;
+                $searchUrl = null;
+                if($address) {
+                    $searchUrl = 'https://www.pagesjaunes.fr/pagesblanches/recherche?quoi'
+                        .'qui=' . $model->name . '&ou=' . urlencode(
+                            $address->line_1 . ' ' . $address->zip_code
+                        ) 
+                        .'&proximite=0';
+                }
                 return $this->render('view', [
                     'model' => $model,
                     'tab' => $tab,
                     'tabContent' => $this->renderPartial('_tab-address', [
                         'model' => $model,
+                        'searchUrl' => $searchUrl
                     ])
                 ]);
                 break;
