@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ?></summary>
             <p>
                 <pre><?php
-                echo VarDumper::export($record['data']);
+                //echo VarDumper::export($record['data']);
                 ?></pre>                        
             </p>
         </details>
