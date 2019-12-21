@@ -18,9 +18,9 @@ return [
      */
     'dateRange' => [
         // example of hard coded date range
-        'saison 2019-2020' => [
-            'start' => '2019-09-01',
-            'end'   => '2020-08-30'
+        'saison 2018-2019' => [
+            'start' => '2018-09-01',
+            'end'   => '2019-08-30'
         ],
         // example of dynamic date range 01/09/Y - 31/08/Y+1
         'saison en cours' => [

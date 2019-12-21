@@ -157,8 +157,8 @@ class CourseController extends Controller
                     ];
 
                     $hasOrder = Order::find()
-                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->where($orderAttribute)
+                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->exists();
 
                     if(! $hasOrder) {

@@ -92,8 +92,8 @@ class CourseController extends \yii\web\Controller
         $orders = Order::find()
             ->select(['product_id', 'COUNT(*) as count_total'])
             ->with('product')
-            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->where(['in', 'product_id', $courseProductIds])
+            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->groupBy('product_id')
             ->asArray()
             ->all();

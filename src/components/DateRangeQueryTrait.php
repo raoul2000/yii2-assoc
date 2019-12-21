@@ -8,6 +8,8 @@ trait DateRangeQueryTrait
      * Add a search condition on a single column date being totally or partially included
      * in the current date range.
      * on the `reference_date` attribute.
+     * 
+     * The condition added is "AND WHERE"
      *
      * @param string $startDate format yyyy-mm-dd the start date range, or empty if left opened range
      * @param string $endDate format yyyy-mm-dd the start date range, or empty if right opened range
