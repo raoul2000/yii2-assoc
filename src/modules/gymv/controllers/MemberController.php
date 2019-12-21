@@ -3,15 +3,12 @@
 namespace app\modules\gymv\controllers;
 
 use Yii;
-use yii\web\NotFoundHttpException;
 use \app\models\Contact;
 use \app\models\ContactSearch;
-use \app\models\Product;
 use \app\models\Order;
-use \app\models\BankAccount;
 use \app\components\SessionDateRange;
-use \app\components\SessionContact;
-use app\modules\gymv\models\ProductSelectionForm;
+use \app\components\helpers\ConverterHelper;
+use \app\modules\gymv\models\MemberSearch;
 
 class MemberController extends \yii\web\Controller
 {
@@ -41,17 +38,11 @@ class MemberController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $searchModel = new ContactSearch();
+        $searchModel = new MemberSearch();
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams
         );
-
-        $dataProvider
-            ->query
-            ->where(['is_natural_person' => true])
-            ->joinWith('toOrders o')
-            ->andWhere(['in', 'o.product_id', [52,53]]);
-
+        
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider

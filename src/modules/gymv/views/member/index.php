@@ -25,26 +25,22 @@ use yii\widgets\Pjax;
                 ],
                 [
                     'attribute' => 'name',
-                    'label' => 'Name'
+                    'label' => 'Name',
+                    'format' => 'raw',
+                    'value'     => function ($model, $key, $index, $column) {
+                        return Html::a('<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                . Html::encode(ucfirst($model->name)),
+                            ['/contact/view','id'=>$model->id],
+                            [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
+                        );
+                    }                    
+
                 ],
                 [
                     'attribute' => 'firstname',
                     'label' => 'Firstname'
                 ],
                 'email:email',
-                [
-                    'class' => 'yii\grid\ActionColumn',
-                    'template'  => '{view}',
-                    'contentOptions' => ['nowrap' => 'nowrap'],
-                    'urlCreator' => function ($action, $model, $key, $index) {
-                        if ($action == 'view') {
-                            return Url::to([
-                                '/contact/view',
-                                'id' => $model->id
-                            ]);
-                        }
-                    },
-                ],                        
             ],
             ]); 
         ?>    

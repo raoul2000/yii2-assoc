@@ -92,7 +92,7 @@ return [
     'registration.product.group' => [
         'courses' => [
             //'productId' => [95,94],
-            'categoryId' => [1,2,3]
+            'categoryId' => [1,2,3] // TODO: this could be duplicate with "courses_category_ids" below
         ],
         // not used anymore
         'group-2' => [
@@ -120,4 +120,9 @@ return [
      * Id of the contact who provides license
      */
     'contact.licence.provider' => 6,
+    /**
+     * list of category id.
+     * All product belonging to these categories are considered as classes
+     */
+    'courses_category_ids' => [1,2,3]
 ];
