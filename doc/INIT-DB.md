@@ -9,6 +9,8 @@ CREATE SCHEMA `yii2_assoc` DEFAULT CHARACTER SET utf8 ;
 - manually create user GymV
     - contact Id = 5
     - bank account id = 1
+- manually create user CODEP
+    - cotact_id = 6    
 - via PhpMyAdmin import
     - **category**, import `db-dataset/set1/category.csv`
     - **product**, import `db-dataset/set1/product.csv`

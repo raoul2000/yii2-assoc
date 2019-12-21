@@ -116,6 +116,8 @@ return [
      * ID of the category assigned to transactions created during the registration wizard
      */
     'registration.transaction.categoryId' => 5,
-
-    'contact.licence.provider' => 527,
+    /**
+     * Id of the contact who provides license
+     */
+    'contact.licence.provider' => 6,
 ];
