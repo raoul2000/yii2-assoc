@@ -41,11 +41,13 @@ class CourseController extends \yii\web\Controller
         ];
     }
     
-    public function actionIndex($course_id = null)
+    public function actionIndex()
     {
         // Order consmued belonging to 
         $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
         
+        // map<product_id, product_name> for courses - used in the dropdown (selectize) 
+        // course selector (search)
         $products = ArrayHelper::map(
             Product::find()
                 ->select(['id','name'])
@@ -55,21 +57,29 @@ class CourseController extends \yii\web\Controller
             'name'
         );
 
-        
         $searchModel = new OrderSearch();
         $searchModel->product_id = '';
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             QueryFactory::findCourseSold($courseProductIds)
-                ->with(['product', 'toContact'])
+                ->with(['toContact'])
                 ->orderBy('product_id')
         );
+
+        $selectedProduct = null;
+        if( !empty($searchModel->product_id)) {
+            $selectedProduct = Product::findOne($searchModel->product_id);
+            // product selected : display members without pagination
+            // otherwise use default pagination to not having to
+            // display too many members in one single page
+            $dataProvider->setPagination(false);
+        } 
 
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
             'products'     => $products,
-            'course_id'    => $course_id
+            'selectedProduct' => $selectedProduct
         ]);
     }
 

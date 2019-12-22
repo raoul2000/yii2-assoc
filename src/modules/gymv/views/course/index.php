@@ -4,10 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-//$this->registerCss(file_get_contents(__DIR__ . '/dashboard.css'));
 ?>
 <div id="member">
     <h1>Cours</h1>
@@ -23,29 +20,28 @@ use yii\widgets\ActiveForm;
         ); 
     ?> 
 
+    <?php if($selectedProduct): ?>
+        <div class="alert alert-info" role="alert">
+            <b>
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                <?= Html::encode($selectedProduct->name); ?>
+            </b>
+            - <?= Html::encode($selectedProduct->short_description); ?>        
+        </div>
+    <?php else: ?>
+        <div class="alert alert-warning" role="alert">
+            No course selected
+        </div>
+    <?php endif; ?>
+
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
             'columns' => [
-                /*
-                [
-                    'attribute' => 'product_id',
-                    'label'     => 'Product',
-                    'filter'    => $products,
-                    'format'    => 'raw',
-                    'value'     => function ($model, $key, $index, $column) {
-                        return Html::a('<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
-                                . Html::encode($model->product->name),
-                            ['/product/view','id'=>$model->product_id],
-                            [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view product')]
-                        );
-                    }
-                ],
-                */                
                 [
                     'attribute' => 'to_contact_id',
-                    'label'     => 'Beneficiary',
+                    'label'     => \Yii::t('app', 'Member Name'),
                     'filter'    => false,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column)  {
@@ -71,6 +67,4 @@ use yii\widgets\ActiveForm;
             ],
         ]); ?>
     <?php Pjax::end(); ?>
-
-
 </div>

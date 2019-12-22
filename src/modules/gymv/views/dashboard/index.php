@@ -24,7 +24,7 @@ $this->registerCss(file_get_contents(__DIR__ . '/dashboard.css'));
                 <h1>Cours Achetés</h1>
                 <div class="metric"><?= $countCourses ?></div>
                 <div class="detail">
-                    Nombre total de cours sur la saison
+                    Nombre de cours/personne sur la saison
                 </div>
             </li>
         </ul>

@@ -5,6 +5,8 @@ namespace app\modules\gymv\models;
 use Yii;
 use app\models\Contact;
 use app\models\Order;
+use app\models\Product;
+use yii\helpers\ArrayHelper;
 use \app\components\SessionDateRange;
 use \app\components\SessionContact;
 use \app\components\helpers\ConverterHelper;
@@ -14,7 +16,7 @@ use \app\components\helpers\ConverterHelper;
  */
 class QueryFactory
 {
-
+    // not used
     static public function getCoursesMap()
     {
         $productIdsAsString = Yii::$app->configManager->getItemValue('product.consumed.by.registered.contact');
