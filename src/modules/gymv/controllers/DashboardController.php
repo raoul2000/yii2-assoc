@@ -59,7 +59,7 @@ class DashboardController extends \yii\web\Controller
         // contact, then it will still appear as owned by the contact
 
         $countCourses = Order::find()
-            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->where(['in', 'product_id', $courseProductIds] )
             ->andWhere(['from_contact_id' => SessionContact::getContactId()])
             ->distinct()

@@ -52,7 +52,7 @@ class ProductController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider
             ->query
-            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
+            ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
 
         $categories = Category::getCategories(
             ModelRegistry::PRODUCT 

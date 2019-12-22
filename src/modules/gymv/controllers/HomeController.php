@@ -66,7 +66,7 @@ class HomeController extends \yii\web\Controller
             $contactIdQuery = Order::find()
                 ->select('to_contact_id')
                 ->distinct()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
+                ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd());
 
             // validate product id list : checks that all product ids configured are matching real products
             $productCount = Product::find()

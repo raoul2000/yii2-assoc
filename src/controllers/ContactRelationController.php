@@ -52,7 +52,7 @@ class ContactRelationController extends Controller
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             ContactRelation::find()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with(['sourceContact', 'targetContact'])
         );
 

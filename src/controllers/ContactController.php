@@ -195,7 +195,7 @@ class ContactController extends Controller
             case 'relation':
                     
                 $relations = ContactRelation::find()
-                    ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                    ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                     ->andWhere([
                         'or',
                             ['source_contact_id' => $id],
@@ -243,7 +243,7 @@ class ContactController extends Controller
 
                 $orderDataProvider
                     ->query
-                    ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                    ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                     ->andWhere([
                         'or',
                             ['to_contact_id' => $id],
@@ -284,12 +284,12 @@ class ContactController extends Controller
             ->where([
                 'or', ['to_contact_id' => $id], ['from_contact_id' => $id] 
             ])
-            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->asArray();
         /* could it be replace by ...
         $queryOrders = $model
             ->getOrders()
-            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->asArray();
         */
 

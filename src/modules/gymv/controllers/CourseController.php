@@ -72,7 +72,7 @@ class CourseController extends \yii\web\Controller
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             Order::find()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with(['product', 'toContact'])
                 ->where(['in', 'product_id', $courseProductIds] )
                 ->andWhere(['in', 'to_contact_id', $memberIds])
@@ -93,7 +93,7 @@ class CourseController extends \yii\web\Controller
             ->select(['product_id', 'COUNT(*) as count_total'])
             ->with('product')
             ->where(['in', 'product_id', $courseProductIds])
-            ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->groupBy('product_id')
             ->asArray()
             ->all();

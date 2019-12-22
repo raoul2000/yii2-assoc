@@ -184,7 +184,7 @@ class IReseauController extends Controller
 
                     $hasOrder = Order::find()
                         ->where($orderAttribute)
-                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                        ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->exists();
 
                     if(! $hasOrder) {
@@ -220,7 +220,7 @@ class IReseauController extends Controller
 
                     $hasLicenceOrder = Order::find()
                         ->where($orderAttribute)
-                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                        ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->exists();
 
                     if(! $hasLicenceOrder) {

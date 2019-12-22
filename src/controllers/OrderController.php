@@ -67,14 +67,14 @@ class OrderController extends Controller
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             Order::find()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
         );
         $totalValue = $dataProvider->query->sum('value'); // compute total Value
 
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             Order::find()
-                ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                 ->with('transactions')
         );
 

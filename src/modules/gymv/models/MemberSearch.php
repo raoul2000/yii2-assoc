@@ -48,7 +48,7 @@ class MemberSearch extends Contact
                 'toOrders' => function($q) use($productIds) {
                     $q
                         ->from(['o' => Order::tableName()])
-                        ->validInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+                        ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
                         ->andWhere(['in', 'o.product_id', $productIds]);
                 }
             ]);        

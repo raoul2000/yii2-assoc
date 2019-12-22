@@ -57,7 +57,7 @@ trait DateRangeQueryTrait
      * @param string $endDate
      * @return void
      */
-    public function validInDateRange($startDate, $endDate = null)
+    public function andWhereValidInDateRange($startDate, $endDate = null)
     {
         $this->validateDateRangeValues($startDate, $endDate);
 
