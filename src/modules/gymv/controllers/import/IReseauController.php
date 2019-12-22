@@ -346,8 +346,8 @@ class IReseauController extends Controller
         // normlize gender (Homme => 1, Femme => 2)
         $record['gender'] = ($record['gender'] == 'femme' ? '2' : '1');
 
-        //$record['phone'] = $this->normalizePhone($record['phone']);
-        //$record['mobile'] = $this->normalizePhone($record['mobile']);
+        $record['phone'] = $this->normalizePhone($record['phone']);
+        $record['mobile'] = $this->normalizePhone($record['mobile']);
 
         if (\strlen($record['certificate']) !== 0) {
             // By CONVENTION if only year is provided, turn it into 01/09/YYYYY 
