@@ -49,33 +49,27 @@ class CourseController extends \yii\web\Controller
         $products = ArrayHelper::map(
             Product::find()
                 ->select(['id','name'])
-                ->where(['in' , 'id', $courseProductIds])
+                ->where(['in', 'id', $courseProductIds])
                 ->all(),
             'id',
             'name'
         );
-        /*
-        $products = Product::find()
-            ->select(['id','name'])
-            ->where(['in' , 'id', $courseProductIds])
-            ->asArray()
-            ->all();
-*/
 
+        
         $searchModel = new OrderSearch();
+        $searchModel->product_id = '';
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             QueryFactory::findCourseSold($courseProductIds)
-                //->andFilterWhere(['id' => $course_id])
                 ->with(['product', 'toContact'])
                 ->orderBy('product_id')
         );
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
-            'products' => $products,
-            'course_id' => $course_id
+            'products'     => $products,
+            'course_id'    => $course_id
         ]);
     }
 

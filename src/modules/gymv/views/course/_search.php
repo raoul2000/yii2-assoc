@@ -17,6 +17,7 @@ use yii\widgets\ActiveForm;
         <table width="100%">
             <tr>
                 <td style="width: 100%;padding-right: 1em;">
+                    <?php $products[''] = 'XXX'; ?>
                     <?= \dosamigos\selectize\SelectizeDropDownList::widget([
                             'name' => 'OrderSearch[product_id]',
                             'items' => $products,
@@ -25,6 +26,7 @@ use yii\widgets\ActiveForm;
                             'clientOptions' => [
                                 'create' => false,
                                 'placeholder' => \Yii::t('app', 'select course ...'),
+                                'allowEmptyOption' => false
                             ],
                         ])
                     ?>
