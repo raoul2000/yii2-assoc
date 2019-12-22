@@ -15,6 +15,7 @@ use \app\components\SessionContact;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\helpers\Url;
 use \app\modules\gymv\models\MemberSearch;
+use \app\modules\gymv\models\QueryFactory;
 
 class DashboardController extends \yii\web\Controller
 {
@@ -46,24 +47,14 @@ class DashboardController extends \yii\web\Controller
     {
         // build cards info
         // count all members
-        $membersCount = MemberSearch::findQueryMembers()->count();
+        $membersCount = QueryFactory::findQueryMembers()->count();
 
         // bank account balance info
         $bankAccount = BankAccount::findOne(SessionContact::getBankAccountId());
         $balanceInfo = $bankAccount->getBalanceInfo();
 
-        // Order consmued belonging to 
-        //$courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
-        $courseProductIds = Yii::$app->params['courses_category_ids'];
-        // TODO: query below does not take into account refund. If a course has been refunded to the
-        // contact, then it will still appear as owned by the contact
-
-        $countCourses = Order::find()
-            ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
-            ->where(['in', 'product_id', $courseProductIds] )
-            ->andWhere(['from_contact_id' => SessionContact::getContactId()])
-            ->distinct()
-            ->count();
+        // Number of course sold for the current  date range
+        $countCourses = QueryFactory::findCourseSold()->count();
 
         return $this->render('index', [
             'membersCount' => $membersCount,

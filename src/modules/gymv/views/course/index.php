@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 //$this->registerCss(file_get_contents(__DIR__ . '/dashboard.css'));
@@ -12,18 +13,22 @@ use yii\widgets\Pjax;
     <h1>Cours</h1>
     <hr/>
 
-    <?php  //echo $this->render('_search', ['model' => $searchModel, 'products' => $products]); ?> 
+    <?php  
+        echo $this->render(
+            '_search',
+            [
+                'searchModel' => $searchModel,
+                'products' => $products
+            ]
+        ); 
+    ?> 
 
-    <?php 
-        // TODO: replace grid filter with selectize input to choose a course product ...
-        Pjax::begin(); 
-    ?>
+    <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            //'filterModel' => false,
             'columns' => [
+                /*
                 [
                     'attribute' => 'product_id',
                     'label'     => 'Product',
@@ -36,7 +41,8 @@ use yii\widgets\Pjax;
                             [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view product')]
                         );
                     }
-                ],                
+                ],
+                */                
                 [
                     'attribute' => 'to_contact_id',
                     'label'     => 'Beneficiary',
@@ -52,13 +58,19 @@ use yii\widgets\Pjax;
                 ],                
                 [
                     'class' => 'yii\grid\ActionColumn',
-                    'contentOptions' => ['nowrap' => 'nowrap']
-                ],
+                    'template'  => '{view}',
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action == 'view') {
+                            return Url::to([
+                                '/order/view',
+                                'id' => $model->id
+                            ]);
+                        }
+                    },
+                ],                
             ],
         ]); ?>
-    <?php 
-        Pjax::end(); 
-    ?>
+    <?php Pjax::end(); ?>
 
 
 </div>

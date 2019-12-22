@@ -34,25 +34,7 @@ class MemberSearch extends Contact
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
-
-    static public function findQueryMembers()
-    {
-        // read list of product ids identifying a registered contact (from config)
-        $productIdsAsString = Yii::$app->configManager->getItemValue('product.consumed.by.registered.contact');
-        $productIds = ConverterHelper::explode(',',$productIdsAsString);
-
-        // search contact having valid order for those products : they are registered members
-        return Contact::find()
-            ->andWhere(['is_natural_person' => true])
-            ->joinWith([
-                'toOrders' => function($q) use($productIds) {
-                    $q
-                        ->from(['o' => Order::tableName()])
-                        ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
-                        ->andWhere(['in', 'o.product_id', $productIds]);
-                }
-            ]);        
-    }
+    
     /**
      * Creates data provider instance with search query applied
      *
@@ -62,7 +44,7 @@ class MemberSearch extends Contact
      */
     public function search($params, $query = null)
     {
-        $query = $query === null ? self::findQueryMembers() : $query;
+        $query = $query === null ? QueryFactory::findQueryMembers() : $query;
 
         // add conditions that should always apply here
         

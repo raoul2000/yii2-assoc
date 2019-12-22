@@ -12,6 +12,7 @@ use \app\models\Order;
 use \app\components\SessionDateRange;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\helpers\ArrayHelper;
+use \app\modules\gymv\models\QueryFactory;
 
 
 class CourseController extends \yii\web\Controller
@@ -40,49 +41,41 @@ class CourseController extends \yii\web\Controller
         ];
     }
     
-    public function actionIndex()
+    public function actionIndex($course_id = null)
     {
-        $members = Contact::find()
-            ->select('contact.id')
-            ->where(['is_natural_person' => true])
-            ->joinWith('toOrders o')
-            ->andWhere(['in', 'o.product_id', [52,53]])
-            ->asArray()
-            ->all();
-
-        $memberIds = array_map(function($contact) {
-            return $contact['id']; //return $contact->id;
-        }, $members);
-
-        $membersCount = count($memberIds);
-
-
         // Order consmued belonging to 
         $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
-        $productRows = Product::find()
+        
+        $products = ArrayHelper::map(
+            Product::find()
+                ->select(['id','name'])
+                ->where(['in' , 'id', $courseProductIds])
+                ->all(),
+            'id',
+            'name'
+        );
+        /*
+        $products = Product::find()
             ->select(['id','name'])
             ->where(['in' , 'id', $courseProductIds])
+            ->asArray()
             ->all();
+*/
 
-        $products = ArrayHelper::map($productRows, 'id', 'name');
-
-        // TODO: query below does not take into account refund. If a course has been refunded to the
-        // contact, then it will still appear as owned by the contact
         $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
-            Order::find()
-                ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
+            QueryFactory::findCourseSold($courseProductIds)
+                //->andFilterWhere(['id' => $course_id])
                 ->with(['product', 'toContact'])
-                ->where(['in', 'product_id', $courseProductIds] )
-                ->andWhere(['in', 'to_contact_id', $memberIds])
                 ->orderBy('product_id')
         );
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'products' => $products
+            'products' => $products,
+            'course_id' => $course_id
         ]);
     }
 
