@@ -55,9 +55,14 @@ trait DateRangeQueryTrait
      *
      * @param string $startDate
      * @param string $endDate
+     * @param string $startFieldName (optional) name of the valid date start field. if not set, value
+     * "valid_date_start" is used
+     * @param string $endFieldName (optional) name of the valid date end field. If not set, value
+     * "valid_date_end" is used
      * @return void
      */
-    public function andWhereValidInDateRange($startDate, $endDate = null)
+    public function andWhereValidInDateRange($startDate, $endDate = null, 
+        $startFieldName = 'valid_date_start', $endFieldName = 'valid_date_end')
     {
         $this->validateDateRangeValues($startDate, $endDate);
 
@@ -94,12 +99,12 @@ trait DateRangeQueryTrait
             $conditions = [
                 'AND',
                 ['OR',
-                    ['IS', 'valid_date_start', $NULL],
-                    ['<=', 'valid_date_start', $endDate],
+                    ['IS', $startFieldName, $NULL],
+                    ['<=', $startFieldName, $endDate],
                 ],
                 ['OR',
-                    ['IS', 'valid_date_end', $NULL],
-                    ['>=', 'valid_date_end', $startDate]
+                    ['IS', $endFieldName, $NULL],
+                    ['>=', $endFieldName, $startDate]
                 ]
             ];
         } elseif (!empty($startDate)) { // only start date (valid from date ....)
@@ -120,12 +125,12 @@ trait DateRangeQueryTrait
             $conditions = [
                 'AND',
                 ['OR',
-                    ['IS', 'valid_date_start', $NULL],
-                    ['<=', 'valid_date_start', $startDate],
+                    ['IS', $startFieldName, $NULL],
+                    ['<=', $startFieldName, $startDate],
                 ],
                 ['OR',
-                    ['IS', 'valid_date_end', $NULL],
-                    ['>=', 'valid_date_end', $startDate]
+                    ['IS', $endFieldName, $NULL],
+                    ['>=', $endFieldName, $startDate]
                 ]
             ];
         } elseif (!empty($endDate)) { // only end date (valid until date ... )
@@ -146,12 +151,12 @@ trait DateRangeQueryTrait
             $conditions = [
                 'AND',
                 ['OR',
-                    ['IS', 'valid_date_start', $NULL],
-                    ['<=', 'valid_date_start', $endDate],
+                    ['IS', $startFieldName, $NULL],
+                    ['<=', $startFieldName, $endDate],
                 ],
                 ['OR',
-                    ['IS', 'valid_date_end', $NULL],
-                    ['>=', 'valid_date_end', $endDate]
+                    ['IS', $endFieldName, $NULL],
+                    ['>=', $endFieldName, $endDate]
                 ]
             ];               
 
