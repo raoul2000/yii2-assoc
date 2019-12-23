@@ -5,11 +5,14 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
-//$this->registerCss(file_get_contents(__DIR__ . '/dashboard.css'));
+
+$this->title = \Yii::t('app', 'Members');
+$this->params['breadcrumbs'][] = ['label' => 'GymV', 'url' => ['/gymv/dashboard/index']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div id="member">
-    <h1>Adhérents</h1>
+    <h1><?= Html::encode($this->title) ?></h1>
     <hr/>
     <?php Pjax::begin(); ?>
         <?= GridView::widget([

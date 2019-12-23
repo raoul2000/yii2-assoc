@@ -2,6 +2,8 @@
 use yii\helpers\Url;
 /* @var $this yii\web\View */
 $this->registerCss(file_get_contents(__DIR__ . '/dashboard.css'));
+$this->title = \Yii::t('app', 'Gymv');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div id="dashboard">
     <div id="widget-stat">

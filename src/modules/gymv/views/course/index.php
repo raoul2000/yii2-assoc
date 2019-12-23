@@ -5,9 +5,15 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
+$this->title = $selectedProduct 
+    ? $selectedProduct->name
+    : \Yii::t('app', 'All Courses');
+$this->params['breadcrumbs'][] = ['label' => 'GymV', 'url' => ['/gymv/dashboard/index']];
+$this->params['breadcrumbs'][] = $this->title;
+    
 ?>
 <div id="member">
-    <h1>Cours</h1>
+    <h1><?= Html::encode($this->title) ?> <small><?= \Yii::t('app', 'Member list') ?></small></h1>
     <hr/>
 
     <?php  
@@ -23,10 +29,9 @@ use yii\widgets\Pjax;
     <?php if($selectedProduct): ?>
         <div class="alert alert-info" role="alert">
             <b>
-                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                <?= Html::encode($selectedProduct->name); ?>
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
+                <?= Html::encode($selectedProduct->short_description); ?>        
             </b>
-            - <?= Html::encode($selectedProduct->short_description); ?>        
         </div>
     <?php else: ?>
         <div class="alert alert-warning" role="alert">

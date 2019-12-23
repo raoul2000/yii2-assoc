@@ -5,9 +5,13 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
+$this->title = 'Effectifs Cours';
+$this->params['breadcrumbs'][] = ['label' => 'GymV', 'url' => ['/gymv/dashboard/index']];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div id="member">
-    <h1>Cours - members</h1>
+    <h1><?= Html::encode($this->title) ?> </h1>
     <hr/>
 
     <?php  
