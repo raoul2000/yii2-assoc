@@ -13,7 +13,7 @@ use \app\components\SessionDateRange;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\helpers\ArrayHelper;
 use \app\modules\gymv\models\QueryFactory;
-
+use yii\data\ActiveDataProvider;
 
 class CourseController extends \yii\web\Controller
 {
@@ -98,5 +98,43 @@ class CourseController extends \yii\web\Controller
         return $this->render('overview', [
             'orders' => $orders
         ]);            
+    }
+
+    public function actionMemberCount()
+    {
+        $queryProduct = Product::find()
+            ->select([
+                '{{product}}.id',
+                '{{product}}.name',
+                'COUNT(o.id) as order_count'
+            ])
+            ->where(['in', 'category_id', Yii::$app->params['courses_category_ids']])
+            ->joinWith(['orders' => function($query) {
+                $query
+                    ->from(['o' => Order::tableName()])
+                    ->andWhereValidInDateRange(
+                        SessionDateRange::getStart(), 
+                        SessionDateRange::getEnd(),
+                        'o.valid_date_start',
+                        'o.valid_date_end'
+                    );
+            }])
+            ->orderBy('order_count')
+            ->asArray()
+            ->groupBy('{{product}}.id');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $queryProduct,
+        ]);
+
+        return $this->render('member-count', [
+            'dataProvider' => $dataProvider,
+            'selectedProduct' => null
+        ]);            
+    }
+
+    public function actionMemberCountChart()
+    {
+
     }
 }
