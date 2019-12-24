@@ -39,13 +39,14 @@ class MemberController extends \yii\web\Controller
 
     public function actionIndex()
     {
-  /*      
+  
         // read list of product ids identifying a registered contact (from config)
         $productIdsAsString = Yii::$app->configManager->getItemValue('product.consumed.by.registered.contact');
         $productIds = ConverterHelper::explode(',',$productIdsAsString);
 
         // search contact having valid order for those products : they are registered members
-        $query = \app\modules\gymv\models\Member::find()
+        $query = Contact::find()
+            ->where(['is_natural_person' => true])
             ->joinWith([
                 'toOrders' => function($q) use($productIds) {
                     $q
@@ -54,16 +55,17 @@ class MemberController extends \yii\web\Controller
                         ->andWhere(['in', 'o.product_id', $productIds]);
                 }
             ]);   
-            */
-
+  
+/*
         $query = \app\modules\gymv\models\Member::find()
                 ->joinWith('membershipOrders');
+*/                
         $searchModel = new MemberSearch();
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
             $query
         );
-        
+
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider
