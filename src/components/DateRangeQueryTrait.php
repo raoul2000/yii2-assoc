@@ -4,6 +4,7 @@ namespace app\components;
 
 trait DateRangeQueryTrait
 {
+    
     /**
      * Add a search condition on a single column date being totally or partially included
      * in the current date range.
@@ -50,18 +51,8 @@ trait DateRangeQueryTrait
         return $this->andWhere($conditions);
     }
 
-    /**
-     * Add a search condition on the valid_date_start and valid_date_end date columns
-     *
-     * @param string $startDate
-     * @param string $endDate
-     * @param string $startFieldName (optional) name of the valid date start field. if not set, value
-     * "valid_date_start" is used
-     * @param string $endFieldName (optional) name of the valid date end field. If not set, value
-     * "valid_date_end" is used
-     * @return void
-     */
-    public function andWhereValidInDateRange($startDate, $endDate = null, 
+    
+    public function buildConditionOnDateRange($startDate, $endDate = null, 
         $startFieldName = 'valid_date_start', $endFieldName = 'valid_date_end')
     {
         $this->validateDateRangeValues($startDate, $endDate);
@@ -159,10 +150,24 @@ trait DateRangeQueryTrait
                     ['>=', $endFieldName, $endDate]
                 ]
             ];               
-
         }
-        
-        return $this->andWhere($conditions);
+        return $conditions;
+    }
+    /**
+     * Add a search condition on the valid_date_start and valid_date_end date columns
+     *
+     * @param string $startDate
+     * @param string $endDate
+     * @param string $startFieldName (optional) name of the valid date start field. if not set, value
+     * "valid_date_start" is used
+     * @param string $endFieldName (optional) name of the valid date end field. If not set, value
+     * "valid_date_end" is used
+     * @return void
+     */
+    public function andWhereValidInDateRange($startDate, $endDate = null, 
+        $startFieldName = 'valid_date_start', $endFieldName = 'valid_date_end')
+    {
+        return $this->andWhere($this->buildConditionOnDateRange($startDate, $endDate, $startFieldName, $endFieldName));
     }
 
     /**
