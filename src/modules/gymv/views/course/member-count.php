@@ -26,20 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
     */
     ?> 
 
-    <?php if($selectedProduct): ?>
-        <div class="alert alert-info" role="alert">
-            <b>
-                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                <?= Html::encode($selectedProduct->name); ?>
-            </b>
-            - <?= Html::encode($selectedProduct->short_description); ?>        
-        </div>
-    <?php else: ?>
-        <div class="alert alert-warning" role="alert">
-            No course selected
-        </div>
-    <?php endif; ?>
-
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
