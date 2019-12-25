@@ -45,9 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'OrderSearch[product_id]'=>$model['id'],
                             ],
                             [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view detail')]
-                        );
+                        )
+                        . '<div style="margin-left:1.2em;font-size: 0.8em;">' . Html::encode($model['short_description']) . '</div>';
                     }
-                ],        
+                ],     
                 [
                     'attribute' => 'order_count',
                     'filter' => false,

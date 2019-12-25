@@ -106,6 +106,7 @@ class CourseController extends \yii\web\Controller
             ->select([
                 '{{product}}.id',
                 '{{product}}.name',
+                '{{product}}.short_description',
                 'COUNT(o.id) as order_count'
             ])
             ->where(['in', 'category_id', Yii::$app->params['courses_category_ids']])

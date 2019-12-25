@@ -30,8 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="alert alert-info" role="alert">
             <b>
                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
-                <?= Html::encode($selectedProduct->short_description); ?>        
+                <?= Html::encode($selectedProduct->short_description) ?>
             </b>
+                (<?= Html::a(\Yii::t('app', 'detail'), ['/product/view', 'id' => $selectedProduct->id]
+                    , [ 'title' => \Yii::t('app', 'view course detail')]); ?>)
         </div>
     <?php else: ?>
         <div class="alert alert-warning" role="alert">
@@ -68,6 +70,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         }
                     },
+                    'buttons' => [
+                        'view' => function ($url, $model, $key) {
+                            return Html::a('<span class="glyphicon glyphicon-eye-open"></span>'
+                                , ['/order/view', 'id' => $model->id]
+                                , [
+                                    'title' => \Yii::t('app', 'view order'),
+                                    'data-pjax' => 0, 
+                                ]);
+                        },
+                    ]
                 ],                
             ],
         ]); ?>
