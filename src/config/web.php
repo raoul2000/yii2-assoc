@@ -10,6 +10,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'fr-FR',
+    'homeUrl' => ['/gymv/dashboard'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -137,7 +138,7 @@ $config = [
         ],
         'gymv' => [
             'class' => 'app\modules\gymv\Module',
-            'defaultRoute' => 'home/index'
+            'defaultRoute' => 'dashboard/index'
         ],
         'stat' => [
             'class' => 'app\modules\stat\Module',

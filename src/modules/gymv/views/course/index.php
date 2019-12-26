@@ -8,12 +8,13 @@ use yii\widgets\Pjax;
 $this->title = $selectedProduct 
     ? $selectedProduct->name
     : \Yii::t('app', 'All Courses');
-$this->params['breadcrumbs'][] = ['label' => 'GymV', 'url' => ['/gymv/dashboard/index']];
 $this->params['breadcrumbs'][] = $this->title;
     
 ?>
 <div id="member">
-    <h1><?= Html::encode($this->title) ?> <small><?= \Yii::t('app', 'Member list') ?></small></h1>
+    <h1>
+        <?= Html::encode($this->title) ?> <small><?= \Yii::t('app', 'Member list') ?></small>
+    </h1>
     <hr/>
 
     <?php  
@@ -32,8 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
                 <?= Html::encode($selectedProduct->short_description) ?>
             </b>
-                (<?= Html::a(\Yii::t('app', 'detail'), ['/product/view', 'id' => $selectedProduct->id]
-                    , [ 'title' => \Yii::t('app', 'view course detail')]); ?>)
+            (<?= Html::a(\Yii::t('app', 'detail'), ['/product/view', 'id' => $selectedProduct->id]
+                , [ 'title' => \Yii::t('app', 'view course detail')]); ?>)
         </div>
     <?php else: ?>
         <div class="alert alert-warning" role="alert">

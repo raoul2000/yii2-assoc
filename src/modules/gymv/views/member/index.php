@@ -5,9 +5,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-
 $this->title = \Yii::t('app', 'Members');
-$this->params['breadcrumbs'][] = ['label' => 'GymV', 'url' => ['/gymv/dashboard/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -37,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
                         );
                     }                    
-
                 ],
                 [
                     'attribute' => 'firstname',
