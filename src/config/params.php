@@ -124,5 +124,6 @@ return [
      * list of category id.
      * All product belonging to these categories are considered as classes
      */
-    'courses_category_ids' => [1,2,3]
+    'courses_category_ids' => [1,2,3],
+    'products_membership_ids' => [52, 53]    // TODO : duplicate : also store in config manager !!
 ];

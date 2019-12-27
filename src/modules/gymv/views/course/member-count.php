@@ -29,11 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
+            //'filterModel'  => $searchModel,
             'columns' => [
                 [
                     'attribute' => 'name',
                     'label'     => \Yii::t('app', 'Course Name'),
-                    'filter'    => false,
+                    //'filter'    => false,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column)  {
                         return Html::a('<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
@@ -48,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         . '<div style="margin-left:1.2em;font-size: 0.8em;">' . Html::encode($model['short_description']) . '</div>';
                     }
                 ],     
+                
                 [
                     'attribute' => 'order_count',
                     'filter' => false,

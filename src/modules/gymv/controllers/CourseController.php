@@ -6,11 +6,13 @@ use Yii;
 use yii\web\NotFoundHttpException;
 use \app\models\Contact;
 use \app\models\ContactSearch;
+use \app\models\ProductSearch;
 use \app\models\OrderSearch;
 use \app\models\Product;
 use \app\models\Order;
 use \app\components\SessionDateRange;
 use app\modules\gymv\models\ProductSelectionForm;
+use app\modules\gymv\models\ProductCourseSearch;
 use yii\helpers\ArrayHelper;
 use \app\modules\gymv\models\QueryFactory;
 use yii\data\ActiveDataProvider;
@@ -102,6 +104,7 @@ class CourseController extends \yii\web\Controller
 
     public function actionMemberCount()
     {
+        
         $queryProduct = Product::find()
             ->select([
                 '{{product}}.id',
@@ -121,14 +124,22 @@ class CourseController extends \yii\web\Controller
                     );
             }])
             ->orderBy('order_count')
-            ->asArray()
-            ->groupBy('{{product}}.id');
-
+            ->groupBy('{{product}}.id')
+            ->asArray();
+/*
+        $searchModel = new ProductCourseSearch();
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            $queryProduct
+        );
+*/        
         $dataProvider = new ActiveDataProvider([
             'query' => $queryProduct,
         ]);
+        
 
         return $this->render('member-count', [
+            // 'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
             'selectedProduct' => null
         ]);            
@@ -137,5 +148,17 @@ class CourseController extends \yii\web\Controller
     public function actionMemberCountChart()
     {
 
+    }
+    public function actionTest()
+    {
+        $searchModel = new ProductCourseSearch();
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams
+        );
+
+        return $this->render('member-count', [
+            'searchModel'  => $searchModel,
+            'dataProvider' => $dataProvider
+        ]);            
     }
 }
