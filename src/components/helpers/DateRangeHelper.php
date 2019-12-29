@@ -93,4 +93,113 @@ class DateRangeHelper
             }
         }
     }
+
+
+    public static function buildConditionOnDateRange($dateRange = [], 
+        $startFieldName = 'valid_date_start', $endFieldName = 'valid_date_end')
+    {
+        if(!is_array($dateRange)) {
+            throw new yii\web\ServerErrorHttpException('invalid argument type : array expected');
+        } else {
+            switch(count($dateRange)) {
+                case 0 : $dateRange = [SessionDateRange::getStart(), SessionDateRange::getEnd()];
+                break;
+                case 1 : $dateRange[] = SessionDateRange::getEnd();
+                break;
+            }
+        }
+        list($startDate, $endDate) = $dateRange;
+
+        // create conditions
+        $conditions = [];
+        $NULL = new \yii\db\Expression('null');
+
+        if (!empty($startDate) && !empty($endDate)) {
+            /**
+             * List of valid dante range configurations
+             * ---------------------------------------
+             * 
+             * B = valid_date_start (Begin)
+             * E = valid_date_end   (End)
+             * 
+             *       $startDate   $endDate
+             * ----------|------------|--------------
+             *     B     :            :
+             *     B     :     E      :       
+             *     B     :            :       E
+             *           :    B       :       
+             *           :    B E     :       
+             *           :    B       :       E
+             *           :    E       :       
+             *           :            :       E
+             *           :            :       
+             */
+
+            $conditions = [
+                'AND',
+                ['OR',
+                    ['IS', $startFieldName, $NULL],
+                    ['<=', $startFieldName, $endDate],
+                ],
+                ['OR',
+                    ['IS', $endFieldName, $NULL],
+                    ['>=', $endFieldName, $startDate]
+                ]
+            ];
+        } elseif (!empty($startDate)) { // only start date (valid from date ....)
+            /**
+             * List of valid dante range configurations
+             * ---------------------------------------
+             * 
+             * B = valid_date_start (Begin)
+             * E = valid_date_end   (End)
+             * 
+             *       $startDate   
+             * ----------|--------------------------
+             *     B     :            
+             *     B     :     E             
+             *           :     E
+             *           :                   
+             */     
+            $conditions = [
+                'AND',
+                ['OR',
+                    ['IS', $startFieldName, $NULL],
+                    ['<=', $startFieldName, $startDate],
+                ],
+                ['OR',
+                    ['IS', $endFieldName, $NULL],
+                    ['>=', $endFieldName, $startDate]
+                ]
+            ];
+        } elseif (!empty($endDate)) { // only end date (valid until date ... )
+            /**
+             * List of valid dante range configurations
+             * ---------------------------------------
+             * 
+             * B = valid_date_start (Begin)
+             * E = valid_date_end   (End)
+             * 
+             *                    $endDate   
+             * ----------------------|------------
+             *     B                 :            
+             *     B                 :     E             
+             *                       :     E
+             *                       :                   
+             */           
+            $conditions = [
+                'AND',
+                ['OR',
+                    ['IS', $startFieldName, $NULL],
+                    ['<=', $startFieldName, $endDate],
+                ],
+                ['OR',
+                    ['IS', $endFieldName, $NULL],
+                    ['>=', $endFieldName, $endDate]
+                ]
+            ];               
+        }
+        return $conditions;
+    }
+
 }

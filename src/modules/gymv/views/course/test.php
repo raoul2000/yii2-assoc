@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div id="member">
-    <h1><?= Html::encode($this->title) ?> </h1>
+    <h1><?= Html::encode($this->title) ?> ! </h1>
     <hr/>
 
     <?php  
@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterModel'  => $searchModel,
             'columns' => [
                 'name',
+                'ValidOrdersCount'
             ],
         ]); ?>
     <?php Pjax::end(); ?>

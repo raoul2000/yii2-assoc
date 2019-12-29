@@ -155,8 +155,9 @@ class CourseController extends \yii\web\Controller
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams
         );
+        $dataProvider->query->with('ordersAggregation');
 
-        return $this->render('member-count', [
+        return $this->render('test', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider
         ]);            

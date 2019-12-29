@@ -24,7 +24,7 @@ class ProductCourseSearch extends \app\models\ProductSearch
         return [
             [['id', 'created_at', 'updated_at', 'category_id'], 'integer'],
             [['name', 'short_description'], 'safe'],
-            [['value'], 'number'],
+            [['value'], 'number', 'validOrdersCount'],
             
             [['valid_date_start', 'valid_date_end'], 'safe'] // handled by addSmartDateCondition
         ];
