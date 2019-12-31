@@ -93,10 +93,55 @@ class DateRangeHelper
             }
         }
     }
+    /**
+     * Create an SQL condition that is TRUE when the reference_date column of a record
+     * is included in the given date Range.
+     * 
+     * The first argument is the date range to test. By default it is set to an empty array which is interpreted
+     * as the current session date range. Otherwise, it should contain [$startDate; $endDate]. If one of them is NULL
+     * then we are dealing with an opened range (left or right opened).
+     *
+     * @param array $dateRange the date range to test
+     * @param string $colName default 'reference_date' the name of the date column to apply condition on
+     * @return array the SQL condition
+     */
+    public function buildConditionOndateInRange($dateRange = [], $colName = 'reference_date')
+    {
+        list($startDate, $endDate) = self::resolveDateRange($dateRange);
+        self::validateDateRangeValues($startDate, $endDate);
 
+        // create conditions
+        $conditions = [];
+        $NULL = new \yii\db\Expression('null');
+        if (!empty($startDate) && !empty($endDate)) {
+            $conditions = [
+                'OR',
+                ['IS', $colName, $NULL],
+                ['BETWEEN', $colName, $startDate, $endDate]
+            ];
+        } elseif (!empty($startDate)) {
+            $conditions = [
+                'OR',
+                ['IS', $colName, $NULL],
+                ['>=', $colName, $startDate],
+            ];
+        } elseif (!empty($endDate)) {
+            $conditions = [
+                'OR',
+                ['IS', $colName, $NULL],
+                ['<=', $colName, $endDate],
+            ];
+        }
+        return $conditions;
+    }
 
-    public static function buildConditionOnDateRange($dateRange = [], 
-        $startFieldName = 'valid_date_start', $endFieldName = 'valid_date_end')
+    /**
+     * Converts the given date range into an effective date range.
+     *
+     * @param [type] $dateRange
+     * @return array effective date range
+     */
+    public static function resolveDateRange($dateRange = [])
     {
         if(!is_array($dateRange)) {
             throw new yii\web\ServerErrorHttpException('invalid argument type : array expected');
@@ -108,7 +153,42 @@ class DateRangeHelper
                 break;
             }
         }
-        list($startDate, $endDate) = $dateRange;
+        return $dateRange;
+    }
+
+    /**
+     * Validate the provided date range.
+     * If it is a closed range, then start date must NOT be after end date. If that's not the case, throw an exception
+     *
+     * @param string $startDate format yyyy-mm-dd the start date range, or empty if left opened range
+     * @param string $endDate format yyyy-mm-dd the start date range, or empty if right opened range
+     * @return void
+     */
+    public static function validateDateRange($startDate, $endDate)
+    {
+        if (!empty($startDate) && !empty($endDate) && \strtotime($startDate) > strtotime($endDate)) {
+            throw new \yii\base\InvalidCallException('start date range must be lower or equal to end date : start = '
+                . $startDate . ' end = ' . $endDate);
+        }
+    }
+
+    /**
+     * Create an SQL condition that is TRUE when a date range is partially ot fully included in 
+     * the date range of a DB record.
+     * The first argument is the date range to test. By default it is set to an empty array which is interpreted
+     * as the current session date range. Otherwise, it should contain [$startDate; $endDate]. If one of them is NULL
+     * then we are dealing with an opened range (left or right opened).
+     * 
+     * @param array $dateRange and array defining the date range
+     * @param string $startFieldName the start date range column name
+     * @param string $endFieldName the end date range column name
+     * @return array the SQL condition
+     */
+    public static function buildConditionOnDateRange($dateRange = [], 
+        $startFieldName = 'valid_date_start', $endFieldName = 'valid_date_end')
+    {
+        list($startDate, $endDate) = self::resolveDateRange($dateRange);
+        self::validateDateRange($startDate, $endDate);
 
         // create conditions
         $conditions = [];
