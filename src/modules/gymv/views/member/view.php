@@ -5,7 +5,8 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-$this->title = \Yii::t('app', 'Members');
+$this->title = $contact->name;
+$this->params['breadcrumbs'][] = ['label' => 'Members', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -16,33 +17,19 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
             'columns' => [
                 [
-                    'attribute' => 'note',
-                    'filter'    => false,
-                    'label'     => '',
-                    'format'    => 'note'
-                ],
-                [
-                    'attribute' => 'name',
-                    'label' => 'Name',
+                    'attribute' => 'product.name',
+                    'label' => 'Course',
                     'format' => 'raw',
                     'value'     => function ($model, $key, $index, $column) {
-                        return Html::a( Html::encode(ucfirst($model->name)),
-                            ['view','id'=>$model->id],
+                        return Html::a( Html::encode(ucfirst($model->product->name)),
+                            ['/gymv/course','OrderSearch[product_id]'=>$model->product->id],
                             [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view')]
                         );
                     }                    
                 ],
-                [
-                    'attribute' => 'firstname',
-                    'label' => 'Firstname'
-                ],
-                'email:email',
             ],
-            ]); 
-        ?>    
-    <?php Pjax::end(); ?>                
-
+        ]); ?>
+    <?php Pjax::end(); ?>
 </div>
