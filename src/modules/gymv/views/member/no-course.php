@@ -24,7 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
         ); 
     */
     ?> 
-
+    <ul>
+        <li>Course product Count : <?= $countCourseProducts ?></li>
+        <li>Member Count : <?= $countMemberContact ?></li>
+        <li>total person contact : <?= $countAllPersonContact ?></li>
+        <li>total Contact : <?= $countAllContact ?></li>
+        <li>person contact no member : <?= $countPersonContactNoMember ?></li>
+        <li>Member with no course : <?= $countMemberNoCourse ?></li>
+    </ul>
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],

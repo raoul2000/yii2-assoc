@@ -149,29 +149,56 @@ select c.id
     products_membership_ids
 */
 
+    // -----------------------------------------
+    // idea : use  sub query to find all ids of member contact
+    $qryMemberContactIds = Contact::find()
+        ->select('c.id')
+        ->from(['c' => Contact::tableName()])
+        ->where(['c.is_natural_person' => true])
+        ->innerJoinWith([
+            'toOrders' => function($q) {
+                $q
+                    ->andOnCondition(['in', 'product_id', Yii::$app->params['products_membership_ids']])
+                    ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
+            }
+        ]);
+    $countMemberContact = $qryMemberContactIds->count();
+
+    // -----------------------------------------
+    $countAllPersonContact = Contact::find()
+        ->where(['is_natural_person' => true])
+        ->count();
+
+    $countAllContact = Contact::find()->count();
+
+    // -----------------------------------------
+    $qryPersonContactNotMember = Contact::find()
+        ->where([
+            'is_natural_person' => true,
+            'product_id'        => null
+        ])
+        ->joinWith([
+            'toOrders' => function($q) {
+                $q
+                    ->andOnCondition(['in', 'product_id', Yii::$app->params['products_membership_ids']])
+                    ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
+            }
+        ]);
+    $countPersonContactNoMember = $qryPersonContactNotMember->count();
+
+    // -----------------------------------------
     $qryCourseProductIds = \app\models\Product::find()
         ->select('id')
         ->where(['in', 'category_id', Yii::$app->params['courses_category_ids']]);
 
-    // idea : use  sub query to find all ids of member contact
-    $qryMemberContactIds = Contact::find()
-        ->select('c.id')
-        ->where(['c.is_natural_person' => true])
-        ->joinWith([
-            'toOrders' => function($q) {
-                $q
-                    ->andWhere(['in', 'product_id', Yii::$app->params['products_membership_ids']])
-                    ->andWhere(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
-            }
-        ]);
+    $countCourseProducts = $qryCourseProductIds->count();
 
+    // -----------------------------------------
     // works fine but should be restricted to members only (not the case now)
     $query = Contact::find()
         ->from(['c' => Contact::tableName()])
-        ->where([
-            'is_natural_person' => true,
-            'o.id' => null])
-        //->andWhere(['in', 'c.id', $qryMemberContactIds])
+        ->where(['o.id' => null])
+        ->andWhere(['in', 'c.id', $qryMemberContactIds])
         ->joinWith([
             'toOrders' => function($q) use($qryCourseProductIds) {
                 $q
@@ -179,8 +206,9 @@ select c.id
                     ->andOnCondition(['in', 'o.product_id', $qryCourseProductIds])
                     ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
             }
-        ]);
-
+        ])
+        ->orderBy('c.name');
+    $countMemberNoCourse = $query->count(); 
 
 /*
         $subQuery = Order::find()
@@ -203,7 +231,13 @@ select c.id
 
         return $this->render('no-course', [
             'searchModel'  => $searchModel,
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'countCourseProducts' => $countCourseProducts,
+            'countMemberContact' => $countMemberContact,
+            'countAllPersonContact' => $countAllPersonContact,
+            'countAllContact' => $countAllContact,
+            'countPersonContactNoMember' => $countPersonContactNoMember,
+            'countMemberNoCourse' => $countMemberNoCourse
         ]);           
     }
     /**
