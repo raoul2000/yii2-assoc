@@ -12,6 +12,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="member">
     <h1><?= Html::encode($this->title) ?></h1>
     <hr/>
+    <p>
+        <?= Html::a(
+            '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> ' . \Yii::t('app', 'Statistics'), 
+            ['stat/address'], 
+            ['class' => 'btn btn-default',  'data-pjax'=>0]
+        )?>
+    </p>    
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],

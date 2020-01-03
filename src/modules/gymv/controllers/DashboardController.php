@@ -62,7 +62,7 @@ class DashboardController extends \yii\web\Controller
             'totalDeb' => $balanceInfo['totalDeb'],
             'totalCred' => $balanceInfo['totalCred'],
             'countCourses' => $countCourses,
-            'urlMember' => Url::toRoute(['/gymv/member']),
+            'urlMember' => Url::toRoute(['member/home']),
             'urlBankAccount' => Url::toRoute(['/bank-account/view', 'id' => SessionContact::getBankAccountId()]),
             'urlCourseOrders' => Url::toRoute(['/gymv/course']),
         ]);

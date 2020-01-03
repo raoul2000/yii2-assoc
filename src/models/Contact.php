@@ -35,6 +35,7 @@ class Contact extends \yii\db\ActiveRecord
     const GENDER_MALE = 1;
     const GENDER_FEMALE = 2;
 
+    public $order_count;
     /**
      * {@inheritdoc}
      */
