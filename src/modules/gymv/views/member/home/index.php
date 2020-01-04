@@ -69,17 +69,35 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Name',
                             'format' => 'raw',
                             'value'     => function ($model, $key, $index, $column) {
+                                return Html::a(
+                                    '<span class="glyphicon glyphicon-user" aria-hidden="true"></span> '
+                                        . Html::encode(ucfirst($model->name)),
+                                    ['/contact/view','id'=>$model->id],
+                                    [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view contact')]
+                                );
+                                /*
                                 return Html::a( Html::encode(ucfirst($model->name)),
                                     ['view','id'=>$model->id],
                                     [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view')]
                                 );
+                                */
                             }                    
                         ],
                         [
                             'attribute' => 'firstname',
                             'label' => 'Firstname'
                         ],
+                        [
+                            'attribute' => 'gender',
+                            'label' => \Yii::t('app', 'Gender'),
+                            'filter' => [
+                                \app\models\Contact::GENDER_MALE   => \Yii::t('app', 'man'),
+                                \app\models\Contact::GENDER_FEMALE => \Yii::t('app', 'woman')
+                            ],
+                            'format'    => 'gender'
+                        ],                        
                         'email:email',
+                        'birthday:appDate',
                     ],
                     ]); 
                 ?>    
