@@ -34,12 +34,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'url' => ['index', 'tab'=>'no-course'],
                 'active' => $tab == 'no-course'
             ],
+            [
+                'label' => \Yii::t('app', 'Not Member'),
+                'url' => ['index', 'tab'=>'not-member'],
+                'active' => $tab == 'not-member'
+            ],
         ]
     ]) ?>
 
+
     <div style="margin-top:1em;">
+
+        <?php if (!empty($infoTxt)) :?>
+            <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> <?= Html::encode($infoTxt) ?>
+            </div>
+        <?php endif; ?>
+
         <?php Pjax::begin(); ?>
-            <?php if ($tab == 'all' || $tab == 'no-course' || 1 == 1):?>
+            <?php if ($tab === 'all' || $tab === 'no-course' || $tab === 'not-member'):?>
                 <?= GridView::widget([
                     'tableOptions' => ['class' => 'table table-hover table-condensed'],
                     'dataProvider' => $dataProvider,
@@ -67,7 +80,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'label' => 'Firstname'
                         ],
                         'email:email',
-                        'order_count'
                     ],
                     ]); 
                 ?>    

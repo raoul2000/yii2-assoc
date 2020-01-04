@@ -82,10 +82,12 @@ class HomeController extends \yii\web\Controller
      */
     public function actionIndex($tab = 'all')
     {
+        $infoTxt = '';
         switch ($tab) {
             case 'all':         // ----- all members
                 $query = Contact::find()
                     ->where(['in', 'id', $this->getQueryMembersId()]);
+                $infoTxt = 'liste des personnes ayant achetés une adhésion pour la période courante';
                 break;
             case 'no-course':   // ------ all members not registered to course
                 $query = Contact::find()
@@ -100,6 +102,14 @@ class HomeController extends \yii\web\Controller
                                 ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
                         }
                     ]);
+                    $infoTxt = 'liste pour la période courante, des adhérents n\'ayant pas acheté de cours ';
+                break;
+            case 'not-member':  // ------- all person not members
+                $query = Contact::find()
+                    ->from(['c' => Contact::tableName()])
+                    ->where(['c.is_natural_person' => true])
+                    ->andWhere(['not in', 'c.id', $this->getQueryMembersId()]);
+                $infoTxt = 'liste des contacts enregistrés n\'ayant pas achetés d\'adhésion pour la période courante';
                 break;
             default:
                 throw new NotFoundHttpException('The requested page does not exist.');
@@ -115,7 +125,8 @@ class HomeController extends \yii\web\Controller
         return $this->render('index', [
             'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
-            'tab' => $tab
+            'tab' => $tab,
+            'infoTxt' => $infoTxt
         ]);    
     }
 
