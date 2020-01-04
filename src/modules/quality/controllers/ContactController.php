@@ -78,9 +78,9 @@ class ContactController extends BaseController
                 'label' => 'Personnes dont le <b>prénom</b> est manquant'
                 ],
            'birthday-null' => [
-                'query' => Contact::find()->where([
-                    'is_natural_person' => true,
-                    'birthday' => '']),
+                'query' => Contact::find()
+                    ->where(['is_natural_person' => true])
+                    ->andWhere([ 'is', 'birthday' , null]),
                 'label' => 'Personnes dont la <b>date de naissance</b> est manquante'
                 ],
             'centenary' => [
