@@ -234,8 +234,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Bob <?= date('Y') ?></p>
-
+        <p class="pull-left" style="cursor:pointer" title="<?= Html::encode(
+            'version ' . APP_VERSION . ' - build ' . APP_BUILD_NUMBER
+        )?>">&copy; Bob <?= date('Y') ?>
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
