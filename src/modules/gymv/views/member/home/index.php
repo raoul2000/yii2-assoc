@@ -12,13 +12,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="member">
     <h1><?= Html::encode($this->title) ?></h1>
     <hr/>
-    <p>
+    <div class="pull-right">
         <?= Html::a(
             '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> ' . \Yii::t('app', 'Statistics'), 
             ['/gymv/member/stat'], 
             ['class' => 'btn btn-default',  'data-pjax'=>0]
         )?>
-    </p>    
+    </div>    
 
     <?= yii\bootstrap\Nav::widget([
         'options' => ['class' =>'nav-tabs'],
