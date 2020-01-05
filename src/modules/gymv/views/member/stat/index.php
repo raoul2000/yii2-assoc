@@ -17,5 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <li>
             <?= Html::a('course purchased', ['course-purchased']) ?>
         </li>
+        <li>
+            <?= Html::a('Licensiée la saison 2018-2019 mais pas la saison actuelle', ['diff-period1']) ?>
+        </li>
     </ul>
 </div>

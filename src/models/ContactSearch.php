@@ -38,9 +38,10 @@ class ContactSearch extends Contact
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query = null)
     {
-        $query = Contact::find();
+        $query = $query === null ? Contact::find() : $query;
+        
         // add conditions that should always apply here
         
         $dataProvider = new ActiveDataProvider([

@@ -25,6 +25,65 @@ class StatController extends \app\modules\gymv\controllers\member\HomeController
         return $this->render('index');    
     }    
 
+    protected function getQueryMembersIdPeriod1()
+    {
+        return Contact::find()
+            ->select('c.id')
+            ->from(['c' => Contact::tableName()])
+            ->where(['c.is_natural_person' => true])
+            ->innerJoinWith([
+                'toOrders' => function($query) {
+                    $query
+                        ->andOnCondition(['in', 'product_id', Yii::$app->params['products_membership_ids']])
+                        ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange(
+                            ['2018-09-1', '2019-08-30']
+                        ));
+                }
+            ]);        
+    }
+
+    public function actionDiffPeriod1()
+    {
+        $query = Contact::find()
+            ->from(['c' => Contact::tableName()])
+            ->where(['in', 'c.id', $this->getQueryMembersIdPeriod1()])
+            ->andWhere(['not in', 'c.id', $this->getQueryMembersId()]);
+
+        $searchModel = new ContactSearch();
+        $dataProvider = $searchModel->search(
+            Yii::$app->request->queryParams,
+            $query
+        );
+
+        if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
+            $exporter = new \yii2tech\csvgrid\CsvGrid(
+                [
+                    'dataProvider' => new \yii\data\ActiveDataProvider([
+                        'query' => $dataProvider->query,
+                        'pagination' => [
+                            'pageSize' => 100, // export batch size
+                        ],
+                    ]),
+                    'columns' => [
+                        ['attribute' => 'name',  'label' => \Yii::t('app', 'Name')],
+                        ['attribute' => 'firstname', 'label' => \Yii::t('app', 'Firstname')],
+                        ['attribute' => 'gender'],
+                        ['attribute' => 'email'],
+                        ['attribute' => 'birthday'],
+                    ]
+                ]
+            );
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+            return $exporter->export()->send('contacts.csv');
+
+        } else {
+            return $this->render('diff-period1', [
+                'searchModel'  => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);        
+        }
+    }
+
     public function actionCoursePurchased()
     {
         $qryAggregateCoursePuchased = Contact::find()
