@@ -58,12 +58,7 @@ class StatController extends \app\modules\gymv\controllers\member\HomeController
         if (\app\components\widgets\DownloadDataGrid::isDownloadRequest()) {
             $exporter = new \yii2tech\csvgrid\CsvGrid(
                 [
-                    'dataProvider' => new \yii\data\ActiveDataProvider([
-                        'query' => $dataProvider->query,
-                        'pagination' => [
-                            'pageSize' => 100, // export batch size
-                        ],
-                    ]),
+                    'dataProvider' => $dataProvider,
                     'columns' => [
                         ['attribute' => 'name',  'label' => \Yii::t('app', 'Name')],
                         ['attribute' => 'firstname', 'label' => \Yii::t('app', 'Firstname')],
