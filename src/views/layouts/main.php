@@ -92,6 +92,11 @@ AppAsset::register($this);
                             'encode' => false,
                             'url'    => ['/gymv/import/home']
                         ],
+                        [
+                            'label'  => \Yii::t('app', 'Export'),
+                            'encode' => false,
+                            'url'    => ['/gymv/export/home']
+                        ],
 
                     ],
                 ]
