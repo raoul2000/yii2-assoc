@@ -7,6 +7,7 @@ use \app\models\Contact;
 use \app\models\ContactSearch;
 use \app\models\Order;
 use \app\models\Product;
+use \app\models\Category;
 use \app\modules\gymv\models\MemberQuery;
 use yii\db\Query;
 use app\modules\gymv\models\ProductCourseQuery;
@@ -14,6 +15,8 @@ use app\modules\gymv\models\ProductCourse;
 use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
 use \app\components\SessionDateRange;
+use yii\helpers\ArrayHelper;
+use app\components\ModelRegistry;
 
 class StatController extends \yii\web\Controller
 {
@@ -39,8 +42,21 @@ class StatController extends \yii\web\Controller
         return $this->render('index');    
     }    
 
-    public function actionMemberCount()
+    /**
+     * Display a list of courses with the number of participant for each course.
+     * The view includes a filter on course categories
+     *
+     * @param [string] $category_filter comma separated list of categories to filter view
+     * @return void
+     */
+    public function actionMemberCount($category_filter = null)
     {
+        // create the category filter : no filter = all configured course categories
+        $categoryIdFilter = empty($category_filter) 
+            ? Yii::$app->params['courses_category_ids']
+            : explode(',',$category_filter);
+
+        // query DB
         $queryProduct = Product::find()
             ->select([
                 '{{product}}.id',
@@ -48,7 +64,7 @@ class StatController extends \yii\web\Controller
                 '{{product}}.short_description',
                 'COUNT(o.id) as order_count'
             ])
-            ->where(['in', 'category_id', Yii::$app->params['courses_category_ids']])
+            ->where(['in', 'category_id', $categoryIdFilter])
             ->joinWith(['orders' => function($query) {
                 $query
                     ->from(['o' => Order::tableName()])
@@ -63,13 +79,7 @@ class StatController extends \yii\web\Controller
             ->orderBy('order_count')
             ->groupBy('{{product}}.id')
             ->asArray();
-/*
-        $searchModel = new ProductCourseSearch();
-        $dataProvider = $searchModel->search(
-            Yii::$app->request->queryParams,
-            $queryProduct
-        );
-*/        
+
         $dataProvider = new ActiveDataProvider([
             'query' => $queryProduct,
         ]);
@@ -92,10 +102,22 @@ class StatController extends \yii\web\Controller
             \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
             return $exporter->export()->send('course-count.csv');
         } else {
+
+            // build list of category option for the filter
+            $categoriesResults = Category::find()
+                ->select('id,name')
+                ->where(['in', 'id', Yii::$app->params['courses_category_ids']])
+                ->all();
+
+            $categoryOptions = array_map(function($item) {
+                return [ 'id' => $item->id, 'name' => $item->name];
+            },$categoriesResults);
+            
+            // render
             return $this->render('member-count', [
-                // 'searchModel'  => $searchModel,
-                'dataProvider' => $dataProvider,
-                'selectedProduct' => null
+                'dataProvider'    => $dataProvider,
+                'categoryOptions' => $categoryOptions,
+                'category_filter' => $category_filter
             ]);                    
         }
 

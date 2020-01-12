@@ -10,7 +10,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Cours', 'url' => ['/gymv/course/ho
 $this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Statistics'), 'url' => ['/gymv/course/stat']];
 $this->params['breadcrumbs'][] = $this->title;
 
-
 ?>
 <div id="member">
     <h1><?= Html::encode($this->title) ?> </h1>
@@ -18,28 +17,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= \app\components\widgets\DownloadDataGrid::widget() ?>      
     </p>
+
     <?php  
-    /*
         echo $this->render(
-            '_search',
+            '_filter-category',
             [
-                'searchModel' => $searchModel,
-                'products' => $products
+                'category_filter' => $category_filter,
+                'categoryOptions' => $categoryOptions
             ]
         ); 
-    */
     ?> 
 
     <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'tableOptions' => ['class' => 'table table-hover table-condensed'],
             'dataProvider' => $dataProvider,
-            //'filterModel'  => $searchModel,
             'columns' => [
                 [
                     'attribute' => 'name',
                     'label'     => \Yii::t('app', 'Course Name'),
-                    //'filter'    => false,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column)  {
                         return Html::a('<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
