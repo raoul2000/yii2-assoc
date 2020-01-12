@@ -9,7 +9,6 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="filter-category" style="margin-bottom:1em;">
-    
     <?php $form = ActiveForm::begin([
         'method'  => 'GET'
     ]); ?>
@@ -17,18 +16,18 @@ use yii\widgets\ActiveForm;
             <tr>
                 <td style="width: 100%;padding-right: 1em;">
                     <?= \dosamigos\selectize\SelectizeTextInput::widget([
-                            'name' => 'category_filter',
-                            'value' => $category_filter,
-                            'options' => ['class' => 'form-control'],
+                            'name'          => 'category_filter',
+                            'value'         => $category_filter,
+                            'options'       => ['class' => 'form-control'],
                             'clientOptions' => [
-                                'plugins' => ['remove_button'],
-                                'valueField' => 'id',
-                                'labelField' => 'name',
+                                'plugins'     => ['remove_button'],
+                                'valueField'  => 'id',
+                                'labelField'  => 'name',
                                 'searchField' => ['name'],
-                                'create' => false,
+                                'create'      => false,
                                 'placeholder' => 'categorie ...',
-                                'maxItems' => 10,
-                                'options' => $categoryOptions
+                                'maxItems'    => 10,
+                                'options'     => $categoryOptions
                             ],
                         ])
                     ?>

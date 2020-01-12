@@ -102,6 +102,10 @@ class StatController extends \yii\web\Controller
             \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
             return $exporter->export()->send('course-count.csv');
         } else {
+            $memberCount = (new \yii\db\Query())
+                ->select('order_count')
+                ->from($queryProduct)
+                ->sum('order_count');
 
             // build list of category option for the filter
             $categoriesResults = Category::find()
@@ -117,7 +121,8 @@ class StatController extends \yii\web\Controller
             return $this->render('member-count', [
                 'dataProvider'    => $dataProvider,
                 'categoryOptions' => $categoryOptions,
-                'category_filter' => $category_filter
+                'category_filter' => $category_filter,
+                'memberCount' => $memberCount
             ]);                    
         }
 

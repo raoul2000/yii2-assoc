@@ -13,9 +13,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="member-state">
     <h1><?= Html::encode($this->title) ?></h1>
     <hr/> 
-    <ul>
-        <li>
-            <?= Html::a('répartition inscription', ['member-count']) ?>
-        </li>
-    </ul>
+
+    <div class="list-group">
+        <?= Html::a(
+            '<h4 class="list-group-item-heading">Séances vendues par cours</h4>'
+                . '<p class="list-group-item-text">
+                    Affiche le nombre de séances ayant été vendues pour chaque cours -  
+                    filtrage par catégorie de cours.
+                </p>',
+            ['member-count'],
+            ['class' => 'list-group-item']
+        )?>
+    </div>
 </div>
