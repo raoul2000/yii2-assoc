@@ -4,17 +4,15 @@ namespace app\modules\gymv\controllers\member;
 
 use Yii;
 use \app\models\Contact;
-use \app\models\ContactSearch;
 use \app\models\OrderSearch;
 use \app\models\Order;
 use \app\models\Product;
 use \app\components\SessionDateRange;
-use \app\components\helpers\ConverterHelper;
 use \app\modules\gymv\models\MemberSearch;
-use \app\modules\gymv\models\QueryFactory;
+use \app\modules\gymv\models\MemberQuery;
 use app\modules\gymv\models\ProductSelectionForm;
 use yii\db\Query;
-use app\modules\gymv\models\ProductCourseSearch;
+use app\modules\gymv\models\ProductCourseQuery;
 use yii\web\NotFoundHttpException;
 
 class HomeController extends \yii\web\Controller
@@ -38,44 +36,6 @@ class HomeController extends \yii\web\Controller
     }
 
     /**
-     * Returns a query selecting id of all contact considered as members.
-     * A contact is a member if : 
-     * - it is a natural person
-     * - it as orders for at least one membership product 
-     * - this order is valid for the current date range
-     *
-     * @return void
-     */
-    protected function getQueryMembersId()
-    {
-        return Contact::find()
-            ->select('c.id')
-            ->from(['c' => Contact::tableName()])
-            ->where(['c.is_natural_person' => true])
-            ->innerJoinWith([
-                'toOrders' => function($query) {
-                    $query
-                        ->andOnCondition(['in', 'product_id', Yii::$app->params['products_membership_ids']])
-                        ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
-                }
-            ]);        
-    }
-
-    /**
-     * Returns a query selecting Ids for all product considered as courses.
-     * A product is considered as a course if it belong to one of the configured
-     * categories.
-     *
-     * @return void
-     */
-    protected function getQueryCourseIds()
-    {
-        return Product::find()
-            ->select('id')
-            ->from(['p' => Product::tableName()])
-            ->where(['in', 'p.category_id', Yii::$app->params['courses_category_ids']]);
-    }
-    /**
      * View a list of all members and all members with no course
      *
      * @return void
@@ -86,7 +46,7 @@ class HomeController extends \yii\web\Controller
         switch ($tab) {
             case 'all':         // ----- all members
                 $query = Contact::find()
-                    ->where(['in', 'id', $this->getQueryMembersId()]);
+                    ->where(['in', 'id', MemberQuery::allIds()]);
                 $infoTxt = 'liste des personnes ayant achetés une adhésion pour la période courante.';
                 break;
 
@@ -94,12 +54,12 @@ class HomeController extends \yii\web\Controller
                 $query = Contact::find()
                     ->from(['c' => Contact::tableName()])
                     ->where(['o.id' => null])
-                    ->andWhere(['in', 'c.id', $this->getQueryMembersId()])
+                    ->andWhere(['in', 'c.id', MemberQuery::allIds()])
                     ->joinWith([
                         'toOrders' => function($q) {
                             $q
                                 ->from(['o' => Order::tableName()])
-                                ->andOnCondition(['in', 'o.product_id', $this->getQueryCourseIds()])
+                                ->andOnCondition(['in', 'o.product_id', ProductCourseQuery::allIds()])
                                 ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
                         }
                     ]);
@@ -110,9 +70,9 @@ class HomeController extends \yii\web\Controller
                 $query = Contact::find()
                     ->from(['c' => Contact::tableName()])
                     ->where(['c.is_natural_person' => true])
-                    ->andWhere(['not in', 'c.id', $this->getQueryMembersId()]);
-                $infoTxt = 'liste des contacts enregistrés n\'ayant pas achetés d\'adhésion pour la période courante. '
-                . "Il peu s'agir d'ancien adhérents, de fournisseurs particuliers, de salariés, etc ...";
+                    ->andWhere(['not in', 'c.id', MemberQuery::allIds()]);
+                $infoTxt = 'liste des personnes enregistrées n\'ayant pas achetés d\'adhésion pour la période courante. '
+                . "Il peut s'agir d'ancien adhérents, de fournisseurs particuliers, de salariés, etc ...";
                 break;
                 
             default:
@@ -155,7 +115,7 @@ class HomeController extends \yii\web\Controller
         // find all courses this member is registred to
 
         $query = Order::find()
-            ->where(['in', 'product_id', $this->getQueryCourseIds()])
+            ->where(['in', 'product_id', ProductCourseQuery::allIds()])
             ->andWhere(['to_contact_id' => $contact->id])
             ->andWhere(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange())
             ->with('product');
@@ -175,6 +135,7 @@ class HomeController extends \yii\web\Controller
         ]);    
     }
 
+    // method belows should be reviewed as they may not be used 
 
 
     public function actionCoursePerMember()

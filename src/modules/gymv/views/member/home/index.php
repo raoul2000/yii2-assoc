@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-$this->title = \Yii::t('app', 'Members');
+$this->title = 'Adhérents';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -30,12 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'active' => $tab == 'all'
             ],
             [
-                'label' => \Yii::t('app', 'No Course'),
+                'label' => 'Sans Cours',
                 'url' => ['index', 'tab'=>'no-course'],
                 'active' => $tab == 'no-course'
             ],
             [
-                'label' => \Yii::t('app', 'Not Member'),
+                'label' => 'Non Adhérent',
                 'url' => ['index', 'tab'=>'not-member'],
                 'active' => $tab == 'not-member'
             ],

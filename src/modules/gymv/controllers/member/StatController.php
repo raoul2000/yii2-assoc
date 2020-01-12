@@ -5,20 +5,14 @@ namespace app\modules\gymv\controllers\member;
 use Yii;
 use \app\models\Contact;
 use \app\models\ContactSearch;
-use \app\models\OrderSearch;
 use \app\models\Order;
 use \app\models\Product;
-use \app\components\SessionDateRange;
-use \app\components\SessionContact;
-use \app\components\helpers\ConverterHelper;
-use \app\modules\gymv\models\MemberSearch;
-use \app\modules\gymv\models\QueryFactory;
-use app\modules\gymv\models\ProductSelectionForm;
+use \app\modules\gymv\models\MemberQuery;
 use yii\db\Query;
-use app\modules\gymv\models\ProductCourseSearch;
+use app\modules\gymv\models\ProductCourseQuery;
 use yii\web\NotFoundHttpException;
 
-class StatController extends \app\modules\gymv\controllers\member\HomeController
+class StatController extends \yii\web\Controller
 {
     public function actionIndex($dataSet = 'all')
     {
@@ -47,7 +41,7 @@ class StatController extends \app\modules\gymv\controllers\member\HomeController
         $query = Contact::find()
             ->from(['c' => Contact::tableName()])
             ->where(['in', 'c.id', $this->getQueryMembersIdPeriod1()])
-            ->andWhere(['not in', 'c.id', $this->getQueryMembersId()]);
+            ->andWhere(['not in', 'c.id', MemberQuery::allIds()]);
 
         $searchModel = new ContactSearch();
         $dataProvider = $searchModel->search(
@@ -87,12 +81,12 @@ class StatController extends \app\modules\gymv\controllers\member\HomeController
                 'c.id',
                 'COUNT(o.id) as order_count'
             ])        
-            ->where(['in', 'c.id', $this->getQueryMembersId()])
+            ->where(['in', 'c.id', MemberQuery::allIds()])
             ->innerJoinWith([
                 'toOrders' => function($q) {
                     $q
                         ->from(['o' => Order::tableName()])
-                        ->andOnCondition(['in', 'o.product_id', $this->getQueryCourseIds()])
+                        ->andOnCondition(['in', 'o.product_id', ProductCourseQuery::allIds()])
                         ->andOnCondition(\app\components\helpers\DateRangeHelper::buildConditionOnDateRange());
                 }
             ])
