@@ -34,7 +34,11 @@ use yii\widgets\ActiveForm;
                     ?>
                 </td>
                 <td>
-                    <?= Html::submitButton(\Yii::t('app', 'Search'), ['class' => 'btn btn-default']) ?>
+                    <?= Html::submitButton(
+                        '<span class="glyphicon glyphicon-search" aria-hidden="true"></span> '
+                            . \Yii::t('app', 'Search'), 
+                        ['class' => 'btn btn-primary']
+                    ) ?>
                 </td>
             </tr>
         </table>

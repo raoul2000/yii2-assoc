@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
                             'options' => ['class' => 'form-control'],
                             'clientOptions' => [
                                 'create' => false,
-                                'placeholder' => \Yii::t('app', 'select a course ...'),
+                                'placeholder' => 'Sélectionnez un cours',
                                 'allowEmptyOption' => false
                             ],
                         ])
