@@ -7,13 +7,13 @@ use yii\widgets\Pjax;
 
 $this->title = $selectedProduct 
     ? $selectedProduct->name
-    : \Yii::t('app', 'All Courses');
+    : 'Tous les cours';
 $this->params['breadcrumbs'][] = $this->title;
     
 ?>
 <div id="member">
     <h1>
-        <?= Html::encode($this->title) ?> <small><?= \Yii::t('app', 'Member list') ?></small>
+        <?= Html::encode($this->title) ?> <small>Participants</small>
     </h1>
     <hr/>
 
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 [
                     'attribute' => 'to_contact_id',
-                    'label'     => \Yii::t('app', 'Member Name'),
+                    'label'     => 'Nom',
                     'filter'    => false,
                     'format'    => 'raw',
                     'value'     => function ($model, $key, $index, $column)  {

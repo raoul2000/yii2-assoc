@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use \app\components\SessionDateRange;
 use \app\components\SessionContact;
 use \app\components\helpers\ConverterHelper;
+use app\modules\gymv\models\ProductCourseQuery;
 
 /**
  * ContactSearch represents the model behind the search form of `app\models\Contact`.
@@ -60,7 +61,7 @@ class QueryFactory
      * Find All orders for course products that have been provided by the current contact (session)
      * and for the current date range.
      *
-     * @param [ids] $courseProductIds (optional) list of product ids to consider as courses. If not provided
+     * @param [\yii\db\ActiveQuery] $courseProductIds (optional) list of product ids to consider as courses. If not provided
      * use configuration
      * @return ActiveQuery
      */
@@ -68,7 +69,7 @@ class QueryFactory
     {
         // list of product ids for all products belonging to the group COURSE
         $courseProductIds = $courseProductIds === null 
-            ? ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE)
+            ? ProductCourseQuery::allIds()
             : $courseProductIds;
         
         // TODO: query below does not take into account refund. If a course has been refunded to the

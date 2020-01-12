@@ -5,14 +5,13 @@ namespace app\modules\gymv\controllers;
 use Yii;
 use yii\web\NotFoundHttpException;
 use \app\models\Contact;
-use \app\models\ContactSearch;
-use \app\models\ProductSearch;
 use \app\models\OrderSearch;
 use \app\models\Product;
 use \app\models\Order;
 use \app\components\SessionDateRange;
 use app\modules\gymv\models\ProductSelectionForm;
 use app\modules\gymv\models\ProductCourseSearch;
+use app\modules\gymv\models\ProductCourseQuery;
 use yii\helpers\ArrayHelper;
 use \app\modules\gymv\models\QueryFactory;
 use yii\data\ActiveDataProvider;
@@ -45,15 +44,12 @@ class CourseController extends \yii\web\Controller
     
     public function actionIndex()
     {
-        // Order consmued belonging to 
-        $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
-        
         // map<product_id, product_name> for courses - used in the dropdown (selectize) 
         // course selector (search)
         $products = ArrayHelper::map(
             Product::find()
                 ->select(['id','name'])
-                ->where(['in', 'id', $courseProductIds])
+                ->where(['in', 'id', ProductCourseQuery::allIds()])
                 ->all(),
             'id',
             'name'
@@ -63,7 +59,7 @@ class CourseController extends \yii\web\Controller
         $searchModel->product_id = '';
         $dataProvider = $searchModel->search(
             Yii::$app->request->queryParams,
-            QueryFactory::findCourseSold($courseProductIds)
+            QueryFactory::findCourseSold()
                 ->with(['toContact'])
                 ->orderBy('product_id')
         );
@@ -85,13 +81,14 @@ class CourseController extends \yii\web\Controller
         ]);
     }
 
+    // NOT USED
     public function actionOverview()
     {
         $courseProductIds = ProductSelectionForm::getProductIdsByGroup(ProductSelectionForm::GROUP_COURSE);
         $orders = Order::find()
             ->select(['product_id', 'COUNT(*) as count_total'])
             ->with('product')
-            ->where(['in', 'product_id', $courseProductIds])
+            ->where(['in', 'product_id', ProductCourseQuery::allIds()])
             ->andWhereValidInDateRange(SessionDateRange::getStart(), SessionDateRange::getEnd())
             ->groupBy('product_id')
             ->asArray()
@@ -102,6 +99,7 @@ class CourseController extends \yii\web\Controller
         ]);            
     }
 
+    // NOT USED
     public function actionMemberCount()
     {
         
@@ -145,10 +143,7 @@ class CourseController extends \yii\web\Controller
         ]);            
     }
 
-    public function actionMemberCountChart()
-    {
-
-    }
+    // NOT USED
     public function actionTest()
     {
         $searchModel = new ProductCourseSearch();
