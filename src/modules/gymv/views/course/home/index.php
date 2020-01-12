@@ -17,15 +17,26 @@ $this->params['breadcrumbs'][] = $this->title;
     </h1>
     <hr/>
 
-    <?php  
-        echo $this->render(
-            '_search',
-            [
-                'searchModel' => $searchModel,
-                'products' => $products
-            ]
-        ); 
-    ?> 
+    <div class="row">
+        <div class="col-xs-10">
+            <?php  
+                echo $this->render(
+                    '_search',
+                    [
+                        'searchModel' => $searchModel,
+                        'products' => $products
+                    ]
+                ); 
+            ?> 
+        </div>
+        <div class="col-xs-2">
+            <?= Html::a(
+                '<span class="glyphicon glyphicon-stats" aria-hidden="true"></span> ' . \Yii::t('app', 'Statistics'), 
+                ['/gymv/course/stat'], 
+                ['class' => 'btn btn-default',  'data-pjax'=>0]
+            )?>
+        </div>
+    </div>
 
     <?php if($selectedProduct): ?>
         <div class="alert alert-info" role="alert">

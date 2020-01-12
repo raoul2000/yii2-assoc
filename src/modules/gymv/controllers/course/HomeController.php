@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\gymv\controllers;
+namespace app\modules\gymv\controllers\course;
 
 use Yii;
 use yii\web\NotFoundHttpException;
@@ -16,7 +16,7 @@ use yii\helpers\ArrayHelper;
 use \app\modules\gymv\models\QueryFactory;
 use yii\data\ActiveDataProvider;
 
-class CourseController extends \yii\web\Controller
+class HomeController extends \yii\web\Controller
 {
     /**
      * {@inheritdoc}

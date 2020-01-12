@@ -6,13 +6,18 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 $this->title = 'Effectifs Cours';
+$this->params['breadcrumbs'][] = ['label' => 'Cours', 'url' => ['/gymv/course/home']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('app', 'Statistics'), 'url' => ['/gymv/course/stat']];
 $this->params['breadcrumbs'][] = $this->title;
+
 
 ?>
 <div id="member">
     <h1><?= Html::encode($this->title) ?> </h1>
     <hr/>
-
+    <p>
+        <?= \app\components\widgets\DownloadDataGrid::widget() ?>      
+    </p>
     <?php  
     /*
         echo $this->render(
@@ -40,20 +45,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('<span class="glyphicon glyphicon-gift" aria-hidden="true"></span> '
                                 . Html::encode($model['name']),
                             [
-                                'course/index',
+                                '/gymv/course/home',
                                 'id'=>$model['id'],
                                 'OrderSearch[product_id]'=>$model['id'],
                             ],
                             [ 'data-pjax' => 0, 'title' => \Yii::t('app', 'view detail')]
-                        )
-                        . '<div style="margin-left:1.2em;font-size: 0.8em;">' . Html::encode($model['short_description']) . '</div>';
+                        );
                     }
                 ],     
-                
                 [
                     'attribute' => 'order_count',
                     'filter' => false,
-                    'label' => \Yii::t('app', 'Member Count')
+                    'label' => 'Nombre de participants'
                 ],
             ],
         ]); ?>

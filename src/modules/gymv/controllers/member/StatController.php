@@ -14,6 +14,29 @@ use yii\web\NotFoundHttpException;
 
 class StatController extends \yii\web\Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' =>  \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }    
     public function actionIndex($dataSet = 'all')
     {
         return $this->render('index');    
