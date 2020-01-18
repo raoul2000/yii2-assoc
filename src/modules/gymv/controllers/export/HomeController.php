@@ -105,7 +105,7 @@ class HomeController extends Controller
                             }
                         }
                     ],
-                    ['attribute' => 'toContact.gender'],
+                    ['attribute' => 'toContact.gender', 'format' => 'gender'],
                     ['attribute' => 'toContact.address.zip_code'],    
                     ['attribute' => 'product.name', 'label' => 'cours'],    
                     ['attribute' => 'product.category.name', 'label' => 'categorie'],    

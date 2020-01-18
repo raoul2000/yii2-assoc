@@ -63,10 +63,26 @@ AppAsset::register($this);
                     'label' => 'GymV',
                     'items' => [
                         [
-                            'label'  => \Yii::t('app', 'Home'),
+                            'label'  => 'Tableau de bord',
                             'encode' => false,
                             'url'    => ['/gymv/dashboard']
                         ],
+                        [
+                            'label'  => 'Adhérents',
+                            'encode' => false,
+                            'url'    => ['/gymv/member/home']
+                        ],
+                        [
+                            'label'  => 'Cours',
+                            'encode' => false,
+                            'url'    => ['/gymv/course/home']
+                        ],
+                        [
+                            'label'  => \Yii::t('app', 'Registration'),
+                            'encode' => false,
+                            'url'    => ['/gymv/registration']
+                        ],
+                        '<li class="divider"></li>',
                         SessionContact::getContactId() !== null ? (
                             [
                                 'label'  => \Yii::t('app', 'Contact'),
@@ -82,11 +98,6 @@ AppAsset::register($this);
                             ]
                         ) : (''),
                         '<li class="divider"></li>',
-                        [
-                            'label'  => \Yii::t('app', 'Registration'),
-                            'encode' => false,
-                            'url'    => ['/gymv/registration']
-                        ],
                         [
                             'label'  => \Yii::t('app', 'Import'),
                             'encode' => false,
