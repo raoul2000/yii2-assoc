@@ -1,6 +1,6 @@
 {
   "name": "yii2-assoc",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "assoc manager app",
   "main": "index.js",
   "directories": {
