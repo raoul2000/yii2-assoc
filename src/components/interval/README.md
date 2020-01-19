@@ -1,5 +1,17 @@
 # Interval
 
+
+
+
+$f = new IntervalFactory();
+$i1 = $f->createInterval($s1,$e1);
+$i2 = $f->createInterval($s2,$e2);
+
+$sum = $i1->add($i2);
+$diff = $i1->substract($i2);
+
+
+
 ## Domain Value
 
 ```php
